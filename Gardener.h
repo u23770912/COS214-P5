@@ -2,6 +2,7 @@
 #define GARDENER_H
 
 #include "GreenhouseStaff.h"
+#include "CareCommand.h"
 #include <iostream>
 
 /**
@@ -13,19 +14,23 @@
  */
 class Gardener : public GreenhouseStaff {
 public:
-    void handleCommand(CareCommand* command) override {
+    void handleCommand(Command* command) override {
         if (!isBusy()) {
             std::cout << "Gardener is handling the '" << command->getType() << "' command." << std::endl;
             setBusy(true);
             command->execute();
             setBusy(false);
             delete command;
-        } else if (nextInChain != nullptr) {
+        } else if (next != nullptr) {
             std::cout << "Gardener is busy, passing to next in the greenhouse team." << std::endl;
-            nextInChain->handleCommand(command);
+            next->handleCommand(command);
         } else {
             std::cout << "All Gardeners are busy. The '" << command->getType() << "' task was dropped. Plant will wither." << std::endl;
-            command->getReceiver()->transitionToWithering();
+             if(CareCommand* careCmd = dynamic_cast<CareCommand*>(command)) {
+               if (careCmd->getReceiver()) {
+                   careCmd->getReceiver()->transitionToWithering();
+               }
+            }
             delete command;
         }
     }

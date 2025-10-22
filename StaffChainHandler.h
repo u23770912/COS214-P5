@@ -1,7 +1,7 @@
 #ifndef STAFFCHAINHANDLER_H
 #define STAFFCHAINHANDLER_H
 
-#include "CareCommand.h"
+#include "Command.h"
 #include "PlantProduct.h"
 #include <iostream>
 
@@ -21,7 +21,7 @@ public:
     /**
      * @brief Handles a command or passes it to the next handler in the chain.
      */
-    virtual void handleCommand(CareCommand* command) = 0;
+    virtual void handleCommand(Command* command) = 0;
 };
 
 #endif // STAFFCHAINHANDLER_H

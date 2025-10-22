@@ -1,6 +1,7 @@
 #ifndef CARE_COMMAND_H
 #define CARE_COMMAND_H
 
+#include "Command.h"
 #include <iostream>
 #include <string>
 #include <map>
@@ -10,7 +11,7 @@ class PlantProduct;
 
 // Abstract Command (Command Pattern)
 // Also acts as the Prototype factory.
-class CareCommand {
+class CareCommand : public Command {
 private:
     // Static map to hold command prototypes.
     static std::map<std::string, CareCommand*> prototypes;

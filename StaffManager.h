@@ -29,9 +29,12 @@ public:
         CareCommand* command = CareCommand::createCommand(commandType);
         if (command) {
             command->setReceiver(plant);
-            staffDispatcher->dispatch(command);
+            staffDispatcher->dispatch(static_cast<Command*>(command));
         }
     }
+    
+
+
 };
 
 #endif // STAFFMANAGER_H
