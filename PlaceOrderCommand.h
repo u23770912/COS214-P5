@@ -2,41 +2,48 @@
 #define PLACEORDERCOMMAND_H
 
 #include <string>
+#include "Command.h"
+#include "Order.h"
+#include "Customer.h"
 
-class Order; // Forward declaration
-class Customer; // Forward declaration
+class StaffMember; // Forward declaration
 
 /**
  * @brief Command class for placing orders (Command pattern)
  * Encapsulates the action of placing an order
  */
-class PlaceOrderCommand {
-private:
-    Order* order;
-    Customer* customer;
-    std::string timestamp;
-    bool executed;
 
-public:
-    PlaceOrderCommand(Order* order, Customer* customer);
-    ~PlaceOrderCommand();
-    
-    // Command interface
-    void execute();
-    void undo();
-    
-    // Getters
-    Order* getOrder() const;
-    Customer* getCustomer() const;
-    std::string getTimestamp() const;
-    bool isExecuted() const;
-    
-    // Command information
-    std::string getCommandInfo() const;
+class PlaceOrderCommand : public Command {
+    private:
+        Order* order;
+        Customer* customer;
+        std::string timestamp;
+        bool executed;
+        StaffMember* salesStaff;
 
-private:
-    // Helper method to generate timestamp
-    std::string generateTimestamp();
+    public:
+        PlaceOrderCommand(Order* order, Customer* customer);
+        ~PlaceOrderCommand();
+        
+        // Command interface
+        void execute(){
+            //salesStaff->processOrder();
+        }; 
+
+        void undo() override;
+        
+        // Getters
+        Order* getOrder() const;
+        Customer* getCustomer() const;
+        std::string getTimestamp() const;
+        bool isExecuted() const;
+        
+        // Command information
+        std::string getCommandInfo() const;
+
+    private:
+        // Helper method to generate timestamp
+        std::string generateTimestamp();
 };
 
 #endif
