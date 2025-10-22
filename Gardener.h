@@ -26,7 +26,8 @@ public:
             next->handleCommand(command);
         } else {
             std::cout << "All Gardeners are busy. The '" << command->getType() << "' task was dropped. Plant will wither." << std::endl;
-             if(CareCommand* careCmd = dynamic_cast<CareCommand*>(command)) {
+              // Only transition to withering if there is a plant associated with the command.
+           if(CareCommand* careCmd = dynamic_cast<CareCommand*>(command)) {
                if (careCmd->getReceiver()) {
                    careCmd->getReceiver()->transitionToWithering();
                }

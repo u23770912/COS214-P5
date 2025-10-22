@@ -33,7 +33,7 @@ public:
             // Found the team handler, delegate to it.
             it->second->handleCommand(command);
         } else {
-            std::cout << "System Error: No team registered for role '" << role << "'. Command dropped." << std::endl;       
+            std::cout << "System Error: No team registered for role '" << role << "'. Command dropped." << std::endl;
             delete command;
         }
     }
