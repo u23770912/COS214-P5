@@ -2,7 +2,7 @@
 
 ## Overview
 
-This code implements the **Observer Pattern** to automatically notify interested parties() when a plant's state changes throughout its lifecycle. When a plant transitions between states (SEED → SPROUTED → GROWING → MATURE → FLOWERING → HARVESTED), all registered observers are notified and can react accordingly.
+This code implements the **Observer Pattern** to automatically notify interested parties() when a plant's state changes throughout its lifecycle. When a plant transitions between states (PlantedState → PropagationState → ReadyForTransplantState → InNurseryState → ReadyForSaleState → SoldState), all registered observers are notified and can react accordingly.
 
 ## 📋 Key Components
 
