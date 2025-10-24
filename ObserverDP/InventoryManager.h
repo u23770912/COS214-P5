@@ -2,7 +2,7 @@
 #define INVENTORY_MANAGER_H
 
 #include "LifecycleObserver.h"
-#include "PlantProduct.h"
+#include "../PlantProduct.h"
 
 // Singleton and Concrete Observer
 class InventoryManager : public LifecycleObserver {

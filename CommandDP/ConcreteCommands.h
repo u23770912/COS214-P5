@@ -2,7 +2,7 @@
 #define CONCRETE_COMMANDS_H
 
 #include "CareCommand.h"
-#include "PlantProduct.h"
+#include "../PlantProduct.h"
 #include <iostream>
 
 // --- Concrete Commands ---

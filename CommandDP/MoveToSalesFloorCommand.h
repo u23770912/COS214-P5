@@ -2,8 +2,8 @@
 #define MOVE_TO_SALES_FLOOR_COMMAND_H
 
 #include "CareCommand.h"
-#include "PlantProduct.h"
-#include "ReadyForSaleState.h"
+#include "../PlantProduct.h"
+#include "../StateDP/ReadyForSaleState.h"
 #include <iostream>
 
 class MoveToSalesFloorCommand : public CareCommand {
@@ -13,7 +13,7 @@ public:
     void execute() override {
         if (plantReceiver) {
             // This command triggers a state change rather than a care strategy
-            plantReceiver->transitionTo(new ReadyForSaleState());
+            //plantReceiver->transitionTo(new ReadyForSaleState());
         }
     }
 

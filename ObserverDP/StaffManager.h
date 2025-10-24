@@ -2,8 +2,8 @@
 #define STAFFMANAGER_H
 
 #include "LifecycleObserver.h"
-#include "CareCommand.h"   // Now includes the factory logic
-#include "StaffMember.h"
+#include "../CommandDP/CareCommand.h"   // Now includes the factory logic
+#include "../ChainOfRespDP/StaffMember.h"
 #include <string>
 
 /**

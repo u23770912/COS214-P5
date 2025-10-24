@@ -2,8 +2,8 @@
 #define STAFFMEMBER_H
 
 #include "StaffChainHandler.h"
-#include "Command.h"
-#include "CareCommand.h"
+#include "../CommandDP/Command.h"
+#include "../CommandDP/CareCommand.h"
 #include <string>
 #include <map>
 #include <iostream>
@@ -23,20 +23,7 @@ public:
         teams[role] = teamHandler;
     }
 
-    void dispatch(Command* command) {
-        if (!command) return;
-
-        std::string role = command->getRequiredRole();
-        auto it = teams.find(role);
-
-        if (it != teams.end()) {
-            // Found the team handler, delegate to it.
-            it->second->handleCommand(command);
-        } else {
-            std::cout << "System Error: No team registered for role '" << role << "'. Command dropped." << std::endl;
-            delete command;
-        }
-    }
+    void dispatch(Command* command);
 };
 
 #endif // STAFFMEMBER_H

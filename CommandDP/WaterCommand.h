@@ -2,7 +2,7 @@
 #define WATER_COMMAND_H
 
 #include "CareCommand.h"
-#include "PlantProduct.h"
+#include "../PlantProduct.h"
 #include <iostream>
 
 class WaterCommand : public CareCommand {
@@ -18,7 +18,7 @@ public:
 
     std::string getRequiredRole() const override { return "Greenhouse"; }
 
-    CareCommand* clone() const override { return new WaterCommand(*this); }
+    Command* clone() const override { return new WaterCommand(*this); }
 };
 
 #endif // WATER_COMMAND_H

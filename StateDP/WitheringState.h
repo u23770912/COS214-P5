@@ -2,7 +2,6 @@
 #define WITHERINGSTATE_H
 
 #include "PlantState.h"
-#include "PlantProduct.h"
 #include <iostream>
 
 /**
@@ -29,6 +28,12 @@ public:
     std::string getName() const override {
         return "Withering";
     }
+
+    void advanceState(PlantProduct* plant) override {
+        std::cout << "The plant remains in the withering state." << std::endl;
+    }
+
+    
 };
 
 #endif // WITHERINGSTATE_H

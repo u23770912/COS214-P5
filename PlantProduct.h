@@ -4,10 +4,10 @@
 #include <vector>
 #include <string>
 #include <map>
-#include "LifecycleObserver.h"
-#include "PlantState.h"
-#include "PlantSpeciesProfile.h"
-#include "CareStrategy.h"
+#include "ObserverDP/LifecycleObserver.h"
+#include "StateDP/PlantState.h"
+#include "BridgeDP/PlantSpeciesProfile.h"
+#include "StrategyDP/CareStrategy.h"
 
 // The main context class that ties many patterns together.
 class PlantProduct {
@@ -20,9 +20,10 @@ private:
     PlantSpeciesProfile* speciesProfile;
     // Strategy Pattern
     std::map<std::string, CareStrategy*> strategy_map;
+    std::string plantId;
 
 public:
-    PlantProduct(PlantSpeciesProfile* profile);
+    PlantProduct(const std::string& id, PlantSpeciesProfile* profile);
     ~PlantProduct();
 
     // --- State ---
@@ -31,7 +32,7 @@ public:
     void transitionToWithering();
 
     // --- Observer ---
-    void notify(const std::string& commandType);
+    void setObserver(LifecycleObserver* obs) { monitor = obs; }
 
     // --- Bridge ---
     PlantSpeciesProfile* getProfile() const;
@@ -42,6 +43,7 @@ public:
 
     // --- Business Logic ---
     void advanceLifecycle();
+    void notify(const std::string& commandType);
 };
 
 #endif // PLANT_PRODUCT_H

@@ -2,6 +2,7 @@
 #define CARE_COMMAND_H
 
 #include "Command.h"
+#include "../PlantProduct.h"
 #include <iostream>
 #include <string>
 #include <map>

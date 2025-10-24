@@ -1,8 +1,8 @@
 #ifndef STAFFCHAINHANDLER_H
 #define STAFFCHAINHANDLER_H
 
-#include "Command.h"
-#include "PlantProduct.h"
+#include "../CommandDP/Command.h"
+#include "../PlantProduct.h"
 #include <iostream>
 
 class StaffChainHandler {
