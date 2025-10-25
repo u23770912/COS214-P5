@@ -2,7 +2,7 @@
 #define STAFFMANAGER_H
 
 #include "LifecycleObserver.h"
-#include "VisitorDP/ModeVisitor.h" // Include the visitor
+#include "ModeVisitor.h" // Include the visitor
 #include <string>
 #include <iostream>
 

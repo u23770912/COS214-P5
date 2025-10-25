@@ -13,7 +13,7 @@ protected:
 public:
     virtual ~PlantSpeciesProfile() {}
 
-    std::string getProperty(const std::string& key) const {
+    virtual std::string getProperty(const std::string& key) const {
         auto it = properties.find(key);
         return it != properties.end() ? it->second : "N/A";
     }

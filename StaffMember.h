@@ -2,8 +2,8 @@
 #define STAFFMEMBER_H
 
 #include "StaffChainHandler.h"
-#include "../CommandDP/Command.h"
-#include "../CommandDP/CareCommand.h"
+#include "Command.h"
+#include "CareCommand.h"
 #include <string>
 #include <map>
 #include <iostream>

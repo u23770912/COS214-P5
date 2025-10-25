@@ -2,11 +2,12 @@
 #define PRUNE_COMMAND_H
 
 #include "CareCommand.h"
-#include "../PlantProduct.h"
+#include "PlantProduct.h"
 #include <iostream>
 
 class PruneCommand : public CareCommand {
 public:
+    PruneCommand() : CareCommand() {}
     void execute() override {
         std::cout << "Executing Prune Command..." << std::endl;
         if (plantReceiver) {

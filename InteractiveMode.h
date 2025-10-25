@@ -2,10 +2,10 @@
 #define INTERACTIVEMODE_H
 
 #include "ModeVisitor.h"
-#include "ObserverDP/StaffManager.h"
-#include "../CommandDP/Command.h"
-#include "../CommandDP/CareCommand.h"
-#include "../PlantProduct.h"
+#include "StaffManager.h"
+#include "Command.h"
+#include "CareCommand.h"
+#include "PlantProduct.h"
 #include <iostream>
 
 /**

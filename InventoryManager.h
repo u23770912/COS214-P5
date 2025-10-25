@@ -2,7 +2,7 @@
 #define INVENTORY_MANAGER_H
 
 #include "LifecycleObserver.h"
-#include "../PlantProduct.h"
+#include "PlantProduct.h"
 
 // Singleton and Concrete Observer
 class InventoryManager : public LifecycleObserver {
@@ -19,7 +19,7 @@ public:
     static InventoryManager* getInstance();
 
     // From LifecycleObserver
-    void update(PlantProduct* plant) override;
+    void update(PlantProduct* plant, const std::string& commandType) override;
 
     int getStockCount() const;
 };

@@ -2,11 +2,13 @@
 
 void AutonomousMode::processUpdate(StaffManager* manager, PlantProduct* plant, const std::string& commandType) {
     std::cout << "StaffManager (AUTONOMOUS): Received notification for '" << commandType << "'. Creating and dispatching command." << std::endl;
-    Command* command = Command::createCommand(commandType);
+    CareCommand* command = CareCommand::createCommand(commandType);
     if (command) {
-        manager->dispatchCommand(command);
-    } else {
-        std::cout << "StaffManager Error: Could not create command for type '" << commandType << "'." << std::endl;
+        CareCommand* careCmd = dynamic_cast<CareCommand*>(command);
+        if (careCmd && plant) {
+            careCmd->setReceiver(plant);
+        }
+        manager->dispatchCommand(dynamic_cast<Command*>(command));
     }
 }
 

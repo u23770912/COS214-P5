@@ -1,7 +1,7 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#include "../PlantProduct.h"
+#include "PlantProduct.h"
 
 #include <string>
 #include <map>
