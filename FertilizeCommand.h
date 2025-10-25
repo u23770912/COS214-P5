@@ -2,7 +2,7 @@
 #define FERTILIZE_COMMAND_H
 
 #include "CareCommand.h"
-#include "../PlantProduct.h"
+#include "PlantProduct.h"
 #include <iostream>
 
 class FertilizeCommand : public CareCommand {

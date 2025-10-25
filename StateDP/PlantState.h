@@ -15,7 +15,9 @@ public:
     virtual void advanceState(PlantProduct* plant) = 0;
     virtual void onEnter(PlantProduct* plant) = 0;
     virtual void onExit(PlantProduct* plant) = 0;
-    virtual LifeCycleMonitor* getLifeCycleMonitor();
+    virtual LifeCycleMonitor* getLifeCycleMonitor() {
+        return nullptr;
+    }
     virtual std::string getName() const = 0;
 };
 

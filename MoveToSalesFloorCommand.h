@@ -2,8 +2,8 @@
 #define MOVE_TO_SALES_FLOOR_COMMAND_H
 
 #include "CareCommand.h"
-#include "../PlantProduct.h"
-#include "../StateDP/ReadyForSaleState.h"
+#include "PlantProduct.h"
+#include "StateDP/ReadyForSaleState.h"
 #include <iostream>
 
 class MoveToSalesFloorCommand : public CareCommand {

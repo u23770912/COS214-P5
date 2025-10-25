@@ -1,6 +1,6 @@
 #include "StaffManager.h"
-#include "../ChainOfRespDP/StaffMember.h"
-#include "VisitorDP/AutonomousMode.h" // Default mode
+#include "StaffMember.h"
+#include "AutonomousMode.h" // Default mode
 
 StaffManager::StaffManager(StaffMember* dispatcher) 
     : staffDispatcher(dispatcher), currentModeVisitor(new AutonomousMode()), pendingPlant(nullptr) {}

@@ -1,10 +1,8 @@
 #include "StaffMember.h"
-#include "../CommandDP/CareCommand.h"
-#include "../PlantProduct.h"
+#include "CareCommand.h"
+#include "PlantProduct.h"
 
-StaffMember::~StaffMember() {
-    std::cout << "StaffMember dispatcher is being destroyed." << std::endl;
-}
+
 
 void StaffMember::dispatch(Command* command) {
     if (!command) {

@@ -22,8 +22,11 @@ void InteractiveMode::resolvePendingTask(StaffManager* manager, const std::strin
 
     if (finalCommandType == expectedCommandType) {
         std::cout << "StaffManager: Correct action '" << finalCommandType << "' provided. Creating and dispatching command." << std::endl;
-        Command* command = Command::createCommand(finalCommandType);
+        CareCommand* command = CareCommand::createCommand(finalCommandType);
         if (command) {
+            if (plant) {
+                command->setReceiver(plant);
+            }
             manager->dispatchCommand(command);
         } else {
              std::cout << "StaffManager Error: Could not create command for type '" << finalCommandType << "'." << std::endl;

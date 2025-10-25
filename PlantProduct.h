@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <map>
-#include "ObserverDP/LifecycleObserver.h"
+#include "LifecycleObserver.h"
 #include "StateDP/PlantState.h"
 #include "BridgeDP/PlantSpeciesProfile.h"
 #include "StrategyDP/CareStrategy.h"
