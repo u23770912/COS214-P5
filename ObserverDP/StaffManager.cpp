@@ -1,32 +1,53 @@
 #include "StaffManager.h"
-#include "../CommandDP/Command.h"
-#include "../CommandDP/CareCommand.h"
-#include "../PlantProduct.h"
-#include <iostream>
+#include "../ChainOfRespDP/StaffMember.h"
+#include "VisitorDP/AutonomousMode.h" // Default mode
 
-// Note: As per the user's request, StaffManager is the "Manager" class.
+StaffManager::StaffManager(StaffMember* dispatcher) 
+    : staffDispatcher(dispatcher), currentModeVisitor(new AutonomousMode()), pendingPlant(nullptr) {}
+
+StaffManager::~StaffManager() {
+    delete currentModeVisitor;
+}
+
+void StaffManager::setMode(ModeVisitor* newMode) {
+    delete currentModeVisitor;
+    currentModeVisitor = newMode;
+}
 
 void StaffManager::update(PlantProduct* plant, const std::string& commandType) {
-    std::cout << "StaffManager received notification for '" << commandType << "' from a plant." << std::endl;
+    currentModeVisitor->processUpdate(this, plant, commandType);
+}
 
-    // Use the static factory on the base Command class to create a command instance.
-    Command* command = Command::createCommand(commandType);
+void StaffManager::resolvePendingTask(const std::string& userInput) {
+    currentModeVisitor->resolvePendingTask(this, userInput);
+}
 
-    if (command) {
-        // Safely downcast to a CareCommand to set the plant receiver.
-        if (CareCommand* careCommand = dynamic_cast<CareCommand*>(command)) {
-            careCommand->setReceiver(plant);
-            std::cout << "Command created and receiver set. Dispatching to StaffMember." << std::endl;
-            
-            // Dispatch the generic command pointer to the StaffMember.
-            staffDispatcher->dispatch(careCommand);
-        } else {
-            // Handle cases where a command is created that is not a CareCommand.
-            std::cout << "Warning: Command '" << commandType << "' is not a CareCommand. Dispatching without a receiver." << std::endl;
-            staffDispatcher->dispatch(command);
-        }
-    } else {
-        std::cout << "Error: Could not create command of type '" << commandType << "'. The plant may wither." << std::endl;
-        plant->transitionToWithering();
+void StaffManager::dispatchCommand(Command* command) {
+    if (staffDispatcher && command) {
+        staffDispatcher->dispatch(command);
     }
+}
+
+// --- Getters and Setters for Visitors ---
+
+void StaffManager::setPendingTask(PlantProduct* plant, const std::string& commandType) {
+    pendingPlant = plant;
+    expectedCommandType = commandType;
+}
+
+void StaffManager::clearPendingTask() {
+    pendingPlant = nullptr;
+    expectedCommandType = "";
+}
+
+bool StaffManager::hasPendingTask() const {
+    return pendingPlant != nullptr;
+}
+
+PlantProduct* StaffManager::getPendingPlant() const {
+    return pendingPlant;
+}
+
+std::string StaffManager::getExpectedCommandType() const {
+    return expectedCommandType;
 }

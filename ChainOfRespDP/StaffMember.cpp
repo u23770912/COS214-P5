@@ -2,14 +2,7 @@
 #include "../CommandDP/CareCommand.h"
 #include "../PlantProduct.h"
 
-// The dispatch logic is already in the header, so this file is for completeness.
-// If the dispatch logic were more complex, it would be moved here.
-// For now, we can add the destructor implementation.
-
 StaffMember::~StaffMember() {
-    // A real application would need to carefully manage the memory of the
-    // team handlers. If StaffMember owns them, it should delete them.
-    // For this simulation, we assume ownership is managed elsewhere.
     std::cout << "StaffMember dispatcher is being destroyed." << std::endl;
 }
 
