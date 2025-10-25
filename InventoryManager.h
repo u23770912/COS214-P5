@@ -1,37 +1,32 @@
 #ifndef INVENTORY_MANAGER_H
 #define INVENTORY_MANAGER_H
 
+#include "LifecycleObserver.h"
+#include "PlantProduct.h"
 #include <vector>
-#include <string>
 
-#include "LifeCycleObserver.h"
-#include "../PlantProduct.h"
+class Pots;
 
-/** 
- * @file InventoryManager.h
- * @brief Inventory management system for plant nursery.
- * @details This file implements the sole usage of the Singleton design pattern to manage the inventory of pots and plants in a plant nursery.
- *          The InventoryManager class provides methods to add, remove, and retrieve pots and plants from the inventory.
- *          This class serves as a form of "database" for the nursery's inventory system.
- */
-
-class Pot;
-class Plant;
-
-class InventoryManager {
-    private:
-        static InventoryManager* instance;
-        std::vector<Pot> pots;
-
-        // Different categories of plants (add more as needed or one general list can be used)
-        std::vector<Plant> succulents;
-        std::vector<Plant> roses;
-        std::vector<Plant> tulips;
-        std::vector<Plant> daisies;
+// Singleton and Concrete Observer
+class InventoryManager : public LifecycleObserver {
     
-        InventoryManager() {}
+    private:
+        InventoryManager();
+        ~InventoryManager();
+        static InventoryManager* instance;
+        
+        std::vector<PlantProduct*> greenHouseInventory;
+        std::vector<PlantProduct*> readyForSalePlants;
+        std::vector<Pots*> potInventory;
+
+        int plantsInStock;
+
+    protected: 
+        InventoryManager(const InventoryManager&) = delete;
+        InventoryManager& operator=(const InventoryManager&) = delete;
 
     public:
+       
         static InventoryManager* getInstance() {
             if (!instance) {
                 instance = new InventoryManager();
@@ -39,17 +34,20 @@ class InventoryManager {
             return instance;
         }
 
-        void addPot(const Pot& pot  );
+        static InventoryManager* getInstance();
 
-        void removePot(const Pot& pot);
+        // From LifecycleObserver
+        void update(PlantProduct* plant, const std::string& commandType) override;
 
-        void addPlant(const Plant& plant);
+        int getStockCount() const;
 
-        void removePlant(const Plant& plant);
+        std::vector<PlantProduct*> getGreenHouseInventory() const;
+        std::vector<PlantProduct*> getReadyForSalePlants() const;
+        std::vector<Pots*> getPotInventory() const;
 
-        std::vector<Pot> getPots() const;
-
-        std::vector<Plant> getPlants() const;
+        void addPot(Pots* pot);
+        void removePot(Pots* pot);
+        
 };
 
-#endif
+#endif // INVENTORY_MANAGER_H

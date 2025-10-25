@@ -1,38 +1,40 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#include "../PlantProduct.h"
+#include "PlantProduct.h"
 
 #include <string>
 #include <map>
 #include <iostream>
 
-/**
- * @brief Abstract Command class (Command pattern)
- * Defines the interface for executing and undoing commands
- */
-
 class Command {
+private:
+    // Static map to hold command prototypes, keyed by a string type.
+    static std::map<std::string, Command*> prototypes;
 
-    private:
-        //static map of command prototypes, keyed by a string type
-        static std::map<std::string, Command*> prototypes;
+public:
+    virtual ~Command() {}
 
-    protected:
-        PlantProduct* receiver; // The plant that will receive the command
+    virtual void execute() = 0;
+    virtual std::string getType() const = 0;
+    virtual std::string getRequiredRole() const = 0;
 
-    public:
-        virtual ~Command() = default;
+    virtual Command* clone() const = 0;
 
-        // Command interface
-        virtual void execute() = 0;
-        virtual std::string getType() const = 0;
-        virtual std::string getRequiredRole() const = 0;
-        virtual Command* clone() const = 0;
-        static void registerCommand(const std::string& type, Command* prototype);
-        static Command* createCommand(const std::string& type);
-        void setReceiver(PlantProduct* plant);
-        virtual void undo();
+    static void registerCommand(const std::string& type, Command* prototype) {
+        prototypes[type] = prototype;
+    }
+
+    static Command* createCommand(const std::string& type) {
+        auto it = prototypes.find(type);
+        if (it != prototypes.end()) {
+            return it->second->clone();
+        }
+        std::cout << "Error: Command type '" << type << "' not registered." << std::endl;
+        return nullptr;
+    }
+    
+    void setReceiver(PlantProduct* plant);
 };
 
-#endif
+#endif // COMMAND_H

@@ -4,14 +4,10 @@
 #include <vector>
 #include <string>
 #include <map>
-#include "./ObserverDP/LifeCycleObserver.h"
-#include "./StateDP/PlantState.h"
-//#include "./BridgeDP/PlantSpeciesProfile.h"  // File doesn't exist yet
-//#include "./StrategyDP/CareStrategy.h"      // File doesn't exist yet
-
-// Forward declarations for classes that don't exist yet
-class PlantSpeciesProfile;
-class CareStrategy;
+#include "LifecycleObserver.h"
+#include "StateDP/PlantState.h"
+#include "BridgeDP/PlantSpeciesProfile.h"
+#include "StrategyDP/CareStrategy.h"
 
 // The main context class that ties many patterns together.
 class PlantProduct {
