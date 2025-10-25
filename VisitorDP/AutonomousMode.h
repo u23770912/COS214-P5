@@ -1,0 +1,20 @@
+#ifndef AUTONOMOUSMODE_H
+#define AUTONOMOUSMODE_H
+
+#include "ModeVisitor.h"
+#include "ObserverDP/StaffManager.h"
+#include "../CommandDP/Command.h"
+#include "../PlantProduct.h"
+#include <iostream>
+
+/**
+ * @class AutonomousMode
+ * @brief A Concrete Visitor for handling the AUTONOMOUS mode.
+ */
+class AutonomousMode : public ModeVisitor {
+public:
+    void processUpdate(StaffManager* manager, PlantProduct* plant, const std::string& commandType) override;
+    void resolvePendingTask(StaffManager* manager, const std::string& userInput) override;
+};
+
+#endif // AUTONOMOUSMODE_H

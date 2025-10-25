@@ -18,10 +18,12 @@
 
 // Observer + Command + CoR
 #include "ObserverDP/StaffManager.h"
+#include "VisitorDP/AutonomousMode.h"
+#include "VisitorDP/InteractiveMode.h"
 // CoR
 #include "ChainOfRespDP/StaffMember.h"
 #include "ChainOfRespDP/Gardener.h"
-#include "ChainOfRespDP/SalesAssociate.h"
+#include "ChainOfRespDP/Cashier.h"
 
 // Concrete Commands
 #include "CommandDP/Command.h"
@@ -41,14 +43,14 @@
 class NeedsWaterState : public PlantState {
 public:
     void onEnter(PlantProduct* plant) override {
-        std::cout << "Plant " << plant->getPlantId() << " has entered NeedsWaterState. Notifying StaffManager." << std::endl;
+        std::cout << "Plant " << "plant->getPlantId()" << " has entered NeedsWaterState. Notifying StaffManager." << std::endl;
         plant->notify("Watering"); // Notify that a "Watering" command is needed
     }
     void onExit(PlantProduct* plant) override {}
     std::string getName() const override { return "NeedsWater"; }
     void advanceState(PlantProduct* plant) override {
         // After watering, maybe it goes back to a general "InNursery" state
-        plant->transitionTo(new InNurseryState());
+        //plant->transitionTo(new InNurseryState());
     }
 };
 
@@ -56,19 +58,32 @@ public:
 class NeedsFertilizerState : public PlantState {
 public:
     void onEnter(PlantProduct* plant) override {
-        std::cout << "Plant " << plant->getPlantId() << " has entered NeedsFertilizerState. Notifying StaffManager." << std::endl;
+        std::cout << "Plant " << "plant->getPlantId()" << " has entered NeedsFertilizerState. Notifying StaffManager." << std::endl;
         plant->notify("Fertilizing"); // Notify that a "Fertilizing" command is needed
     }
     void onExit(PlantProduct* plant) override {}
     std::string getName() const override { return "NeedsFertilizer"; }
     void advanceState(PlantProduct* plant) override {
-        plant->transitionTo(new InNurseryState());
+        //plant->transitionTo(new InNurseryState());
+    }
+};
+
+class PlantedState : public PlantState {
+public:
+    void onEnter(PlantProduct* plant) override {
+        std::cout << "Plant " << "plant->getPlantId()" << " has entered PlantedState. Notifying StaffManager." << std::endl;
+        plant->notify("Planted"); // Notify that a "Planted" command is needed
+    }
+    void onExit(PlantProduct* plant) override {}
+    std::string getName() const override { return "Planted"; }
+    void advanceState(PlantProduct* plant) override {
+        //plant->transitionTo(new InNurseryState());
     }
 };
 
 
 void setupCommandPrototypes() {
-    Command::registerCommand("Watering", new WaterCommand());
+    //Command::registerCommand("Watering", new WaterCommand());
     Command::registerCommand("Pruning", new PruneCommand());
     Command::registerCommand("Fertilizing", new FertilizeCommand());
     Command::registerCommand("MoveToSalesFloor", new MoveToSalesFloorCommand());
@@ -84,34 +99,29 @@ int main() {
     // 2. Build Staff and Chains
     StaffMember* dispatcher = new StaffMember();
     
-    // Greenhouse Team (Expanded)
-    Gardener* gardener1 = new Gardener("Alice");
-    Gardener* gardener2 = new Gardener("Bob");
-    Gardener* gardener3 = new Gardener("Charlie");
-    Gardener* gardener4 = new Gardener("David");
-    gardener1->setNext(gardener2);
-    gardener2->setNext(gardener3);
-    gardener3->setNext(gardener4);
+    Gardener* gardener1 = new Gardener();
+    gardener1->setNext(new Gardener());
     dispatcher->registerTeam("Gardener", gardener1);
 
-    // Sales Team (Expanded)
-    SalesAssociate* sales1 = new SalesAssociate("Eve");
-    SalesAssociate* sales2 = new SalesAssociate("Frank");
-    sales1->setNext(sales2);
-    dispatcher->registerTeam("Sales Associate", sales1);
-    
+    Cashier* sales1 = new Cashier();
+    sales1->setNext(new Cashier());
+    dispatcher->registerTeam("Cashier", sales1);
+
     std::cout << "Staff teams and chains created." << std::endl;
 
     // 3. Setup the Manager (Observer)
     StaffManager* manager = new StaffManager(dispatcher);
     std::cout << "StaffManager (Manager) created." << std::endl;
 
-    // 4. Create a Plant (Rose)
-    PlantSpeciesProfile* roseProfile = new FlowerProfile("Rose", "A beautiful red rose", "Full sun, well-drained soil");
-    PlantProduct rose("rose_01", roseProfile);
-    rose.setObserver(manager); // Register the manager to observe this plant
+    // --- GAME START ---
+    std::cout << "\n--- Welcome to the Interactive Nursery! ---" << std::endl;
+    manager->setMode(new InteractiveMode());
 
-    // Add strategies to the rose
+    // 4. Create a Plant (Rose)
+    PlantSpeciesProfile* roseProfile = new FlowerProfile("Rose", "A beautiful red rose", "Full sun", "well-drained soil");
+    PlantProduct rose("rose_01", roseProfile);
+    rose.setObserver(manager); 
+
     rose.addStrategy("Watering", new DripWateringStrategy());
     rose.addStrategy("Pruning", new StandardPruningStrategy());
     
@@ -119,48 +129,46 @@ int main() {
     rose.transitionTo(new PlantedState());
     std::cout << "Current state: " << rose.getCurrentStateName() << std::endl;
 
-    std::cout << "\n--- Time passes. The rose needs water. ---" << std::endl;
-    // The plant's state changes, triggering the whole notification-command-dispatch flow
-    rose.transitionTo(new NeedsWaterState());
+    // --- SCENARIO 1: Correct Action ---
+    std::cout << "\n--- Time passes. The rose looks thirsty. ---" << std::endl;
+    rose.transitionTo(new NeedsWaterState()); // Triggers manager.update()
 
-    std::cout << "\n--- The rose has been watered. It continues to grow. ---" << std::endl;
-    rose.advanceLifecycle(); // Moves from NeedsWaterState to InNurseryState
-    std::cout << "Current state: " << rose.getCurrentStateName() << std::endl;
+    if (manager->hasPendingTask()) {
+        std::cout << "\nAn action is required for plant 'rose_01'!" << std::endl;
+        std::cout << "What should be done? (Enter command type, e.g., Watering, Pruning, skip): ";
+        std::string userInput;
+        std::cin >> userInput;
+        manager->resolvePendingTask(userInput);
+    }
+    
+    // Check plant state after action
+    std::cout << "Plant 'rose_01' current state: " << rose.getCurrentStateName() << std::endl;
 
-    // 5. Create another Plant (Succulent)
-    PlantSpeciesProfile* succulentProfile = new SucculentProfile("Echeveria", "A drought-tolerant succulent", "Bright, indirect light, infrequent watering");
-    PlantProduct succulent("succulent_01", succulentProfile);
-    succulent.setObserver(manager);
 
-    // Add strategies to the succulent
-    succulent.addStrategy("Watering", new GentleMistStrategy());
-    succulent.addStrategy("Fertilizing", new FertilizingStrategy());
+    // --- SCENARIO 2: Incorrect Action ---
+    std::cout << "\n--- More time passes. The rose needs fertilizing, but we'll make a mistake. ---" << std::endl;
+    rose.transitionTo(new NeedsFertilizerState()); // Triggers manager.update()
 
-    std::cout << "\n--- A new Succulent has been potted. ---" << std::endl;
-    succulent.transitionTo(new PlantedState());
-    std::cout << "Current state: " << succulent.getCurrentStateName() << std::endl;
+    if (manager->hasPendingTask()) {
+        std::cout << "\nAn action is required for plant 'rose_01'!" << std::endl;
+        std::cout << "What should be done? (Enter command type, e.g., Watering, Pruning, Fertilizing): ";
+        std::string userInput;
+        std::cin >> userInput;
+        manager->resolvePendingTask(userInput);
+    }
 
-    std::cout << "\n--- Time passes. The succulent looks pale and needs nutrients. ---" << std::endl;
-    succulent.transitionTo(new NeedsFertilizerState());
-
-    std::cout << "\n--- The succulent has been fertilized. It continues to grow. ---" << std::endl;
-    succulent.advanceLifecycle();
-    std::cout << "Current state: " << succulent.getCurrentStateName() << std::endl;
+    // Check plant state after incorrect action
+    std::cout << "Plant 'rose_01' current state: " << rose.getCurrentStateName() << std::endl;
 
 
     std::cout << "\n--- Cleaning up. ---" << std::endl;
-    // In a real app, command prototypes and staff would need proper memory management.
-    // This is a simplified cleanup for demonstration.
+    // Proper memory management for the chain is complex.
+    // For this demo, we are simplifying cleanup.
     delete dispatcher;
     delete manager;
-    delete gardener1;
-    delete gardener2;
-    delete gardener3;
-    delete gardener4;
+    delete gardener1; // Deleting the head of the chain
     delete sales1;
-    delete sales2;
     delete roseProfile;
-    delete succulentProfile;
 
     return 0;
 }

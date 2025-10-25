@@ -11,10 +11,18 @@
  * such as SalesAssociates.
  */
 class SalesFloorStaff : public StaffChainHandler {
-public:
-    virtual ~SalesFloorStaff() {}
-    // This class is abstract and does not implement handleCommand.
-    // Concrete subclasses like SalesAssociate will implement it.
+    public:
+        SalesFloorStaff() : StaffChainHandler() {}
+        virtual ~SalesFloorStaff() {}
+
+        void setNext(StaffChainHandler* next) { this->next = next; }
+        bool isBusy() const { return busy; }
+        void setBusy(bool status) { this->busy = status; }
+
+        /**
+         * @brief Handles a command or passes it to the next handler in the chain.
+         */
+        virtual void handleCommand(Command* command) = 0;
 };
 
 #endif // SALESFLOORSTAFF_H

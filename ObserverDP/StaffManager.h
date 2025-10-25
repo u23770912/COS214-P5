@@ -2,38 +2,46 @@
 #define STAFFMANAGER_H
 
 #include "LifecycleObserver.h"
-#include "../CommandDP/CareCommand.h"   // Now includes the factory logic
-#include "../ChainOfRespDP/StaffMember.h"
+#include "VisitorDP/ModeVisitor.h" // Include the visitor
 #include <string>
+#include <iostream>
+
+// Forward declarations
+class StaffMember;
+class PlantProduct;
+class Command;
 
 /**
  * @class StaffManager
- * @brief Observes plants, creates commands, and passes them to a dispatcher.
- * 
- * This class uses the static factory methods on CareCommand to create commands.
+ * @brief The "Element" class that accepts a visitor to change its mode.
+ * Observes plants, creates commands, and passes them to a dispatcher.
  */
 class StaffManager : public LifecycleObserver {
-private:
-    StaffMember* staffDispatcher; // A pointer to the single dispatcher object
+    private:
+        StaffMember* staffDispatcher;
+        ModeVisitor* currentModeVisitor; // The current mode (state)
+        
+        // --- Interactive Mode State ---
+        PlantProduct* pendingPlant;
+        std::string expectedCommandType;
+    public:
+        StaffManager(StaffMember* dispatcher);
+        ~StaffManager();
 
-public:
-    StaffManager(StaffMember* dispatcher) 
-        : staffDispatcher(dispatcher) {}
+        // --- Visitor Management ---
+        void setMode(ModeVisitor* newMode);
 
-    /**
-     * @brief The update method called by the Observable (PlantProduct).
-     * Creates a command and passes it to the staff dispatcher.
-     */
-    void update(PlantProduct* plant, const std::string& commandType) override {
-        // Use the static factory method on CareCommand
-        CareCommand* command = CareCommand::createCommand(commandType);
-        if (command) {
-            command->setReceiver(plant);
-            staffDispatcher->dispatch(static_cast<Command*>(command));
-        }
-    }
-    
+        // --- Methods called by Visitors ---
+        void setPendingTask(PlantProduct* plant, const std::string& commandType);
+        void clearPendingTask();
+        bool hasPendingTask() const;
+        PlantProduct* getPendingPlant() const;
+        std::string getExpectedCommandType() const;
+        void dispatchCommand(Command* command);
 
+        // --- Core Methods ---
+        void resolvePendingTask(const std::string& userInput);
+        void update(PlantProduct* plant, const std::string& commandType) override;
 
 };
 
