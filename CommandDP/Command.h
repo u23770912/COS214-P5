@@ -1,7 +1,7 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#include "PlantProduct.h"
+#include "../PlantProduct.h"
 
 #include <string>
 #include <map>
@@ -18,6 +18,9 @@ class Command {
         //static map of command prototypes, keyed by a string type
         static std::map<std::string, Command*> prototypes;
 
+    protected:
+        PlantProduct* receiver; // The plant that will receive the command
+
     public:
         virtual ~Command() = default;
 
@@ -28,6 +31,7 @@ class Command {
         virtual Command* clone() const = 0;
         static void registerCommand(const std::string& type, Command* prototype);
         static Command* createCommand(const std::string& type);
+        void setReceiver(PlantProduct* plant);
         virtual void undo();
 };
 

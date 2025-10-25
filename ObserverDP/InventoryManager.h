@@ -4,6 +4,9 @@
 #include <vector>
 #include <string>
 
+#include "LifeCycleObserver.h"
+#include "../PlantProduct.h"
+
 /** 
  * @file InventoryManager.h
  * @brief Inventory management system for plant nursery.
