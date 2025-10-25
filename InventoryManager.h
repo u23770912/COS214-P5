@@ -3,25 +3,51 @@
 
 #include "LifecycleObserver.h"
 #include "PlantProduct.h"
+#include <vector>
+
+class Pots;
 
 // Singleton and Concrete Observer
 class InventoryManager : public LifecycleObserver {
-private:
-    InventoryManager();
-    static InventoryManager* instance;
+    
+    private:
+        InventoryManager();
+        ~InventoryManager();
+        static InventoryManager* instance;
+        
+        std::vector<PlantProduct*> greenHouseInventory;
+        std::vector<PlantProduct*> readyForSalePlants;
+        std::vector<Pots*> potInventory;
 
-    int plantsInStock;
+        int plantsInStock;
 
-public:
-    InventoryManager(const InventoryManager&) = delete;
-    void operator=(const InventoryManager&) = delete;
+    protected: 
+        InventoryManager(const InventoryManager&) = delete;
+        InventoryManager& operator=(const InventoryManager&) = delete;
 
-    static InventoryManager* getInstance();
+    public:
+       
+        static InventoryManager* getInstance() {
+            if (!instance) {
+                instance = new InventoryManager();
+            }
+            return instance;
+        }
 
-    // From LifecycleObserver
-    void update(PlantProduct* plant, const std::string& commandType) override;
+        static InventoryManager* getInstance();
 
-    int getStockCount() const;
+        // From LifecycleObserver
+        void update(PlantProduct* plant, const std::string& commandType) override;
+
+        int getStockCount() const;
+
+        std::vector<PlantProduct*> getGreenHouseInventory() const;
+        std::vector<PlantProduct*> getReadyForSalePlants() const;
+        std::vector<Pots*> getPotInventory() const;
+
+        void addPot(Pots* pot);
+        void removePot(Pots* pot);
+        
 };
 
 #endif // INVENTORY_MANAGER_H
