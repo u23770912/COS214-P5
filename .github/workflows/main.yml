@@ -17,6 +17,19 @@ jobs:
       - name: Install build dependencies
         run: sudo apt-get update && sudo apt-get install -y build-essential cmake valgrind
 
+      - name: Compile sources (syntax only)
+        shell: bash
+        run: |
+          SRC=$(find . -path ./build -prune -o -name '*.cpp' -o -name '*.cc' -o -name '*.cxx' -print)
+          if [ -z "$SRC" ]; then
+            echo "No source files found."
+            exit 0
+          fi
+          for file in $SRC; do
+            echo "Checking $file"
+            g++ -std=c++11 -Wall -Werror -I. -fsyntax-only "$file"
+          done
+
       - name: Configure and build project
         shell: bash
         run: |
