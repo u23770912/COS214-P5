@@ -1,0 +1,46 @@
+name: CMake CI
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential cmake
+
+      - name: Configure and build project
+        shell: bash
+        run: |
+          if [ -f CMakeLists.txt ]; then
+            cmake -S . -B build
+            cmake --build build --config Release
+          elif [ -f Makefile ]; then
+            make clean
+            make
+          else
+            echo "Neither CMakeLists.txt nor Makefile found." >&2
+            exit 1
+          fi
+
+      - name: Run CTest (if configured)
+        if: hashFiles('CMakeLists.txt') != ''
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Run Make test target (if available)
+        if: hashFiles('Makefile') != ''
+        shell: bash
+        run: |
+          if grep -q '^test:' Makefile; then
+            make test
+          else
+            echo "No 'test' target in Makefile. Skipping.";
+          fi
