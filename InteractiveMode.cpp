@@ -2,40 +2,39 @@
 
 void InteractiveMode::processUpdate(StaffManager* manager, PlantProduct* plant, const std::string& commandType) {
     std::cout << "StaffManager (INTERACTIVE): Received notification for '" << commandType << "'. Awaiting user input." << std::endl;
-    manager->setPendingTask(plant, commandType);
-}
-
-void InteractiveMode::resolvePendingTask(StaffManager* manager, const std::string& userInput) {
-    if (!manager->hasPendingTask()) {
-        std::cout << "StaffManager: No pending task to resolve." << std::endl;
-        return;
-    }
-
-    PlantProduct* plant = manager->getPendingPlant();
-    std::string expectedCommandType = manager->getExpectedCommandType();
-
-    std::string finalCommandType = userInput;
+    
+    // Store the task in THIS visitor's state
+    pendingPlant = plant;
+    expectedCommand = commandType;
+    
+    // Request user input
+    std::cout << "Enter command (or 'skip'): ";
+    std::string userInput;
+    std::cin >> userInput;
+    
+    // Process the input immediately
+    std::string finalCommand = userInput;
     if (userInput == "skip") {
-        finalCommandType = expectedCommandType;
-        std::cout << "StaffManager: 'skip' entered. Resolving with expected command: '" << finalCommandType << "'." << std::endl;
+        finalCommand = expectedCommand;
+        std::cout << "StaffManager: 'skip' entered. Using expected command: '" << finalCommand << "'." << std::endl;
     }
-
-    if (finalCommandType == expectedCommandType) {
-        std::cout << "StaffManager: Correct action '" << finalCommandType << "' provided. Creating and dispatching command." << std::endl;
-        CareCommand* command = CareCommand::createCommand(finalCommandType);
+    
+    if (finalCommand == expectedCommand) {
+        std::cout << "StaffManager: Correct action '" << finalCommand << "' provided. Creating and dispatching command." << std::endl;
+        
+        CareCommand* command = CareCommand::createCommand(finalCommand);
         if (command) {
-            if (plant) {
-                command->setReceiver(plant);
-            }
+            command->setReceiver(pendingPlant);
             manager->dispatchCommand(command);
         } else {
-             std::cout << "StaffManager Error: Could not create command for type '" << finalCommandType << "'." << std::endl;
+            std::cout << "StaffManager Error: Could not create command for type '" << finalCommand << "'." << std::endl;
         }
     } else {
-        std::cout << "StaffManager: Incorrect action '" << userInput << "' provided. Expected '" << expectedCommandType << "'. Plant will wither." << std::endl;
-        plant->transitionToWithering();
+        std::cout << "StaffManager: Incorrect action '" << userInput << "' provided. Expected '" << expectedCommand << "'. Plant will wither." << std::endl;
+        pendingPlant->transitionToWithering();
     }
-
-    // Clear the pending task
-    manager->clearPendingTask();
+    
+    // Clear state
+    pendingPlant = nullptr;
+    expectedCommand = "";
 }

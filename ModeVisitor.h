@@ -1,10 +1,10 @@
-#ifndef MODEVISTOR_H
-#define MODEVISTOR_H
+#ifndef MODEVISITOR_H
+#define MODEVISITOR_H
 
 #include <string>
 
-class StaffManager; // Forward declaration to avoid circular dependency
-class PlantProduct; // Forward declaration
+class StaffManager;
+class PlantProduct;
 
 /**
  * @class ModeVisitor
@@ -14,7 +14,6 @@ class ModeVisitor {
 public:
     virtual ~ModeVisitor() = default;
     virtual void processUpdate(StaffManager* manager, PlantProduct* plant, const std::string& commandType) = 0;
-    virtual void resolvePendingTask(StaffManager* manager, const std::string& userInput) = 0;
 };
 
-#endif // MODEVISTOR_H
+#endif // MODEVISITOR_H

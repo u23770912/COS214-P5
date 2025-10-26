@@ -11,10 +11,9 @@
 #include "FertilizeCommand.h"
 #include "StaffMember.h"
 #include "StaffChainHandler.h"
-#include "GreenhouseStaff.h"
-#include "SalesFloorStaff.h"
 #include "Gardener.h"
 #include "Cashier.h"
+#include "MoveToSalesFloorCommand.h"
 
 // Simple mock for PlantSpeciesProfile
 class SimpleProfile : public PlantSpeciesProfile {
@@ -31,12 +30,13 @@ int main() {
     CareCommand::registerCommand("Watering", new WaterCommand());
     CareCommand::registerCommand("Pruning", new PruneCommand());
     CareCommand::registerCommand("Fertilizing", new FertilizeCommand());
+    CareCommand::registerCommand("MoveToSalesFloor", new MoveToSalesFloorCommand());
+    CareCommand::registerCommand("ReadyForSale", new MoveToSalesFloorCommand());
     
     // Setup Chain of Responsibility
     std::cout << "\n2. Setting up chain of responsibility..." << std::endl;
     StaffChainHandler* gardener = new Gardener();
     StaffChainHandler* cashier = new Cashier();
-    
     gardener->setNext(cashier);
     
     // Create StaffMember that wraps the chain
@@ -54,33 +54,22 @@ int main() {
     PlantProduct* plant = new PlantProduct("P001", new SimpleProfile());
     plant->setObserver(manager);
     
-    // TEST 1: Plant notifies -> waits for user input
+    // TEST: Plant notifies -> Interactive mode handles everything
     std::cout << "\n5. Plant notifies with 'Watering'..." << std::endl;
-    std::cout << "   [Interactive mode: waiting for user input]" << std::endl;
     plant->notify("Watering");
+    // (User will be prompted for input inside processUpdate)
     
-    std::cout << "\nEnter command (or 'skip'): ";
-    std::string userInput1;
-    std::cin >> userInput1;
-    manager->resolvePendingTask(userInput1);
-    
-    // TEST 2: Another notification
     std::cout << "\n6. Plant notifies with 'Pruning'..." << std::endl;
     plant->notify("Pruning");
+    // (User will be prompted for input inside processUpdate)
     
-    std::cout << "\nEnter command (or 'skip'): ";
-    std::string userInput2;
-    std::cin >> userInput2;
-    manager->resolvePendingTask(userInput2);
-    
-    // TEST 3: One more
     std::cout << "\n7. Plant notifies with 'Fertilizing'..." << std::endl;
     plant->notify("Fertilizing");
-    
-    std::cout << "\nEnter command (or 'skip'): ";
-    std::string userInput3;
-    std::cin >> userInput3;
-    manager->resolvePendingTask(userInput3);
+    // (User will be prompted for input inside processUpdate)
+
+    std::cout << "\n8. Plant notifies with 'ReadyForSale'..." << std::endl;
+    plant->notify("ReadyForSale");
+    // (User will be prompted for input inside processUpdate)
     
     // Cleanup
     delete plant;
