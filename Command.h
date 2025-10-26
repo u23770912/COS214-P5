@@ -33,7 +33,8 @@ public:
         std::cout << "Error: Command type '" << type << "' not registered." << std::endl;
         return nullptr;
     }
-
+    
+    void setReceiver(PlantProduct* plant);
 };
 
 #endif // COMMAND_H
