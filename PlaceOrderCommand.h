@@ -24,14 +24,24 @@ class PlaceOrderCommand : public Command {
     public:
         PlaceOrderCommand(Order* order, Customer* customer);
         ~PlaceOrderCommand();
+        // Override clone method for Prototype pattern
+        Command* clone() const override {
+            return new PlaceOrderCommand(*this);
+        }
+        // Command type
+        std::string getType() const override {
+            return "PlaceOrder";
+        }
+        // Required role to execute this command
+        std::string getRequiredRole() const override {
+            return "SalesStaff";
+        }
         
         // Command interface
         void execute(){
             //salesStaff->processOrder();
         }; 
 
-        void undo() override;
-        
         // Getters
         Order* getOrder() const;
         Customer* getCustomer() const;
