@@ -2,9 +2,9 @@ name: CMake CI
 
 on:
   push:
-    branches: [dev]
+    branches: [Dev-Branch]
   pull_request:
-    branches: [dev]
+    branches: [Dev-Branch]
 
 jobs:
   build:
