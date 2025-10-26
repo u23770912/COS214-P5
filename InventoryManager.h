@@ -27,13 +27,6 @@ class InventoryManager : public LifecycleObserver {
 
     public:
        
-        static InventoryManager* getInstance() {
-            if (!instance) {
-                instance = new InventoryManager();
-            }
-            return instance;
-        }
-
         static InventoryManager* getInstance();
 
         // From LifecycleObserver
@@ -47,6 +40,12 @@ class InventoryManager : public LifecycleObserver {
 
         void addPot(Pots* pot);
         void removePot(Pots* pot);
+        
+        // Methods for moving plants between greenhouse and sales floor
+        void moveToSalesFloor(PlantProduct* plant);
+        void addToGreenhouse(PlantProduct* plant);
+        void removeFromGreenhouse(PlantProduct* plant);
+        bool isPlantInGreenhouse(PlantProduct* plant) const;
         
 };
 
