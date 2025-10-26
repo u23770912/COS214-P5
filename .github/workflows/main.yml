@@ -15,7 +15,20 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install build dependencies
-        run: sudo apt-get update && sudo apt-get install -y build-essential cmake
+        run: sudo apt-get update && sudo apt-get install -y build-essential cmake valgrind
+
+      - name: Compile sources (syntax only)
+        shell: bash
+        run: |
+          SRC=$(find . -path ./build -prune -o -name '*.cpp' -o -name '*.cc' -o -name '*.cxx' -print)
+          if [ -z "$SRC" ]; then
+            echo "No source files found."
+            exit 0
+          fi
+          for file in $SRC; do
+            echo "Checking $file"
+            g++ -std=c++11 -Wall -Werror -I. -fsyntax-only "$file"
+          done
 
       - name: Configure and build project
         shell: bash
@@ -43,4 +56,14 @@ jobs:
             make test
           else
             echo "No 'test' target in Makefile. Skipping.";
+          fi
+
+      - name: Run Valgrind target (if available)
+        if: hashFiles('Makefile') != ''
+        shell: bash
+        run: |
+          if grep -q '^valgrind:' Makefile; then
+            make valgrind
+          else
+            echo "No 'valgrind' target in Makefile. Skipping.";
           fi
