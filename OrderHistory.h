@@ -1,28 +1,24 @@
-#ifndef ORDERMEMENTO_H
-#define OrderHistor_CH
+#ifndef ORDERHISTORY_H
+#define ORDERHISTORY_H
 
-#include "OrderMemento.h"
-#include "Order.h"
-
-#include <iostream>
-#include <string>
 #include <vector>
+#include <cstddef>
 
-using namespace std;
+class OrderMemento;
+class Order;
 
 class OrderHistory {
 private:
-    vector<OrderMemento*> history;
+    std::vector<OrderMemento*> history;
 
 public:
     OrderHistory();
     ~OrderHistory();
+    void addMemento(OrderMemento* memento);
+    void removeMemento(std::size_t index);
+    OrderMemento* getMemento(std::size_t index) const;
     void saveOrder(Order* order);
     void undo(Order* order);
-
-    void addMemento(OrderMemento* memento);
-    void removeMemento(int id);
-    OrderMemento* getMemento(int index) const;
 };
 
-#endif // OrderHistor_CPP
+#endif // ORDERHISTORY_H

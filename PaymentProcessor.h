@@ -13,10 +13,10 @@ private:
     PaymentHandler* handler;
 public:
     PaymentProcessor();
-    virtual ~PaymentProcessor();
-    void setHandler(PaymentHandler* handler);
-    PaymentHandler* getHandler() const;
-    virtual void processPayment(double amount, const string& customerId, const string payload) = 0;
+    virtual ~PaymentProcessor() = default;
+    // void setHandler(PaymentHandler* handler);
+    // PaymentHandler* getHandler() const;
+    virtual bool processPayment(double amount, const string& customerId, const string payload) = 0;
 
 };
 

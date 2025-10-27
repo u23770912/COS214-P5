@@ -2,8 +2,6 @@
 #include "Order.h"
 #include "OrderHistory.h"
 
-using namespace std;
-
 int main() {
     // Create history manager
     OrderHistory history;
@@ -26,28 +24,27 @@ int main() {
     history.saveOrder(&order3);
 
     // Display individual order
-    cout << "Order 1 Details:\n" << order1.getOrderDetails() << endl;
+    // std::cout << "Order 1 Details:\n" << order1.getOrderDetails() << std::endl;
 
     // Display all orders for a specific customer
-    cout << "All orders for Siyabonga:\n" << order1.getOrderDetails("Siyabonga") << endl;
-
-    cout << "All orders for Tim:\n" << order2.getOrderDetails("Tim") << endl;
+    // std::cout << order1.getOrderDetails("Siyabonga") << std::endl;
+    // std::cout << order2.getOrderDetails("Tim") << std::endl;
 
     // Make some changes to order1
     order1.addItem("Mouse Pad", 300.0);
     order1.removeItem("Laptop");
 
-    cout << "After changes to Order 1:\n" << order1.getOrderDetails() << endl;
+    std::cout << "After changes to Order 1:\n" << order1.getOrderDetails() << std::endl;
 
     // Undo changes
     history.undo(&order1);
 
-    cout << "After undo for Order 1:\n" << order1.getOrderDetails() << endl;
+    std::cout << "After undo for Order 1:\n" << order1.getOrderDetails() << std::endl;
 
-    // Display all orders for all customers using one customer filter at a time
-    cout << "All orders for all customers:\n";
+    // Display all orders for all customers
+    std::cout << "All orders for all customers:\n";
     for (auto order : Order::getAllOrders()) {
-        cout << order->getOrderDetails() << endl;
+        std::cout << order->getOrderDetails() << std::endl;
     }
 
     return 0;

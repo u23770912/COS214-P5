@@ -1,8 +1,10 @@
 #include "OrderMemento.h"
 
-OrderMemento::OrderMemento(const string& savedState)
+OrderMemento::OrderMemento(const std::string& savedState)
+    : state(savedState)
 {}
 
-string OrderMemento::getState() const
-{}
-
+std::string OrderMemento::getState() const
+{
+    return state;
+}
