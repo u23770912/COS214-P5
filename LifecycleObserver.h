@@ -1,6 +1,7 @@
 #ifndef LIFECYCLE_OBSERVER_H
 #define LIFECYCLE_OBSERVER_H
 #include <iostream>
+#include "PlantProduct.h"
 
 class PlantProduct;
 
