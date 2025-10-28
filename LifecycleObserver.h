@@ -2,14 +2,22 @@
 #define LIFECYCLE_OBSERVER_H
 #include <iostream>
 
-// Forward declaration to avoid circular dependency
 class PlantProduct;
 
-// Observer Interface (Observer Pattern)
-class LifecycleObserver {
+/**
+ * @class LifeCycleObserver
+ * @brief Abstract base class for observers that monitor PlantProduct lifecycle events
+ *
+ * This class defines the interface for objects that need to be notified
+ * about changes in the lifecycle of a PlantProduct.
+ */
+
+class LifeCycleObserver
+{
 public:
-    virtual ~LifecycleObserver() {}
-    virtual void update(PlantProduct* plant, const std::string& commandType) = 0;
+    virtual ~LifeCycleObserver() {}
+
+    virtual void update(PlantProduct *plant, const std::string &commandType) = 0;
 };
 
-#endif // LIFECYCLE_OBSERVER_H
+#endif
