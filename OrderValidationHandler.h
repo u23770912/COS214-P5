@@ -5,21 +5,34 @@
 #include "InventoryManager.h"
 #include "SinglePlant.h"
 #include "PlantBundle.h"
+#include <vector>
+#include <string>
 
 /**
  * @brief Concrete handler for order validation
  * Validates that all items in the order are available in inventory
  */
 class OrderValidationHandler : public OrderProcessHandler {
+private:
+    std::vector<std::string> validationErrors;
+    
 public:
     OrderValidationHandler() : OrderProcessHandler("Order Validation") {}
     
+    std::vector<std::string> getValidationErrors() const {
+        return validationErrors;
+    }
+    
 protected:
     bool processOrder(Order* order, Customer* customer) override {
+        validationErrors.clear(); // Clear previous errors
+        
         logStep("Checking inventory availability for all order items...");
         
         if (!order || order->isEmpty()) {
-            std::cout << "[ERROR] Order is empty or invalid" << std::endl;
+            std::string error = "Order is empty or invalid. Please add items to your order before submitting.";
+            validationErrors.push_back(error);
+            std::cout << "\n[VALIDATION ERROR] " << error << std::endl;
             return false;
         }
         
@@ -28,14 +41,34 @@ protected:
         
         logStep("Available plants in sales floor: " + std::to_string(availablePlants.size()));
         
+        if (availablePlants.empty()) {
+            std::string error = "No plants are currently available on the sales floor. Please check back later or contact staff for assistance.";
+            validationErrors.push_back(error);
+            std::cout << "\n[VALIDATION ERROR] " << error << std::endl;
+            return false;
+        }
+        
         // Validate each order item
+        bool allValid = true;
         for (const auto* orderItem : order->getOrderItems()) {
             if (!validateOrderItem(orderItem, availablePlants)) {
-                return false;
+                allValid = false;
             }
         }
         
-        logStep("All items are available in inventory");
+        if (!allValid) {
+            std::cout << "\n╔════════════════════════════════════════╗" << std::endl;
+            std::cout << "║     VALIDATION FAILED                 ║" << std::endl;
+            std::cout << "╚════════════════════════════════════════╝" << std::endl;
+            std::cout << "\nThe following issues were found with your order:\n" << std::endl;
+            for (size_t i = 0; i < validationErrors.size(); i++) {
+                std::cout << (i+1) << ". " << validationErrors[i] << std::endl;
+            }
+            std::cout << "\nPlease modify your order and try again." << std::endl;
+            return false;
+        }
+        
+        logStep("✓ All items are available in inventory");
         order->setStatus("Validated");
         return true;
     }
@@ -51,7 +84,9 @@ private:
             return validatePlantBundle(bundle, availablePlants);
         }
         
-        logStep("Unknown order item type");
+        std::string error = "Unknown order item type encountered.";
+        validationErrors.push_back(error);
+        logStep("ERROR: " + error);
         return false;
     }
     
@@ -69,12 +104,20 @@ private:
         }
         
         if (availableCount >= requiredQuantity) {
-            logStep("[OK] " + plantType + ": " + std::to_string(requiredQuantity) + 
+            logStep("✓ " + plantType + ": " + std::to_string(requiredQuantity) + 
                    " required, " + std::to_string(availableCount) + " available");
             return true;
         } else {
-            std::cout << "[ERROR] Insufficient " << plantType << ": " << requiredQuantity 
-                     << " required, only " << availableCount << " available" << std::endl;
+            std::string error;
+            if (availableCount == 0) {
+                error = "'" + plantType + "' is currently out of stock. We don't have any available at the moment.";
+            } else {
+                error = "Insufficient '" + plantType + "' plants available. You requested " + 
+                       std::to_string(requiredQuantity) + " but we only have " + 
+                       std::to_string(availableCount) + " in stock.";
+            }
+            validationErrors.push_back(error);
+            std::cout << "  [✗] " << error << std::endl;
             return false;
         }
     }
@@ -82,15 +125,23 @@ private:
     bool validatePlantBundle(const PlantBundle* bundle, const std::vector<PlantProduct*>& availablePlants) {
         logStep("Validating bundle: " + bundle->getName());
         
+        bool bundleValid = true;
         // Validate all items in the bundle
         for (const auto* bundleItem : bundle->getItems()) {
             if (!validateOrderItem(bundleItem, availablePlants)) {
-                return false;
+                bundleValid = false;
             }
         }
         
-        logStep("[OK] Bundle validation completed");
-        return true;
+        if (bundleValid) {
+            logStep("✓ Bundle '" + bundle->getName() + "' validation completed");
+        } else {
+            std::string error = "Bundle '" + bundle->getName() + "' contains items that are not available.";
+            // Don't add to validationErrors as individual items already added their errors
+            logStep("✗ " + error);
+        }
+        
+        return bundleValid;
     }
 };
 

@@ -29,6 +29,7 @@ class InventoryManager : public LifeCycleObserver {
         // Database storage vectors
         std::vector<PlantProduct*> greenHouseInventory;
         std::vector<PlantProduct*> readyForSalePlants;
+        std::vector<PlantProduct*> soldPlants;  // Plants that have been sold
         std::vector<Pots*> potInventory;
 
         int plantsInStock;
@@ -58,6 +59,7 @@ class InventoryManager : public LifeCycleObserver {
 
         std::vector<PlantProduct*> getGreenHouseInventory() const;
         std::vector<PlantProduct*> getReadyForSalePlants() const;
+        std::vector<PlantProduct*> getSoldPlants() const;
         std::vector<Pots*> getPotInventory() const;
 
         void addPot(Pots* pot);
@@ -84,6 +86,11 @@ class InventoryManager : public LifeCycleObserver {
         int getAvailablePlantCount(const std::string& plantType) const;
         int getAvailablePotCount(const std::string& potType) const;
         void printInventoryReport() const;
+        
+        // Methods for handling sold plants
+        bool sellPlants(const std::string& plantType, int quantity);
+        void removeFromSalesFloor(PlantProduct* plant);
+        void markAsSold(PlantProduct* plant);
         
 };
 

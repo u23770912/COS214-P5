@@ -38,6 +38,10 @@ std::vector<PlantProduct*> InventoryManager::getReadyForSalePlants() const {
     return readyForSalePlants;
 }
 
+std::vector<PlantProduct*> InventoryManager::getSoldPlants() const {
+    return soldPlants;
+}
+
 std::vector<Pots*> InventoryManager::getPotInventory() const {
     return potInventory;
 }
@@ -189,6 +193,7 @@ void InventoryManager::printInventoryReport() const {
     std::cout << "\n=== INVENTORY DATABASE REPORT ===" << std::endl;
     std::cout << "Greenhouse Inventory: " << greenHouseInventory.size() << " plants" << std::endl;
     std::cout << "Sales Floor Inventory: " << readyForSalePlants.size() << " plants" << std::endl;
+    std::cout << "Sold Plants: " << soldPlants.size() << " plants" << std::endl;
     std::cout << "Pot Inventory: " << potInventory.size() << " pots" << std::endl;
     
     // Group plants by type
@@ -199,4 +204,57 @@ void InventoryManager::printInventoryReport() const {
         }
     }
     std::cout << "=================================" << std::endl;
+}
+
+bool InventoryManager::sellPlants(const std::string& plantType, int quantity) {
+    std::vector<PlantProduct*> plantsToSell;
+    
+    // Find the required quantity of plants
+    for (PlantProduct* plant : readyForSalePlants) {
+        if (plant && plant->getProfile() && 
+            plant->getProfile()->getSpeciesName() == plantType) {
+            plantsToSell.push_back(plant);
+            if ((int)plantsToSell.size() >= quantity) {
+                break;
+            }
+        }
+    }
+    
+    // Check if we have enough
+    if ((int)plantsToSell.size() < quantity) {
+        std::cout << "Cannot sell " << quantity << " " << plantType 
+                  << " - only " << plantsToSell.size() << " available" << std::endl;
+        return false;
+    }
+    
+    // Move plants from sales floor to sold
+    for (PlantProduct* plant : plantsToSell) {
+        removeFromSalesFloor(plant);
+        markAsSold(plant);
+    }
+    
+    std::cout << "Successfully sold " << quantity << " " << plantType << " plant(s)" << std::endl;
+    return true;
+}
+
+void InventoryManager::removeFromSalesFloor(PlantProduct* plant) {
+    auto it = std::find(readyForSalePlants.begin(), readyForSalePlants.end(), plant);
+    if (it != readyForSalePlants.end()) {
+        readyForSalePlants.erase(it);
+        plantsInStock--;
+        std::cout << "  [Removed from sales floor: " 
+                  << plant->getProfile()->getSpeciesName() << "]" << std::endl;
+    }
+}
+
+void InventoryManager::markAsSold(PlantProduct* plant) {
+    if (plant) {
+        // Check if not already in sold list
+        auto it = std::find(soldPlants.begin(), soldPlants.end(), plant);
+        if (it == soldPlants.end()) {
+            soldPlants.push_back(plant);
+            std::cout << "  [Marked as sold: " 
+                      << plant->getProfile()->getSpeciesName() << "]" << std::endl;
+        }
+    }
 }

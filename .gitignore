@@ -1,3 +1,31 @@
-VISITOR_PATTERN_EXPLANATION
-COS 214 Final Project
-.vscode
+# Compiled Object files
+*.o
+*.obj
+
+# Executables
+greenhouse
+test_move_to_sales_floor
+test_*
+
+# Coverage files
+*.gcda
+*.gcno
+*.gcov
+coverage.info
+out/
+
+# VS Code
+.vscode/
+
+# Documentation (if you want to ignore it)
+VISITOR_PATTERN_EXPLANATION.md
+*.pdf
+
+# Build directories
+build/
+bin/
+
+# System files
+.DS_Store
+*.swp
+*~
