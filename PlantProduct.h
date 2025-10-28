@@ -15,7 +15,7 @@ private:
     // State Pattern
     PlantState* currentState;
     // Observer Pattern
-    LifecycleObserver* monitor;
+    LifeCycleObserver* monitor;
     // Bridge Pattern
     PlantSpeciesProfile* speciesProfile;
     // Strategy Pattern
@@ -32,7 +32,7 @@ public:
     void transitionToWithering();
 
     // --- Observer ---
-    void setObserver(LifecycleObserver* obs) { monitor = obs; }
+    void setObserver(LifeCycleObserver* obs) { monitor = obs; }
 
     // --- Bridge ---
     PlantSpeciesProfile* getProfile() const;

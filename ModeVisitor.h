@@ -14,7 +14,6 @@ class ModeVisitor {
 public:
     virtual ~ModeVisitor() = default;
     virtual void processUpdate(StaffManager* manager, PlantProduct* plant, const std::string& commandType) = 0;
-    virtual void resolvePendingTask(StaffManager* manager, const std::string& userInput) = 0;
 };
 
 #endif // MODEVISTOR_H

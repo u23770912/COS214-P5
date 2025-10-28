@@ -34,7 +34,7 @@ public:
         return nullptr;
     }
     
-    void setReceiver(PlantProduct* plant);
+    virtual void setReceiver(PlantProduct* plant);
 };
 
 #endif // COMMAND_H

@@ -15,7 +15,6 @@
 class AutonomousMode : public ModeVisitor {
 public:
     void processUpdate(StaffManager* manager, PlantProduct* plant, const std::string& commandType) override;
-    void resolvePendingTask(StaffManager* manager, const std::string& userInput) override;
 };
 
 #endif // AUTONOMOUSMODE_H

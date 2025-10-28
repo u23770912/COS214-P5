@@ -6,10 +6,10 @@
 class PlantProduct;
 
 // Observer Interface (Observer Pattern)
-class LifecycleObserver {
+class LifeCycleObserver {
 public:
-    virtual ~LifecycleObserver() {}
+    virtual ~LifeCycleObserver() {}
     virtual void update(PlantProduct* plant, const std::string& commandType) = 0;
 };
 
-#endif // LIFECYCLE_OBSERVER_H
+#endif

@@ -3,23 +3,22 @@
 #include <algorithm>
 #include <iostream>
 
-// Initialize static member
-InventoryManager* InventoryManager::instance = nullptr;
-
+// Private constructor
 InventoryManager::InventoryManager() : plantsInStock(0) {
-    std::cout << "InventoryManager initialized." << std::endl;
+    std::cout << "InventoryManager database initialized." << std::endl;
 }
 
+// Private destructor - automatic cleanup
 InventoryManager::~InventoryManager() {
-    // Clean up inventory vectors if needed
-    // Note: We don't delete PlantProduct* as they may be owned elsewhere
+    std::cout << "InventoryManager database shutting down." << std::endl;
+    // Note: We don't delete PlantProduct* or Pots* here as they may be owned elsewhere
+    // This class acts as a database registry, not owner of the objects
 }
 
-InventoryManager* InventoryManager::getInstance() {
-    if (!instance) {
-        instance = new InventoryManager();
-    }
-    return instance;
+// Meyer's Singleton - Thread-safe, automatic lifetime management
+InventoryManager& InventoryManager::getInstance() {
+    static InventoryManager instance; // Created once, destroyed automatically at program end
+    return instance;  // Return reference, never null
 }
 
 void InventoryManager::update(PlantProduct* plant, const std::string& commandType) {
@@ -99,4 +98,105 @@ void InventoryManager::removeFromGreenhouse(PlantProduct* plant) {
 bool InventoryManager::isPlantInGreenhouse(PlantProduct* plant) const {
     auto it = std::find(greenHouseInventory.begin(), greenHouseInventory.end(), plant);
     return it != greenHouseInventory.end();
+}
+
+// Order validation methods
+bool InventoryManager::isPlantAvailableForSale(const std::string& plantType, int quantity) const {
+    return getAvailablePlantCount(plantType) >= quantity;
+}
+
+bool InventoryManager::isPotAvailable(const std::string& potType, int quantity) const {
+    return getAvailablePotCount(potType) >= quantity;
+}
+
+std::vector<PlantProduct*> InventoryManager::getAvailablePlantsByType(const std::string& plantType) const {
+    std::vector<PlantProduct*> availablePlants;
+    
+    for (PlantProduct* plant : readyForSalePlants) {
+        if (plant && plant->getProfile() && 
+            plant->getProfile()->getSpeciesName() == plantType) {
+            availablePlants.push_back(plant);
+        }
+    }
+    
+    return availablePlants;
+}
+
+int InventoryManager::getAvailablePlantCount(const std::string& plantType) const {
+    int count = 0;
+    
+    for (PlantProduct* plant : readyForSalePlants) {
+        if (plant && plant->getProfile() && 
+            plant->getProfile()->getSpeciesName() == plantType) {
+            count++;
+        }
+    }
+    
+    return count;
+}
+
+int InventoryManager::getAvailablePotCount(const std::string& potType) const {
+    int count = 0;
+    
+    // Note: This is a simplified implementation
+    // In a real system, Pots would have a type/name property
+    for (Pots* pot : potInventory) {
+        if (pot) {
+            // For now, assume all pots are available
+            // In real implementation, check pot->getType() == potType
+            count++;
+        }
+    }
+    
+    return count;
+}
+
+bool InventoryManager::reservePlantsForOrder(const std::string& plantType, int quantity) {
+    std::vector<PlantProduct*> availablePlants = getAvailablePlantsByType(plantType);
+    
+    if (static_cast<int>(availablePlants.size()) >= quantity) {
+        std::cout << "Reserved " << quantity << " " << plantType << " plants for order." << std::endl;
+        return true;
+    } else {
+        std::cout << "Cannot reserve " << quantity << " " << plantType 
+                  << " plants. Only " << availablePlants.size() << " available." << std::endl;
+        return false;
+    }
+}
+
+bool InventoryManager::reservePotsForOrder(const std::string& potType, int quantity) {
+    int availablePots = getAvailablePotCount(potType);
+    
+    if (availablePots >= quantity) {
+        std::cout << "Reserved " << quantity << " " << potType << " pots for order." << std::endl;
+        return true;
+    } else {
+        std::cout << "Cannot reserve " << quantity << " " << potType 
+                  << " pots. Only " << availablePots << " available." << std::endl;
+        return false;
+    }
+}
+
+void InventoryManager::releasePlantsFromOrder(const std::string& plantType, int quantity) {
+    std::cout << "Released " << quantity << " " << plantType << " plants from order reservation." << std::endl;
+}
+
+void InventoryManager::releasePotsFromOrder(const std::string& potType, int quantity) {
+    std::cout << "Released " << quantity << " " << potType << " pots from order reservation." << std::endl;
+}
+
+void InventoryManager::printInventoryReport() const {
+    std::cout << "\n=== INVENTORY DATABASE REPORT ===" << std::endl;
+    std::cout << "Greenhouse Inventory: " << greenHouseInventory.size() << " plants" << std::endl;
+    std::cout << "Sales Floor Inventory: " << readyForSalePlants.size() << " plants" << std::endl;
+    std::cout << "Pot Inventory: " << potInventory.size() << " pots" << std::endl;
+    
+    // Group plants by type
+    std::cout << "\nPlants Ready for Sale by Type:" << std::endl;
+    for (PlantProduct* plant : readyForSalePlants) {
+        if (plant && plant->getProfile()) {
+            std::cout << "  - " << plant->getProfile()->getSpeciesName() << std::endl;
+        }
+    }
+    std::cout << "=================================" << std::endl;
 }

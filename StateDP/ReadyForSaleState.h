@@ -6,8 +6,9 @@
 
 class ReadyForSaleState : public PlantState {
 public:
-    void onEnter(PlantProduct* plant) override {}
-    void onExit(PlantProduct* plant) override {}
+    void onEnter(PlantProduct* plant) override;
+    void onExit(PlantProduct* plant) override;
+    void advanceState(PlantProduct* plant) override;
     std::string getName() const override { return "ReadyForSale"; }
 };
 

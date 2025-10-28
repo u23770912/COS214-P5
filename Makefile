@@ -1,23 +1,40 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -Wall --coverage
 
-SRC = $(wildcard *.cpp)
-DEPS = $(wildcard *.h)
-OBJ = $(SRC:.cpp=.o)
+# Source files
+SRC = $(wildcard *.cpp) $(wildcard StateDP/*.cpp) $(wildcard BridgeDP/*.cpp) $(wildcard StrategyDP/*.cpp)
+DEPS = $(wildcard *.h) $(wildcard StateDP/*.h) $(wildcard BridgeDP/*.h) $(wildcard StrategyDP/*.h)
+
+# Object files - use proper path handling
+OBJ = $(patsubst %.cpp,%.o,$(SRC))
+
+# Exclude test files from main
+MAIN_SRC = $(filter-out MoveToSaleFloorTest.cpp,$(SRC))
+MAIN_OBJ = $(patsubst %.cpp,%.o,$(MAIN_SRC))
+
+# Test files - exclude main.cpp, Customer.cpp, and InteractiveMode.cpp 
+TEST_SRC = $(filter-out main.cpp Customer.cpp InteractiveMode.cpp,$(SRC))
+TEST_OBJ = $(patsubst %.cpp,%.o,$(TEST_SRC))
 
 TARGET = greenhouse
+TEST_TARGET = test_move_to_sales_floor
 
 all: $(TARGET)
 
-$(TARGET): $(OBJ)
+test: $(TEST_TARGET)
+
+$(TARGET): $(MAIN_OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+$(TEST_TARGET): $(TEST_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 %.o: %.cpp $(DEPS)
-	$(CXX) $(CXXFLAGS) -c $<
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) $(TARGET)
-	rm -f *.gcda *.gcno *.gcov coverage.info
+	rm -f $(OBJ) $(TARGET) $(TEST_TARGET)
+	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno
 	rm -rf out
 
 valgrind: $(TARGET)
@@ -32,7 +49,7 @@ coverage: all
 	@echo "Coverage report generated in out/index.html"
 
 coverage-clean:
-	rm -f *.gcda *.gcno *.gcov coverage.info
+	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno
 	rm -rf out
 
-.PHONY: all clean valgrind coverage-clean
+.PHONY: all test clean valgrind coverage-clean

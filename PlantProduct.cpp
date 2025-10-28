@@ -6,7 +6,7 @@
 #include <iostream>
 
 PlantProduct::PlantProduct(const std::string& id, PlantSpeciesProfile* profile) 
-    : plantId(id), currentState(nullptr), monitor(nullptr), speciesProfile(profile) {
+    : currentState(nullptr), monitor(nullptr), speciesProfile(profile), plantId(id) {
     // Initial state could be set here, e.g., transitionTo(new PlantedState());
 }
 

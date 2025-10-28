@@ -2,22 +2,22 @@
 #include "../PlantProduct.h"
 #include <iostream>
 
-// The logic for WitheringState is already in the header file.
-// This .cpp file is created for consistency and for any future, more complex logic.
-
-WitheringState::WitheringState() {}
-WitheringState::~WitheringState() {}
-
-void WitheringState::onEnter(PlantProduct* product) {
-    std::cout << "Plant has entered the withering state." << std::endl;
+void WitheringState::onEnter(PlantProduct* plant) {
+    if (plant && plant->getProfile()) {
+        std::cout << "Plant " << plant->getProfile()->getSpeciesName() 
+                  << " is now withering due to neglect." << std::endl;
+    } else {
+        std::cout << "A plant has entered the withering state due to neglect." << std::endl;
+    }
 }
 
-void WitheringState::onExit(PlantProduct* product) {
+void WitheringState::onExit(PlantProduct* plant) {
+    // Typically no action needed when exiting a terminal state
     std::cout << "Plant is exiting the withering state." << std::endl;
 }
 
-void WitheringState::advanceState(PlantProduct* product) {
-    // WitheringState might not advance further, or you can define logic here
+void WitheringState::advanceState(PlantProduct* plant) {
+    // WitheringState might not advance further
     std::cout << "Plant remains in withering state." << std::endl;
 }
 

@@ -7,6 +7,9 @@
 #include "Customer.h"
 
 class StaffMember; // Forward declaration
+class InventoryManager; // Forward declaration
+class SinglePlant; // Forward declaration
+class PlantBundle; // Forward declaration
 
 /**
  * @brief Command class for placing orders (Command pattern)
@@ -36,11 +39,9 @@ class PlaceOrderCommand : public Command {
         std::string getRequiredRole() const override {
             return "SalesStaff";
         }
-        
+
         // Command interface
-        void execute(){
-            //salesStaff->processOrder();
-        }; 
+        void execute() override; 
 
         // Getters
         Order* getOrder() const;
@@ -54,6 +55,17 @@ class PlaceOrderCommand : public Command {
     private:
         // Helper method to generate timestamp
         std::string generateTimestamp();
+        
+        // Inventory validation methods
+        bool validateInventoryAvailability();
+        bool validateOrderItem(const OrderItem* item, const std::vector<PlantProduct*>& availablePlants);
+        bool validateSinglePlant(const SinglePlant* plant, const std::vector<PlantProduct*>& availablePlants);
+        bool validatePlantBundle(const PlantBundle* bundle, const std::vector<PlantProduct*>& availablePlants);
+        
+        // Order processing methods
+        void processOrderWithStaff();
+        void updateInventoryAfterSale();
+        void removeSoldItemsFromInventory(const OrderItem* item, InventoryManager* inventory);
 };
 
 #endif

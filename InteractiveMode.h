@@ -13,9 +13,12 @@
  * @brief A Concrete Visitor for handling the INTERACTIVE mode.
  */
 class InteractiveMode : public ModeVisitor {
+private:
+    PlantProduct* pendingPlant = nullptr;
+    std::string expectedCommand = "";
+
 public:
     void processUpdate(StaffManager* manager, PlantProduct* plant, const std::string& commandType) override;
-    void resolvePendingTask(StaffManager* manager, const std::string& userInput) override;
 };
 
 #endif // INTERACTIVEMODE_H
