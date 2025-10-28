@@ -1,26 +1,32 @@
-#ifndef STAFF_MEMBER_H
-#define STAFF_MEMBER_H
+#ifndef STAFFMEMBER_H
+#define STAFFMEMBER_H
 
-class CareCommand;
+#include "StaffChainHandler.h"
+#include "Command.h"
+#include "CareCommand.h"
+#include <string>
+#include <map>
+#include <iostream>
 
-class StaffMember {
+class StaffMember
+{
 private:
-    StaffMember* nextHandler;
-    bool isBusy;
+    // A map where the key is the role and the value is the team handler (not individual chain members).
+    std::map<std::string, StaffChainHandler *> teams;
 
 public:
-    StaffMember();
-    
-    virtual ~StaffMember() = default;
-    
-    void setNext(StaffMember* next);
+    StaffMember() {}
+    ~StaffMember()
+    {
+        // In a real application, manage memory of team handlers here.
+    }
 
-    bool getIsBusy() const;
+    void registerTeam(const std::string &role, StaffChainHandler *teamHandler)
+    {
+        teams[role] = teamHandler;
+    }
 
-    void setIsBusy(bool busy);
-
-    
-    virtual void handle(CareCommand* command);
+    void dispatch(Command *command);
 };
 
-#endif
+#endif // STAFFMEMBER_H
