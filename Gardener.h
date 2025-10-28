@@ -13,6 +13,7 @@
  * greenhouse team will be composed of instances of Gardener.
  */
 class Gardener : public GreenhouseStaff {
+<<<<<<< HEAD
 public:
     void handleCommand(Command* command) override {
         if (!isBusy()) {
@@ -20,6 +21,16 @@ public:
             setBusy(true);
             command->execute();
             setBusy(false);
+=======
+
+public:
+    void handleCommand(Command* command) override {
+        if (!isBusy()) {
+            activePlant = command->getReceiver();
+            setBusyFor(std::chrono::seconds(10));  // stay busy three seconds
+            std::cout << "Gardener is handling the '" << command->getType() << "' command." << std::endl;
+            command->execute();
+>>>>>>> a5cc157f06bf6b3c50e503d2c0883ab9968a4990
             delete command;
         } else if (next != nullptr) {
             std::cout << "Gardener is busy, passing to next in the greenhouse team." << std::endl;

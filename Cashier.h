@@ -16,10 +16,17 @@ class Cashier : public SalesFloorStaff {
 public:
     void handleCommand(Command* command) override {
         if (!isBusy()) {
+<<<<<<< HEAD
             std::cout << "Cashier is handling the '" << command->getType() << "' command." << std::endl;
             setBusy(true);
             command->execute();
             setBusy(false);
+=======
+            activePlant = command->getReceiver();
+            setBusyFor(std::chrono::seconds(20));  // stay busy twenty seconds
+            std::cout << "Cashier is handling the '" << command->getType() << "' command." << std::endl;
+            command->execute();
+>>>>>>> a5cc157f06bf6b3c50e503d2c0883ab9968a4990
             delete command;
         } else if (next != nullptr) {
             std::cout << "Cashier is busy, passing to next in the sales team." << std::endl;

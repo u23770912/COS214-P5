@@ -1,7 +1,11 @@
 #ifndef CARE_COMMAND_H
 #define CARE_COMMAND_H
 
+<<<<<<< HEAD
 // #include "Command.h"
+=======
+#include "Command.h"
+>>>>>>> a5cc157f06bf6b3c50e503d2c0883ab9968a4990
 #include "PlantProduct.h"
 #include <iostream>
 #include <string>

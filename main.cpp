@@ -35,6 +35,7 @@ int main() {
     
     // Setup Chain of Responsibility
     std::cout << "\n2. Setting up chain of responsibility..." << std::endl;
+<<<<<<< HEAD
     StaffChainHandler* gardener = new Gardener();
     StaffChainHandler* cashier = new Cashier();
     gardener->setNext(cashier);
@@ -43,6 +44,22 @@ int main() {
     StaffMember* dispatcher = new StaffMember();
     dispatcher->registerTeam("Greenhouse", gardener);
     dispatcher->registerTeam("Sales", cashier);
+=======
+    GreenhouseStaff* gardener1 = new Gardener();
+    GreenhouseStaff* gardener2 = new Gardener();
+    GreenhouseStaff* gardener3 = new Gardener();
+    SalesFloorStaff* cashier1 = new Cashier();
+    SalesFloorStaff* cashier2 = new Cashier();
+    gardener1->setNext(gardener2);
+    gardener2->setNext(gardener3);
+    
+    cashier1->setNext(cashier2);
+    
+    // Create StaffMember that wraps the chain
+    StaffMember* dispatcher = new StaffMember();
+    dispatcher->registerTeam("Greenhouse", gardener1);
+    dispatcher->registerTeam("Sales", cashier1);
+>>>>>>> a5cc157f06bf6b3c50e503d2c0883ab9968a4990
     
     // Setup Observer with Visitor (INTERACTIVE Mode)
     std::cout << "\n3. Setting up StaffManager with INTERACTIVE Mode..." << std::endl;
@@ -71,13 +88,29 @@ int main() {
     plant->notify("ReadyForSale");
     // (User will be prompted for input inside processUpdate)
     
+<<<<<<< HEAD
+=======
+    std::cout << "\n9. Plant notifies with 'ReadyForSale'..." << std::endl;
+    plant->notify("ReadyForSale");
+    // (User will be prompted for input inside processUpdate)
+
+>>>>>>> a5cc157f06bf6b3c50e503d2c0883ab9968a4990
     // Cleanup
     delete plant;
     delete manager;
     delete dispatcher;
+<<<<<<< HEAD
     delete cashier;
     delete gardener;
     
+=======
+    delete cashier1;
+    delete cashier2;
+    delete gardener1;
+    delete gardener2;
+    delete gardener3;
+
+>>>>>>> a5cc157f06bf6b3c50e503d2c0883ab9968a4990
     std::cout << "\n=== TEST COMPLETED ===" << std::endl;
     return 0;
 }
