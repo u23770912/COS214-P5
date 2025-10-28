@@ -1,5 +1,8 @@
+// ============= Enhanced Main with UI =============
 #include <iostream>
 #include <string>
+#include <thread>
+#include <chrono>
 #include "PlantProduct.h"
 #include "StaffManager.h"
 #include "AutonomousMode.h"
@@ -14,74 +17,99 @@
 #include "Gardener.h"
 #include "Cashier.h"
 #include "MoveToSalesFloorCommand.h"
+#include "TerminalUI.h"
 
-// Simple mock for PlantSpeciesProfile
 class SimpleProfile : public PlantSpeciesProfile {
 public:
     std::string getSpeciesName() const override { return "Rose"; }
     std::string getProperty(const std::string& key) const override { return "value"; }
 };
 
+void displayStaffStatus(const std::vector<std::pair<std::string, StaffChainHandler*>>& staff) {
+    TerminalUI::printSection("STAFF STATUS");
+    for (const auto& member : staff) {
+        TerminalUI::printStaffStatus(member.first, member.second->isBusy());
+    }
+    std::cout << std::endl;
+}
+
 int main() {
-    std::cout << "=== SIMPLE TEST: Interactive Mode ===" << std::endl;
+    TerminalUI::clearScreen();
+    TerminalUI::printHeader("GREENHOUSE MANAGEMENT SYSTEM");
     
-    // Register commands (Prototype Pattern)
-    std::cout << "\n1. Registering commands..." << std::endl;
+    // Register commands
+    TerminalUI::printSection("SYSTEM INITIALIZATION");
+    TerminalUI::printInfo("Registering commands...");
     CareCommand::registerCommand("Watering", new WaterCommand());
     CareCommand::registerCommand("Pruning", new PruneCommand());
     CareCommand::registerCommand("Fertilizing", new FertilizeCommand());
     CareCommand::registerCommand("MoveToSalesFloor", new MoveToSalesFloorCommand());
     CareCommand::registerCommand("ReadyForSale", new MoveToSalesFloorCommand());
+    TerminalUI::printSuccess("Commands registered");
     
     // Setup Chain of Responsibility
-    std::cout << "\n2. Setting up chain of responsibility..." << std::endl;
+    TerminalUI::printInfo("Setting up staff chain...");
     GreenhouseStaff* gardener1 = new Gardener();
     GreenhouseStaff* gardener2 = new Gardener();
     GreenhouseStaff* gardener3 = new Gardener();
     SalesFloorStaff* cashier1 = new Cashier();
     SalesFloorStaff* cashier2 = new Cashier();
+    
     gardener1->setNext(gardener2);
     gardener2->setNext(gardener3);
-    
     cashier1->setNext(cashier2);
     
-    // Create StaffMember that wraps the chain
+    // Track staff for status display
+    std::vector<std::pair<std::string, StaffChainHandler*>> staff = {
+        {"Gardener 1", gardener1},
+        {"Gardener 2", gardener2},
+        {"Gardener 3", gardener3},
+        {"Cashier 1", cashier1},
+        {"Cashier 2", cashier2}
+    };
+    
     StaffMember* dispatcher = new StaffMember();
     dispatcher->registerTeam("Greenhouse", gardener1);
     dispatcher->registerTeam("Sales", cashier1);
+    TerminalUI::printSuccess("Staff chain configured");
     
-    // Setup Observer with Visitor (INTERACTIVE Mode)
-    std::cout << "\n3. Setting up StaffManager with INTERACTIVE Mode..." << std::endl;
+    // Setup StaffManager
+    TerminalUI::printInfo("Configuring StaffManager (Interactive Mode)...");
     StaffManager* manager = new StaffManager(dispatcher);
     manager->setMode(new InteractiveMode());
+    TerminalUI::printSuccess("StaffManager ready");
     
     // Setup Plant
-    std::cout << "\n4. Creating plant and attaching observer..." << std::endl;
+    TerminalUI::printInfo("Creating plant...");
     PlantProduct* plant = new PlantProduct("P001", new SimpleProfile());
     plant->setObserver(manager);
+    TerminalUI::printSuccess("Plant 'P001' (Rose) created");
     
-    // TEST: Plant notifies -> Interactive mode handles everything
-    std::cout << "\n5. Plant notifies with 'Watering'..." << std::endl;
-    plant->notify("Watering");
-    // (User will be prompted for input inside processUpdate)
+    std::cout << std::endl;
+    TerminalUI::printDivider();
     
-    std::cout << "\n6. Plant notifies with 'Pruning'..." << std::endl;
-    plant->notify("Pruning");
-    // (User will be prompted for input inside processUpdate)
+    // Test commands
+    std::vector<std::string> commands = {"Watering", "Pruning", "Fertilizing", "ReadyForSale", "ReadyForSale"};
     
-    std::cout << "\n7. Plant notifies with 'Fertilizing'..." << std::endl;
-    plant->notify("Fertilizing");
-    // (User will be prompted for input inside processUpdate)
-
-    std::cout << "\n8. Plant notifies with 'ReadyForSale'..." << std::endl;
-    plant->notify("ReadyForSale");
-    // (User will be prompted for input inside processUpdate)
+    for (size_t i = 0; i < commands.size(); i++) {
+        std::cout << std::endl;
+        displayStaffStatus(staff);
+        
+        TerminalUI::printSection("TASK " + std::to_string(i + 1) + " OF " + std::to_string(commands.size()));
+        //TerminalUI::printInfo("Plant requires: " + BOLD + commands[i] + RESET);
+        
+        plant->notify(commands[i]);
+        
+        // Small delay to see the effect
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        TerminalUI::printDivider();
+    }
     
-    std::cout << "\n9. Plant notifies with 'ReadyForSale'..." << std::endl;
-    plant->notify("ReadyForSale");
-    // (User will be prompted for input inside processUpdate)
-
     // Cleanup
+    std::cout << std::endl;
+    TerminalUI::printSection("CLEANUP");
+    TerminalUI::printInfo("Shutting down system...");
+    
     delete plant;
     delete manager;
     delete dispatcher;
@@ -90,7 +118,9 @@ int main() {
     delete gardener1;
     delete gardener2;
     delete gardener3;
-
-    std::cout << "\n=== TEST COMPLETED ===" << std::endl;
+    
+    TerminalUI::printSuccess("System shutdown complete");
+    TerminalUI::printDivider();
+    
     return 0;
 }
