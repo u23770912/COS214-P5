@@ -4,12 +4,17 @@
 #include "CareStrategy.h"
 #include <iostream>
 
-class DripWateringStrategy : public CareStrategy {
+class DripWateringStrategy : public CareStrategy
+{
 public:
-void applyCare(int amount, const std::string& careType) override {
-        if (careType == "drip") {
+    void applyCare(int amount, const std::string &careType) override
+    {
+        if (careType == "drip" || careType == "water" || careType == "watering")
+        {
             std::cout << "Applying " << amount << " ml of water via Drip System." << std::endl;
-        } else {
+        }
+        else
+        {
             std::cout << "DripWateringStrategy does not handle care type: " << careType << std::endl;
         }
     }

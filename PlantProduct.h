@@ -42,6 +42,8 @@ public:
     int getSecondsSinceLastCare() const;
     void resetLastCareTime();
 
+    bool isCareTypeAppropriate(const std::string &careType) const;
+
     // --- Observer ---
     void setObserver(LifeCycleObserver *obs) { monitor = obs; }
 
@@ -57,6 +59,10 @@ public:
     // --- Business Logic ---
     void advanceLifecycle();
     void notify(const std::string &commandType);
+
+    const std::map<std::string, CareStrategy*>& getStrategyMap() const { 
+    return strategy_map; 
+}
 };
 
 #endif // PLANT_PRODUCT_H

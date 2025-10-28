@@ -1,7 +1,7 @@
 #ifndef STAFFMANAGER_H
 #define STAFFMANAGER_H
 
-#include "LifeCycleObserver.h"
+#include "LifecycleObserver.h"
 #include "ModeVisitor.h"
 #include <string>
 #include <iostream>
