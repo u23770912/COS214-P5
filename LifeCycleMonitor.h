@@ -2,7 +2,12 @@
 #define LIFECYCLE_MONITOR_H
 
 #include <vector>
-#include "LifeCycleObserver.h"
+#include <iostream>
+// #include "LifeCycleObserver.h"
+
+class PlantProduct;
+
+class LifeCycleObserver;
 
 /**
  * @class LifeCycleMonitor
