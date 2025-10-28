@@ -7,8 +7,8 @@
 class PlantedState : public PlantState {
 public:
     void onEnter(PlantProduct* plant) override;
-    void onExit(PlantProduct* plant) override ;
-    std::string getName() const override;
+    void onExit(PlantProduct* plant) override;
+    std::string getName() const override { return "Planted"; }
     void advanceState(PlantProduct* plant) override;
 };
 

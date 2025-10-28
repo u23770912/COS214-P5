@@ -4,7 +4,12 @@
 #include "PlantState.h"
 #include <string>
 
+class LifeCycleMonitor;
+
 class InNurseryState : public PlantState {
+private:
+    bool lastWasWater = false;
+
 public:
     void onEnter(PlantProduct* plant) override;
     void onExit(PlantProduct* plant) override;

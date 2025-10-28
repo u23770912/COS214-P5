@@ -3,14 +3,15 @@
 
 #include "Command.h"
 #include "PlantProduct.h"
-#include <iostream>
 #include <chrono>
+#include <string>
 #include <thread>
 
 class StaffChainHandler {
 protected:
     StaffChainHandler* next;
     PlantProduct* activePlant = nullptr;
+    std::string activeTask;
     bool busy;
 
 public:
@@ -20,12 +21,20 @@ public:
     void setNext(StaffChainHandler* next) { this->next = next; }
     bool isBusy() const { return activePlant != nullptr; }
     void setBusy(bool status) { this->busy = status; }
+    const PlantProduct* getActivePlant() const { return activePlant; }
+    std::string getActiveTask() const { return activeTask; }
+
+    void clearAssignment() {
+        activePlant = nullptr;
+        activeTask.clear();
+    }
+
     virtual void setBusyFor(std::chrono::seconds duration) {
         busy = true;
         std::thread([this, duration]() {
             std::this_thread::sleep_for(duration);
             this->busy = false;
-            this->activePlant = nullptr;
+            this->clearAssignment();
         }).detach();
     }
 

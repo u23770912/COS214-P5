@@ -1,24 +1,36 @@
 #include "InNurseryState.h"
 #include "PlantProduct.h"
-#include "PlantedState.h"  
+#include "GrowingState.h"
 #include <iostream>
-#include <string>  
 
 void InNurseryState::onEnter(PlantProduct* plant) {
-    std::cout << "Plant has entered the InNursery state." << std::endl;
+    std::cout << "[STATE] Plant entered InNursery state (45 seconds)" << std::endl;
+    lastWasWater = false;
 }
 
 void InNurseryState::onExit(PlantProduct* plant) {
-    std::cout << "Plant is exiting the InNursery state." << std::endl;
+    std::cout << "[STATE] Plant exiting InNursery state" << std::endl;
 }
 
 void InNurseryState::advanceState(PlantProduct* plant) {
-    // Assume profile returns a string, convert to int
-    std::string daysStr = plant->getProfile()->getProperty("daysInNursery");
-    int requiredDays = daysStr.empty() ? 3 : std::stoi(daysStr);  // Default to 3 days if not set
+    int secondsInState = plant->getSecondsInCurrentState();
+    int secondsSinceCare = plant->getSecondsSinceLastCare();
 
-    if (plant-> getDaysInCurrentState()  >= requiredDays) {
-        std::cout << "Advancing from InNursery to Planted state." << std::endl;
-        plant->transitionTo(new PlantedState());
+    if (secondsSinceCare >= 5) {
+        if (lastWasWater) {
+            std::cout << "[IN_NURSERY] Requesting fertilizer..." << std::endl;
+            plant->notify("Fertilizing");
+            lastWasWater = false;
+        } else {
+            std::cout << "[IN_NURSERY] Requesting water..." << std::endl;
+            plant->notify("Watering");
+            lastWasWater = true;
+        }
+        plant->resetLastCareTime();
+    }
+
+    if (secondsInState >= 15) {
+        std::cout << "[IN_NURSERY] Growth stage complete. Moving to Growing." << std::endl;
+        plant->transitionTo(new GrowingState());
     }
 }

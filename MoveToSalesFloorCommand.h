@@ -3,7 +3,7 @@
 
 #include "CareCommand.h"
 #include "PlantProduct.h"
-#include "StateDP/ReadyForSaleState.h"
+#include "ReadyForSaleState.h"
 #include <iostream>
 
 class MoveToSalesFloorCommand : public CareCommand {

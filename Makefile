@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g -std=c++11 -Wall --coverage
+CXXFLAGS = -g -std=c++11 -Wall #--coverage
 
 SRC = $(wildcard *.cpp)
 DEPS = $(wildcard *.h)

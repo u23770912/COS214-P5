@@ -1,8 +1,7 @@
-// ============= StaffManager.h =============
 #ifndef STAFFMANAGER_H
 #define STAFFMANAGER_H
 
-#include "LifecycleObserver.h"
+#include "LifeCycleObserver.h"
 #include "ModeVisitor.h"
 #include <string>
 #include <iostream>

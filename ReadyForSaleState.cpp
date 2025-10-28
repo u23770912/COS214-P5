@@ -6,6 +6,7 @@
 
 void ReadyForSaleState::onEnter(PlantProduct* plant) {
     std::cout << "Plant has entered the ReadyForSale state." << std::endl;
+    plant->notify("MoveToSalesFloor");
 }
 
 void ReadyForSaleState::onExit(PlantProduct* plant) {

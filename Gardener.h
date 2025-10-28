@@ -18,7 +18,8 @@ public:
     void handleCommand(Command* command) override {
         if (!isBusy()) {
             activePlant = command->getReceiver();
-            setBusyFor(std::chrono::seconds(10));  // stay busy three seconds
+            activeTask = command->getType();
+                setBusyFor(std::chrono::seconds(3));
             std::cout << "Gardener is handling the '" << command->getType() << "' command." << std::endl;
             command->execute();
             delete command;

@@ -1,29 +1,29 @@
 #include "PlantedState.h"
 #include "PlantProduct.h"
-#include "ReadyForSaleState.h"  
+#include "InNurseryState.h"
 #include <iostream>
-#include <string>  
 
 void PlantedState::onEnter(PlantProduct* plant) {
-    std::cout << "Plant has entered the Planted state." << std::endl;
+    std::cout << "[STATE] Plant entered Planted state (30 seconds)" << std::endl;
 }
 
 void PlantedState::onExit(PlantProduct* plant) {
-    std::cout << "Plant is exiting the Planted state." << std::endl;
+    std::cout << "[STATE] Plant exiting Planted state" << std::endl;
 }
 
 void PlantedState::advanceState(PlantProduct* plant) {
-    // Assume profile returns a string, convert to int
-    std::string daysStr = plant->getProfile()->getProperty("daysPlantedToReady");
-    int requiredDays = daysStr.empty() ? 5 : std::stoi(daysStr);  // Default to 5 days if not set
+    int secondsInState = plant->getSecondsInCurrentState();
+    int secondsSinceCare = plant->getSecondsSinceLastCare();
 
-    if (plant->  getDaysInCurrentState() >= requiredDays) {
-        std::cout << "Advancing from Planted to ReadyForSale state." << std::endl;
-        plant->transitionTo(new ReadyForSaleState());
+    if (secondsSinceCare >= 3) {
+        std::cout << "[PLANTED] Requesting water..." << std::endl;
+        plant->notify("Watering");
+        plant->resetLastCareTime();
     }
-}
 
-std::string PlantedState::getName() const{
-    return "Planted";
+    if (secondsInState >= 10) {
+        std::cout << "[PLANTED] Growth stage complete. Moving to InNursery." << std::endl;
+        plant->transitionTo(new InNurseryState());
+    }
 }
 

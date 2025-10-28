@@ -1,6 +1,10 @@
 #include "PlantProduct.h"
+#include "LifeCycleObserver.h"
 #include "PlantState.h"
+#include "PlantedState.h"
 #include "InNurseryState.h"
+#include "GrowingState.h"
+#include "ReadyForSaleState.h"
 #include "WitheringState.h"
 #include "PlantSpeciesProfile.h"
 #include "CareStrategy.h"
@@ -12,11 +16,14 @@
 #include "StandardPruningStrategy.h"
 #include "DripWateringStrategy.h"
 #include <iostream>
-#include <string>  
+#include <string>
+#include <algorithm>
+#include <cctype>
 
 PlantProduct::PlantProduct(const std::string& id, PlantSpeciesProfile* profile) 
-    : currentState(nullptr), daysInCurrentState(0), monitor(nullptr), speciesProfile(profile), plantId(id) {
-    transitionTo(new InNurseryState());
+        : currentState(nullptr), daysInCurrentState(0), stateStartTime(std::chrono::steady_clock::now()),
+            lastCareNotification(std::chrono::steady_clock::now()), monitor(nullptr), speciesProfile(profile), plantId(id) {
+        transitionTo(new PlantedState());
     addStrategy("water", new WateringStrategy());
     addStrategy("mist", new GentleMistStrategy());
     addStrategy("prune_artistic", new ArtisticPruningStrategy());
@@ -46,6 +53,8 @@ void PlantProduct::transitionTo(PlantState *state)
     currentState = state;
     currentState->onEnter(this);
     daysInCurrentState = 0; // Reset days when transitioning
+    stateStartTime = std::chrono::steady_clock::now();
+    lastCareNotification = std::chrono::steady_clock::now();
 }
 
 std::string PlantProduct::getCurrentStateName() const
@@ -81,26 +90,54 @@ void PlantProduct::addStrategy(const std::string &careType, CareStrategy *strate
     strategy_map[careType] = strategy;
 }
 
-void PlantProduct::performCare(const std::string &careType)//add time
+void PlantProduct::performCare(const std::string &careType)
 {
-    auto it = strategy_map.find(careType);
+    std::string normalized = careType;
+    std::transform(normalized.begin(), normalized.end(), normalized.begin(), [](unsigned char c) {
+        return static_cast<char>(std::tolower(c));
+    });
+
+    static const std::map<std::string, std::string> aliases = {
+        {"watering", "water"},
+        {"water", "water"},
+        {"mist", "mist"},
+        {"fertilizing", "fertilize"},
+        {"fertilize", "fertilize"},
+        {"pruning", "prune_standard"},
+        {"prune", "prune_standard"},
+        {"prune_standard", "prune_standard"},
+        {"prune_artistic", "prune_artistic"},
+        {"flood", "flood"},
+        {"drip", "drip"}
+    };
+
+    auto aliasIt = aliases.find(normalized);
+    if (aliasIt != aliases.end())
+    {
+        normalized = aliasIt->second;
+    }
+
+    auto it = strategy_map.find(normalized);
     if (it != strategy_map.end())
     {
-        std::string key;
-        if (careType == "water")
-            key = "idealWater";
-        else if (careType == "mist")
-            key = "idealWater"; // Assume mist uses water property
-        else if (careType == "prune_artistic")
-            key = "idealPruning"; // Add if needed
-        else if (careType == "fertilize")
-            key = "idealFertilizer"; // Add if needed
-        // Add mappings for other care types as needed
+        std::string propertyKey;
+        if (normalized == "water" || normalized == "mist" || normalized == "flood" || normalized == "drip")
+        {
+            propertyKey = "idealWater";
+        }
+        else if (normalized == "fertilize")
+        {
+            propertyKey = "idealFertilizer";
+        }
+        else if (normalized == "prune_artistic" || normalized == "prune_standard")
+        {
+            propertyKey = "idealPruning";
+        }
 
-        std::string amountStr = speciesProfile->getProperty(key);
-        int amount = amountStr.empty() ? 100 : std::stoi(amountStr); // Parse to int, default 100
-        std::cout << "Performing '" << careType << "' care for " << speciesProfile->getSpeciesName() << "." << std::endl;
-        it->second->applyCare(amount, careType);
+        std::string amountStr = propertyKey.empty() ? std::string() : speciesProfile->getProperty(propertyKey);
+        int amount = amountStr.empty() ? 100 : std::stoi(amountStr);
+        std::cout << "Performing '" << normalized << "' care for " << speciesProfile->getSpeciesName() << "." << std::endl;
+        it->second->applyCare(amount, normalized);
     }
     else
     {
@@ -116,4 +153,21 @@ void PlantProduct::advanceLifecycle()
         daysInCurrentState++;
         currentState->advanceState(this);
     }
+}
+
+int PlantProduct::getSecondsInCurrentState() const
+{
+    auto now = std::chrono::steady_clock::now();
+    return static_cast<int>(std::chrono::duration_cast<std::chrono::seconds>(now - stateStartTime).count());
+}
+
+int PlantProduct::getSecondsSinceLastCare() const
+{
+    auto now = std::chrono::steady_clock::now();
+    return static_cast<int>(std::chrono::duration_cast<std::chrono::seconds>(now - lastCareNotification).count());
+}
+
+void PlantProduct::resetLastCareTime()
+{
+    lastCareNotification = std::chrono::steady_clock::now();
 }
