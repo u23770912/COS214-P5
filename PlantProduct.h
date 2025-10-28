@@ -5,15 +5,17 @@
 #include <string>
 #include <map>
 #include "LifecycleObserver.h"
-#include "StateDP/PlantState.h"
-#include "BridgeDP/PlantSpeciesProfile.h"
-#include "StrategyDP/CareStrategy.h"
+#include "PlantState.h"
+#include "PlantSpeciesProfile.h"
+#include "CareStrategy.h"
 
 // The main context class that ties many patterns together.
 class PlantProduct {
 private:
     // State Pattern
     PlantState* currentState;
+    int daysInCurrentState;
+   
     // Observer Pattern
     LifecycleObserver* monitor;
     // Bridge Pattern
@@ -30,6 +32,7 @@ public:
     void transitionTo(PlantState* state);
     std::string getCurrentStateName() const;
     void transitionToWithering();
+    int getDaysInCurrentState() const { return daysInCurrentState; };
 
     // --- Observer ---
     void setObserver(LifecycleObserver* obs) { monitor = obs; }
