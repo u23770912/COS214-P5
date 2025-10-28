@@ -13,11 +13,7 @@ private:
     static std::map<std::string, Command*> prototypes;
 
 public:
-<<<<<<< HEAD
-    virtual ~Command() {}
-=======
     virtual ~Command();
->>>>>>> a5cc157f06bf6b3c50e503d2c0883ab9968a4990
 
     virtual void execute() = 0;
     virtual std::string getType() const = 0;
@@ -37,14 +33,9 @@ public:
         std::cout << "Error: Command type '" << type << "' not registered." << std::endl;
         return nullptr;
     }
-<<<<<<< HEAD
-    
-    void setReceiver(PlantProduct* plant);
-=======
 
     virtual void setReceiver(PlantProduct* plant);
     virtual PlantProduct* getReceiver() const;
->>>>>>> a5cc157f06bf6b3c50e503d2c0883ab9968a4990
 };
 
 #endif // COMMAND_H
