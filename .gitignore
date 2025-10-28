@@ -18,7 +18,8 @@ out/
 .vscode/
 
 # Documentation (if you want to ignore it)
-VISITOR_PATTERN_EXPLANATION.md
+*.md
+!README.md
 *.pdf
 
 # Build directories

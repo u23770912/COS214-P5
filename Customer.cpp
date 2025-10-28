@@ -4,13 +4,13 @@
 #include "Order.h"
 #include "InventoryManager.h"
 #include "PlantProduct.h"
-#include "StaffManager.h"
+#include "CustomerObserver.h"
 #include "BridgeDP/PlantSpeciesProfile.h"
 #include <iostream>
 #include <iomanip>
 
 Customer::Customer(const std::string& name, const std::string& email, const std::string& cellPhone)
-    : name(name), email(email), cellPhone(cellPhone), orderBuilder(nullptr), orderProduct(nullptr), placeOrderCommand(nullptr), staffObserver(nullptr) {
+    : name(name), email(email), cellPhone(cellPhone), orderBuilder(nullptr), orderProduct(nullptr), placeOrderCommand(nullptr) {
     // Initialize the order builder
     orderBuilder = new ConcreteOrderBuilder(name);
 }
@@ -73,7 +73,7 @@ bool Customer::executeOrder() {
     
     // Step 1: Request staff validation FIRST (as designed!)
     std::cout << "\n[STEP 1] Requesting Staff Validation..." << std::endl;
-    if (!requestStaffValidation(orderProduct)) {
+    if (!requestValidation(orderProduct)) {
         std::cout << "[ERROR] Staff validation failed - cannot proceed with order" << std::endl;
         return false;
     }
@@ -139,8 +139,8 @@ bool Customer::addPlantToOrder(int plantIndex, int quantity) {
     std::cout << "\n[SUCCESS] Adding " << quantity << "x " << plantType 
               << " to your order..." << std::endl;
     
-    // Notify staff of customer interaction
-    notifyStaffOfInteraction("PlantSelection", 
+    // Notify observers of customer interaction
+    notifyInteraction("PlantSelection", 
         "Customer selected " + std::to_string(quantity) + "x " + plantType);
     
     // Use the builder to add the plant
@@ -169,8 +169,8 @@ bool Customer::addBundleToOrder(const std::string& bundleName, const std::vector
     
     std::cout << "\n[BUNDLE] Creating bundle: " << bundleName << " with " << discount << "% discount" << std::endl;
     
-    // Notify staff of bundle creation
-    notifyStaffOfInteraction("BundleCreation", 
+    // Notify observers of bundle creation
+    notifyInteraction("BundleCreation", 
         "Customer creating " + bundleName + " with " + std::to_string(plantIndices.size()) + " plants");
     
     // Use builder to create bundle
@@ -242,43 +242,55 @@ ConcreteOrderBuilder* Customer::getOrderBuilder() {
     return dynamic_cast<ConcreteOrderBuilder*>(orderBuilder);
 }
 
-// Staff interaction methods - Observer pattern implementation
-void Customer::setStaffObserver(StaffManager* staff) {
-    staffObserver = staff;
-    std::cout << "[SYSTEM] Customer " << name << " connected to staff system" << std::endl;
-}
+// ============= Observer Pattern Implementation (Pure Pattern) =============
 
-void Customer::notifyStaffOfInteraction(const std::string& interactionType, const std::string& details) {
-    if (staffObserver) {
-        std::cout << "[STAFF] Customer " << name << " requesting staff assistance: " << interactionType << std::endl;
-        if (!details.empty()) {
-            std::cout << "   Details: " << details << std::endl;
+// Override from CustomerSubject - notifies all observers
+void Customer::notifyInteraction(const std::string& interactionType, const std::string& details) {
+    std::cout << "[CUSTOMER NOTIFICATION] " << name << " - " << interactionType << std::endl;
+    if (!details.empty()) {
+        std::cout << "   Details: " << details << std::endl;
+    }
+    
+    // Notify all attached observers
+    for (CustomerObserver* observer : observers) {
+        if (observer) {
+            observer->updateCustomerInteraction(this, interactionType, details);
         }
-        // Notify staff through observer pattern
-        // staffObserver->handleCustomerInteraction(this, interactionType, details);
-    } else {
-        std::cout << "[WARNING] No staff available - customer service request ignored" << std::endl;
     }
 }
 
-bool Customer::requestStaffValidation(Order* order) {
-    if (!staffObserver) {
-        std::cout << "[ERROR] No staff available for order validation" << std::endl;
+// Override from CustomerSubject - requests validation from observers
+bool Customer::requestValidation(Order* order) {
+    if (observers.empty()) {
+        std::cout << "[ERROR] No staff observers available for order validation" << std::endl;
         return false;
     }
     
-    std::cout << "\n[STAFF REQUEST] REQUESTING STAFF VALIDATION" << std::endl;
+    std::cout << "\n[VALIDATION REQUEST] Sending to staff observers..." << std::endl;
     std::cout << "Customer: " << name << " (" << email << ")" << std::endl;
     std::cout << "Order ID: " << order->getOrderId() << std::endl;
     
-    notifyStaffOfInteraction("OrderValidation", "Customer needs order validation for " + order->getOrderId());
+    // Try each observer until one validates successfully
+    for (CustomerObserver* observer : observers) {
+        if (observer && observer->validateCustomerOrder(order, this)) {
+            std::cout << "[SUCCESS] Order validated by staff" << std::endl;
+            return true;
+        }
+    }
     
-    // In a real system, this would be asynchronous
-    // For demo, we'll simulate staff processing
-    std::cout << "[PROCESSING] Staff processing validation request..." << std::endl;
-    
-    // Simulate staff validation through chain
-    return true; // For now, always succeed
+    std::cout << "[FAILED] No staff could validate the order" << std::endl;
+    return false;
+}
+
+// Convenience methods for attaching/detaching observers
+void Customer::attachObserver(CustomerObserver* observer) {
+    attach(observer);
+    std::cout << "[SYSTEM] Staff observer registered for customer: " << name << std::endl;
+}
+
+void Customer::detachObserver(CustomerObserver* observer) {
+    detach(observer);
+    std::cout << "[SYSTEM] Staff observer unregistered for customer: " << name << std::endl;
 }
 
 // Helper methods

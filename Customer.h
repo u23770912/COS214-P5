@@ -2,14 +2,19 @@
 #define CUSTOMER_H
 #include <string>
 #include <vector>
+#include "CustomerSubject.h"
 
 class OrderBuilder; // Forward declaration
 class Order; // Forward declaration
 class PlaceOrderCommand; // Forward declaration
 class PlantProduct; // Forward declaration
-class StaffManager; // Forward declaration
+class CustomerObserver; // Forward declaration
 
-class Customer {
+/**
+ * @brief ConcreteSubject in the Customer Observer pattern
+ * Notifies observers (staff) about customer interactions and order events
+ */
+class Customer : public CustomerSubject {
     private:
         std::string name;
         std::string email;
@@ -18,9 +23,6 @@ class Customer {
         OrderBuilder* orderBuilder;
         Order* orderProduct;
         PlaceOrderCommand* placeOrderCommand;
-        
-        // Observer pattern - Staff management
-        StaffManager* staffObserver;
        
     public:
         Customer(const std::string& name, const std::string& email, const std::string& cellPhone = "");
@@ -44,10 +46,14 @@ class Customer {
         // Helper method to access the order builder
         class ConcreteOrderBuilder* getOrderBuilder();
         
-        // Staff interaction methods - Observer pattern
-        void setStaffObserver(StaffManager* staff);
-        void notifyStaffOfInteraction(const std::string& interactionType, const std::string& details = "");
-        bool requestStaffValidation(Order* order);
+        // Observer pattern methods - Override from CustomerSubject
+        void notifyInteraction(const std::string& interactionType, 
+                             const std::string& details = "") override;
+        bool requestValidation(Order* order) override;
+        
+        // Convenience methods (delegates to base class)
+        void attachObserver(CustomerObserver* observer);
+        void detachObserver(CustomerObserver* observer);
         
     private:
         // Helper methods for inventory management

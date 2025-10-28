@@ -17,16 +17,21 @@ MOVE_TEST_SRC = $(filter-out main.cpp Customer.cpp InteractiveMode.cpp CustomerO
 MOVE_TEST_OBJ = $(patsubst %.cpp,%.o,$(MOVE_TEST_SRC))
 
 # Customer Order test (exclude main.cpp and MoveToSaleFloorTest.cpp)
-ORDER_TEST_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp,$(SRC))
+ORDER_TEST_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp PureObserverPatternTest.cpp,$(SRC))
 ORDER_TEST_OBJ = $(patsubst %.cpp,%.o,$(ORDER_TEST_SRC))
+
+# Pure Observer Pattern test (exclude main.cpp, MoveToSaleFloorTest.cpp, CustomerOrderTest.cpp)
+PURE_OBSERVER_TEST_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp CustomerOrderTest.cpp,$(SRC))
+PURE_OBSERVER_TEST_OBJ = $(patsubst %.cpp,%.o,$(PURE_OBSERVER_TEST_SRC))
 
 TARGET = greenhouse
 TEST_MOVE_TARGET = test_move_to_sales_floor
 TEST_ORDER_TARGET = test_customer_order
+TEST_PURE_OBSERVER_TARGET = test_pure_observer
 
 all: $(TARGET)
 
-test: $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET)
+test: $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET) $(TEST_PURE_OBSERVER_TARGET)
 
 $(TARGET): $(MAIN_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
@@ -37,11 +42,14 @@ $(TEST_MOVE_TARGET): $(MOVE_TEST_OBJ)
 $(TEST_ORDER_TARGET): $(ORDER_TEST_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+$(TEST_PURE_OBSERVER_TARGET): $(PURE_OBSERVER_TEST_OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
 %.o: %.cpp $(DEPS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) $(TARGET) $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET)
+	rm -f $(OBJ) $(TARGET) $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET) $(TEST_PURE_OBSERVER_TARGET)
 	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno
 	rm -rf out
 
