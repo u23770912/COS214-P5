@@ -2,9 +2,6 @@
 #define EFTADAPTEE_H
 
 #include <string>
-#include "iostream"
-
-using namespace std;
 
 class EFTAdaptee {
 public:

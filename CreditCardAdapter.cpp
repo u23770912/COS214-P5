@@ -1,29 +1,31 @@
+// CreditCardAdapter.cpp
 #include "CreditCardAdapter.h"
 #include "CreditCardAdaptee.h"
+#include <iostream>
 
-CreditCardAdapter::CreditCardAdapter(CreditCardAdaptee* adaptee) : adaptee(adaptee)
-{}
+using namespace std;
+#include <string>
 
-CreditCardAdapter::~CreditCardAdapter()
-{}
+CreditCardAdapter::CreditCardAdapter(CreditCardAdaptee* adaptee) : adaptee(adaptee) {}
 
-bool CreditCardAdapter::processPayment(double amount, const string& customerId, const string payload)
-{
+CreditCardAdapter::~CreditCardAdapter() {}
+
+bool CreditCardAdapter::processPayment(double amount, const std::string& customerId, const std::string& payload) {
+    // expect payload format "cardNumber;expiry;cvc"
     size_t pos1 = payload.find(';');
     size_t pos2 = payload.rfind(';');
-    if (pos1 == string::npos || pos2 == string::npos || pos1 == pos2) 
-    {
+    if (pos1 == std::string::npos || pos2 == std::string::npos || pos1 == pos2) {
+        cout << "[CreditCardAdapter] Invalid payload format for credit card." << endl;
         return false;
     }
 
-    string card = payload.substr(0, pos1);
-    string expiry = payload.substr(pos1 + 1, pos2 - pos1 - 1);
-    string cvc = payload.substr(pos2 + 1);
+    std::string card = payload.substr(0, pos1);
+    std::string expiry = payload.substr(pos1 + 1, pos2 - pos1 - 1);
+    std::string cvc = payload.substr(pos2 + 1);
 
-    string receipt;
-    bool success = adaptee->processCreditCardTransaction(card, expiry, cvc, amount, receipt);
-    if (success)
-    {
+    std::string receipt;
+    bool ok = adaptee->processCreditCardTransaction(card, expiry, cvc, amount, receipt);
+    if (ok) {
         cout << "[CreditCardAdapter] Credit card payment processed for " << customerId
              << ", amount: R" << amount << ", receipt: " << receipt << endl;
         return true;

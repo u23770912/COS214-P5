@@ -5,6 +5,9 @@
 #include <ctime>
 #include <algorithm>
 
+// Definition of static member
+std::vector<Order*> Order::allOrders;
+
 Order::Order(const std::string& orderId, const std::string& customerName)
     : orderId(orderId), customerName(customerName), totalAmount(0.0), status("Pending") {
     // Generate timestamp
@@ -148,7 +151,7 @@ void Order::clearOrder() {
 }
 
 int Order::getItemCount() const {
-    return orderItems.size();
+    return static_cast<int>(orderItems.size());
 }
 
 bool Order::isEmpty() const {
@@ -183,10 +186,10 @@ const std::vector<std::string>& Order::getItems() const
     return items;
 }
 
-const std::vector<std::string>& Order::getItems() const
-{
-    return items;
-}
+// const std::vector<std::string>& Order::getItems() const
+// {
+//     return items;
+// }
 
 std::string Order::getOrderDetails(const std::string& customerFilter) const
 {
@@ -195,7 +198,7 @@ std::string Order::getOrderDetails(const std::string& customerFilter) const
     if (customerFilter.empty())
     {
         // details for this single order
-        details << "Order ID: " << orderID << "\n";
+        details << "Order ID: " << orderId << "\n";
         details << "Customer Name: " << customerName << "\n";
         details << "Items:\n";
         for (const auto& item : items) details << "- " << item << "\n";
@@ -219,7 +222,7 @@ std::string Order::getOrderDetails(const std::string& customerFilter) const
     bool found = false;
     for (auto order : allOrders)
     {
-        if (order->getCustomer() == customerFilter)
+        if (order->getCustomerName() == customerFilter)
         {
             found = true;
             details << "----------------------\n";
@@ -235,17 +238,20 @@ std::string Order::getOrderDetails(const std::string& customerFilter) const
     return details.str();
 }
 
-OrderMemento* Order::createMemento() const
-{
-    std::stringstream state;
-    state << orderID << "\n" << customerName << "\n" << totalAmount << "\n";
-    for (const auto& item : items)
-    {
-        state << item << "\n";
-    }
-
-    return new OrderMemento(state.str());
-}
+OrderMemento* Order::createMemento() const {
+       std::stringstream state;
+       state << orderId << "\n" << customerName << "\n" << status << "\n";
+       
+       // Save orderItems (the actual order content)
+       state << orderItems.size() << "\n";
+       for (const auto* item : orderItems) {
+           state << item->getName() << "|" 
+                 << item->getQuantity() << "|" 
+                 << item->getPrice() << "\n";
+       }
+       
+       return new OrderMemento(state.str());
+   }
 
 void Order::restoreState(const OrderMemento* memento)
 {
@@ -253,7 +259,7 @@ void Order::restoreState(const OrderMemento* memento)
 
     std::string s = memento->getState();
     std::stringstream state(s);
-    std::getline(state, orderID);
+    std::getline(state, orderId);
     std::getline(state, customerName);
     state >> totalAmount;
     state.ignore(); // eat newline after totalAmount

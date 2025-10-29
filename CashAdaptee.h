@@ -1,16 +1,15 @@
+// CashAdaptee.h
 #ifndef CASHADAPTEE_H
 #define CASHADAPTEE_H
 
 #include <string>
-#include "iostream"
-
-using namespace std;
 
 class CashAdaptee {
 public:
     CashAdaptee();
     ~CashAdaptee();
-    bool processCashTransaction(double ammount, string&  ReceiptId);
+    // returns true on success, writes receiptId
+    bool processCashTransaction(double amount, std::string& receiptId);
 };
 
 #endif // CASHADAPTEE_H

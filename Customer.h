@@ -2,12 +2,19 @@
 #define CUSTOMER_H
 #include <string>
 #include <vector>
+#include <map>
 
+class OrderHistory; // Forward declaration
 class OrderBuilder; // Forward declaration
 class Order; // Forward declaration
 class PlaceOrderCommand; // Forward declaration
 class PlantProduct; // Forward declaration
 class StaffManager; // Forward declaration
+
+class PaymentProcessor;
+class CashAdaptee;
+class CreditCardAdaptee;
+class EFTAdaptee;
 
 class Customer {
     private:
@@ -21,6 +28,20 @@ class Customer {
         
         // Observer pattern - Staff management
         StaffManager* staffObserver;
+
+        //memento pattern - order history
+        OrderHistory* orderHistory;
+
+        //adapter pattern - payment processors
+        CashAdaptee* cashSystem;
+        CreditCardAdaptee* creditCardSystem;
+        EFTAdaptee* eftSystem;
+
+        std::map<std::string, PaymentProcessor*> paymentAdapters;
+
+        void initializePaymentSystems();
+        void cleanupPaymentSystems();
+
        
     public:
         Customer(const std::string& name, const std::string& email, const std::string& cellPhone = "");
@@ -48,13 +69,22 @@ class Customer {
         void setStaffObserver(StaffManager* staff);
         void notifyStaffOfInteraction(const std::string& interactionType, const std::string& details = "");
         bool requestStaffValidation(Order* order);
-        
+
+        // Memento pattern - order history methods
+        void saveCurrentOrder();
+        void restoreLastOrder();
+        void viewOrderHistory();
+
+        // Adapter pattern - payment processing
+        bool processPayment(const std::string& paymentType, double amount, const std::string& paymentDetails = "");
+        void showPaymentOptions() const;
+        bool isPaymentMethodSupported(const std::string& paymentType) const;
+        bool executeOrderWithPayment(const std::string& paymentType, const std::string& paymentDetails = "");
+
     private:
         // Helper methods for inventory management
         std::vector<PlantProduct*> getAvailablePlantsFromInventory();
         void displayPlantDetails(const PlantProduct* plant, int index);
 };
 
-
-
-#endif
+#endif // CUSTOMER_H

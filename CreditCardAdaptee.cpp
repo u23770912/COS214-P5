@@ -1,14 +1,14 @@
+// CreditCardAdaptee.cpp
 #include "CreditCardAdaptee.h"
+#include <string>
 
-CreditCardAdaptee::CreditCardAdaptee()
-{}
+CreditCardAdaptee::CreditCardAdaptee() {}
+CreditCardAdaptee::~CreditCardAdaptee() {}
 
-CreditCardAdaptee::~CreditCardAdaptee()
-{}
-
-bool CreditCardAdaptee::processCreditCardTransaction(const string& cardNumber, const string& expiry, const string& cvc, double amount, string& ReceiptId)
+bool CreditCardAdaptee::processCreditCardTransaction(const std::string& cardNumber,const std::string& expiry,const std::string& cvc,double amount,std::string& receiptId)
 {
     static int counter = 0;
-    ReceiptId = "CC-" + to_string(++counter);
+    receiptId = "CC-" + std::to_string(++counter);
+    // For demo: always succeed
     return true;
 }

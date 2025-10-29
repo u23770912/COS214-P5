@@ -6,19 +6,33 @@
 #include "PlantProduct.h"
 #include "StaffManager.h"
 #include "BridgeDP/PlantSpeciesProfile.h"
+#include "OrderHistory.h"
 #include <iostream>
 #include <iomanip>
+
+#include "PaymentProcessor.h"
+#include "CashAdapter.h"
+#include "CreditCardAdapter.h"
+#include "EFTAdapter.h"
+#include "CashAdaptee.h"
+#include "CreditCardAdaptee.h"
+#include "EFTAdaptee.h"
+
+#include <vector>
+#include <map>
 
 Customer::Customer(const std::string& name, const std::string& email, const std::string& cellPhone)
     : name(name), email(email), cellPhone(cellPhone), orderBuilder(nullptr), orderProduct(nullptr), placeOrderCommand(nullptr), staffObserver(nullptr) {
     // Initialize the order builder
     orderBuilder = new ConcreteOrderBuilder(name);
+    orderHistory = new OrderHistory();
 }
 
 Customer::~Customer() {
     delete orderBuilder;
     delete orderProduct;
     delete placeOrderCommand;
+    delete orderHistory;
 }
 
 std::string Customer::getName() const {
@@ -310,4 +324,194 @@ void Customer::displayPlantDetails(const PlantProduct* plant, int index) {
         std::cout << "Unknown Plant";
     }
     std::cout << std::endl;
+}
+
+// Memento pattern - order history methods
+void Customer::saveCurrentOrder() {
+    if(orderProduct && !orderProduct->isEmpty()) {
+        orderHistory->saveOrder(orderProduct);
+        std::cout << "[SAVED] Current order saved to history" << std::endl;
+    } else {
+        std::cout << "[ERROR] No order to save" << std::endl;
+    }
+}
+
+void Customer::restoreLastOrder()
+{
+    if(orderProduct)
+    {
+        orderHistory->undo(orderProduct);
+        std::cout << "[RESTORED] Last order state restored from history" << std::endl;
+        viewCurrentOrder();
+    }
+    else
+    {
+        std::cout << "[ERROR] No order to restore" << std::endl;
+    }
+}
+
+void Customer::viewOrderHistory()
+{
+        std::cout << "\n=== ORDER HISTORY ===" << std::endl;
+    std::cout << "You can restore previous order states using restoreLastOrder()" << std::endl;
+    std::cout << "Current order: " << std::endl;
+    viewCurrentOrder();
+}
+
+// Adapter pattern - payment processing //
+void Customer::initializePaymentSystems()
+{
+    std::cout << "[Payment] Initializing payment adapters for customer..." << std::endl;
+    
+    // Create adaptees (third-party payment systems)
+    cashSystem = new CashAdaptee();
+    creditCardSystem = new CreditCardAdaptee();
+    eftSystem = new EFTAdaptee();
+    
+    // Create adapters and register them
+    paymentAdapters["CASH"] = new CashAdapter(cashSystem);
+    paymentAdapters["CREDIT_CARD"] = new CreditCardAdapter(creditCardSystem);
+    paymentAdapters["EFT"] = new EFTAdapter(eftSystem);
+    
+    std::cout << "[Payment] Available payment methods: CASH, CREDIT_CARD, EFT" << std::endl;
+}
+
+void Customer::cleanupPaymentSystems() {
+    // Delete adapters
+    for (auto& pair : paymentAdapters) {
+        delete pair.second;
+    }
+    paymentAdapters.clear();
+    
+    // Delete adaptees
+    delete cashSystem;
+    delete creditCardSystem;
+    delete eftSystem;
+}
+
+bool Customer::processPayment(const std::string& paymentType, double amount, 
+                              const std::string& paymentDetails) {
+    std::cout << "\n╔════════════════════════════════════════╗" << std::endl;
+    std::cout << "║     PROCESSING PAYMENT                ║" << std::endl;
+    std::cout << "╚════════════════════════════════════════╝" << std::endl;
+    
+    std::cout << "Customer: " << name << " (" << email << ")" << std::endl;
+    std::cout << "Payment Type: " << paymentType << std::endl;
+    std::cout << "Amount: R" << std::fixed << std::setprecision(2) << amount << std::endl;
+    
+    // Find the appropriate adapter
+    auto it = paymentAdapters.find(paymentType);
+    if (it == paymentAdapters.end()) {
+        std::cout << "\n[ERROR] Unsupported payment type: " << paymentType << std::endl;
+        std::cout << "Available methods: CASH, CREDIT_CARD, EFT" << std::endl;
+        return false;
+    }
+    
+    // Process payment through the adapter
+    std::cout << "\n[Processing] Using " << paymentType << " adapter..." << std::endl;
+    bool success = it->second->processPayment(amount, email, paymentDetails);
+    
+    if (success) {
+        std::cout << "\n✓ Payment processed successfully!" << std::endl;
+        std::cout << "Transaction completed for " << name << std::endl;
+    } else {
+        std::cout << "\n✗ Payment failed!" << std::endl;
+        std::cout << "Please check your payment details and try again." << std::endl;
+    }
+    
+    return success;
+}
+
+bool Customer::isPaymentMethodSupported(const std::string& paymentType) const {
+    return paymentAdapters.find(paymentType) != paymentAdapters.end();
+}
+
+bool Customer::executeOrderWithPayment(const std::string& paymentType, 
+                                       const std::string& paymentDetails) {
+    if (!orderProduct || orderProduct->isEmpty()) {
+        std::cout << "[ERROR] No order to execute. Please finalize your order first." << std::endl;
+        return false;
+    }
+    
+    std::cout << "\n╔════════════════════════════════════════╗" << std::endl;
+    std::cout << "║   INTEGRATED ORDER EXECUTION          ║" << std::endl;
+    std::cout << "╚════════════════════════════════════════╝\n" << std::endl;
+    
+    // Step 1: Save order state (Memento pattern)
+    std::cout << "[Step 1] Saving order state before processing..." << std::endl;
+    saveCurrentOrder();
+    
+    // Step 2: Display order summary
+    std::cout << "\n[Step 2] Order Summary:" << std::endl;
+    std::cout << orderProduct->getOrderSummary() << std::endl;
+    
+    // Step 3: Validate payment method
+    std::cout << "\n[Step 3] Validating payment method..." << std::endl;
+    if (!isPaymentMethodSupported(paymentType)) {
+        std::cout << "[ERROR] Payment method '" << paymentType << "' is not supported." << std::endl;
+        showPaymentOptions();
+        return false;
+    }
+    std::cout << "[OK] Payment method '" << paymentType << "' is supported." << std::endl;
+    
+    // Step 4: Request staff validation
+    std::cout << "\n[Step 4] Requesting staff validation..." << std::endl;
+    if (!requestStaffValidation(orderProduct)) {
+        std::cout << "[ERROR] Staff validation failed." << std::endl;
+        std::cout << "Restoring order to previous state..." << std::endl;
+        restoreLastOrder();
+        return false;
+    }
+    std::cout << "[OK] Staff validation completed." << std::endl;
+    
+    // Step 5: Process payment (Adapter pattern)
+    std::cout << "\n[Step 5] Processing payment..." << std::endl;
+    double totalAmount = orderProduct->getTotalAmount();
+    bool paymentSuccess = processPayment(paymentType, totalAmount, paymentDetails);
+    
+    if (!paymentSuccess) {
+        std::cout << "\n[ERROR] Payment processing failed." << std::endl;
+        std::cout << "Order has NOT been completed." << std::endl;
+        std::cout << "You can try again with a different payment method." << std::endl;
+        return false;
+    }
+    
+    // Step 6: Finalize order
+    std::cout << "\n[Step 6] Finalizing order..." << std::endl;
+    orderProduct->setStatus("Completed - Paid");
+    
+    std::cout << "\n╔════════════════════════════════════════╗" << std::endl;
+    std::cout << "║     ORDER COMPLETED SUCCESSFULLY!     ║" << std::endl;
+    std::cout << "╚════════════════════════════════════════╝" << std::endl;
+    
+    std::cout << "\nOrder ID: " << orderProduct->getOrderId() << std::endl;
+    std::cout << "Status: " << orderProduct->getStatus() << std::endl;
+    std::cout << "Total Paid: R" << std::fixed << std::setprecision(2) << totalAmount << std::endl;
+    std::cout << "\nThank you for your purchase, " << name << "!" << std::endl;
+    
+    return true;
+}
+
+void Customer::showPaymentOptions() const {
+    std::cout << "\n╔════════════════════════════════════════╗" << std::endl;
+    std::cout << "║   AVAILABLE PAYMENT METHODS           ║" << std::endl;
+    std::cout << "╚════════════════════════════════════════╝" << std::endl;
+    
+    std::cout << "\n1. CASH" << std::endl;
+    std::cout << "   - Pay with cash" << std::endl;
+    std::cout << "   - No additional details required" << std::endl;
+    std::cout << "   - Usage: processPayment(\"CASH\", amount, \"\")" << std::endl;
+    
+    std::cout << "\n2. CREDIT_CARD" << std::endl;
+    std::cout << "   - Pay with credit/debit card" << std::endl;
+    std::cout << "   - Format: \"cardNumber;expiry;cvc\"" << std::endl;
+    std::cout << "   - Example: \"4532123456789012;12/25;123\"" << std::endl;
+    std::cout << "   - Usage: processPayment(\"CREDIT_CARD\", amount, cardDetails)" << std::endl;
+    
+    std::cout << "\n3. EFT" << std::endl;
+    std::cout << "   - Electronic Funds Transfer" << std::endl;
+    std::cout << "   - Direct bank transfer" << std::endl;
+    std::cout << "   - Usage: processPayment(\"EFT\", amount, \"EFT\")" << std::endl;
+    
+    std::cout << "\n" << std::string(44, '=') << std::endl;
 }

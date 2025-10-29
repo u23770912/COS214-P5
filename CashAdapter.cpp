@@ -1,25 +1,30 @@
+// CashAdapter.cpp
 #include "CashAdapter.h"
 #include "CashAdaptee.h"
+#include <iostream>
 
-CashAdapter::CashAdapter(CashAdaptee* adaptee)
+using std::cout;
+using std::endl;
+
+CashAdapter::CashAdapter(CashAdaptee* adaptee) : adaptee(adaptee) {}
+CashAdapter::~CashAdapter() = default;
+
+bool CashAdapter::processPayment(double amount, const std::string& customerId, const std::string& payload)
 {
-    this->adaptee = adaptee;
-}
-
-CashAdapter::~CashAdapter()
-{}
-
-void CashAdapter::processPayment(double amount, const string& customerId, const string payload)
-{
-    if (payload == "CASH" || payload.empty())
-    {
-        string receipt;
-        bool success = adaptee->processCashTransaction(amount, receipt);
-        if (success)
-        {
+    // treat "CASH" or empty as cash payment
+    if (payload == "CASH" || payload.empty()) {
+        std::string receipt;
+        bool ok = adaptee->processCashTransaction(amount, receipt);
+        if (ok) {
             cout << "[CashAdapter] Cash payment processed for " << customerId
-                << ", amount: R" << amount << ", receipt: " << receipt << endl;
+                 << ", amount: R" << amount << ", receipt: " << receipt << endl;
+            return true;
         }
+        cout << "[CashAdapter] Cash payment failed for " << customerId << endl;
+        return false;
     }
-    cout << "[CashAdapter] Unsupported payment payload for cash payment." << endl;
+
+    // unsupported payload for cash adapter
+    cout << "[CashAdapter] Unsupported payload for cash adapter: " << payload << endl;
+    return false;
 }

@@ -1,15 +1,12 @@
-#include "PaymentProcessor.h"
+// #include "PaymentProcessor.h"
 
-PaymentProcessor::PaymentProcessor()
-{
-    handler = nullptr;
-}
+// // PaymentProcessor::PaymentProcessor()
+// // {
+// //     handler = nullptr;
+// // }
 
-PaymentProcessor::~PaymentProcessor()
-{}
+// // void PaymentProcessor::setHandler(PaymentHandler* handler)
+// // {}
 
-// void PaymentProcessor::setHandler(PaymentHandler* handler)
-// {}
-
-// PaymentHandler* PaymentProcessor::getHandler() const
-// {};
+// // PaymentHandler* PaymentProcessor::getHandler() const
+// // {};

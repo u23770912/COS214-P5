@@ -9,24 +9,29 @@ DEPS = $(wildcard *.h) $(wildcard StateDP/*.h) $(wildcard BridgeDP/*.h) $(wildca
 OBJ = $(patsubst %.cpp,%.o,$(SRC))
 
 # Exclude test files from main
-MAIN_SRC = $(filter-out MoveToSaleFloorTest.cpp CustomerOrderTest.cpp,$(SRC))
+MAIN_SRC = $(filter-out MoveToSaleFloorTest.cpp CustomerOrderTest.cpp test_memento_adapter.cpp,$(SRC))
 MAIN_OBJ = $(patsubst %.cpp,%.o,$(MAIN_SRC))
 
-# Test files - MoveToSalesFloor test (exclude main.cpp, Customer.cpp, InteractiveMode.cpp)
-MOVE_TEST_SRC = $(filter-out main.cpp Customer.cpp InteractiveMode.cpp CustomerOrderTest.cpp,$(SRC))
+# Test files - MoveToSalesFloor test (exclude main.cpp, InteractiveMode.cpp)
+MOVE_TEST_SRC = $(filter-out main.cpp InteractiveMode.cpp CustomerOrderTest.cpp test_memento_adapter.cpp,$(SRC))
 MOVE_TEST_OBJ = $(patsubst %.cpp,%.o,$(MOVE_TEST_SRC))
 
 # Customer Order test (exclude main.cpp and MoveToSaleFloorTest.cpp)
-ORDER_TEST_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp,$(SRC))
+ORDER_TEST_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp test_memento_adapter.cpp,$(SRC))
 ORDER_TEST_OBJ = $(patsubst %.cpp,%.o,$(ORDER_TEST_SRC))
+
+# Memento & Adapter test (exclude main.cpp and other test files)
+test_memento_adapter_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp CustomerOrderTest.cpp,$(SRC))
+test_memento_adapter_OBJ = $(patsubst %.cpp,%.o,$(test_memento_adapter_SRC))
 
 TARGET = greenhouse
 TEST_MOVE_TARGET = test_move_to_sales_floor
 TEST_ORDER_TARGET = test_customer_order
+TEST_MEMENTO_ADAPTER_TARGET = test_memento_adapter
 
 all: $(TARGET)
 
-test: $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET)
+test: $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET) $(TEST_MEMENTO_ADAPTER_TARGET)
 
 $(TARGET): $(MAIN_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
@@ -37,16 +42,22 @@ $(TEST_MOVE_TARGET): $(MOVE_TEST_OBJ)
 $(TEST_ORDER_TARGET): $(ORDER_TEST_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+$(TEST_MEMENTO_ADAPTER_TARGET): $(test_memento_adapter_OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
 %.o: %.cpp $(DEPS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) $(TARGET) $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET)
-	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno
+	rm -f $(OBJ) $(TARGET) $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET) $(TEST_MEMENTO_ADAPTER_TARGET)
+	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno BridgeDP/*.gcda BridgeDP/*.gcno StrategyDP/*.gcda StrategyDP/*.gcno
 	rm -rf out
 
 valgrind: $(TARGET)
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(TARGET)
+
+valgrind-memento: $(TEST_MEMENTO_ADAPTER_TARGET)
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(TEST_MEMENTO_ADAPTER_TARGET)
 
 coverage: all
 	./$(TARGET)
@@ -56,40 +67,16 @@ coverage: all
 	@genhtml coverage.info --output-directory out
 	@echo "Coverage report generated in out/index.html"
 
+coverage-memento: $(TEST_MEMENTO_ADAPTER_TARGET)
+	./$(TEST_MEMENTO_ADAPTER_TARGET)
+	@echo "Generating coverage report for Memento & Adapter test..."
+	@mkdir -p out
+	@lcov --capture --directory . --output-file coverage.info
+	@genhtml coverage.info --output-directory out
+	@echo "Coverage report generated in out/index.html"
+
 coverage-clean:
-	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno
+	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno BridgeDP/*.gcda BridgeDP/*.gcno StrategyDP/*.gcda StrategyDP/*.gcno
 	rm -rf out
 
-.PHONY: all test clean valgrind coverage-clean
-
-# Compiler
-CXX = g++
-CXXFLAGS = -std=c++11 -Wall -g
-
-# Source files
-SRCS = main.cpp Order.cpp OrderMemento.cpp OrderHistory.cpp
-
-# Object files
-OBJS = $(SRCS:.cpp=.o)
-
-# Executable
-TARGET = order_app
-
-# Default target
-all: $(TARGET)
-
-# Link
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
-
-# Compile .cpp to .o
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-# Clean
-clean:
-	rm -f $(OBJS) $(TARGET)
-
-run: $(TARGET)
-	./$(TARGET)
-
+.PHONY: all test clean valgrind valgrind-memento coverage coverage-memento coverage-clean

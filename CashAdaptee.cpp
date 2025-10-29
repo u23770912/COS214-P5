@@ -1,14 +1,14 @@
+// CashAdaptee.cpp
 #include "CashAdaptee.h"
+#include <string>
 
-CashAdaptee::CashAdaptee()
-{}
+CashAdaptee::CashAdaptee() {}
+CashAdaptee::~CashAdaptee() {}
 
-CashAdaptee::~CashAdaptee()
-{}
-
-bool CashAdaptee::processCashTransaction(double ammount, string&  receiptId)
+bool CashAdaptee::processCashTransaction(double amount, std::string& receiptId)
 {
     static int counter = 0;
-    receiptId = "CASH-" + to_string(++counter);
-    return true; // always succeeds for demo purposes
+    receiptId = "CASH-" + std::to_string(++counter);
+    // For demo: always succeed
+    return true;
 }

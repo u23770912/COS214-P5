@@ -3,9 +3,8 @@
 
 #include "PaymentProcessor.h"
 #include <string>
-#include <iostream>
 
-class EFTAdaptee;
+class EFTAdaptee;  // Forward declaration
 
 class EFTAdapter : public PaymentProcessor {
 private:
@@ -15,7 +14,7 @@ public:
     EFTAdapter(EFTAdaptee* adaptee);
     virtual ~EFTAdapter();
 
-    virtual bool processPayment(double amount, const std::string& customerId, const std::string payload) override;
+    virtual bool processPayment(double amount, const std::string& customerId, const std::string& payload) override;
 };
 
 #endif // EFTADAPTER_H
