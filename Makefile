@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -Wall #--coverage
 
-SRC = $(filter-out CactusProfile.cpp AutonomousMode.cpp InteractiveMode.cpp, $(wildcard *.cpp))
+SRC = $(wildcard *.cpp)
 DEPS = $(wildcard *.h)
 OBJ = $(SRC:.cpp=.o)
 

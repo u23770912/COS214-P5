@@ -58,10 +58,7 @@ public:
     void performCare(const std::string &careType);
     
     // Get strategy name for a care type (for display purposes)
-    std::string getStrategyNameForCareType(const std::string &careType) const {
-        auto it = strategy_map.find(careType);
-        return (it != strategy_map.end()) ? it->second->getName() : "Unknown";
-    }
+    std::string getStrategyNameForCareType(const std::string &careType) const;
 
     // --- Business Logic ---
     void advanceLifecycle();
