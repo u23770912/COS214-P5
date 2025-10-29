@@ -1,6 +1,8 @@
 #ifndef PLANTGROUP_H
 #define PLANTGROUP_H
 
+
+#include <algorithm>
 #include <string>
 #include <vector> 
 
