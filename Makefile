@@ -36,3 +36,6 @@ coverage-clean:
 	rm -rf out
 
 .PHONY: all clean valgrind coverage-clean
+
+run: $(TARGET)
+	./$(TARGET)

@@ -13,15 +13,19 @@
  */
 class TreeProfile : public PlantSpeciesProfile {
 public:
-    TreeProfile(const std::string& speciesName, const std::string& water, const std::string& sunlight, const std::string& soil) {
+    TreeProfile(const std::string& speciesName, const std::string& water, 
+                const std::string& sunlight, const std::string& soil) {
         properties["category"] = "Tree";
         properties["species"] = speciesName;
         properties["idealWater"] = water;
         properties["idealSunlight"] = sunlight;
         properties["idealSoil"] = soil;
-        properties["daysInNursery"] = "5";  // Default for testing
-        properties["daysPlantedToReady"] = "7";  // Default for testing
-        properties["maxDaysWithoutCare"] = "9"; // Default for testing
+        properties["preferredWaterMethod"] = "drip";  // Trees need deep watering
+        properties["needsPruning"] = "true";
+        properties["pruningStyle"] = "artistic";
+        properties["daysInNursery"] = "5";
+        properties["daysPlantedToReady"] = "7";
+        properties["maxDaysWithoutCare"] = "9";
     }
 
     std::string getSpeciesName() const override {

@@ -1,5 +1,5 @@
 #include "LifeCycleMonitor.h"
-#include "LifeCycleObserver.h"
+#include "LifecycleObserver.h"
 #include "PlantProduct.h"
 
 LifeCycleMonitor::LifeCycleMonitor(PlantProduct *plant) : subject(plant) {}

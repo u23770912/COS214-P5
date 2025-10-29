@@ -12,6 +12,9 @@ public:
         properties["idealWater"] = "50ml";
         properties["idealSunlight"] = "Full Sun";
         properties["idealSoil"] = "Sandy";
+        properties["preferredWaterMethod"] = "drip";  
+        properties["needsPruning"] = "false";        
+        properties["sensitiveTo"] = "mist,flood";     
         properties["daysInNursery"] = "4";
         properties["daysPlantedToReady"] = "6"; 
         properties["maxDaysWithoutCare"] = "10";
