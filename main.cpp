@@ -135,6 +135,7 @@ int main() {
 
     gardener1->setNext(gardener2);
     gardener2->setNext(gardener3);
+    gardener3->setNext(cashier1);
     cashier1->setNext(cashier2);
 
     std::vector<std::pair<std::string, StaffChainHandler *>> staff = {
