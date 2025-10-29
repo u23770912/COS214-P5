@@ -13,6 +13,7 @@ void applyCare(int amount, const std::string& careType) override {
             std::cout << "FloodWateringStrategy does not handle care type: " << careType << std::endl;
         }
     }
+std::string getName() const override { return "Flood Watering"; }
 };
 
 #endif // FLOOD_WATERING_STRATEGY_H

@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -Wall #--coverage
 
-SRC = $(wildcard *.cpp)
+SRC = $(filter-out CactusProfile.cpp AutonomousMode.cpp InteractiveMode.cpp, $(wildcard *.cpp))
 DEPS = $(wildcard *.h)
 OBJ = $(SRC:.cpp=.o)
 
@@ -36,6 +36,3 @@ coverage-clean:
 	rm -rf out
 
 .PHONY: all clean valgrind coverage-clean
-
-run: $(TARGET)
-	./$(TARGET)

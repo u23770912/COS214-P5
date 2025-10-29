@@ -18,6 +18,8 @@ public:
             std::cout << "DripWateringStrategy does not handle care type: " << careType << std::endl;
         }
     }
+
+    std::string getName() const override { return "Drip Watering"; }
 };
 
 #endif // DRIP_WATERING_STRATEGY_H

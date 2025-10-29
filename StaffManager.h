@@ -1,8 +1,8 @@
 #ifndef STAFFMANAGER_H
 #define STAFFMANAGER_H
 
-#include "LifecycleObserver.h"
-#include "ModeVisitor.h"
+#include "LifeCycleObserver.h"
+// #include "ModeVisitor.h"
 #include <string>
 #include <iostream>
 
@@ -12,19 +12,19 @@ class Command;
 
 /**
  * @class StaffManager
- * @brief Observes plants and delegates behavior to a ModeVisitor.
+ * @brief Observes plants and delegates behavior.
  */
 class StaffManager : public LifeCycleObserver
 {
 private:
     StaffMember *staffDispatcher;
-    ModeVisitor *currentModeVisitor;
+    // ModeVisitor *currentModeVisitor;
 
 public:
     StaffManager(StaffMember *dispatcher);
     ~StaffManager();
 
-    void setMode(ModeVisitor *newMode);
+    // void setMode(ModeVisitor *newMode);
     void update(PlantProduct *plant, const std::string &commandType) override;
     void dispatchCommand(Command *command);
 };

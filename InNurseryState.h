@@ -4,17 +4,17 @@
 #include "PlantState.h"
 #include <string>
 
-class LifeCycleMonitor;
-
 class InNurseryState : public PlantState {
 private:
-    bool lastWasWater = false;
-
+    bool lastWasWater;
+    
 public:
+    InNurseryState() : lastWasWater(false) {}
+    
     void onEnter(PlantProduct* plant) override;
     void onExit(PlantProduct* plant) override;
     std::string getName() const override { return "InNursery"; }
     void advanceState(PlantProduct* plant) override;
 };
 
-#endif // IN_NURSERY_STATE_H
+#endif

@@ -13,6 +13,7 @@ void applyCare(int amount, const std::string& careType) override {
             std::cout << "ArtisticPruningStrategy does not handle care type: " << careType << std::endl;
         }
     }
+std::string getName() const override { return "Artistic Pruning"; }
 };
 
 #endif // ARTISTIC_PRUNING_STRATEGY_H
