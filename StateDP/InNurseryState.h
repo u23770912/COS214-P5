@@ -6,6 +6,7 @@
 
 class InNurseryState : public PlantState {
 public:
+    void advanceState(PlantProduct* plant) override;
     void onEnter(PlantProduct* plant) override {}
     void onExit(PlantProduct* plant) override {}
     std::string getName() const override { return "InNursery"; }

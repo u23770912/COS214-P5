@@ -18,14 +18,22 @@
 #include "CreditCardAdaptee.h"
 #include "EFTAdaptee.h"
 
+#include "SuggestionTemplate/BouquetSuggestionFactory.h"
+
 #include <vector>
 #include <map>
+#include <string>
+
+using namespace std;
 
 Customer::Customer(const std::string& name, const std::string& email, const std::string& cellPhone)
     : name(name), email(email), cellPhone(cellPhone), orderBuilder(nullptr), orderProduct(nullptr), placeOrderCommand(nullptr), staffObserver(nullptr) {
     // Initialize the order builder
     orderBuilder = new ConcreteOrderBuilder(name);
     orderHistory = new OrderHistory();
+
+    // Initialize payment systems
+    initializePaymentSystems();
 }
 
 Customer::~Customer() {
@@ -33,6 +41,9 @@ Customer::~Customer() {
     delete orderProduct;
     delete placeOrderCommand;
     delete orderHistory;
+
+    // Cleanup payment systems
+    cleanupPaymentSystems();
 }
 
 std::string Customer::getName() const {
@@ -328,36 +339,43 @@ void Customer::displayPlantDetails(const PlantProduct* plant, int index) {
 
 // Memento pattern - order history methods
 void Customer::saveCurrentOrder() {
-    if(orderProduct && !orderProduct->isEmpty()) {
+    // First, get or create the current order from builder
+    ConcreteOrderBuilder* concreteBuilder = dynamic_cast<ConcreteOrderBuilder*>(orderBuilder);
+    if (!concreteBuilder || !concreteBuilder->hasCurrentOrder()) {
+        std::cout << "[MEMENTO] No order to save - order not built yet" << std::endl;
+        return;
+    }
+    
+    // Get the current order if we don't have it yet (DON'T delete it first)
+    if (!orderProduct) {
+        orderProduct = orderBuilder->getOrder();
+    }
+    
+    if (orderProduct && !orderProduct->isEmpty()) {
         orderHistory->saveOrder(orderProduct);
-        std::cout << "[SAVED] Current order saved to history" << std::endl;
+        std::cout << "[MEMENTO] Current order saved to history (Item count: " 
+                  << orderProduct->getItemCount() << ")" << std::endl;
     } else {
-        std::cout << "[ERROR] No order to save" << std::endl;
+        std::cout << "[MEMENTO] No order to save - order is empty" << std::endl;
     }
 }
 
-void Customer::restoreLastOrder()
-{
-    if(orderProduct)
-    {
+void Customer::restoreLastOrder() {
+    if (orderProduct) {
         orderHistory->undo(orderProduct);
-        std::cout << "[RESTORED] Last order state restored from history" << std::endl;
+        std::cout << "[MEMENTO] Last order state restored from history" << std::endl;
         viewCurrentOrder();
-    }
-    else
-    {
-        std::cout << "[ERROR] No order to restore" << std::endl;
+    } else {
+        std::cout << "[MEMENTO] No order to restore" << std::endl;
     }
 }
 
-void Customer::viewOrderHistory()
-{
-        std::cout << "\n=== ORDER HISTORY ===" << std::endl;
+void Customer::viewOrderHistory() {
+    std::cout << "\n=== ORDER HISTORY ===" << std::endl;
     std::cout << "You can restore previous order states using restoreLastOrder()" << std::endl;
     std::cout << "Current order: " << std::endl;
     viewCurrentOrder();
 }
-
 // Adapter pattern - payment processing //
 void Customer::initializePaymentSystems()
 {
@@ -373,7 +391,11 @@ void Customer::initializePaymentSystems()
     paymentAdapters["CREDIT_CARD"] = new CreditCardAdapter(creditCardSystem);
     paymentAdapters["EFT"] = new EFTAdapter(eftSystem);
     
-    std::cout << "[Payment] Available payment methods: CASH, CREDIT_CARD, EFT" << std::endl;
+    std::cout << "[Payment] Registered payment methods: ";
+    for (const auto& pair : paymentAdapters) {
+        std::cout << pair.first << " ";
+    }
+    std::cout << std::endl;
 }
 
 void Customer::cleanupPaymentSystems() {
@@ -403,10 +425,14 @@ bool Customer::processPayment(const std::string& paymentType, double amount,
     auto it = paymentAdapters.find(paymentType);
     if (it == paymentAdapters.end()) {
         std::cout << "\n[ERROR] Unsupported payment type: " << paymentType << std::endl;
-        std::cout << "Available methods: CASH, CREDIT_CARD, EFT" << std::endl;
+        std::cout << "Available methods: ";
+        for (const auto& pair : paymentAdapters) {
+            std::cout << pair.first << " ";
+        }
+        std::cout << std::endl;
         return false;
     }
-    
+
     // Process payment through the adapter
     std::cout << "\n[Processing] Using " << paymentType << " adapter..." << std::endl;
     bool success = it->second->processPayment(amount, email, paymentDetails);
@@ -423,7 +449,10 @@ bool Customer::processPayment(const std::string& paymentType, double amount,
 }
 
 bool Customer::isPaymentMethodSupported(const std::string& paymentType) const {
-    return paymentAdapters.find(paymentType) != paymentAdapters.end();
+    bool supported = paymentAdapters.find(paymentType) != paymentAdapters.end();
+    std::cout << "[DEBUG] Checking support for '" << paymentType << "': " 
+              << (supported ? "YES" : "NO") << std::endl;
+    return supported;
 }
 
 bool Customer::executeOrderWithPayment(const std::string& paymentType, 
@@ -514,4 +543,26 @@ void Customer::showPaymentOptions() const {
     std::cout << "   - Usage: processPayment(\"EFT\", amount, \"EFT\")" << std::endl;
     
     std::cout << "\n" << std::string(44, '=') << std::endl;
+}
+
+//suggested Bouqeut
+
+void Customer::browseBouquetSuggestions(const std::string& eventType) {
+    BouquetSuggestionFactory& factory = BouquetSuggestionFactory::getInstance();
+    BouquetSuggestionTemplate* tmpl = factory.getTemplate(eventType);
+    
+    if (!tmpl) {
+        std::cout << "Sorry, we don't have suggestions for that event yet." << std::endl;
+        return;
+    }
+    
+    // The template method handles the entire algorithm!
+    std::vector<BouquetSuggestion> suggestions = tmpl->generateSuggestions();
+    
+    // Display suggestions
+    for (size_t i = 0; i < suggestions.size(); i++) {
+        std::cout << "\n[Option " << (i+1) << "]" << std::endl;
+        std::cout << suggestions[i].getDescription() << std::endl;
+        std::cout << std::string(60, '-') << std::endl;
+    }
 }
