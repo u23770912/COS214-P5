@@ -51,28 +51,21 @@ $(MEMENTO_ADAPTER_TEST_TARGET): $(MEMENTO_ADAPTER_TEST_OBJ)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-<<<<<<< HEAD
-	rm -f $(OBJ) $(TARGET) $(TEST_ORDER_TARGET) $(CONCURRENT_DEMO_TARGET)
-	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno
-=======
-	rm -f $(OBJ) $(TARGET) $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET) $(TEST_MEMENTO_ADAPTER_TARGET)
+	rm -f $(OBJ) $(TARGET) $(TEST_ORDER_TARGET) $(CONCURRENT_DEMO_TARGET) $(MEMENTO_ADAPTER_TEST_TARGET)
 	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno BridgeDP/*.gcda BridgeDP/*.gcno StrategyDP/*.gcda StrategyDP/*.gcno
->>>>>>> salesfloor
 	rm -rf out
 
 valgrind: $(TARGET)
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(TARGET)
 
-<<<<<<< HEAD
 valgrind-test: $(TEST_ORDER_TARGET)
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --verbose ./$(TEST_ORDER_TARGET)
 
 valgrind-concurrent: $(CONCURRENT_DEMO_TARGET)
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --verbose ./$(CONCURRENT_DEMO_TARGET)
-=======
-valgrind-memento: $(TEST_MEMENTO_ADAPTER_TARGET)
-	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(TEST_MEMENTO_ADAPTER_TARGET)
->>>>>>> salesfloor
+
+valgrind-memento: $(MEMENTO_ADAPTER_TEST_TARGET)
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(MEMENTO_ADAPTER_TEST_TARGET)
 
 coverage: all
 	./$(TARGET)
@@ -94,8 +87,4 @@ coverage-clean:
 	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno BridgeDP/*.gcda BridgeDP/*.gcno StrategyDP/*.gcda StrategyDP/*.gcno
 	rm -rf out
 
-<<<<<<< HEAD
-.PHONY: all test concurrent clean valgrind valgrind-test valgrind-concurrent coverage-clean
-=======
-.PHONY: all test clean valgrind valgrind-memento coverage coverage-memento coverage-clean
->>>>>>> salesfloor
+.PHONY: all test concurrent clean valgrind valgrind-test valgrind-concurrent valgrind-memento coverage coverage-memento coverage-clean

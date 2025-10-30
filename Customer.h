@@ -17,6 +17,8 @@ class PaymentProcessor; // Forward declaration
 class CashAdaptee; // Forward declaration
 class CreditCardAdaptee; // Forward declaration
 class EFTAdaptee; // Forward declaration
+class StaffManager; // Forward declaration
+
 
 /**
  * @brief ConcreteSubject in the Customer Observer pattern
