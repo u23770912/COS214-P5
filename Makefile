@@ -1,38 +1,33 @@
+# Compiler and flags
 CXX = g++
-CXXFLAGS = -g -std=c++11 -Wall #--coverage
+CXXFLAGS = -g -std=c++11 -Wall -I. # <-- Add -I. here
+LDFLAGS =
 
-SRC = $(wildcard *.cpp)
-DEPS = $(wildcard *.h)
-OBJ = $(SRC:.cpp=.o)
+# Find all .cpp files in the current directory and subdirectories
+SRCS := $(wildcard *.cpp)
+OBJS := $(SRCS:.cpp=.o)
 
+# Name of the final executable
 TARGET = greenhouse
+
+.PHONY: all clean test valgrind
 
 all: $(TARGET)
 
-$(TARGET): $(OBJ)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+$(TARGET): $(OBJS)
+    $(CXX) $(LDFLAGS) -o $@ $^
 
-%.o: %.cpp $(DEPS)
-	$(CXX) $(CXXFLAGS) -c $<
+# Generic rule to compile .cpp files to .o files
+%.o: %.cpp
+    $(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) $(TARGET)
-	rm -f *.gcda *.gcno *.gcov coverage.info
-	rm -rf out
+    rm -f $(OBJS) $(TARGET) *.gcda *.gcno *.gcov coverage.info
+    rm -rf out
 
-valgrind: $(TARGET)
-	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(TARGET)
+# Add your test and valgrind rules here if needed
+test:
+    @echo "No test target defined."
 
-coverage: all
-	./$(TARGET)
-	@echo "Generating coverage report..."
-	@mkdir -p out
-	@lcov --capture --directory . --output-file coverage.info
-	@genhtml coverage.info --output-directory out
-	@echo "Coverage report generated in out/index.html"
-
-coverage-clean:
-	rm -f *.gcda *.gcno *.gcov coverage.info
-	rm -rf out
-
-.PHONY: all clean valgrind coverage-clean
+valgrind: all
+    valgrind --leak-check=full ./$(TARGET)
