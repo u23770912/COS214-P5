@@ -212,6 +212,7 @@ void cleanup(StaffContext& ctx,
     for (auto h : ctx.handlers) delete h;
     delete ctx.dispatcher;
     delete ctx.manager;
+    CareCommand::cleanupPrototypes(); // Clean up command prototypes
 }
 
 }  // namespace
