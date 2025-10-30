@@ -37,10 +37,10 @@ void InventoryManager::cleanup() {
     soldPlants.clear();
     
     // Clean up pots
-    for (Pots* pot : potInventory) {
-        delete pot;
-    }
-    potInventory.clear();
+    // for (Pots* pot : potInventory) {
+    //     delete pot;
+    // }
+    // potInventory.clear();
     
     plantsInStock = 0;
     std::cout << "InventoryManager cleanup complete." << std::endl;
