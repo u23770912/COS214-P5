@@ -9,28 +9,12 @@ DEPS = $(wildcard *.h) $(wildcard StateDP/*.h) $(wildcard BridgeDP/*.h) $(wildca
 OBJ = $(patsubst %.cpp,%.o,$(SRC))
 
 # Exclude test files from main
-MAIN_SRC = $(filter-out MoveToSaleFloorTest.cpp CustomerOrderTest.cpp,$(SRC))
+MAIN_SRC = $(filter-out CustomerOrderTest.cpp,$(SRC))
 MAIN_OBJ = $(patsubst %.cpp,%.o,$(MAIN_SRC))
 
-# Test files - MoveToSalesFloor test (exclude main.cpp, Customer.cpp, InteractiveMode.cpp)
-MOVE_TEST_SRC = $(filter-out main.cpp Customer.cpp InteractiveMode.cpp CustomerOrderTest.cpp,$(SRC))
-MOVE_TEST_OBJ = $(patsubst %.cpp,%.o,$(MOVE_TEST_SRC))
-
-# Customer Order test (exclude main.cpp and other test files)
-ORDER_TEST_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp PureObserverPatternTest.cpp DirectorPatternDemo.cpp FacadePatternDemo.cpp,$(SRC))
+# Customer Order test (exclude main.cpp)
+ORDER_TEST_SRC = $(filter-out main.cpp,$(SRC))
 ORDER_TEST_OBJ = $(patsubst %.cpp,%.o,$(ORDER_TEST_SRC))
-
-# Pure Observer Pattern test (exclude main.cpp, MoveToSaleFloorTest.cpp, CustomerOrderTest.cpp)
-PURE_OBSERVER_TEST_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp CustomerOrderTest.cpp DirectorPatternDemo.cpp,$(SRC))
-PURE_OBSERVER_TEST_OBJ = $(patsubst %.cpp,%.o,$(PURE_OBSERVER_TEST_SRC))
-
-# Director Pattern demo (exclude main.cpp and test files)
-DIRECTOR_DEMO_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp CustomerOrderTest.cpp PureObserverPatternTest.cpp FacadePatternDemo.cpp,$(SRC))
-DIRECTOR_DEMO_OBJ = $(patsubst %.cpp,%.o,$(DIRECTOR_DEMO_SRC))
-
-# Facade Pattern demo (exclude main.cpp and test files)
-FACADE_DEMO_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp CustomerOrderTest.cpp PureObserverPatternTest.cpp DirectorPatternDemo.cpp,$(SRC))
-FACADE_DEMO_OBJ = $(patsubst %.cpp,%.o,$(FACADE_DEMO_SRC))
 
 TARGET = greenhouse
 TEST_MOVE_TARGET = test_move_to_sales_floor
