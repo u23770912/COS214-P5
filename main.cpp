@@ -8,8 +8,6 @@
 #include <thread>
 #include <vector>
 
-// #include "AutonomousMode.h"
-// #include "CactusProfile.h"
 #include "CareCommand.h"
 #include "Cashier.h"
 #include "FertilizeCommand.h"
@@ -92,7 +90,11 @@ StaffContext createStaffContext() {
     ctx.dispatcher->registerTeam("Sales", cashier1);
 
     ctx.manager = new StaffManager(ctx.dispatcher);
-    // ctx.manager->setMode(new AutonomousMode());
+
+    // CRITICAL FIX: Set manager back-reference for ALL handlers
+    for (auto handler : ctx.handlers) {
+        handler->setManager(ctx.dispatcher);
+    }
 
     return ctx;
 }
@@ -100,7 +102,6 @@ StaffContext createStaffContext() {
 std::vector<PlantSpeciesProfile*> createProfiles() {
     std::vector<PlantSpeciesProfile*> profiles;
     profiles.push_back(new FlowerProfile("Rose", "250ml", "Partial Sun", "Loamy"));
-    // profiles.push_back(new CactusProfile());
     profiles.push_back(new TreeProfile("Bonsai", "180ml", "Full Sun", "Well-drained"));
     profiles.push_back(new SucculentProfile("Aloe Vera", "120ml", "Bright Indirect", "Sandy"));
     profiles.push_back(new TreeProfile("Oak Sapling", "300ml", "Full Sun", "Clay"));
@@ -108,7 +109,6 @@ std::vector<PlantSpeciesProfile*> createProfiles() {
     profiles.push_back(new SucculentProfile("Echeveria", "100ml", "Full Sun", "Gritty Mix"));
     profiles.push_back(new TreeProfile("Maple", "350ml", "Full Sun", "Loamy"));
     profiles.push_back(new FlowerProfile("Tulip", "150ml", "Full Sun", "Well-drained"));
-    // profiles.push_back(new CactusProfile("Saguaro", "50ml", "Full Sun", "Sandy"));
     return profiles;
 }
 
@@ -231,16 +231,25 @@ int main() {
     std::vector<PlantProduct*> plants = createPlants(profiles, staff.manager);
     TerminalUI::printSuccess(std::to_string(plants.size()) + " plants created");
 
-    const int maxSimulationSeconds = 300;
+    const int maxSimulationSeconds = 120;
     auto start = std::chrono::steady_clock::now();
     std::map<std::string, std::string> stateHistory;
     for (const auto& plant : plants) {
         stateHistory[plant->getId()] = plant->getCurrentStateName();
     }
 
+    int loopCounter = 0;
+
     while (true) {
+        // Advance plant lifecycles
         for (auto& plant : plants) {
             plant->advanceLifecycle();
+        }
+
+        // CRITICAL: Process unhandled queue every 2 seconds
+        // This attempts to re-dispatch queued commands when staff becomes available
+        if (loopCounter % 2 == 0) {
+            staff.dispatcher->processUnhandledQueue();
         }
 
         auto now = std::chrono::steady_clock::now();
@@ -262,6 +271,7 @@ int main() {
         }
 
         std::this_thread::sleep_for(std::chrono::seconds(1));
+        loopCounter++;
     }
 
     TerminalUI::printSection("FINAL SUMMARY");

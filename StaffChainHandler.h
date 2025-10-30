@@ -7,18 +7,22 @@
 #include <string>
 #include <thread>
 
+class StaffMember; // Forward declaration
+
 class StaffChainHandler {
 protected:
     StaffChainHandler* next;
+    StaffMember* manager; // Back-pointer to the dispatcher
     PlantProduct* activePlant = nullptr;
     std::string activeTask;
     bool busy;
 
 public:
-    StaffChainHandler() : next(nullptr), busy(false) {}
+    StaffChainHandler() : next(nullptr), manager(nullptr), busy(false) {}
     virtual ~StaffChainHandler() {}
 
     void setNext(StaffChainHandler* next) { this->next = next; }
+    void setManager(StaffMember* mgr) { this->manager = mgr; } // Setter for the manager
     bool isBusy() const { return activePlant != nullptr; }
     void setBusy(bool status) { this->busy = status; }
     const PlantProduct* getActivePlant() const { return activePlant; }

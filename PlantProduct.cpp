@@ -129,22 +129,23 @@ void PlantProduct::performCare(const std::string &careType)
     auto it = strategy_map.find(normalized);
     if (it != strategy_map.end())
     {
-        std::string propertyKey;
-        if (normalized == "water" || normalized == "mist" || normalized == "flood" || normalized == "drip")
-        {
-            propertyKey = "idealWater";
-        }
-        else if (normalized == "fertilize")
-        {
-            propertyKey = "idealFertilizer";
-        }
-        else if (normalized == "prune_artistic" || normalized == "prune_standard" || normalized == "prune_minimal")
-        {
-            propertyKey = "idealPruning";
+        std::string amountStr;
+        int amount = 1; // Default amount for pruning, as it's not numeric
+        std::string propertyKey; // Declare propertyKey here
+
+        if (normalized.rfind("prune", 0) != 0) { // if not a pruning type
+            if (normalized == "water" || normalized == "mist" || normalized == "flood" || normalized == "drip")
+            {
+                propertyKey = "idealWater";
+            }
+            else if (normalized == "fertilize")
+            {
+                propertyKey = "idealFertilizer";
+            }
+            amountStr = propertyKey.empty() ? std::string() : speciesProfile->getProperty(propertyKey);
+            amount = amountStr.empty() ? 100 : std::stoi(amountStr);
         }
 
-        std::string amountStr = propertyKey.empty() ? std::string() : speciesProfile->getProperty(propertyKey);
-        int amount = amountStr.empty() ? 100 : std::stoi(amountStr);
         std::cout << "Performing '" << normalized << "' care for " << speciesProfile->getSpeciesName() << "." << std::endl;
         it->second->applyCare(amount, normalized);
     }
