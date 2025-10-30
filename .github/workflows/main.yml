@@ -1,10 +1,10 @@
-name: CMake CI
+name: C++ CI
 
 on:
   push:
-    branches: [Dev-Branch]
+    branches: [ "Dev-Branch" ] # Triggers on pushes to the development branch
   pull_request:
-    branches: [Dev-Branch]
+    branches: [ "Dev-Branch" ] # Triggers on pull requests targeting the development branch
 
 jobs:
   build:
@@ -17,30 +17,33 @@ jobs:
       - name: Install build dependencies
         run: sudo apt-get update && sudo apt-get install -y build-essential cmake valgrind
 
-      - name: Compile sources (syntax only)
+      - name: Syntax Check (Compile Only)
         shell: bash
         run: |
-          SRC=$(find . -path ./build -prune -o -name '*.cpp' -o -name '*.cc' -o -name '*.cxx' -print)
-          if [ -z "$SRC" ]; then
-            echo "No source files found."
+          # Use find to get all C++ source and header files, excluding the build directory
+          SOURCES=$(find . \( -name "*.cpp" -o -name "*.h" \) -not -path "./build/*")
+          if [ -z "$SOURCES" ]; then
+            echo "No source or header files found. Skipping syntax check."
             exit 0
           fi
-          for file in $SRC; do
-            echo "Checking $file"
-            g++ -std=c++11 -Wall -Werror -I. -fsyntax-only "$file"
-          done
+          echo "Found source and header files:"
+          echo "$SOURCES"
+          # Check all found files for syntax errors
+          g++ -std=c++11 -Wall -Werror -I. -fsyntax-only $SOURCES
 
-      - name: Configure and build project
+      - name: Configure and Build Project
         shell: bash
         run: |
           if [ -f CMakeLists.txt ]; then
+            echo "CMakeLists.txt found. Configuring and building with CMake."
             cmake -S . -B build
             cmake --build build --config Release
           elif [ -f Makefile ]; then
+            echo "Makefile found. Building with Make."
             make clean
             make
           else
-            echo "Neither CMakeLists.txt nor Makefile found." >&2
+            echo "ERROR: Neither CMakeLists.txt nor Makefile found." >&2
             exit 1
           fi
 
@@ -48,21 +51,21 @@ jobs:
         if: hashFiles('CMakeLists.txt') != ''
         run: ctest --test-dir build --output-on-failure
 
-      - name: Run Make test target (if available)
+      - name: Run Make Test Target (if available)
         if: hashFiles('Makefile') != ''
         shell: bash
         run: |
-          if grep -q '^test:' Makefile; then
+          if grep -q -E '^test:' Makefile; then
             make test
           else
             echo "No 'test' target in Makefile. Skipping.";
           fi
 
-      - name: Run Valgrind target (if available)
+      - name: Run Valgrind Target (if available)
         if: hashFiles('Makefile') != ''
         shell: bash
         run: |
-          if grep -q '^valgrind:' Makefile; then
+          if grep -q -E '^valgrind:' Makefile; then
             make valgrind
           else
             echo "No 'valgrind' target in Makefile. Skipping.";

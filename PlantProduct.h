@@ -5,6 +5,7 @@
 #include <string>
 #include <map>
 #include <chrono>
+#include "LifeCycleObserver.h"
 #include "PlantState.h"
 #include "PlantSpeciesProfile.h"
 #include "CareStrategy.h"
