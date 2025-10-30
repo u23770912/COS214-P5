@@ -4,10 +4,14 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <chrono>
 #include "LifeCycleObserver.h"
 #include "PlantState.h"
 #include "PlantSpeciesProfile.h"
 #include "CareStrategy.h"
+#include "LifeCycleObserver.h"
+
+class LifeCycleObserver;
 
 // The main context class that ties many patterns together.
 class PlantProduct
@@ -16,6 +20,10 @@ private:
     // State Pattern
     PlantState *currentState;
     int daysInCurrentState;
+
+    // Timing for autonomous growth
+    std::chrono::steady_clock::time_point stateStartTime;
+    std::chrono::steady_clock::time_point lastCareNotification;
 
     // Observer Pattern
     LifeCycleObserver *monitor;
@@ -33,7 +41,12 @@ public:
     void transitionTo(PlantState *state);
     std::string getCurrentStateName() const;
     void transitionToWithering();
-    int getDaysInCurrentState() const { return daysInCurrentState; };
+    int getDaysInCurrentState() const { return daysInCurrentState; }
+
+    // --- Timing ---
+    int getSecondsInCurrentState() const;
+    int getSecondsSinceLastCare() const;
+    void resetLastCareTime();
 
     // --- Observer ---
     void setObserver(LifeCycleObserver *obs) { monitor = obs; }
@@ -44,10 +57,20 @@ public:
     // --- Strategy ---
     void addStrategy(const std::string &careType, CareStrategy *strategy);
     void performCare(const std::string &careType);
+    
+    // Get strategy name for a care type (for display purposes)
+    std::string getStrategyNameForCareType(const std::string &careType) const;
 
     // --- Business Logic ---
     void advanceLifecycle();
     void notify(const std::string &commandType);
+    
+    // --- Plant ID ---
+    std::string getId() const { return plantId; }
+
+private:
+    // Helper method to validate care appropriateness
+    bool isCareTypeAppropriate(const std::string &careType) const;
 };
 
 #endif // PLANT_PRODUCT_H

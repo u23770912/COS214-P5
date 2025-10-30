@@ -2,7 +2,21 @@
 #include "CareCommand.h"
 #include "PlantProduct.h"
 
+void StaffMember::queueUnhandledCommand(Command* command) {
+    if (command) {
+        std::cout << "Queueing unhandled command '" << command->getType() << "' for later." << std::endl;
+        unhandledCommands.push(command);
+    }
+}
 
+void StaffMember::processUnhandledQueue() {
+    if (!unhandledCommands.empty()) {
+        Command* command = unhandledCommands.front();
+        unhandledCommands.pop();
+        std::cout << "Re-dispatching command '" << command->getType() << "' from the unhandled queue." << std::endl;
+        dispatch(command);
+    }
+}
 
 void StaffMember::dispatch(Command* command) {
     if (!command) {

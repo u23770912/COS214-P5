@@ -20,6 +20,7 @@ void applyCare(int amount, const std::string& careType) override {
             std::cout << "FertilizingStrategy does not handle care type: " << careType << std::endl;
         }
     }
+    std::string getName() const override { return "Fertilizing"; }
 };
 
 #endif // FERTILIZINGSTRATEGY_H

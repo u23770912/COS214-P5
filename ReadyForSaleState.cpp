@@ -1,27 +1,29 @@
 #include "ReadyForSaleState.h"
 #include "PlantProduct.h"
-#include "WitheringState.h"  
 #include <iostream>
-#include <string>  
 
 void ReadyForSaleState::onEnter(PlantProduct* plant) {
-    std::cout << "Plant has entered the ReadyForSale state." << std::endl;
+    std::cout << "[STATE] Plant has entered ReadyForSale state (terminal state)" << std::endl;
+    hasRequestedMove = false;
 }
 
 void ReadyForSaleState::onExit(PlantProduct* plant) {
-    std::cout << "Plant is exiting the ReadyForSale state." << std::endl;
+    std::cout << "[STATE] Plant is exiting ReadyForSale state" << std::endl;
 }
 
 void ReadyForSaleState::advanceState(PlantProduct* plant) {
-    // Check for neglect: transition to WitheringState if no care or sale within max days
-    std::string maxDaysStr = plant->getProfile()->getProperty("maxDaysWithoutCare");
-    int maxDays = maxDaysStr.empty() ? 7 : std::stoi(maxDaysStr);  // Default to 7 days if not set
-
-    if (plant->getDaysInCurrentState() >= maxDays) {
-        std::cout << "Plant neglected too long in ReadyForSale state, transitioning to Withering." << std::endl;
-        plant->transitionTo(new WitheringState());
-    } else {
-        std::cout << "Plant remains in ReadyForSale state." << std::endl;
+    // Only request move once, after a delay
+    if (!hasRequestedMove) {
+        int secondsInState = plant->getSecondsInCurrentState();
+        
+        // Wait 5 seconds before requesting move (give time to see the state change)
+        if (secondsInState >= 5) {
+            std::cout << "[READY_FOR_SALE] Requesting move to sales floor..." << std::endl;
+            plant->notify("MoveToSalesFloor");
+            hasRequestedMove = true;
+        }
     }
-    // Note: daysInCurrentState is incremented in PlantProduct::advanceLifecycle()
+    
+    // Terminal state - stays here, won't wither
+    // Plant remains in this state until explicitly sold or removed
 }

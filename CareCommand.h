@@ -63,6 +63,11 @@ public:
         }
         return nullptr;
     }
+
+    /**
+     * @brief Cleans up the stored command prototypes to prevent memory leaks.
+     */
+    static void cleanupPrototypes();
 };
 
 #endif // CARE_COMMAND_H

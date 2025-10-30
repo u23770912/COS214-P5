@@ -1,29 +1,46 @@
 #include "PlantedState.h"
 #include "PlantProduct.h"
-#include "ReadyForSaleState.h"  
+#include "InNurseryState.h"
+#include "PlantSpeciesProfile.h"
 #include <iostream>
-#include <string>  
 
 void PlantedState::onEnter(PlantProduct* plant) {
-    std::cout << "Plant has entered the Planted state." << std::endl;
+    PlantSpeciesProfile* profile = plant->getProfile();
+    int duration = profile ? profile->getStateDurationSeconds("Planted", 20) : 20;
+    
+    std::cout << "[STATE] Plant entered Planted state (" << duration << " seconds)" << std::endl;
 }
 
 void PlantedState::onExit(PlantProduct* plant) {
-    std::cout << "Plant is exiting the Planted state." << std::endl;
+    std::cout << "[STATE] Plant exiting Planted state" << std::endl;
 }
 
 void PlantedState::advanceState(PlantProduct* plant) {
-    // Assume profile returns a string, convert to int
-    std::string daysStr = plant->getProfile()->getProperty("daysPlantedToReady");
-    int requiredDays = daysStr.empty() ? 5 : std::stoi(daysStr);  // Default to 5 days if not set
+    int secondsInState = plant->getSecondsInCurrentState();
+    int secondsSinceCare = plant->getSecondsSinceLastCare();
 
-    if (plant->  getDaysInCurrentState() >= requiredDays) {
-        std::cout << "Advancing from Planted to ReadyForSale state." << std::endl;
-        plant->transitionTo(new ReadyForSaleState());
+    // Get watering interval from profile
+    int waterInterval = 10;
+    if (PlantSpeciesProfile* profile = plant->getProfile()) {
+        waterInterval = profile->getCareIntervalSeconds("Watering", waterInterval);
+    }
+
+    // Request water at appropriate interval
+    if (secondsSinceCare >= waterInterval) {
+        std::cout << "[PLANTED] Requesting water (interval: " << waterInterval << "s)..." << std::endl;
+        plant->notify("Watering");
+        plant->resetLastCareTime();
+    }
+
+    // Get state duration from profile
+    int plantedDuration = 20;
+    if (PlantSpeciesProfile* profile = plant->getProfile()) {
+        plantedDuration = profile->getStateDurationSeconds("Planted", plantedDuration);
+    }
+
+    // Advance to next state when duration is complete
+    if (secondsInState >= plantedDuration) {
+        std::cout << "[PLANTED] Growth stage complete. Moving to InNursery." << std::endl;
+        plant->transitionTo(new InNurseryState());
     }
 }
-
-std::string PlantedState::getName() const{
-    return "Planted";
-}
-

@@ -9,6 +9,7 @@ class WateringStrategy : public CareStrategy {
 public:
     // virtual ~WateringStrategy() {}
     void applyCare(int amount, const std::string& careType) override;
+    std::string getName() const override { return "Standard Watering"; }
 };
 
 #endif // WATERING_STRATEGY_H

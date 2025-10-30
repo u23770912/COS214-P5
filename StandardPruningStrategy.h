@@ -20,6 +20,7 @@ void applyCare(int amount, const std::string& careType) override {
             std::cout << "StandardPruningStrategy does not handle care type: " << careType << std::endl;
         }
     }
+    std::string getName() const override { return "Standard Pruning"; }
 };
 
 #endif // STANDARDPRUNINGSTRATEGY_H
