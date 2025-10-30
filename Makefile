@@ -16,22 +16,29 @@ MAIN_OBJ = $(patsubst %.cpp,%.o,$(MAIN_SRC))
 MOVE_TEST_SRC = $(filter-out main.cpp Customer.cpp InteractiveMode.cpp CustomerOrderTest.cpp,$(SRC))
 MOVE_TEST_OBJ = $(patsubst %.cpp,%.o,$(MOVE_TEST_SRC))
 
-# Customer Order test (exclude main.cpp and MoveToSaleFloorTest.cpp)
-ORDER_TEST_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp PureObserverPatternTest.cpp,$(SRC))
+# Customer Order test (exclude main.cpp and other test files)
+ORDER_TEST_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp PureObserverPatternTest.cpp DirectorPatternDemo.cpp,$(SRC))
 ORDER_TEST_OBJ = $(patsubst %.cpp,%.o,$(ORDER_TEST_SRC))
 
 # Pure Observer Pattern test (exclude main.cpp, MoveToSaleFloorTest.cpp, CustomerOrderTest.cpp)
-PURE_OBSERVER_TEST_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp CustomerOrderTest.cpp,$(SRC))
+PURE_OBSERVER_TEST_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp CustomerOrderTest.cpp DirectorPatternDemo.cpp,$(SRC))
 PURE_OBSERVER_TEST_OBJ = $(patsubst %.cpp,%.o,$(PURE_OBSERVER_TEST_SRC))
+
+# Director Pattern demo (exclude main.cpp and test files)
+DIRECTOR_DEMO_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp CustomerOrderTest.cpp PureObserverPatternTest.cpp,$(SRC))
+DIRECTOR_DEMO_OBJ = $(patsubst %.cpp,%.o,$(DIRECTOR_DEMO_SRC))
 
 TARGET = greenhouse
 TEST_MOVE_TARGET = test_move_to_sales_floor
 TEST_ORDER_TARGET = test_customer_order
 TEST_PURE_OBSERVER_TARGET = test_pure_observer
+DIRECTOR_DEMO_TARGET = director_demo
 
 all: $(TARGET)
 
 test: $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET) $(TEST_PURE_OBSERVER_TARGET)
+
+demo: $(DIRECTOR_DEMO_TARGET)
 
 $(TARGET): $(MAIN_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
@@ -45,16 +52,28 @@ $(TEST_ORDER_TARGET): $(ORDER_TEST_OBJ)
 $(TEST_PURE_OBSERVER_TARGET): $(PURE_OBSERVER_TEST_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+$(DIRECTOR_DEMO_TARGET): $(DIRECTOR_DEMO_OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
 %.o: %.cpp $(DEPS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) $(TARGET) $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET) $(TEST_PURE_OBSERVER_TARGET)
+	rm -f $(OBJ) $(TARGET) $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET) $(TEST_PURE_OBSERVER_TARGET) $(DIRECTOR_DEMO_TARGET)
 	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno
 	rm -rf out
 
 valgrind: $(TARGET)
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(TARGET)
+
+valgrind-customer: $(TEST_ORDER_TARGET)
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --verbose ./$(TEST_ORDER_TARGET)
+
+valgrind-move: $(TEST_MOVE_TARGET)
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(TEST_MOVE_TARGET)
+
+valgrind-observer: $(TEST_PURE_OBSERVER_TARGET)
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(TEST_PURE_OBSERVER_TARGET)
 
 coverage: all
 	./$(TARGET)
@@ -68,4 +87,4 @@ coverage-clean:
 	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno
 	rm -rf out
 
-.PHONY: all test clean valgrind coverage-clean
+.PHONY: all test clean valgrind valgrind-customer valgrind-move valgrind-observer coverage-clean

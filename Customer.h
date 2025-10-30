@@ -5,6 +5,7 @@
 #include "CustomerSubject.h"
 
 class OrderBuilder; // Forward declaration
+class OrderDirector; // Forward declaration
 class Order; // Forward declaration
 class PlaceOrderCommand; // Forward declaration
 class PlantProduct; // Forward declaration
@@ -21,6 +22,7 @@ class Customer : public CustomerSubject {
         std::string cellPhone;
 
         OrderBuilder* orderBuilder;
+        OrderDirector* orderDirector;
         Order* orderProduct;
         PlaceOrderCommand* placeOrderCommand;
        
@@ -35,6 +37,15 @@ class Customer : public CustomerSubject {
         // Enhanced order creation methods
         Order* createOrder(); // Creates new order and returns pointer for building
         bool executeOrder(); // executes the PlaceOrderCommand and returns success status
+        
+        // Director-based construction methods
+        Order* construct(); // Main construction method using Director
+        Order* constructSimplePlantOrder(const std::string& plantType, int quantity);
+        Order* constructPlantWithPotOrder(const std::string& plantType, const std::string& potType, int quantity);
+        Order* constructBundleOrder(const std::string& bundleName, 
+                                   const std::vector<std::string>& plantTypes,
+                                   const std::vector<int>& quantities, 
+                                   double discount);
         
         // Interactive order building methods
         void displayAvailableItems();

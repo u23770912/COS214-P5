@@ -1,5 +1,11 @@
 #include <iostream>
 #include <vector>
+#include <string>
+#include <sstream>
+#include <limits>
+#include <climits>
+#include <cctype>
+#include <cfloat>
 #include "Customer.h"
 #include "Order.h"
 #include "ConcreteOrderBuilder.h"
@@ -23,35 +29,144 @@ using std::cout;
 using std::cin;
 using std::endl;
 using std::string;
+using std::getline;
+using std::stringstream;
+
+// Input validation utility functions
+int getValidInteger(const string& prompt, int min = INT_MIN, int max = INT_MAX) {
+    string input;
+    int value;
+    
+    while (true) {
+        cout << prompt;
+        getline(cin, input);
+        
+        // Remove leading/trailing whitespace
+        input.erase(0, input.find_first_not_of(" \t"));
+        input.erase(input.find_last_not_of(" \t") + 1);
+        
+        if (input.empty()) {
+            cout << "❌ Error: Please enter a valid number.\n";
+            continue;
+        }
+        
+        stringstream ss(input);
+        if (ss >> value && ss.eof()) {
+            if (value >= min && value <= max) {
+                return value;
+            } else {
+                cout << "❌ Error: Please enter a number between " << min << " and " << max << ".\n";
+            }
+        } else {
+            cout << "❌ Error: Please enter a valid integer number.\n";
+        }
+    }
+}
+
+double getValidDouble(const string& prompt, double min = -DBL_MAX, double max = DBL_MAX) {
+    string input;
+    double value;
+    
+    while (true) {
+        cout << prompt;
+        getline(cin, input);
+        
+        // Remove leading/trailing whitespace
+        input.erase(0, input.find_first_not_of(" \t"));
+        input.erase(input.find_last_not_of(" \t") + 1);
+        
+        if (input.empty()) {
+            cout << "❌ Error: Please enter a valid number.\n";
+            continue;
+        }
+        
+        stringstream ss(input);
+        if (ss >> value && ss.eof()) {
+            if (value >= min && value <= max) {
+                return value;
+            } else {
+                cout << "❌ Error: Please enter a number between " << min << " and " << max << ".\n";
+            }
+        } else {
+            cout << "❌ Error: Please enter a valid decimal number.\n";
+        }
+    }
+}
+
+char getValidChoice(const string& prompt, const string& validChoices) {
+    string input;
+    
+    while (true) {
+        cout << prompt;
+        getline(cin, input);
+        
+        // Remove leading/trailing whitespace and convert to lowercase
+        input.erase(0, input.find_first_not_of(" \t"));
+        input.erase(input.find_last_not_of(" \t") + 1);
+        
+        if (input.length() == 1) {
+            char choice = tolower(input[0]);
+            if (validChoices.find(choice) != string::npos) {
+                return choice;
+            }
+        }
+        
+        cout << "❌ Error: Please enter one of these options: ";
+        for (size_t i = 0; i < validChoices.length(); i++) {
+            cout << validChoices[i];
+            if (i < validChoices.length() - 1) cout << ", ";
+        }
+        cout << "\n";
+    }
+}
+
+string getValidString(const string& prompt) {
+    string input;
+    
+    while (true) {
+        cout << prompt;
+        getline(cin, input);
+        
+        // Remove leading/trailing whitespace
+        input.erase(0, input.find_first_not_of(" \t"));
+        input.erase(input.find_last_not_of(" \t") + 1);
+        
+        if (!input.empty()) {
+            return input;
+        }
+        
+        cout << "❌ Error: Please enter a valid non-empty value.\n";
+    }
+}
 
 // Helper function to populate inventory with sample plants
 void populateInventory() {
-    InventoryManager& inventory = InventoryManager::getInstance();
+
     
     cout << "\n=== Setting up Sales Floor Inventory ===" << endl;
     
     // Add various plants to sales floor
     PlantProduct* aloe1 = new PlantProduct("A001", new SucculentProfile("Aloe Vera", "low", "bright", "sandy"));
     aloe1->transitionTo(new ReadyForSaleState());
-    inventory.moveToSalesFloor(aloe1);
+    InventoryManager::getInstance().moveToSalesFloor(aloe1);
     
     PlantProduct* aloe2 = new PlantProduct("A002", new SucculentProfile("Aloe Vera", "low", "bright", "sandy"));
     aloe2->transitionTo(new ReadyForSaleState());
-    inventory.moveToSalesFloor(aloe2);
-    
+    InventoryManager::getInstance().moveToSalesFloor(aloe2);
+
     PlantProduct* rose1 = new PlantProduct("R001", new FlowerProfile("Rose", "moderate", "full sun", "loamy"));
     rose1->transitionTo(new ReadyForSaleState());
-    inventory.moveToSalesFloor(rose1);
-    
+    InventoryManager::getInstance().moveToSalesFloor(rose1);
+
     PlantProduct* rose2 = new PlantProduct("R002", new FlowerProfile("Rose", "moderate", "full sun", "loamy"));
     rose2->transitionTo(new ReadyForSaleState());
-    inventory.moveToSalesFloor(rose2);
-    
+    InventoryManager::getInstance().moveToSalesFloor(rose2);
+
     PlantProduct* oak1 = new PlantProduct("O001", new TreeProfile("Oak", "moderate", "full sun", "well-drained"));
     oak1->transitionTo(new ReadyForSaleState());
-    inventory.moveToSalesFloor(oak1);
-    
-    cout << "Inventory populated with " << inventory.getReadyForSalePlants().size() << " plants" << endl;
+    InventoryManager::getInstance().moveToSalesFloor(oak1);
+
+    cout << "Inventory populated with " << InventoryManager::getInstance().getReadyForSalePlants().size() << " plants" << endl;
     cout << "=========================================\n" << endl;
 }
 
@@ -71,9 +186,8 @@ void displayMenu() {
 }
 
 void displayAvailablePlants() {
-    InventoryManager& inventory = InventoryManager::getInstance();
-    auto plants = inventory.getReadyForSalePlants();
-    
+    auto plants = InventoryManager::getInstance().getReadyForSalePlants();
+
     cout << "\n┌────────────────────────────────────────┐" << endl;
     cout << "│     AVAILABLE PLANTS FOR SALE         │" << endl;
     cout << "├────────────────────────────────────────┤" << endl;
@@ -114,13 +228,9 @@ int main() {
     
     // Create customer
     cout << "=== Customer Information ===" << endl;
-    string name, email, phone;
-    cout << "Enter your name: ";
-    std::getline(cin, name);
-    cout << "Enter your email: ";
-    std::getline(cin, email);
-    cout << "Enter your phone: ";
-    std::getline(cin, phone);
+    string name = getValidString("Enter your name: ");
+    string email = getValidString("Enter your email: ");
+    string phone = getValidString("Enter your phone: ");
     
     Customer* customer = new Customer(name, email, phone);
     cout << "\nWelcome, " << name << "!" << endl;
@@ -134,8 +244,7 @@ int main() {
     while (running) {
         displayMenu();
         
-        int choice;
-        cin >> choice;
+        int choice = getValidInteger("Enter your choice: ", 1, 6);
         
         switch (choice) {
             case 1: {
@@ -146,26 +255,17 @@ int main() {
             case 2: {
                 // Add single plant
                 displayAvailablePlants();
-                InventoryManager& inventory = InventoryManager::getInstance();
-                auto plants = inventory.getReadyForSalePlants();
-                
+               
+                auto plants = InventoryManager::getInstance().getReadyForSalePlants();
+
                 if (plants.empty()) {
                     cout << "\nNo plants available!" << endl;
                     break;
                 }
                 
-                cout << "\nEnter plant number to add (1-" << plants.size() << "): ";
-                int plantNum;
-                cin >> plantNum;
+                int plantNum = getValidInteger("\nEnter plant number to add (1-" + std::to_string(plants.size()) + "): ", 1, plants.size());
                 
-                if (plantNum < 1 || plantNum > (int)plants.size()) {
-                    cout << "Invalid plant number!" << endl;
-                    break;
-                }
-                
-                cout << "Enter quantity: ";
-                int quantity;
-                cin >> quantity;
+                int quantity = getValidInteger("Enter quantity: ", 1, 100);
                 
                 // Create order if it doesn't exist
                 if (!currentOrder) {
@@ -189,16 +289,13 @@ int main() {
                 string bundleName;
                 std::getline(cin, bundleName);
                 
-                cout << "Enter discount percentage (0-50): ";
-                double discount;
-                cin >> discount;
+                double discount = getValidDouble("Enter discount percentage (0-50): ", 0.0, 50.0);
                 
                 PlantBundle* bundle = new PlantBundle(bundleName, "Custom", 1, discount);
                 
                 // Add plants to bundle
                 displayAvailablePlants();
-                InventoryManager& inventory = InventoryManager::getInstance();
-                auto plants = inventory.getReadyForSalePlants();
+                auto plants = InventoryManager::getInstance().getReadyForSalePlants();
                 
                 if (plants.empty()) {
                     cout << "\nNo plants available for bundle!" << endl;
@@ -206,24 +303,13 @@ int main() {
                     break;
                 }
                 
-                cout << "\nHow many different plants in bundle? ";
-                int numPlants;
-                cin >> numPlants;
+                int numPlants = getValidInteger("\nHow many different plants in bundle? ", 1, 10);
                 
                 for (int i = 0; i < numPlants; i++) {
                     cout << "\nPlant " << (i+1) << " of " << numPlants << endl;
-                    cout << "Enter plant number: ";
-                    int plantNum;
-                    cin >> plantNum;
+                    int plantNum = getValidInteger("Enter plant number: ", 1, plants.size());
                     
-                    if (plantNum < 1 || plantNum > (int)plants.size()) {
-                        cout << "Invalid plant number, skipping..." << endl;
-                        continue;
-                    }
-                    
-                    cout << "Enter quantity: ";
-                    int qty;
-                    cin >> qty;
+                    int qty = getValidInteger("Enter quantity: ", 1, 50);
                     
                     string plantType = plants[plantNum-1]->getProfile()->getSpeciesName();
                     SinglePlant* bundlePlant = new SinglePlant(plantType, 25.99, qty);
@@ -314,10 +400,8 @@ int main() {
                 delete failureNotifier;
                 
                 // Ask if user wants to continue
-                cout << "\nCreate new order? (y/n): ";
-                char continueChoice;
-                cin >> continueChoice;
-                if (continueChoice == 'n' || continueChoice == 'N') {
+                char continueChoice = getValidChoice("\nCreate new order? (y/n): ", "yn");
+                if (continueChoice == 'n') {
                     running = false;
                 } else {
                     // Reset for new order
@@ -351,8 +435,14 @@ int main() {
     delete orderBuilder;
     delete customer;
     delete dispatcher;
-    delete cashier1;
-    delete cashier2;
+    
+    // Only delete the head of the chain - the Chain of Responsibility 
+    // destructor will automatically clean up all chained handlers
+    delete cashier1;  // This will automatically delete cashier2 via ~StaffChainHandler()
+    // DO NOT delete cashier2 separately - it's already freed by the chain!
+    
+    // Clean up inventory BEFORE program exit to avoid static destruction order issues
+    InventoryManager::getInstance().cleanup();
     
     cout << "Goodbye!" << endl;
     

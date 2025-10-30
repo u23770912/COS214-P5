@@ -60,6 +60,9 @@ class InventoryManager : public LifeCycleObserver {
         std::vector<PlantProduct*> getGreenHouseInventory() const;
         std::vector<PlantProduct*> getReadyForSalePlants() const;
         std::vector<PlantProduct*> getSoldPlants() const;
+
+        // Manual cleanup method - call before program exit to avoid static destruction issues
+        void cleanup();
         std::vector<Pots*> getPotInventory() const;
 
         void addPot(Pots* pot);

@@ -1,5 +1,6 @@
 #include "Customer.h"
 #include "ConcreteOrderBuilder.h"
+#include "OrderDirector.h"
 #include "PlaceOrderCommand.h"
 #include "Order.h"
 #include "InventoryManager.h"
@@ -10,12 +11,16 @@
 #include <iomanip>
 
 Customer::Customer(const std::string& name, const std::string& email, const std::string& cellPhone)
-    : name(name), email(email), cellPhone(cellPhone), orderBuilder(nullptr), orderProduct(nullptr), placeOrderCommand(nullptr) {
+    : name(name), email(email), cellPhone(cellPhone), orderBuilder(nullptr), orderDirector(nullptr), orderProduct(nullptr), placeOrderCommand(nullptr) {
     // Initialize the order builder
     orderBuilder = new ConcreteOrderBuilder(name);
+    
+    // Initialize the order director with the builder
+    orderDirector = new OrderDirector(orderBuilder);
 }
 
 Customer::~Customer() {
+    delete orderDirector;
     delete orderBuilder;
     delete orderProduct;
     delete placeOrderCommand;
@@ -322,4 +327,96 @@ void Customer::displayPlantDetails(const PlantProduct* plant, int index) {
         std::cout << "Unknown Plant";
     }
     std::cout << std::endl;
+}
+
+// Director-based construction methods
+
+Order* Customer::construct() {
+    std::cout << "\n=== Using Director to construct default order ===" << std::endl;
+    
+    // Clean up any previous order
+    delete orderProduct;
+    orderProduct = 0;
+    
+    // Notify observers about order construction
+    notifyInteraction("ORDER_CONSTRUCTION_STARTED", "Customer initiated order construction via Director");
+    
+    // Use the director to construct the order
+    orderProduct = orderDirector->construct();
+    
+    if (orderProduct) {
+        std::cout << "Order successfully constructed via Director!" << std::endl;
+        notifyInteraction("ORDER_CONSTRUCTED", "Director successfully built order");
+    } else {
+        std::cout << "Failed to construct order via Director." << std::endl;
+        notifyInteraction("ORDER_CONSTRUCTION_FAILED", "Director failed to build order");
+    }
+    
+    return orderProduct;
+}
+
+Order* Customer::constructSimplePlantOrder(const std::string& plantType, int quantity) {
+    std::cout << "\n=== Constructing Simple Plant Order ===" << std::endl;
+    std::cout << "Plant: " << plantType << ", Quantity: " << quantity << std::endl;
+    
+    // Clean up any previous order
+    delete orderProduct;
+    orderProduct = 0;
+    
+    // Notify observers
+    notifyInteraction("SIMPLE_PLANT_ORDER", "Constructing simple plant order: " + plantType);
+    
+    // Use director to construct
+    orderProduct = orderDirector->constructSimplePlantOrder(plantType, quantity);
+    
+    if (orderProduct) {
+        std::cout << "Simple plant order constructed successfully!" << std::endl;
+    }
+    
+    return orderProduct;
+}
+
+Order* Customer::constructPlantWithPotOrder(const std::string& plantType, const std::string& potType, int quantity) {
+    std::cout << "\n=== Constructing Plant with Pot Order ===" << std::endl;
+    std::cout << "Plant: " << plantType << ", Pot: " << potType << ", Quantity: " << quantity << std::endl;
+    
+    // Clean up any previous order
+    delete orderProduct;
+    orderProduct = 0;
+    
+    // Notify observers
+    notifyInteraction("PLANT_POT_ORDER", "Constructing plant+pot order: " + plantType + " + " + potType);
+    
+    // Use director to construct
+    orderProduct = orderDirector->constructPlantWithPotOrder(plantType, potType, quantity);
+    
+    if (orderProduct) {
+        std::cout << "Plant with pot order constructed successfully!" << std::endl;
+    }
+    
+    return orderProduct;
+}
+
+Order* Customer::constructBundleOrder(const std::string& bundleName, 
+                                     const std::vector<std::string>& plantTypes,
+                                     const std::vector<int>& quantities, 
+                                     double discount) {
+    std::cout << "\n=== Constructing Bundle Order ===" << std::endl;
+    std::cout << "Bundle: " << bundleName << ", Discount: " << discount << "%" << std::endl;
+    
+    // Clean up any previous order
+    delete orderProduct;
+    orderProduct = 0;
+    
+    // Notify observers
+    notifyInteraction("BUNDLE_ORDER", "Constructing bundle order: " + bundleName);
+    
+    // Use director to construct
+    orderProduct = orderDirector->constructBundleOrder(bundleName, plantTypes, quantities, discount);
+    
+    if (orderProduct) {
+        std::cout << "Bundle order constructed successfully!" << std::endl;
+    }
+    
+    return orderProduct;
 }
