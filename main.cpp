@@ -23,6 +23,7 @@
 #include "TerminalUI.h"
 #include "TreeProfile.h"
 #include "WaterCommand.h"
+#include "InventoryManager.h"
 
 namespace {
 
@@ -207,12 +208,14 @@ bool allPlantsReady(const std::vector<PlantProduct*>& plants) {
 void cleanup(StaffContext& ctx,
              std::vector<PlantProduct*>& plants,
              std::vector<PlantSpeciesProfile*>& profiles) {
-    for (auto p : plants) delete p;
+    // The InventoryManager now owns the plants, so we don't delete them here.
+    // for (auto p : plants) delete p; 
     for (auto p : profiles) delete p;
     for (auto h : ctx.handlers) delete h;
     delete ctx.dispatcher;
     delete ctx.manager;
     CareCommand::cleanupPrototypes(); // Clean up command prototypes
+    InventoryManager::getInstance().cleanup(); // Clean up inventory
 }
 
 }  // namespace
@@ -231,6 +234,11 @@ int main() {
     std::vector<PlantSpeciesProfile*> profiles = createProfiles();
     std::vector<PlantProduct*> plants = createPlants(profiles, staff.manager);
     TerminalUI::printSuccess(std::to_string(plants.size()) + " plants created");
+
+    // Add plants to the inventory manager
+    for (auto* plant : plants) {
+        InventoryManager::getInstance().addToGreenhouse(plant);
+    }
 
     const int maxSimulationSeconds = 120;
     auto start = std::chrono::steady_clock::now();

@@ -4,8 +4,8 @@
 std::map<std::string, CareCommand*> CareCommand::prototypes;
 
 void CareCommand::cleanupPrototypes() {
-    for (auto const& [key, val] : prototypes) {
-        delete val;
+    for (auto const& pair : prototypes) {
+        delete pair.second;
     }
     prototypes.clear();
 }
