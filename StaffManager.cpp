@@ -1,21 +1,20 @@
 #include "StaffManager.h"
 #include "StaffMember.h"
-#include "AutonomousMode.h"
+#include "CareCommand.h"
+#include "PlantProduct.h"
 
 StaffManager::StaffManager(StaffMember* dispatcher) 
-    : staffDispatcher(dispatcher), currentModeVisitor(new AutonomousMode()) {}
+    : staffDispatcher(dispatcher) {}
 
 StaffManager::~StaffManager() {
-    delete currentModeVisitor;
-}
-
-void StaffManager::setMode(ModeVisitor* newMode) {
-    delete currentModeVisitor;
-    currentModeVisitor = newMode;
 }
 
 void StaffManager::update(PlantProduct* plant, const std::string& commandType) {
-    currentModeVisitor->processUpdate(this, plant, commandType);
+    CareCommand* command = CareCommand::createCommand(commandType);
+    if (command) {
+        command->setReceiver(plant);
+        dispatchCommand(command);
+    }
 }
 
 void StaffManager::dispatchCommand(Command* command) {
