@@ -1,7 +1,12 @@
 #include "Order.h"
+#include "OrderMemento.h"
 #include <sstream>
 #include <iomanip>
 #include <ctime>
+#include <algorithm>
+
+// Definition of static member
+std::vector<Order*> Order::allOrders;
 
 Order::Order(const std::string& orderId, const std::string& customerName)
     : orderId(orderId), customerName(customerName), totalAmount(0.0), status("Pending") {
@@ -10,6 +15,7 @@ Order::Order(const std::string& orderId, const std::string& customerName)
     char buf[80];
     strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", localtime(&now));
     orderDate = std::string(buf);
+    allOrders.push_back(this);
 }
 
 Order::~Order() {
@@ -18,6 +24,9 @@ Order::~Order() {
         delete item;
     }
     orderItems.clear();
+
+    auto it = std::find(allOrders.begin(), allOrders.end(), this);
+    if (it != allOrders.end()) allOrders.erase(it);
 }
 
 void Order::addOrderItem(OrderItem* item) {
@@ -142,9 +151,128 @@ void Order::clearOrder() {
 }
 
 int Order::getItemCount() const {
-    return orderItems.size();
+    return static_cast<int>(orderItems.size());
 }
 
 bool Order::isEmpty() const {
     return orderItems.empty();
+}
+
+void Order::addItem(const std::string& item, double price)
+{
+    items.push_back(item);
+    totalAmount += price;
+}
+
+void Order::removeItem(const std::string& item)
+{
+    auto it = std::find(items.begin(), items.end(), item);
+    if (it != items.end())
+    {
+        items.erase(it);
+        // NOTE: we don't track item prices per-item, so totalAmount is not adjusted here.
+        // If you want to deduct price when removing, store a vector of (item,price) pairs.
+    }
+}
+
+void Order::clearItems()
+{
+    items.clear();
+    totalAmount = 0.0;
+}
+
+const std::vector<std::string>& Order::getItems() const
+{
+    return items;
+}
+
+// const std::vector<std::string>& Order::getItems() const
+// {
+//     return items;
+// }
+
+std::string Order::getOrderDetails(const std::string& customerFilter) const
+{
+    std::stringstream details;
+
+    if (customerFilter.empty())
+    {
+        // details for this single order
+        details << "Order ID: " << orderId << "\n";
+        details << "Customer Name: " << customerName << "\n";
+        details << "Items:\n";
+        for (const auto& item : items) details << "- " << item << "\n";
+        details << "Total Amount: R" << totalAmount << "\n";
+        return details.str();
+    }
+
+    if (customerFilter == "ALL")
+    {
+        details << "All orders for all customers:\n";
+        for (auto order : allOrders)
+        {
+            details << "----------------------\n";
+            details << order->getOrderDetails(""); // single-order details
+        }
+        return details.str();
+    }
+
+    // Filter by specific customer name
+    details << "All orders for " << customerFilter << ":\n";
+    bool found = false;
+    for (auto order : allOrders)
+    {
+        if (order->getCustomerName() == customerFilter)
+        {
+            found = true;
+            details << "----------------------\n";
+            details << order->getOrderDetails("");
+        }
+    }
+
+    if (!found)
+    {
+        details << "(no orders found for " << customerFilter << ")\n";
+    }
+
+    return details.str();
+}
+
+OrderMemento* Order::createMemento() const {
+       std::stringstream state;
+       state << orderId << "\n" << customerName << "\n" << status << "\n";
+       
+       // Save orderItems (the actual order content)
+       state << orderItems.size() << "\n";
+       for (const auto* item : orderItems) {
+           state << item->getName() << "|" 
+                 << item->getQuantity() << "|" 
+                 << item->getPrice() << "\n";
+       }
+       
+       return new OrderMemento(state.str());
+   }
+
+void Order::restoreState(const OrderMemento* memento)
+{
+    if (!memento) return;
+
+    std::string s = memento->getState();
+    std::stringstream state(s);
+    std::getline(state, orderId);
+    std::getline(state, customerName);
+    state >> totalAmount;
+    state.ignore(); // eat newline after totalAmount
+
+    items.clear();
+    std::string item;
+    while (std::getline(state, item))
+    {
+        if (!item.empty()) items.push_back(item);
+    }
+}
+
+const std::vector<Order*>& Order::getAllOrders()
+{
+    return allOrders;
 }
