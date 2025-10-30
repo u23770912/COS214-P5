@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <iostream>
-// #include "LifeCycleObserver.h"
+#include "LifeCycleObserver.h"
 
 class PlantProduct;
 
