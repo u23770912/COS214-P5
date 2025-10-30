@@ -17,7 +17,7 @@ MOVE_TEST_SRC = $(filter-out main.cpp Customer.cpp InteractiveMode.cpp CustomerO
 MOVE_TEST_OBJ = $(patsubst %.cpp,%.o,$(MOVE_TEST_SRC))
 
 # Customer Order test (exclude main.cpp and other test files)
-ORDER_TEST_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp PureObserverPatternTest.cpp DirectorPatternDemo.cpp,$(SRC))
+ORDER_TEST_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp PureObserverPatternTest.cpp DirectorPatternDemo.cpp FacadePatternDemo.cpp,$(SRC))
 ORDER_TEST_OBJ = $(patsubst %.cpp,%.o,$(ORDER_TEST_SRC))
 
 # Pure Observer Pattern test (exclude main.cpp, MoveToSaleFloorTest.cpp, CustomerOrderTest.cpp)
@@ -25,20 +25,25 @@ PURE_OBSERVER_TEST_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp CustomerO
 PURE_OBSERVER_TEST_OBJ = $(patsubst %.cpp,%.o,$(PURE_OBSERVER_TEST_SRC))
 
 # Director Pattern demo (exclude main.cpp and test files)
-DIRECTOR_DEMO_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp CustomerOrderTest.cpp PureObserverPatternTest.cpp,$(SRC))
+DIRECTOR_DEMO_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp CustomerOrderTest.cpp PureObserverPatternTest.cpp FacadePatternDemo.cpp,$(SRC))
 DIRECTOR_DEMO_OBJ = $(patsubst %.cpp,%.o,$(DIRECTOR_DEMO_SRC))
+
+# Facade Pattern demo (exclude main.cpp and test files)
+FACADE_DEMO_SRC = $(filter-out main.cpp MoveToSaleFloorTest.cpp CustomerOrderTest.cpp PureObserverPatternTest.cpp DirectorPatternDemo.cpp,$(SRC))
+FACADE_DEMO_OBJ = $(patsubst %.cpp,%.o,$(FACADE_DEMO_SRC))
 
 TARGET = greenhouse
 TEST_MOVE_TARGET = test_move_to_sales_floor
 TEST_ORDER_TARGET = test_customer_order
 TEST_PURE_OBSERVER_TARGET = test_pure_observer
 DIRECTOR_DEMO_TARGET = director_demo
+FACADE_DEMO_TARGET = facade_demo
 
 all: $(TARGET)
 
 test: $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET) $(TEST_PURE_OBSERVER_TARGET)
 
-demo: $(DIRECTOR_DEMO_TARGET)
+demo: $(DIRECTOR_DEMO_TARGET) $(FACADE_DEMO_TARGET)
 
 $(TARGET): $(MAIN_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
@@ -55,11 +60,14 @@ $(TEST_PURE_OBSERVER_TARGET): $(PURE_OBSERVER_TEST_OBJ)
 $(DIRECTOR_DEMO_TARGET): $(DIRECTOR_DEMO_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+$(FACADE_DEMO_TARGET): $(FACADE_DEMO_OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
 %.o: %.cpp $(DEPS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) $(TARGET) $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET) $(TEST_PURE_OBSERVER_TARGET) $(DIRECTOR_DEMO_TARGET)
+	rm -f $(OBJ) $(TARGET) $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET) $(TEST_PURE_OBSERVER_TARGET) $(DIRECTOR_DEMO_TARGET) $(FACADE_DEMO_TARGET)
 	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno
 	rm -rf out
 

@@ -7,6 +7,7 @@
 #include <cctype>
 #include <cfloat>
 #include "Customer.h"
+#include "OrderUIFacade.h"
 #include "Order.h"
 #include "ConcreteOrderBuilder.h"
 #include "SinglePlant.h"
@@ -289,9 +290,8 @@ int main() {
                 string bundleName;
                 std::getline(cin, bundleName);
                 
-                double discount = getValidDouble("Enter discount percentage (0-50): ", 0.0, 50.0);
-                
-                PlantBundle* bundle = new PlantBundle(bundleName, "Custom", 1, discount);
+                // We'll calculate automatic discount after adding plants
+                PlantBundle* bundle = new PlantBundle(bundleName, "Custom", 1, 0.0);
                 
                 // Add plants to bundle
                 displayAvailablePlants();
@@ -305,16 +305,29 @@ int main() {
                 
                 int numPlants = getValidInteger("\nHow many different plants in bundle? ", 1, 10);
                 
+                int totalPlantCount = 0;
+                
                 for (int i = 0; i < numPlants; i++) {
                     cout << "\nPlant " << (i+1) << " of " << numPlants << endl;
                     int plantNum = getValidInteger("Enter plant number: ", 1, plants.size());
                     
                     int qty = getValidInteger("Enter quantity: ", 1, 50);
+                    totalPlantCount += qty;  // Track total plants for automatic discount
                     
                     string plantType = plants[plantNum-1]->getProfile()->getSpeciesName();
                     SinglePlant* bundlePlant = new SinglePlant(plantType, 25.99, qty);
                     bundle->addItem(bundlePlant);
                 }
+                
+                // Calculate automatic discount based on total plant count
+                OrderUIFacade* facade = customer->getUIFacade();
+                double automaticDiscount = facade->calculateAutomaticDiscount(totalPlantCount);
+                
+                // Update bundle with automatic discount
+                bundle->setDiscount(automaticDiscount);
+                
+                cout << "\n[AUTOMATIC DISCOUNT] " << totalPlantCount << " plants = " 
+                     << automaticDiscount << "% discount applied!" << endl;
                 
                 // Create order if it doesn't exist
                 if (!currentOrder) {

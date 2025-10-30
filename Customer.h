@@ -6,6 +6,7 @@
 
 class OrderBuilder; // Forward declaration
 class OrderDirector; // Forward declaration
+class OrderUIFacade; // Forward declaration
 class Order; // Forward declaration
 class PlaceOrderCommand; // Forward declaration
 class PlantProduct; // Forward declaration
@@ -23,6 +24,7 @@ class Customer : public CustomerSubject {
 
         OrderBuilder* orderBuilder;
         OrderDirector* orderDirector;
+        OrderUIFacade* uiFacade; // Facade for all UI operations
         Order* orderProduct;
         PlaceOrderCommand* placeOrderCommand;
        
@@ -34,11 +36,12 @@ class Customer : public CustomerSubject {
         std::string getEmail() const;
         std::string getCellPhone() const;
 
-        // Enhanced order creation methods
+        // Core order creation methods - Customer's primary responsibility
         Order* createOrder(); // Creates new order and returns pointer for building
         bool executeOrder(); // executes the PlaceOrderCommand and returns success status
+        bool finalizeOrder(); // Finalizes the current order for execution
         
-        // Director-based construction methods
+        // Director-based construction methods - Delegate complex construction
         Order* construct(); // Main construction method using Director
         Order* constructSimplePlantOrder(const std::string& plantType, int quantity);
         Order* constructPlantWithPotOrder(const std::string& plantType, const std::string& potType, int quantity);
@@ -47,15 +50,17 @@ class Customer : public CustomerSubject {
                                    const std::vector<int>& quantities, 
                                    double discount);
         
-        // Interactive order building methods
-        void displayAvailableItems();
+        // Order building methods - Core business logic only (no UI)
         bool addPlantToOrder(int plantIndex, int quantity = 1);
-        bool addBundleToOrder(const std::string& bundleName, const std::vector<int>& plantIndices, double discount = 10.0);
-        void viewCurrentOrder();
-        bool finalizeOrder();
+        bool addBundleToOrder(const std::string& bundleName, const std::vector<int>& plantIndices);
         
-        // Helper method to access the order builder
-        class ConcreteOrderBuilder* getOrderBuilder();
+        // UI methods - Delegated to facade (for compatibility with existing tests)
+        void displayAvailableItems(); // Delegates to facade
+        void viewCurrentOrder(); // Delegates to facade
+        
+        // Access methods for facade and components
+        OrderUIFacade* getUIFacade(); // Get UI facade for terminal operations
+        class ConcreteOrderBuilder* getOrderBuilder(); // Access to order builder
         
         // Observer pattern methods - Override from CustomerSubject
         void notifyInteraction(const std::string& interactionType, 
@@ -67,9 +72,8 @@ class Customer : public CustomerSubject {
         void detachObserver(CustomerObserver* observer);
         
     private:
-        // Helper methods for inventory management
-        std::vector<PlantProduct*> getAvailablePlantsFromInventory();
-        void displayPlantDetails(const PlantProduct* plant, int index);
+        // Private helper methods for order management only
+        void cleanupPreviousOrder(); // Helper to clean up previous orders
 };
 
 
