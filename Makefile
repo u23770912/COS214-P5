@@ -15,19 +15,19 @@ TARGET = greenhouse
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-    $(CXX) $(LDFLAGS) -o $@ $^
+	$(CXX) $(LDFLAGS) -o $@ $^
 
 # Generic rule to compile .cpp files to .o files
 %.o: %.cpp
-    $(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-    rm -f $(OBJS) $(TARGET) *.gcda *.gcno *.gcov coverage.info
-    rm -rf out
+	rm -f $(OBJS) $(TARGET) *.gcda *.gcno *.gcov coverage.info
+	rm -rf out
 
 # Add your test and valgrind rules here if needed
 test:
-    @echo "No test target defined."
+	@echo "No test target defined."
 
 valgrind: all
-    valgrind --leak-check=full ./$(TARGET)
+	valgrind --leak-check=full ./$(TARGET)

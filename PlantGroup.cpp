@@ -1,4 +1,5 @@
 #include "PlantGroup.h"
+#include <algorithm>
 
 PlantGroup::PlantGroup(std::string name): name(name){
 
