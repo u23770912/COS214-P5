@@ -13,59 +13,48 @@ MAIN_SRC = $(filter-out CustomerOrderTest.cpp,$(SRC))
 MAIN_OBJ = $(patsubst %.cpp,%.o,$(MAIN_SRC))
 
 # Customer Order test (exclude main.cpp)
-ORDER_TEST_SRC = $(filter-out main.cpp,$(SRC))
+ORDER_TEST_SRC = $(filter-out main.cpp ConcurrentOrderDemo.cpp,$(SRC))
 ORDER_TEST_OBJ = $(patsubst %.cpp,%.o,$(ORDER_TEST_SRC))
 
+# Concurrent Demo (exclude main.cpp and CustomerOrderTest.cpp)
+CONCURRENT_DEMO_SRC = $(filter-out main.cpp CustomerOrderTest.cpp,$(SRC))
+CONCURRENT_DEMO_OBJ = $(patsubst %.cpp,%.o,$(CONCURRENT_DEMO_SRC))
+
 TARGET = greenhouse
-TEST_MOVE_TARGET = test_move_to_sales_floor
 TEST_ORDER_TARGET = test_customer_order
-TEST_PURE_OBSERVER_TARGET = test_pure_observer
-DIRECTOR_DEMO_TARGET = director_demo
-FACADE_DEMO_TARGET = facade_demo
+CONCURRENT_DEMO_TARGET = concurrent_demo
 
 all: $(TARGET)
 
-test: $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET) $(TEST_PURE_OBSERVER_TARGET)
+test: $(TEST_ORDER_TARGET)
 
-demo: $(DIRECTOR_DEMO_TARGET) $(FACADE_DEMO_TARGET)
+concurrent: $(CONCURRENT_DEMO_TARGET)
 
 $(TARGET): $(MAIN_OBJ)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-$(TEST_MOVE_TARGET): $(MOVE_TEST_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 $(TEST_ORDER_TARGET): $(ORDER_TEST_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-$(TEST_PURE_OBSERVER_TARGET): $(PURE_OBSERVER_TEST_OBJ)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-$(DIRECTOR_DEMO_TARGET): $(DIRECTOR_DEMO_OBJ)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-$(FACADE_DEMO_TARGET): $(FACADE_DEMO_OBJ)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+$(CONCURRENT_DEMO_TARGET): $(CONCURRENT_DEMO_OBJ)
+	$(CXX) $(CXXFLAGS) -lpthread -o $@ $^
 
 %.o: %.cpp $(DEPS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) $(TARGET) $(TEST_MOVE_TARGET) $(TEST_ORDER_TARGET) $(TEST_PURE_OBSERVER_TARGET) $(DIRECTOR_DEMO_TARGET) $(FACADE_DEMO_TARGET)
+	rm -f $(OBJ) $(TARGET) $(TEST_ORDER_TARGET) $(CONCURRENT_DEMO_TARGET)
 	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno
 	rm -rf out
 
 valgrind: $(TARGET)
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(TARGET)
 
-valgrind-customer: $(TEST_ORDER_TARGET)
+valgrind-test: $(TEST_ORDER_TARGET)
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --verbose ./$(TEST_ORDER_TARGET)
 
-valgrind-move: $(TEST_MOVE_TARGET)
-	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(TEST_MOVE_TARGET)
-
-valgrind-observer: $(TEST_PURE_OBSERVER_TARGET)
-	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(TEST_PURE_OBSERVER_TARGET)
+valgrind-concurrent: $(CONCURRENT_DEMO_TARGET)
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --verbose ./$(CONCURRENT_DEMO_TARGET)
 
 coverage: all
 	./$(TARGET)
@@ -79,4 +68,4 @@ coverage-clean:
 	rm -f *.gcda *.gcno *.gcov coverage.info StateDP/*.gcda StateDP/*.gcno
 	rm -rf out
 
-.PHONY: all test clean valgrind valgrind-customer valgrind-move valgrind-observer coverage-clean
+.PHONY: all test concurrent clean valgrind valgrind-test valgrind-concurrent coverage-clean
