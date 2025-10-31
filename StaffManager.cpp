@@ -1,25 +1,22 @@
 #include "StaffManager.h"
 #include "StaffMember.h"
-#include "AutonomousMode.h"
 #include "Customer.h"
 #include "Order.h"
+#include "Command.h"
+#include "PlantProduct.h"
 #include <iostream>
 
+
+
 StaffManager::StaffManager(StaffMember* dispatcher) 
-    : staffDispatcher(dispatcher), currentModeVisitor(new AutonomousMode()) {}
+    : staffDispatcher(dispatcher) {}
 
 StaffManager::~StaffManager() {
-    delete currentModeVisitor;
-}
-
-void StaffManager::setMode(ModeVisitor* newMode) {
-    delete currentModeVisitor;
-    currentModeVisitor = newMode;
 }
 
 // LifeCycleObserver implementation - for plant lifecycle events
 void StaffManager::update(PlantProduct* plant, const std::string& commandType) {
-    currentModeVisitor->processUpdate(this, plant, commandType);
+    //currentModeVisitor->processUpdate(this, plant, commandType);
 }
 
 // CustomerObserver implementation - for customer interaction events
@@ -66,6 +63,12 @@ bool StaffManager::validateCustomerOrder(Order* order, Customer* customer) {
     
     std::cout << "   [VALIDATION PASSED] Order approved by staff" << std::endl;
     return true;
+    
+    Command* command = Command::createCommand(commandType);
+    if (command) {
+        command->setReceiver(plant);
+        dispatchCommand(command);
+    }
 }
 
 void StaffManager::dispatchCommand(Command* command) {

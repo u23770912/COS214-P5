@@ -37,10 +37,10 @@ void InventoryManager::cleanup() {
     soldPlants.clear();
     
     // Clean up pots
-    for (Pots* pot : potInventory) {
-        delete pot;
-    }
-    potInventory.clear();
+    // for (Pots* pot : potInventory) {
+    //     delete pot;
+    // }
+    // potInventory.clear();
     
     plantsInStock = 0;
     std::cout << "InventoryManager cleanup complete." << std::endl;
@@ -83,12 +83,12 @@ void InventoryManager::addPot(Pots* pot) {
     }
 }
 
-void InventoryManager::removePot(Pots* pot) {
-    auto it = std::find(potInventory.begin(), potInventory.end(), pot);
-    if (it != potInventory.end()) {
-        potInventory.erase(it);
-    }
-}
+// void InventoryManager::removePot(Pots* pot) {
+//     auto it = std::find(potInventory.begin(), potInventory.end(), pot);
+//     if (it != potInventory.end()) {
+//         potInventory.erase(it);
+//     }
+// }
 
 void InventoryManager::moveToSalesFloor(PlantProduct* plant) {
     if (plant) {

@@ -14,10 +14,10 @@
 #include "PlantBundle.h"
 #include "InventoryManager.h"
 #include "PlantProduct.h"
-#include "BridgeDP/SucculentProfile.h"
-#include "BridgeDP/FlowerProfile.h"
-#include "BridgeDP/TreeProfile.h"
-#include "StateDP/ReadyForSaleState.h"
+#include "SucculentProfile.h"
+#include "FlowerProfile.h"
+#include "TreeProfile.h"
+#include "ReadyForSaleState.h"
 #include "Cashier.h"
 #include "StaffMember.h"
 #include "OrderValidationHandler.h"
@@ -47,7 +47,7 @@ int getValidInteger(const string& prompt, int min = INT_MIN, int max = INT_MAX) 
         input.erase(input.find_last_not_of(" \t") + 1);
         
         if (input.empty()) {
-            cout << "❌ Error: Please enter a valid number.\n";
+            cout << "Error: Please enter a valid number.\n";
             continue;
         }
         
@@ -56,10 +56,10 @@ int getValidInteger(const string& prompt, int min = INT_MIN, int max = INT_MAX) 
             if (value >= min && value <= max) {
                 return value;
             } else {
-                cout << "❌ Error: Please enter a number between " << min << " and " << max << ".\n";
+                cout << "Error: Please enter a number between " << min << " and " << max << ".\n";
             }
         } else {
-            cout << "❌ Error: Please enter a valid integer number.\n";
+            cout << "Error: Please enter a valid integer number.\n";
         }
     }
 }
@@ -77,7 +77,7 @@ double getValidDouble(const string& prompt, double min = -DBL_MAX, double max = 
         input.erase(input.find_last_not_of(" \t") + 1);
         
         if (input.empty()) {
-            cout << "❌ Error: Please enter a valid number.\n";
+            cout << "Error: Please enter a valid number.\n";
             continue;
         }
         
@@ -86,10 +86,10 @@ double getValidDouble(const string& prompt, double min = -DBL_MAX, double max = 
             if (value >= min && value <= max) {
                 return value;
             } else {
-                cout << "❌ Error: Please enter a number between " << min << " and " << max << ".\n";
+                cout << "Error: Please enter a number between " << min << " and " << max << ".\n";
             }
         } else {
-            cout << "❌ Error: Please enter a valid decimal number.\n";
+            cout << "Error: Please enter a valid decimal number.\n";
         }
     }
 }
@@ -112,7 +112,7 @@ char getValidChoice(const string& prompt, const string& validChoices) {
             }
         }
         
-        cout << "❌ Error: Please enter one of these options: ";
+        cout << "Error: Please enter one of these options: ";
         for (size_t i = 0; i < validChoices.length(); i++) {
             cout << validChoices[i];
             if (i < validChoices.length() - 1) cout << ", ";
@@ -136,7 +136,7 @@ string getValidString(const string& prompt) {
             return input;
         }
         
-        cout << "❌ Error: Please enter a valid non-empty value.\n";
+        cout << "Error: Please enter a valid non-empty value.\n";
     }
 }
 

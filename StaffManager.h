@@ -1,10 +1,7 @@
-// ============= StaffManager.h =============
 #ifndef STAFFMANAGER_H
 #define STAFFMANAGER_H
 
-#include "LifecycleObserver.h"
-#include "CustomerObserver.h"
-#include "ModeVisitor.h"
+#include "LifeCycleObserver.h"
 #include <string>
 #include <iostream>
 
@@ -16,31 +13,33 @@ class Customer;
 
 /**
  * @class StaffManager
- * @brief ConcreteObserver for both Plant Lifecycle and Customer interactions
- * Observes plants (LifeCycleObserver) and customers (CustomerObserver)
- * Delegates behavior to a ModeVisitor
+ * @brief The "Element" class that accepts a visitor to change its mode.
+ * Observes plants, creates commands, and passes them to a dispatcher.
  */
 class StaffManager : public LifeCycleObserver, public CustomerObserver {
-private:
-    StaffMember* staffDispatcher;
-    ModeVisitor* currentModeVisitor;
     
-public:
-    StaffManager(StaffMember* dispatcher);
-    ~StaffManager();
+    private:
+        StaffMember* staffDispatcher;
 
-    void setMode(ModeVisitor* newMode);
-    
-    // LifeCycleObserver interface - for plant lifecycle events
-    void update(PlantProduct* plant, const std::string& commandType) override;
-    
-    // CustomerObserver interface - for customer interaction events
-    void updateCustomerInteraction(Customer* customer, 
-                                   const std::string& interactionType, 
-                                   const std::string& details = "") override;
-    bool validateCustomerOrder(Order* order, Customer* customer) override;
-    
-    void dispatchCommand(Command* command);
+        //Interactive and automated mode have been removed from system so we need to fix all automated and interactive mode fucntionality
+        PlantProduct* pendingPlant;
+        std::string expectedCommandType;
+
+    public:
+        StaffManager(StaffMember* dispatcher);
+        ~StaffManager();
+
+        //visitor management removed
+
+        // --- Core Methods ---
+        void resolvePendingTask(const std::string& userInput);
+        void update(PlantProduct* plant, const std::string& commandType) override;
+
+        void updateCustomerInteraction(Customer* customer, const std::string& interactionType, const std::string& details = "") override;
+        bool validateCustomerOrder(Order* order, Customer* customer) override;
+
+        void dispatchCommand(Command* command);
+
 };
 
 #endif // STAFFMANAGER_H

@@ -4,46 +4,73 @@
 #include <vector>
 #include <string>
 #include <map>
-#include "LifecycleObserver.h"
-#include "StateDP/PlantState.h"
-#include "BridgeDP/PlantSpeciesProfile.h"
-#include "StrategyDP/CareStrategy.h"
+#include <chrono>
+#include "LifeCycleObserver.h"
+#include "PlantState.h"
+#include "PlantSpeciesProfile.h"
+#include "CareStrategy.h"
+#include "LifeCycleObserver.h"
+
+class LifeCycleObserver;
 
 // The main context class that ties many patterns together.
-class PlantProduct {
+class PlantProduct
+{
 private:
     // State Pattern
-    PlantState* currentState;
+    PlantState *currentState;
+    int daysInCurrentState;
+
+    // Timing for autonomous growth
+    std::chrono::steady_clock::time_point stateStartTime;
+    std::chrono::steady_clock::time_point lastCareNotification;
+
     // Observer Pattern
     LifeCycleObserver* monitor;
     // Bridge Pattern
-    PlantSpeciesProfile* speciesProfile;
+    PlantSpeciesProfile *speciesProfile;
     // Strategy Pattern
-    std::map<std::string, CareStrategy*> strategy_map;
+    std::map<std::string, CareStrategy *> strategy_map;
     std::string plantId;
 
 public:
-    PlantProduct(const std::string& id, PlantSpeciesProfile* profile);
+    PlantProduct(const std::string &id, PlantSpeciesProfile *profile);
     ~PlantProduct();
 
     // --- State ---
-    void transitionTo(PlantState* state);
+    void transitionTo(PlantState *state);
     std::string getCurrentStateName() const;
     void transitionToWithering();
+    int getDaysInCurrentState() const { return daysInCurrentState; }
+
+    // --- Timing ---
+    int getSecondsInCurrentState() const;
+    int getSecondsSinceLastCare() const;
+    void resetLastCareTime();
 
     // --- Observer ---
     void setObserver(LifeCycleObserver* obs) { monitor = obs; }
 
     // --- Bridge ---
-    PlantSpeciesProfile* getProfile() const;
+    PlantSpeciesProfile *getProfile() const;
 
     // --- Strategy ---
-    void addStrategy(const std::string& careType, CareStrategy* strategy);
-    void performCare(const std::string& careType);
+    void addStrategy(const std::string &careType, CareStrategy *strategy);
+    void performCare(const std::string &careType);
+    
+    // Get strategy name for a care type (for display purposes)
+    std::string getStrategyNameForCareType(const std::string &careType) const;
 
     // --- Business Logic ---
     void advanceLifecycle();
-    void notify(const std::string& commandType);
+    void notify(const std::string &commandType);
+    
+    // --- Plant ID ---
+    std::string getId() const { return plantId; }
+
+private:
+    // Helper method to validate care appropriateness
+    bool isCareTypeAppropriate(const std::string &careType) const;
 };
 
 #endif // PLANT_PRODUCT_H

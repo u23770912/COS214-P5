@@ -1,5 +1,5 @@
 #include "Cashier.h"
-#include "CareCommand.h"
+#include "Command.h"
 #include "MoveToSalesFloorCommand.h"
 #include <iostream>
 
@@ -29,18 +29,15 @@ void Cashier::handleCommand(Command* command) {
     else {
         std::cout << "All Cashiers are busy. The '" << command->getType() << "' task was dropped." << std::endl;
         
-        // Only transition to withering for care commands that affect plant health
-        if (CareCommand* careCmd = dynamic_cast<CareCommand*>(command)) {
-            if (careCmd->getReceiver()) {
+        // Check if command has a plant receiver (care commands that affect plant health)
+        if (command->getReceiver()) {
+            // Only wither if it's not a MoveToSalesFloorCommand
+            if (dynamic_cast<MoveToSalesFloorCommand*>(command) == nullptr) {
                 std::cout << "Plant will wither due to neglected care." << std::endl;
-                careCmd->getReceiver()->transitionToWithering();
+                command->getReceiver()->transitionToWithering();
+            } else {
+                std::cout << "Warning: Plant could not be moved to sales floor - will retry later." << std::endl;
             }
-        }
-        // For MoveToSalesFloorCommand, we don't wither the plant
-        // but we do need to handle the situation
-        else if (MoveToSalesFloorCommand* moveCmd = dynamic_cast<MoveToSalesFloorCommand*>(command)) {
-            (void)moveCmd; // Suppress unused variable warning
-            std::cout << "Warning: Plant could not be moved to sales floor - will retry later." << std::endl;
         }
         
         delete command;

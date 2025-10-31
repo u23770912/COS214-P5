@@ -4,7 +4,7 @@
 #include "PlantProduct.h"
 #include "ConcreteOrderBuilder.h"
 #include "InventoryManager.h"
-#include "BridgeDP/PlantSpeciesProfile.h"
+#include "PlantSpeciesProfile.h"
 #include <iostream>
 #include <iomanip>
 

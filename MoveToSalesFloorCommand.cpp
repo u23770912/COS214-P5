@@ -1,6 +1,6 @@
 #include "MoveToSalesFloorCommand.h"
 #include "PlantProduct.h"
-#include "StateDP/ReadyForSaleState.h"
+#include "ReadyForSaleState.h"
 #include "InventoryManager.h"
 #include <iostream>
 

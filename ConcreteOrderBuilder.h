@@ -7,6 +7,8 @@
 #include "PlantBundle.h"
 #include <string>
 
+class Order;
+
 /**
  * @brief Concrete implementation of OrderBuilder
  * Builds orders with plants, plant pots, and bundles
