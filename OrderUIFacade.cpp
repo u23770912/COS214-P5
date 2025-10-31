@@ -5,8 +5,20 @@
 #include "ConcreteOrderBuilder.h"
 #include "InventoryManager.h"
 #include "PlantSpeciesProfile.h"
+#include "TerminalUI.h"
 #include <iostream>
 #include <iomanip>
+
+/**
+ * @file OrderUIFacade.cpp
+ * @brief Implementation of OrderUIFacade - works in conjunction with TerminalUI
+ * 
+ * OrderUIFacade handles order-specific logic and delegates display operations to TerminalUI.
+ * This creates a layered facade:
+ * - TerminalUI: Low-level display operations
+ * - OrderUIFacade: Order business logic + UI coordination
+ * - Customer: High-level order management
+ */
 
 OrderUIFacade::OrderUIFacade(Customer* customer) : customer(customer) {
     // Facade initialized with customer reference
@@ -58,64 +70,44 @@ int OrderUIFacade::countTotalPlantsInOrder(ConcreteOrderBuilder* builder) const 
 }
 
 void OrderUIFacade::displayAvailableItems() {
-    std::cout << "\n=== AVAILABLE PLANTS IN NURSERY ===" << std::endl;
-    
-    std::vector<PlantProduct*> availablePlants = getAvailablePlantsFromInventory();
-    
-    if (availablePlants.empty()) {
-        std::cout << "[ERROR] Sorry! No plants are currently available for sale." << std::endl;
-        std::cout << "Please check back later or contact staff." << std::endl;
-        return;
-    }
-    
-    std::cout << "We have " << availablePlants.size() << " plants ready for sale:" << std::endl;
-    std::cout << std::string(60, '-') << std::endl;
-    
-    for (size_t i = 0; i < availablePlants.size(); ++i) {
-        displayPlantDetails(availablePlants[i], static_cast<int>(i + 1));
-    }
-    
-    std::cout << std::string(60, '-') << std::endl;
-    displayDiscountInformation();
-    std::cout << "[INFO] To add a plant: Use addPlantToOrder(number, quantity)" << std::endl;
+    // Delegate to TerminalUI for consistent display formatting
+    // TerminalUI handles all the visual presentation
+    TerminalUI::displayAvailablePlants();
 }
 
 void OrderUIFacade::viewCurrentOrder() {
     if (!customer) {
-        std::cout << "[ERROR] No customer associated with UI facade." << std::endl;
+        TerminalUI::printError("No customer associated with UI facade.");
         return;
     }
     
     ConcreteOrderBuilder* builder = customer->getOrderBuilder();
     if (!builder || !builder->hasCurrentOrder()) {
-        std::cout << "\n[ORDER] Your order is currently empty." << std::endl;
-        std::cout << "[INFO] Use displayAvailableItems() to see what's available!" << std::endl;
+        // Delegate to TerminalUI for empty order display
+        TerminalUI::displayCurrentOrder(0);
         displayDiscountInformation();
         return;
     }
     
-    std::cout << "\n=== YOUR CURRENT ORDER ===" << std::endl;
-    
     // Get temporary order to display
     Order* tempOrder = builder->getOrder();
+    
+    // Delegate to TerminalUI for order display
+    TerminalUI::displayCurrentOrder(tempOrder);
+    
+    // Display discount information using TerminalUI methods
     if (tempOrder && !tempOrder->isEmpty()) {
-        std::cout << tempOrder->getOrderSummary() << std::endl;
-        
-        // Show current plant count and applicable discount
         int plantCount = countTotalPlantsInOrder(builder);
         double discount = calculateAutomaticDiscount(plantCount);
         
-        std::cout << "\n[DISCOUNT INFO] Total plants: " << plantCount;
+        std::string discountInfo = "Total plants: " + std::to_string(plantCount);
         if (discount > 0.0) {
-            std::cout << " | Automatic discount: " << discount << "%" << std::endl;
+            discountInfo += " | Automatic discount: " + std::to_string(static_cast<int>(discount)) + "%";
+            TerminalUI::printSuccess(discountInfo);
         } else {
-            std::cout << " | No discount applied" << std::endl;
+            discountInfo += " | No discount yet (add 3+ for discount)";
+            TerminalUI::printInfo(discountInfo);
         }
-        
-        std::cout << "[TOTAL] Current Total: $" << std::fixed << std::setprecision(2) 
-                  << tempOrder->getTotalAmount() << std::endl;
-    } else {
-        std::cout << "[ORDER] Order is empty." << std::endl;
     }
 }
 
@@ -232,45 +224,44 @@ bool OrderUIFacade::addBundleToOrderWithAutoDiscount(const std::string& bundleNa
 
 void OrderUIFacade::displayOrderCreationWelcome() {
     if (!customer) {
-        std::cout << "[ERROR] No customer associated with UI facade." << std::endl;
+        TerminalUI::printError("No customer associated with UI facade.");
         return;
     }
     
-    std::cout << "\n=== Welcome " << customer->getName() << "! Let's create your order ===" << std::endl;
-    std::cout << "New order session started!" << std::endl;
+    // Delegate to TerminalUI for welcome message
+    TerminalUI::displayWelcomeMessage(customer->getName());
     displayOrderInstructions();
 }
 
 void OrderUIFacade::displayOrderExecutionSummary() {
     if (!customer) {
-        std::cout << "[ERROR] No customer associated with UI facade." << std::endl;
+        TerminalUI::printError("No customer associated with UI facade.");
         return;
     }
     
-    std::cout << "\n=== EXECUTING ORDER ===" << std::endl;
-    std::cout << "Customer: " << customer->getName() << " (" << customer->getEmail() << ")" << std::endl;
+    TerminalUI::printSection("EXECUTING ORDER");
+    TerminalUI::printInfo("Customer: " + customer->getName() + " (" + customer->getEmail() + ")");
 }
 
 void OrderUIFacade::displayFinalOrderConfirmation() {
-    std::cout << "\n=== ORDER FINALIZED ===" << std::endl;
-    std::cout << "[SUCCESS] Order is ready for execution!" << std::endl;
-    std::cout << "[INFO] Use executeOrder() to place your order with staff." << std::endl;
+    TerminalUI::printSection("ORDER FINALIZED");
+    TerminalUI::printSuccess("Order is ready for execution!");
+    TerminalUI::printInfo("Use executeOrder() to place your order with staff.");
 }
 
 void OrderUIFacade::displayDiscountInformation() const {
-    std::cout << "\n[AUTOMATIC DISCOUNTS AVAILABLE]" << std::endl;
-    std::cout << "  3-5 plants:  10% discount automatically applied" << std::endl;
-    std::cout << "  6-9 plants:  15% discount automatically applied" << std::endl;
-    std::cout << "  10+ plants:  30% discount automatically applied (MAX)" << std::endl;
+    // Delegate to TerminalUI for consistent discount display
+    TerminalUI::displayDiscountInformation();
 }
 
 void OrderUIFacade::displayOrderInstructions() const {
-    std::cout << "Use these interactive methods to build your order:" << std::endl;
-    std::cout << "1. displayAvailableItems() - See what's available" << std::endl;
-    std::cout << "2. addPlantToOrder(index, quantity) - Add plants with auto-discount" << std::endl;
-    std::cout << "3. addBundleToOrder(name, indices) - Create bundles with auto-discount" << std::endl;
-    std::cout << "4. viewCurrentOrder() - Review your order" << std::endl;
-    std::cout << "5. finalizeOrder() - Complete the order" << std::endl;
+    TerminalUI::printSubsection("How to build your order:");
+    std::cout << "  1. displayAvailableItems() - See what's available" << std::endl;
+    std::cout << "  2. addPlantToOrder(index, quantity) - Add plants with auto-discount" << std::endl;
+    std::cout << "  3. addBundleToOrder(name, indices) - Create bundles with auto-discount" << std::endl;
+    std::cout << "  4. viewCurrentOrder() - Review your order" << std::endl;
+    std::cout << "  5. finalizeOrder() - Complete the order" << std::endl;
+    TerminalUI::displayBlankLine();
 }
 
 // Private helper methods moved from Customer class

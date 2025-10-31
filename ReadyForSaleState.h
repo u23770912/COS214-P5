@@ -5,7 +5,12 @@
 #include <string>
 
 class ReadyForSaleState : public PlantState {
+private:
+    bool hasRequestedMove;
+    
 public:
+    ReadyForSaleState() : hasRequestedMove(false) {}
+    
     void onEnter(PlantProduct* plant) override;
     void onExit(PlantProduct* plant) override;
     void advanceState(PlantProduct* plant) override;

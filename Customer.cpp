@@ -7,7 +7,7 @@
 #include "InventoryManager.h"
 #include "PlantProduct.h"
 #include "CustomerObserver.h"
-#include "BridgeDP/PlantSpeciesProfile.h"
+#include "PlantSpeciesProfile.h"
 #include "OrderHistory.h"
 #include "StaffManager.h"
 #include <iostream>
@@ -120,22 +120,35 @@ bool Customer::executeOrder() {
     }
 }
 
-// UI operations delegated to facade - maintaining compatibility for existing tests
+// ============= UI Operations (Delegated to Facade) =============
+// All customer-facing UI operations are delegated to OrderUIFacade
+// This maintains separation of concerns and keeps Customer focused on business logic
+
 void Customer::displayAvailableItems() {
+    // Delegate to OrderUIFacade which internally uses TerminalUI for display
     uiFacade->displayAvailableItems();
 }
 
 void Customer::viewCurrentOrder() {
+    // Delegate to OrderUIFacade which internally uses TerminalUI for display
     uiFacade->viewCurrentOrder();
 }
 
 bool Customer::addPlantToOrder(int plantIndex, int quantity) {
-    // Delegate to facade which handles UI and automatic discount logic
+    // Delegate to facade which handles:
+    // 1. Validation of plant index and quantity
+    // 2. Automatic discount calculation
+    // 3. UI feedback via TerminalUI
+    // 4. Adding plant to order via builder
     return uiFacade->addPlantToOrderWithAutoDiscount(plantIndex, quantity);
 }
 
 bool Customer::addBundleToOrder(const std::string& bundleName, const std::vector<int>& plantIndices) {
-    // Delegate to facade which handles validation, UI, and automatic discount logic
+    // Delegate to facade which handles:
+    // 1. Bundle creation and validation
+    // 2. Automatic discount calculation based on total plants
+    // 3. UI feedback via TerminalUI
+    // 4. Adding bundle to order via builder
     return uiFacade->addBundleToOrderWithAutoDiscount(bundleName, plantIndices);
 }
 

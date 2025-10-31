@@ -2,6 +2,7 @@
 #define STAFFMANAGER_H
 
 #include "LifeCycleObserver.h"
+#include "CustomerObserver.h"
 #include <string>
 #include <iostream>
 

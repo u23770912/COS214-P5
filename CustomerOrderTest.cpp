@@ -25,6 +25,7 @@
 #include "NotificationHandler.h"
 #include "OrderProcessHandler.h"
 #include "Command.h"
+#include "MoveToSalesFloorCommand.h"
 
 using std::cout;
 using std::cin;
@@ -140,34 +141,66 @@ string getValidString(const string& prompt) {
     }
 }
 
-// Helper function to populate inventory with sample plants
-void populateInventory() {
-
-    
+// Helper function to populate inventory with sample plants using proper command flow
+void populateInventory(SalesFloorStaff* cashierChain) {
     cout << "\n=== Setting up Sales Floor Inventory ===" << endl;
+    cout << "Creating plants and processing through staff chain...\n" << endl;
     
-    // Add various plants to sales floor
+    // Create plants in ReadyForSale state
     PlantProduct* aloe1 = new PlantProduct("A001", new SucculentProfile("Aloe Vera", "low", "bright", "sandy"));
     aloe1->transitionTo(new ReadyForSaleState());
-    InventoryManager::getInstance().moveToSalesFloor(aloe1);
+    InventoryManager::getInstance().addToGreenhouse(aloe1);
     
     PlantProduct* aloe2 = new PlantProduct("A002", new SucculentProfile("Aloe Vera", "low", "bright", "sandy"));
     aloe2->transitionTo(new ReadyForSaleState());
-    InventoryManager::getInstance().moveToSalesFloor(aloe2);
+    InventoryManager::getInstance().addToGreenhouse(aloe2);
 
     PlantProduct* rose1 = new PlantProduct("R001", new FlowerProfile("Rose", "moderate", "full sun", "loamy"));
     rose1->transitionTo(new ReadyForSaleState());
-    InventoryManager::getInstance().moveToSalesFloor(rose1);
+    InventoryManager::getInstance().addToGreenhouse(rose1);
 
     PlantProduct* rose2 = new PlantProduct("R002", new FlowerProfile("Rose", "moderate", "full sun", "loamy"));
     rose2->transitionTo(new ReadyForSaleState());
-    InventoryManager::getInstance().moveToSalesFloor(rose2);
+    InventoryManager::getInstance().addToGreenhouse(rose2);
 
     PlantProduct* oak1 = new PlantProduct("O001", new TreeProfile("Oak", "moderate", "full sun", "well-drained"));
     oak1->transitionTo(new ReadyForSaleState());
-    InventoryManager::getInstance().moveToSalesFloor(oak1);
+    InventoryManager::getInstance().addToGreenhouse(oak1);
+    
+    // Now properly move plants to sales floor using MoveToSalesFloorCommand through Cashier chain
+    std::vector<PlantProduct*> plants;
+    plants.push_back(aloe1);
+    plants.push_back(aloe2);
+    plants.push_back(rose1);
+    plants.push_back(rose2);
+    plants.push_back(oak1);
+    
+    cout << "Processing MoveToSalesFloor commands through Cashier chain...\n" << endl;
+    
+    for (size_t i = 0; i < plants.size(); i++) {
+        PlantProduct* plant = plants[i];
+        
+        // Create MoveToSalesFloorCommand
+        Command* moveCommand = Command::createCommand("MoveToSalesFloor");
+        if (moveCommand) {
+            moveCommand->setReceiver(plant);
+            
+            cout << "[" << (i+1) << "/" << plants.size() << "] Moving " 
+                 << plant->getProfile()->getSpeciesName() 
+                 << " (" << plant->getId() << ") to sales floor..." << endl;
+            
+            // Dispatch through cashier chain (proper Chain of Responsibility)
+            cashierChain->handleCommand(moveCommand);
+            
+            cout << endl;
+        } else {
+            cout << "ERROR: Failed to create MoveToSalesFloorCommand for " << plant->getId() << endl;
+        }
+    }
 
-    cout << "Inventory populated with " << InventoryManager::getInstance().getReadyForSalePlants().size() << " plants" << endl;
+    cout << "Sales floor inventory now has " 
+         << InventoryManager::getInstance().getReadyForSalePlants().size() 
+         << " plants" << endl;
     cout << "=========================================\n" << endl;
 }
 
@@ -213,8 +246,11 @@ int main() {
     cout << "║   GREENHOUSE CUSTOMER ORDER SYSTEM    ║" << endl;
     cout << "╚════════════════════════════════════════╝\n" << endl;
     
-    // Setup inventory
-    populateInventory();
+    // Register command prototypes (needed for Command::createCommand())
+    cout << "=== Registering Command Prototypes ===" << endl;
+    Command::registerCommand("MoveToSalesFloor", new MoveToSalesFloorCommand());
+    cout << "MoveToSalesFloorCommand registered" << endl;
+    cout << "======================================\n" << endl;
     
     // Setup cashier staff chain
     cout << "=== Setting up Sales Staff ===" << endl;
@@ -226,6 +262,9 @@ int main() {
     dispatcher->registerTeam("Sales", cashier1);
     cout << "Sales team configured with 2 cashiers" << endl;
     cout << "==================================\n" << endl;
+    
+    // Setup inventory using proper command flow through cashier chain
+    populateInventory(cashier1);
     
     // Create customer
     cout << "=== Customer Information ===" << endl;
@@ -285,10 +324,7 @@ int main() {
             case 3: {
                 // Add plant bundle
                 cout << "\n=== Create Plant Bundle ===" << endl;
-                cout << "Enter bundle name: ";
-                cin.ignore();
-                string bundleName;
-                std::getline(cin, bundleName);
+                string bundleName = getValidString("Enter bundle name: ");
                 
                 // We'll calculate automatic discount after adding plants
                 PlantBundle* bundle = new PlantBundle(bundleName, "Custom", 1, 0.0);

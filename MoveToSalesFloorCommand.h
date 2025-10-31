@@ -7,9 +7,6 @@
 class PlantProduct;
 
 class MoveToSalesFloorCommand : public Command {
-    private:
-        PlantProduct* plantReceiver; // the plant to be moved
-        
     public:
         MoveToSalesFloorCommand();
         ~MoveToSalesFloorCommand();

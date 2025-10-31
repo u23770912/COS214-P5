@@ -1,4 +1,4 @@
-// TerminalUI.h - Enhanced colored terminal output with progress bars and tables
+// TerminalUI.h - Facade for customer terminal UI operations and enhanced display
 #ifndef TERMINAL_UI_H
 #define TERMINAL_UI_H
 
@@ -8,6 +8,11 @@
 #include <iomanip>
 #include <chrono>
 #include <thread>
+
+// Forward declarations
+class Customer;
+class Order;
+class PlantProduct;
 
 // ANSI Color Codes
 #define RESET   "\033[0m"
@@ -30,93 +35,26 @@
 
 class TerminalUI {
 public:
-    static void clearScreen() {
-        #ifdef _WIN32
-            system("cls");
-        #else
-            std::cout << "\033[2J\033[1;1H";
-        #endif
-    }
-
-    static void setCursorPosition(int row, int col) {
-        std::cout << "\033[" << row << ";" << col << "H";
-    }
-
-    static void hideCursor() {
-        std::cout << "\033[?25l";
-    }
-
-    static void showCursor() {
-        std::cout << "\033[?25h";
-    }
-
-    static void printHeader(const std::string& title, const std::string& subtitle = "") {
-        std::cout << BOLD << CYAN << "\n============================================================\n";
-        std::cout << "  " << title << "\n";
-        
-        if (!subtitle.empty()) {
-            std::cout << "  " << subtitle << "\n";
-        }
-        
-        std::cout << "============================================================" << RESET << "\n\n";
-    }
-
-    static void printSection(const std::string& title) {
-        std::cout << BOLD << YELLOW << ">> " << title << RESET << std::endl;
-    }
-
-    static void printSubsection(const std::string& title) {
-        std::cout << BOLD << BLUE << "  - " << title << RESET << std::endl;
-    }
-
-    static void printSuccess(const std::string& msg) {
-        std::cout << GREEN << "[OK] " << msg << RESET << std::endl;
-    }
-
-    static void printError(const std::string& msg) {
-        std::cout << RED << "[ERROR] " << msg << RESET << std::endl;
-    }
-
-    static void printWarning(const std::string& msg) {
-        std::cout << YELLOW << "[WARN] " << msg << RESET << std::endl;
-    }
-
-    static void printInfo(const std::string& msg) {
-        std::cout << BLUE << "[INFO] " << msg << RESET << std::endl;
-    }
-
-    static void printDebug(const std::string& msg) {
-        std::cout << GRAY << "[DEBUG] " << msg << RESET << std::endl;
-    }
-
-    static void printBusy(const std::string& name) {
-        std::cout << RED << "  [BUSY] " << RESET << name << GRAY << " (working...)" << RESET << std::endl;
-    }
-
-    static void printAvailable(const std::string& name) {
-        std::cout << GREEN << "  [FREE] " << RESET << name << std::endl;
-    }
-
+    // Basic terminal control functions
+    static void clearScreen();
+    static void setCursorPosition(int row, int col);
+    static void hideCursor();
+    static void showCursor();
+    
+    // Display formatting functions
+    static void printHeader(const std::string& title, const std::string& subtitle = "");
+    static void printSection(const std::string& title);
+    static void printSubsection(const std::string& title);
+    static void printSuccess(const std::string& msg);
+    static void printError(const std::string& msg);
+    static void printWarning(const std::string& msg);
+    static void printInfo(const std::string& msg);
+    static void printDebug(const std::string& msg);
+    static void printBusy(const std::string& name);
+    static void printAvailable(const std::string& name);
     static void printStaffAssignment(const std::string& plantId,
                                      const std::string& plantState,
-                                     const std::string& task) {
-        std::cout << GRAY << "    -> " << RESET;
-        if (!plantId.empty()) {
-            std::cout << CYAN << plantId << RESET;
-        } else {
-            std::cout << CYAN << "Unknown" << RESET;
-        }
-
-        if (!plantState.empty()) {
-            std::cout << " [" << BOLD << plantState << RESET << "]";
-        }
-
-        if (!task.empty()) {
-            std::cout << " | task: " << BOLD << MAGENTA << task << RESET;
-        }
-
-        std::cout << std::endl;
-    }
+                                     const std::string& task);
 
     static void printCommandExecution(const std::string& command, const std::string& handler) {
         std::cout << MAGENTA << "> " << RESET << "Executing '" << BOLD << command << RESET 
@@ -236,6 +174,100 @@ public:
         std::cout << GRAY << "[" << std::put_time(std::localtime(&time), "%H:%M:%S") << "] " 
                   << RESET << color << msg << RESET << std::endl;
     }
+
+    // ========================================================================
+    // Customer Order Session Methods (Facade Pattern)
+    // ========================================================================
+    
+    /**
+     * @brief Display welcome message to customer
+     * @param customerName Name of the customer
+     */
+    static void displayWelcomeMessage(const std::string& customerName);
+    
+    /**
+     * @brief Display all available plants from inventory
+     * Shows plants that are ready for sale with their details
+     */
+    static void displayAvailablePlants();
+    
+    /**
+     * @brief Display the current order contents
+     * @param order The order to display
+     */
+    static void displayCurrentOrder(Order* order);
+    
+    /**
+     * @brief Display detailed order summary before submission
+     * @param order The order to summarize
+     */
+    static void displayOrderSummary(Order* order);
+    
+    /**
+     * @brief Display order confirmation or failure message
+     * @param order The processed order
+     * @param success Whether the order was successful
+     */
+    static void displayOrderConfirmation(Order* order, bool success);
+    
+    /**
+     * @brief Display automatic discount information
+     * Shows discount tiers based on quantity
+     */
+    static void displayDiscountInformation();
+    
+    /**
+     * @brief Display result of an operation
+     * @param success Whether operation succeeded
+     * @param operation Name of the operation
+     * @param details Additional details about the result
+     */
+    static void displayOperationResult(bool success, const std::string& operation, 
+                                      const std::string& details = "");
+    
+    /**
+     * @brief Display current inventory status
+     * Shows greenhouse and sales floor plant counts
+     */
+    static void displayInventoryStatus();
+    
+    /**
+     * @brief Add a plant to an order (helper for customer operations)
+     * @param order The order to add to
+     * @param plantIndex Index of plant in available plants list
+     * @param quantity Quantity to add
+     * @return true if successful, false otherwise
+     */
+    static bool addPlantToOrder(Order* order, int plantIndex, int quantity);
+    
+    /**
+     * @brief Add a bundle to an order
+     * @param order The order to add to
+     * @param bundleName Name of the bundle
+     * @param plantIndices Indices of plants to include
+     * @param quantities Quantities for each plant
+     * @param discount Discount percentage to apply
+     * @return true if successful, false otherwise
+     */
+    static bool addBundleToOrder(Order* order, const std::string& bundleName,
+                                const std::vector<int>& plantIndices,
+                                const std::vector<int>& quantities,
+                                double discount = 0.0);
+    
+    /**
+     * @brief Display help and instructions for customers
+     */
+    static void displayHelp();
+    
+    /**
+     * @brief Display a visual separator line
+     */
+    static void displaySeparator();
+    
+    /**
+     * @brief Display a blank line for spacing
+     */
+    static void displayBlankLine();
 };
 
 #endif // TERMINAL_UI_H
