@@ -95,10 +95,10 @@ class Customer : public CustomerSubject {
         void attachObserver(CustomerObserver* observer);
         void detachObserver(CustomerObserver* observer);
         
-        // Staff interaction methods - Observer pattern (Additional from salesfloor)
-        void setStaffObserver(StaffManager* staff);
-        void notifyStaffOfInteraction(const std::string& interactionType, const std::string& details = "");
-        bool requestStaffValidation(Order* order);
+        // Staff interaction methods - Observer pattern (Convenience methods from salesfloor integration)
+        void setStaffObserver(StaffManager* staff); // Convenience: sets staff and adds to observers
+        void notifyStaffOfInteraction(const std::string& interactionType, const std::string& details = ""); // Delegates to notifyInteraction()
+        bool requestStaffValidation(Order* order); // Convenience: delegates to requestValidation()
 
         // Memento pattern - order history methods
         void saveCurrentOrder();

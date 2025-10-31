@@ -23,6 +23,7 @@
 
 #include <vector>
 #include <map>
+#include <algorithm>
 
 Customer::Customer(const std::string& name, const std::string& email, const std::string& cellPhone)
     : name(name), email(email), cellPhone(cellPhone), orderBuilder(0), orderDirector(0), uiFacade(0), orderProduct(0), placeOrderCommand(0), 
@@ -522,37 +523,25 @@ void Customer::showPaymentOptions() const {
 void Customer::setStaffObserver(StaffManager* staff) {
     staffObserver = staff;
     if (staff) {
+        // Also add to observers list for unified Observer pattern behavior
+        attachObserver(staff);
         std::cout << "[SYSTEM] Staff observer set for customer: " << name << std::endl;
     }
 }
 
 void Customer::notifyStaffOfInteraction(const std::string& interactionType, const std::string& details) {
-    if (staffObserver) {
-        std::cout << "[STAFF NOTIFICATION] " << name << " - " << interactionType << std::endl;
-        if (!details.empty()) {
-            std::cout << "   Details: " << details << std::endl;
-        }
-        staffObserver->updateCustomerInteraction(this, interactionType, details);
-    } else {
-        std::cout << "[WARNING] No staff observer set for customer: " << name << std::endl;
-    }
+    // Delegate to the main Observer pattern notification method
+    // This eliminates code duplication and ensures all observers are notified
+    notifyInteraction(interactionType, details);
 }
 
 bool Customer::requestStaffValidation(Order* order) {
-    if (!staffObserver) {
-        std::cout << "[ERROR] No staff observer available for order validation" << std::endl;
-        return false;
+    // Ensure the staffObserver is added to the observers list if not already there
+    if (staffObserver && std::find(observers.begin(), observers.end(), staffObserver) == observers.end()) {
+        attach(staffObserver);
     }
     
-    std::cout << "\n[STAFF VALIDATION REQUEST] Requesting validation from staff observer..." << std::endl;
-    std::cout << "Customer: " << name << " (" << email << ")" << std::endl;
-    std::cout << "Order ID: " << order->getOrderId() << std::endl;
-    
-    if (staffObserver->validateCustomerOrder(order, this)) {
-        std::cout << "[SUCCESS] Order validated by staff observer" << std::endl;
-        return true;
-    }
-    
-    std::cout << "[FAILED] Staff observer could not validate the order" << std::endl;
-    return false;
+    // Delegate to the main Observer pattern validation method
+    // This eliminates code duplication and maintains consistent behavior
+    return requestValidation(order);
 }

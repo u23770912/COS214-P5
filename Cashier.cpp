@@ -39,6 +39,7 @@ void Cashier::handleCommand(Command* command) {
         // For MoveToSalesFloorCommand, we don't wither the plant
         // but we do need to handle the situation
         else if (MoveToSalesFloorCommand* moveCmd = dynamic_cast<MoveToSalesFloorCommand*>(command)) {
+            (void)moveCmd; // Suppress unused variable warning
             std::cout << "Warning: Plant could not be moved to sales floor - will retry later." << std::endl;
         }
         

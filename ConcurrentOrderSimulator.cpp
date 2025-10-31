@@ -161,6 +161,7 @@ void ConcurrentOrderSimulator::initializeInventory() {
     threadSafeStaffManager->logMessage("[SETUP] Initializing inventory with diverse plant selection...");
     
     InventoryManager& inventory = InventoryManager::getInstance();
+    (void)inventory; // Suppress unused variable warning - inventory is accessed via singleton methods
     
     // Create diverse plant profiles for testing
     TreeProfile* oakProfile = new TreeProfile("Oak Tree", "weekly", "full sun", "well-drained");
