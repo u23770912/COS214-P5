@@ -21,9 +21,10 @@
 #include <algorithm>
 #include <cctype>
 
-PlantProduct::PlantProduct(const std::string& id, PlantSpeciesProfile* profile) 
-        : currentState(nullptr), daysInCurrentState(0), stateStartTime(std::chrono::steady_clock::now()),
-            lastCareNotification(std::chrono::steady_clock::now()), monitor(nullptr), speciesProfile(profile), plantId(id) {
+PlantProduct::PlantProduct(const std::string &id, PlantSpeciesProfile *profile)
+    : currentState(nullptr), daysInCurrentState(0), stateStartTime(std::chrono::steady_clock::now()),
+      lastCareNotification(std::chrono::steady_clock::now()), monitor(nullptr), speciesProfile(profile), plantId(id)
+{
     transitionTo(new PlantedState());
     addStrategy("water", new WateringStrategy());
     addStrategy("mist", new GentleMistStrategy());
@@ -94,21 +95,28 @@ void PlantProduct::addStrategy(const std::string &careType, CareStrategy *strate
 void PlantProduct::performCare(const std::string &careType)
 {
     std::string normalized = careType;
-    std::transform(normalized.begin(), normalized.end(), normalized.begin(), [](unsigned char c) {
-        return static_cast<char>(std::tolower(c));
-    });
+    std::transform(normalized.begin(), normalized.end(), normalized.begin(), [](unsigned char c)
+                   { return static_cast<char>(std::tolower(c)); });
 
     // Dynamic pruning strategy selection
-    if (normalized == "pruning" || normalized == "prune") {
+    if (normalized == "pruning" || normalized == "prune")
+    {
         std::string idealPruning = speciesProfile->getProperty("idealPruning");
-        if (idealPruning == "artistic") {
+        if (idealPruning == "artistic")
+        {
             normalized = "prune_artistic";
-        } else if (idealPruning == "minimal") {
+        }
+        else if (idealPruning == "minimal")
+        {
             normalized = "prune_minimal";
-        } else {
+        }
+        else
+        {
             normalized = "prune_standard"; // Default
         }
-    } else {
+    }
+    else
+    {
         // Legacy alias logic for other care types
         static const std::map<std::string, std::string> aliases = {
             {"watering", "water"},
@@ -117,8 +125,7 @@ void PlantProduct::performCare(const std::string &careType)
             {"fertilizing", "fertilize"},
             {"fertilize", "fertilize"},
             {"flood", "flood"},
-            {"drip", "drip"}
-        };
+            {"drip", "drip"}};
         auto aliasIt = aliases.find(normalized);
         if (aliasIt != aliases.end())
         {
@@ -130,10 +137,11 @@ void PlantProduct::performCare(const std::string &careType)
     if (it != strategy_map.end())
     {
         std::string amountStr;
-        int amount = 1; // Default amount for pruning, as it's not numeric
+        int amount = 1;          // Default amount for pruning, as it's not numeric
         std::string propertyKey; // Declare propertyKey here
 
-        if (normalized.rfind("prune", 0) != 0) { // if not a pruning type
+        if (normalized.rfind("prune", 0) != 0)
+        { // if not a pruning type
             if (normalized == "water" || normalized == "mist" || normalized == "flood" || normalized == "drip")
             {
                 propertyKey = "idealWater";
@@ -181,22 +189,30 @@ void PlantProduct::resetLastCareTime()
     lastCareNotification = std::chrono::steady_clock::now();
 }
 
-std::string PlantProduct::getStrategyNameForCareType(const std::string& careType) const {
+std::string PlantProduct::getStrategyNameForCareType(const std::string &careType) const
+{
     std::string normalized = careType;
-    std::transform(normalized.begin(), normalized.end(), normalized.begin(), [](unsigned char c) {
-        return static_cast<char>(std::tolower(c));
-    });
+    std::transform(normalized.begin(), normalized.end(), normalized.begin(), [](unsigned char c)
+                   { return static_cast<char>(std::tolower(c)); });
 
-    if (normalized == "pruning" || normalized == "prune") {
+    if (normalized == "pruning" || normalized == "prune")
+    {
         std::string idealPruning = speciesProfile->getProperty("idealPruning");
-        if (idealPruning == "artistic") {
+        if (idealPruning == "artistic")
+        {
             normalized = "prune_artistic";
-        } else if (idealPruning == "minimal") {
+        }
+        else if (idealPruning == "minimal")
+        {
             normalized = "prune_minimal";
-        } else {
+        }
+        else
+        {
             normalized = "prune_standard";
         }
-    } else {
+    }
+    else
+    {
         static const std::map<std::string, std::string> aliases = {
             {"watering", "water"},
             {"water", "water"},
@@ -204,16 +220,17 @@ std::string PlantProduct::getStrategyNameForCareType(const std::string& careType
             {"fertilizing", "fertilize"},
             {"fertilize", "fertilize"},
             {"flood", "flood"},
-            {"drip", "drip"}
-        };
+            {"drip", "drip"}};
         auto aliasIt = aliases.find(normalized);
-        if (aliasIt != aliases.end()) {
+        if (aliasIt != aliases.end())
+        {
             normalized = aliasIt->second;
         }
     }
 
     auto it = strategy_map.find(normalized);
-    if (it != strategy_map.end()) {
+    if (it != strategy_map.end())
+    {
         return it->second->getName();
     }
     return "Unknown";

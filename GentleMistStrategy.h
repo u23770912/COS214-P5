@@ -7,20 +7,25 @@
 /**
  * @class GentleMistStrategy
  * @brief Implements a misting algorithm for humidity-loving plants.
- * 
+ *
  * This strategy is used to increase local humidity, which is crucial for
  * certain tropical plants or ferns.
  */
-class GentleMistStrategy : public CareStrategy {
+class GentleMistStrategy : public CareStrategy
+{
 public:
-void applyCare(int amount, const std::string& careType) override {
-        if (careType == "mist") {
+    void applyCare(int amount, const std::string &careType) override
+    {
+        if (careType == "mist")
+        {
             std::cout << "Gently misting to maintain humidity level: " << amount << " ml" << std::endl;
-        } else {
+        }
+        else
+        {
             std::cout << "GentleMistStrategy does not handle care type: " << careType << std::endl;
         }
     }
-std::string getName() const override { return "Gentle Mist"; }
+    std::string getName() const override { return "Gentle Mist"; }
 };
 
 #endif // GENTLEMISTSTRATEGY_H

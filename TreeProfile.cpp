@@ -3,7 +3,8 @@
 TreeProfile::TreeProfile(const std::string &species,
 						 const std::string &idealWater,
 						 const std::string &sunlight,
-						 const std::string &soil) {
+						 const std::string &soil)
+{
 	speciesName = species;
 	setProperty("category", "Tree");
 	setProperty("idealWater", sanitizeNumericString(idealWater, "300"));

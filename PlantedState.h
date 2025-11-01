@@ -4,12 +4,13 @@
 #include "PlantState.h"
 #include <string>
 
-class PlantedState : public PlantState {
+class PlantedState : public PlantState
+{
 public:
-    void onEnter(PlantProduct* plant) override;
-    void onExit(PlantProduct* plant) override;
+    void onEnter(PlantProduct *plant) override;
+    void onExit(PlantProduct *plant) override;
     std::string getName() const override { return "Planted"; }
-    void advanceState(PlantProduct* plant) override;
+    void advanceState(PlantProduct *plant) override;
 };
 
 #endif // PLANTED_STATE_H
