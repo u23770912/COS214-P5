@@ -32,7 +32,7 @@ struct BouquetSuggestion {
         oss << "   Colors: " << colorScheme << "\n";
         oss << "   Flowers: ";
         
-        for (int i = 0; i < flowerTypes.size(); i++) {
+        for (size_t i = 0; i < flowerTypes.size(); i++) {
             oss << quantities[i] << "x " << flowerTypes[i];
             if (i < flowerTypes.size() - 1) oss << ", ";
         }

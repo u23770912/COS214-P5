@@ -7,6 +7,7 @@
 #include <map>
 #include "Customer.h"
 #include "Order.h"
+#include "OrderMemento.h"
 #include "ConcreteOrderBuilder.h"
 #include "SinglePlant.h"
 #include "PlantBundle.h"
@@ -61,10 +62,10 @@ void clearScreen() {
 
 /**
  * @brief Prints a horizontal border line
- * @param ch Character to use for the border (default: '═')
+ * @param ch Character to use for the border (default: '=')
  * @param width Width of the border in characters (default: 70)
  */
-void printBorder(char ch = '═', int width = 70) {
+void printBorder(char ch = '=', int width = 70) {
     cout << string(width, ch) << endl;
 }
 
@@ -210,7 +211,7 @@ void displayPlantCatalog() {
     
     // Group plants by category
     cout << CYAN << "    Available Plants: " << plants.size() << "\n" << RESET;
-    cout << "    " << string(66, '─') << "\n";
+    cout << "    " << string(66, '-') << "\n";
     
     for (size_t i = 0; i < plants.size(); i++) {
         string name = plants[i]->getProfile()->getSpeciesName();
@@ -224,7 +225,7 @@ void displayPlantCatalog() {
         cout << " │ " << GREEN << "$25.99" << RESET << "\n";
     }
     
-    cout << "    " << string(66, '─') << "\n";
+    cout << "    " << string(66, '-') << "\n";
 }
 
 void addSinglePlantToOrder(Order*& currentOrder, ConcreteOrderBuilder* builder) {
@@ -372,11 +373,11 @@ void browseBouquetSuggestions() {
     auto events = factory.getAvailableEvents();
     
     cout << "    Available Events:\n";
-    cout << "    " << string(66, '─') << "\n";
+    cout << "    " << string(66, '-') << "\n";
     for (size_t i = 0; i < events.size(); i++) {
         cout << "    " << YELLOW << (i+1) << ". " << RESET << events[i] << "\n";
     }
-    cout << "    " << string(66, '─') << "\n";
+    cout << "    " << string(66, '-') << "\n";
     
     cout << "\n    " << YELLOW << "➤ Select event (1-" << events.size() << "): " << RESET;
     int choice;
@@ -520,11 +521,11 @@ void checkoutOrder(Order*& currentOrder, Customer* customer, ConcreteOrderBuilde
     
     // Payment method selection
     cout << "    " << YELLOW << "Select Payment Method:\n" << RESET;
-    cout << "    " << string(66, '─') << "\n";
+    cout << "    " << string(66, '-') << "\n";
     cout << "    1. 💵 Cash\n";
     cout << "    2. 💳 Credit Card\n";
     cout << "    3. 🏦 EFT (Bank Transfer)\n";
-    cout << "    " << string(66, '─') << "\n";
+    cout << "    " << string(66, '-') << "\n";
     cout << "\n    " << YELLOW << "➤ Choice (1-3): " << RESET;
     
     int paymentChoice;

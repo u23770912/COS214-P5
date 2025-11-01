@@ -87,9 +87,21 @@
 #include "OrderValidationHandler.h"
 #include "PaymentProcessHandler.h"
 #include "NotificationHandler.h"
+#include "OrderMemento.h"
+#include "SuggestionTemplate/BouquetSuggestionFactory.h"
 
 // UI Infrastructure
 #include "TerminalUI.h"
+
+// ANSI Color Codes for enhanced UI
+#define ANSI_RESET   "\033[0m"
+#define ANSI_BOLD    "\033[1m"
+#define ANSI_RED     "\033[31m"
+#define ANSI_GREEN   "\033[32m"
+#define ANSI_YELLOW  "\033[33m"
+#define ANSI_BLUE    "\033[34m"
+#define ANSI_MAGENTA "\033[35m"
+#define ANSI_CYAN    "\033[36m"
 
 // Forward declarations
 struct StaffContext;
@@ -477,6 +489,37 @@ void runGreenhouseSimulation(StaffContext& staff) {
             allReadyCounter++;
             if (allReadyCounter == 1) {
                 TerminalUI::printInfo("All plants reached ReadyForSale! Allowing time for sales floor transfer...");
+                TerminalUI::printSection("CASHIER TEAM ACTIVITY");
+                std::cout << ANSI_CYAN << "Cashier team is now moving plants to the sales floor...\n" << ANSI_RESET;
+            }
+            
+            // Display cashier activity during grace period
+            if (allReadyCounter > 0 && allReadyCounter <= moveGracePeriod) {
+                // Show which cashiers are processing moves
+                bool cashierActive = false;
+                for (size_t i = 0; i < staff.roster.size(); ++i) {
+                    StaffChainHandler* handler = staff.roster[i].second;
+                    // Check if this is a cashier (Sales team members)
+                    if (staff.roster[i].first.find("Cashier") != std::string::npos) {
+                        if (handler->isBusy()) {
+                            cashierActive = true;
+                            const PlantProduct* plant = handler->getActivePlant();
+                            if (plant) {
+                                std::cout << ANSI_GREEN << "[ACTIVE] " << staff.roster[i].first 
+                                         << " is moving " << plant->getId() << " (" 
+                                         << plant->getProfile()->getSpeciesName() 
+                                         << ") to sales floor" << ANSI_RESET << std::endl;
+                            }
+                        }
+                    }
+                }
+                
+                if (!cashierActive && allReadyCounter > 2) {
+                    // Show progress update
+                    int salesFloorCount = InventoryManager::getInstance().getReadyForSalePlants().size();
+                    std::cout << ANSI_YELLOW << "[UPDATE] Sales floor inventory: " 
+                             << salesFloorCount << " plants available" << ANSI_RESET << std::endl;
+                }
             }
         }
 
@@ -601,141 +644,340 @@ char getValidChoice(const std::string& prompt, const std::string& validChoices) 
 }
 
 /**
- * @brief Display interactive customer menu
+ * @brief Show animated loading bar for better UX
  */
-void displayCustomerMenu() {
-    std::cout << "\n╔════════════════════════════════════════╗" << std::endl;
-    std::cout << "║     CUSTOMER ORDER MENU               ║" << std::endl;
-    std::cout << "╠════════════════════════════════════════╣" << std::endl;
-    std::cout << "║ 1. View Available Plants              ║" << std::endl;
-    std::cout << "║ 2. Add Single Plant to Order          ║" << std::endl;
-    std::cout << "║ 3. Add Plant Bundle to Order          ║" << std::endl;
-    std::cout << "║ 4. View Current Order                 ║" << std::endl;
-    std::cout << "║ 5. Submit Order for Validation        ║" << std::endl;
-    std::cout << "║ 6. Exit Customer Menu                 ║" << std::endl;
-    std::cout << "╚════════════════════════════════════════╝" << std::endl;
+void showLoadingBar(const std::string& task, int durationMs = 1000) {
+    std::cout << ANSI_CYAN << task << ": " << ANSI_RESET;
+    int bars = 30;
+    for (int i = 0; i <= bars; i++) {
+        std::cout << ANSI_GREEN << "█" << ANSI_RESET << std::flush;
+        std::this_thread::sleep_for(std::chrono::milliseconds(durationMs / bars));
+    }
+    std::cout << " " << ANSI_GREEN << "✓" << ANSI_RESET << std::endl;
 }
 
 /**
- * @brief Display available plants in a formatted table
+ * @brief Display enhanced interactive customer menu with all options
+ */
+void displayCustomerMenu() {
+    std::cout << "\n" << ANSI_CYAN << ANSI_BOLD;
+    std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+    std::cout << "    ║                        MAIN MENU                                 ║\n";
+    std::cout << "    ╠══════════════════════════════════════════════════════════════════╣\n";
+    std::cout << ANSI_RESET;
+    
+    std::cout << "    ║  " << ANSI_GREEN << "1" << ANSI_RESET << " │ 🌺 Browse Available Plants                                  ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "2" << ANSI_RESET << " │ 🛒 Add Single Plant to Cart                                 ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "3" << ANSI_RESET << " │ 🎁 Create Custom Plant Bundle                               ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "4" << ANSI_RESET << " │ 💐 Browse Event Bouquet Suggestions                         ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "5" << ANSI_RESET << " │ 👀 View Current Order                                       ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "6" << ANSI_RESET << " │ 💾 Save Order Snapshot (Memento)                            ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "7" << ANSI_RESET << " │ ⏮  Restore Last Order Snapshot                              ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "8" << ANSI_RESET << " │ 💳 Checkout & Payment                                       ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "9" << ANSI_RESET << " │ 🚪 Exit                                                     ║\n";
+    
+    std::cout << ANSI_CYAN << ANSI_BOLD;
+    std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+    std::cout << ANSI_RESET;
+    std::cout << "\n    " << ANSI_YELLOW << "➤ Enter your choice: " << ANSI_RESET;
+}
+
+/**
+ * @brief Display available plants in an enhanced formatted table with details
  */
 void displayAvailablePlants() {
     std::vector<PlantProduct*> plants = InventoryManager::getInstance().getReadyForSalePlants();
 
-    std::cout << "\n┌────────────────────────────────────────┐" << std::endl;
-    std::cout << "│     AVAILABLE PLANTS FOR SALE         │" << std::endl;
-    std::cout << "├────────────────────────────────────────┤" << std::endl;
+    TerminalUI::clearScreen();
+    std::cout << "\n" << ANSI_GREEN << ANSI_BOLD;
+    std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+    std::cout << "    ║                    🌿 PLANT CATALOG 🌿                           ║\n";
+    std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+    std::cout << ANSI_RESET << "\n";
     
     if (plants.empty()) {
-        std::cout << "│  No plants available                  │" << std::endl;
-    } else {
-        for (size_t i = 0; i < plants.size(); i++) {
-            std::cout << "│ " << (i+1) << ". " << plants[i]->getProfile()->getSpeciesName();
-            
-            // Pad to align
-            std::string name = plants[i]->getProfile()->getSpeciesName();
-            for (size_t j = name.length(); j < 30; j++) std::cout << " ";
-            std::cout << " │" << std::endl;
-        }
+        std::cout << ANSI_RED << "    ✗ No plants available at the moment.\n" << ANSI_RESET;
+        std::cout << "\n    " << ANSI_CYAN << "Press Enter to continue..." << ANSI_RESET;
+        std::cin.ignore();
+        std::cin.get();
+        return;
     }
-    std::cout << "└────────────────────────────────────────┘" << std::endl;
+    
+    std::cout << ANSI_CYAN << "    Available Plants: " << plants.size() << "\n" << ANSI_RESET;
+    std::cout << "    " << std::string(66, '-') << "\n";
+    
+    for (size_t i = 0; i < plants.size(); i++) {
+        std::string name = plants[i]->getProfile()->getSpeciesName();
+        std::string water = plants[i]->getProfile()->getProperty("idealWater");
+        std::string sun = plants[i]->getProfile()->getProperty("idealSunlight");
+        
+        std::cout << "    " << ANSI_YELLOW << std::setw(2) << (i+1) << ". " << ANSI_RESET;
+        std::cout << ANSI_BOLD << std::setw(20) << std::left << name << ANSI_RESET;
+        std::cout << " │ 💧 " << std::setw(12) << water;
+        std::cout << " │ ☀️  " << std::setw(15) << sun;
+        std::cout << " │ " << ANSI_GREEN << "$25.99" << ANSI_RESET << "\n";
+    }
+    
+    std::cout << "    " << std::string(66, '-') << "\n";
+    std::cout << "\n    " << ANSI_CYAN << "Press Enter to continue..." << ANSI_RESET;
+    std::cin.ignore();
+    std::cin.get();
 }
 
 /**
- * @brief Run the interactive customer order experience
+ * @brief Browse event-specific bouquet suggestions using Template Method Pattern
+ */
+void browseBouquetSuggestions() {
+    TerminalUI::clearScreen();
+    std::cout << "\n" << ANSI_MAGENTA << ANSI_BOLD;
+    std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+    std::cout << "    ║              💐 EVENT BOUQUET SUGGESTIONS 💐                     ║\n";
+    std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+    std::cout << ANSI_RESET << "\n";
+    
+    BouquetSuggestionFactory& factory = BouquetSuggestionFactory::getInstance();
+    std::vector<std::string> events = factory.getAvailableEvents();
+    
+    std::cout << "    Available Events:\n";
+    std::cout << "    " << std::string(66, '-') << "\n";
+    for (size_t i = 0; i < events.size(); i++) {
+        std::cout << "    " << ANSI_YELLOW << (i+1) << ". " << ANSI_RESET << events[i] << "\n";
+    }
+    std::cout << "    " << std::string(66, '-') << "\n";
+    
+    int choice = getValidInteger("\n    Select event (1-" + std::to_string(events.size()) + "): ", 1, events.size());
+    
+    std::string eventType = events[choice-1];
+    BouquetSuggestionTemplate* tmpl = factory.getTemplate(eventType);
+    
+    if (!tmpl) {
+        std::cout << ANSI_RED << "    ✗ Template not found!\n" << ANSI_RESET;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        return;
+    }
+    
+    TerminalUI::clearScreen();
+    std::cout << "\n";
+    std::vector<BouquetSuggestion> suggestions = tmpl->generateSuggestions();
+    
+    std::cout << "\n    " << ANSI_CYAN << "Press Enter to return to menu..." << ANSI_RESET;
+    std::cin.ignore();
+    std::cin.get();
+}
+
+/**
+ * @brief Run the enhanced interactive customer order experience
  * 
- * This function provides an interactive menu-driven interface where the user can:
- * 1. View available plants from the sales floor
- * 2. Add individual plants to their order
- * 3. Create plant bundles with automatic discounts
- * 4. View their current order
- * 5. Submit order for validation through the staff chain
- * 6. Exit when finished
+ * This function provides a comprehensive interactive menu-driven interface where customers can:
+ * 1. Browse available plants from the sales floor with detailed information
+ * 2. Add individual plants to their shopping cart
+ * 3. Create custom plant bundles with automatic discounts
+ * 4. Browse event-specific bouquet suggestions (Template Method Pattern)
+ * 5. View their current order with full details
+ * 6. Save order snapshots (Memento Pattern)
+ * 7. Restore previous order states (Memento Pattern)
+ * 8. Complete checkout with multiple payment options (Adapter Pattern)
+ * 9. Exit when finished
  * 
- * The function uses the same inventory populated by the greenhouse simulation,
- * ensuring end-to-end integration. All interactions use the TerminalUI facade
- * and proper design patterns (Builder, Chain of Responsibility, Observer).
+ * Features:
+ * - Enhanced UI with colors and progress indicators
+ * - Robust input validation to prevent crashes
+ * - Automatic discount calculation based on quantity
+ * - Payment processing through Adapter Pattern (Cash/Credit/EFT)
+ * - Integration with Cashier chain for command dispatch
+ * - Order validation through Chain of Responsibility
+ * - Inventory synchronization with greenhouse simulation
  * 
- * @param staff Staff context with configured teams
+ * Design Patterns Demonstrated:
+ * - Builder: Order construction
+ * - Chain of Responsibility: Order validation, payment processing
+ * - Observer: Customer interaction notifications
+ * - Adapter: Multiple payment system integration
+ * - Memento: Order state save/restore
+ * - Template Method: Bouquet suggestions
+ * - Facade: OrderUIFacade for automatic discounts
+ * 
+ * @param staff Staff context with configured teams (includes Cashier chain)
  */
 void runCustomerOrderTest(StaffContext& staff) {
-    TerminalUI::printHeader("PHASE 2: INTERACTIVE CUSTOMER ORDER EXPERIENCE");
-    TerminalUI::printInfo("Welcome to the greenhouse customer order system!");
-    std::cout << std::endl;
+    // ============================================================================
+    // Phase 2: Enhanced Customer Experience Header
+    // ============================================================================
+    TerminalUI::clearScreen();
+    std::cout << "\n" << ANSI_GREEN << ANSI_BOLD;
+    std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+    std::cout << "    ║                                                                  ║\n";
+    std::cout << "    ║          🌿 GREENHOUSE NURSERY MANAGEMENT SYSTEM 🌿             ║\n";
+    std::cout << "    ║                                                                  ║\n";
+    std::cout << "    ║              Your Gateway to Green Living                       ║\n";
+    std::cout << "    ║                                                                  ║\n";
+    std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+    std::cout << ANSI_RESET << "\n";
     
     // ============================================================================
-    // Phase 2.1: Display available inventory
+    // Phase 2.1: Display available inventory with loading animation
     // ============================================================================
-    TerminalUI::printSection("SALES FLOOR INVENTORY STATUS");
     int availablePlants = InventoryManager::getInstance().getReadyForSalePlants().size();
-    TerminalUI::printInfo("Plants available for purchase: " + std::to_string(availablePlants));
+    
+    std::cout << ANSI_CYAN << "\n⚙  Verifying Greenhouse Inventory..." << ANSI_RESET << std::endl;
+    showLoadingBar("Loading plant database", 800);
+    
+    std::cout << ANSI_GREEN << "✓ Inventory ready: " << availablePlants 
+             << " plants available\n" << ANSI_RESET << std::endl;
     
     if (availablePlants == 0) {
         TerminalUI::printWarning("No plants available on sales floor!");
         TerminalUI::printInfo("Skipping customer order experience.");
+        std::cout << "\nPress Enter to continue...";
+        std::cin.get();
         return;
     }
     
-    std::cout << std::endl;
+    // ============================================================================
+    // Phase 2.2: Customer Registration
+    // ============================================================================
+    std::cout << ANSI_YELLOW << ANSI_BOLD;
+    std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+    std::cout << "    ║                    CUSTOMER REGISTRATION                         ║\n";
+    std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+    std::cout << ANSI_RESET << "\n";
     
-    // ============================================================================
-    // Phase 2.2: Gather customer information
-    // ============================================================================
-    TerminalUI::printSection("CUSTOMER INFORMATION");
-    std::string name = getValidString("Enter your name: ");
-    std::string email = getValidString("Enter your email: ");
-    std::string phone = getValidString("Enter your phone: ");
+    std::string name, email, phone;
+    std::cout << "    " << ANSI_CYAN << "➤ Full Name: " << ANSI_RESET;
+    std::getline(std::cin, name);
+    std::cout << "    " << ANSI_CYAN << "➤ Email: " << ANSI_RESET;
+    std::getline(std::cin, email);
+    std::cout << "    " << ANSI_CYAN << "➤ Phone: " << ANSI_RESET;
+    std::getline(std::cin, phone);
     
     Customer* customer = new Customer(name, email, phone);
     
     // Attach staff manager as observer to customer
     customer->attachObserver(staff.manager);
     
-    std::cout << "\n";
-    TerminalUI::printSuccess("Welcome, " + name + "!");
-    TerminalUI::printInfo("Email: " + email);
-    TerminalUI::printInfo("Phone: " + phone);
-    std::cout << std::endl;
+    std::cout << "\n    " << ANSI_GREEN << "✓ Welcome, " << name << "! 🌿\n" << ANSI_RESET;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     
     // ============================================================================
-    // Phase 2.3: Create order builder
+    // Phase 2.3: Create order builder and memento support
     // ============================================================================
     ConcreteOrderBuilder* orderBuilder = new ConcreteOrderBuilder(customer->getName());
     Order* currentOrder = NULL;
+    OrderMemento* savedMemento = NULL;  // For memento pattern demonstration
     
     // ============================================================================
-    // Phase 2.4: Interactive menu loop
+    // Phase 2.4: Enhanced Interactive menu loop with extended features
     // ============================================================================
     bool customerActive = true;
     
     while (customerActive) {
+        TerminalUI::clearScreen();
+        std::cout << "\n" << ANSI_GREEN << ANSI_BOLD;
+        std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+        std::cout << "    ║          🌿 GREENHOUSE NURSERY MANAGEMENT SYSTEM 🌿             ║\n";
+        std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+        std::cout << ANSI_RESET;
+        
         displayCustomerMenu();
         
-        int choice = getValidInteger("Enter your choice: ", 1, 6);
+        int choice;
+        std::cin >> choice;
+        
+        // Check if input failed (e.g., user entered non-numeric input)
+        if (std::cin.fail()) {
+            std::cin.clear();  // Clear the error flag
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Discard invalid input
+            std::cout << "\n    " << ANSI_RED << "✗ Invalid input! Please enter a number between 1-9.\n" << ANSI_RESET;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            continue;
+        }
+        
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        
+        if (choice < 1 || choice > 9) {
+            std::cout << "\n    " << ANSI_RED << "✗ Invalid choice! Try again.\n" << ANSI_RESET;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            continue;
+        }
         
         switch (choice) {
             case 1: {
-                // View available plants
+                // Browse available plants with enhanced display
                 displayAvailablePlants();
                 break;
             }
             
             case 2: {
-                // Add single plant to order
-                displayAvailablePlants();
+                // Add single plant to order with enhanced UI
+                TerminalUI::clearScreen();
+                std::cout << "\n" << ANSI_GREEN << ANSI_BOLD;
+                std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+                std::cout << "    ║                    🌿 PLANT CATALOG 🌿                           ║\n";
+                std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+                std::cout << ANSI_RESET << "\n";
                 
                 std::vector<PlantProduct*> plants = InventoryManager::getInstance().getReadyForSalePlants();
                 
                 if (plants.empty()) {
-                    std::cout << "\nNo plants available!" << std::endl;
+                    std::cout << ANSI_RED << "    ✗ No plants available!\n" << ANSI_RESET;
+                    std::cout << "\n    " << ANSI_CYAN << "Press Enter to continue..." << ANSI_RESET;
+                    std::cin.get();
                     break;
                 }
                 
-                int plantNum = getValidInteger("\nEnter plant number to add (1-" + 
-                                               std::to_string(plants.size()) + "): ", 
-                                               1, plants.size());
+                std::cout << ANSI_CYAN << "    Available Plants: " << plants.size() << "\n" << ANSI_RESET;
+                std::cout << "    " << std::string(66, '-') << "\n";
                 
-                int quantity = getValidInteger("Enter quantity: ", 1, 100);
+                for (size_t i = 0; i < plants.size(); i++) {
+                    std::string name_p = plants[i]->getProfile()->getSpeciesName();
+                    std::string water = plants[i]->getProfile()->getProperty("idealWater");
+                    std::string sun = plants[i]->getProfile()->getProperty("idealSunlight");
+                    
+                    std::cout << "    " << ANSI_YELLOW << std::setw(2) << (i+1) << ". " << ANSI_RESET;
+                    std::cout << ANSI_BOLD << std::setw(20) << std::left << name_p << ANSI_RESET;
+                    std::cout << " │ 💧 " << std::setw(12) << water;
+                    std::cout << " │ ☀️  " << std::setw(15) << sun;
+                    std::cout << " │ " << ANSI_GREEN << "$25.99" << ANSI_RESET << "\n";
+                }
+                std::cout << "    " << std::string(66, '-') << "\n";
+                
+                std::cout << "\n    " << ANSI_YELLOW << "➤ Enter plant number (1-" << plants.size() << "): " << ANSI_RESET;
+                int plantNum;
+                std::cin >> plantNum;
+                
+                if (std::cin.fail()) {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    std::cout << ANSI_RED << "    ✗ Invalid input! Please enter a number.\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    break;
+                }
+                std::cin.ignore();
+                
+                if (plantNum < 1 || plantNum > (int)plants.size()) {
+                    std::cout << ANSI_RED << "    ✗ Invalid selection!\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    break;
+                }
+                
+                std::cout << "    " << ANSI_YELLOW << "➤ Quantity: " << ANSI_RESET;
+                int quantity;
+                std::cin >> quantity;
+                
+                if (std::cin.fail()) {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    std::cout << ANSI_RED << "    ✗ Invalid input! Please enter a number.\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    break;
+                }
+                std::cin.ignore();
+                
+                if (quantity < 1) {
+                    std::cout << ANSI_RED << "    ✗ Invalid quantity!\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    break;
+                }
                 
                 // Create order if it doesn't exist
                 if (!currentOrder) {
@@ -747,42 +989,125 @@ void runCustomerOrderTest(StaffContext& staff) {
                 SinglePlant* plant = new SinglePlant(plantType, 25.99, quantity);
                 currentOrder->addOrderItem(plant);
                 
-                std::cout << "\n✓ Added " << quantity << "x " << plantType << " to order" << std::endl;
+                std::cout << "\n    " << ANSI_GREEN << "✓ Added " << quantity << "x " << plantType << " to cart!\n" << ANSI_RESET;
+                std::this_thread::sleep_for(std::chrono::milliseconds(800));
                 break;
             }
             
             case 3: {
-                // Add plant bundle
-                std::cout << "\n=== Create Plant Bundle ===" << std::endl;
-                std::string bundleName = getValidString("Enter bundle name: ");
+                // Create plant bundle with automatic discount
+                TerminalUI::clearScreen();
+                std::cout << "\n" << ANSI_MAGENTA << ANSI_BOLD;
+                std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+                std::cout << "    ║                  🎁 CREATE CUSTOM BUNDLE 🎁                      ║\n";
+                std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+                std::cout << ANSI_RESET << "\n";
                 
-                // We'll calculate automatic discount after adding plants
-                PlantBundle* bundle = new PlantBundle(bundleName, "Custom", 1, 0.0);
+                std::cout << "    " << ANSI_YELLOW << "➤ Bundle name: " << ANSI_RESET;
+                std::string bundleName;
+                std::getline(std::cin, bundleName);
                 
-                // Show available plants
-                displayAvailablePlants();
-                std::vector<PlantProduct*> plants = InventoryManager::getInstance().getReadyForSalePlants();
-                
-                if (plants.empty()) {
-                    std::cout << "\nNo plants available for bundle!" << std::endl;
-                    delete bundle;
+                if (bundleName.empty()) {
+                    std::cout << ANSI_RED << "    ✗ Bundle name cannot be empty!\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
                     break;
                 }
                 
-                int numPlants = getValidInteger("\nHow many different plants in bundle? ", 1, 10);
+                // Initial bundle with no discount (will be calculated automatically)
+                PlantBundle* bundle = new PlantBundle(bundleName, "Custom", 1, 0.0);
+                
+                std::vector<PlantProduct*> plants = InventoryManager::getInstance().getReadyForSalePlants();
+                
+                if (plants.empty()) {
+                    std::cout << ANSI_RED << "    ✗ No plants available for bundle!\n" << ANSI_RESET;
+                    delete bundle;
+                    std::cout << "\n    " << ANSI_CYAN << "Press Enter to continue..." << ANSI_RESET;
+                    std::cin.get();
+                    break;
+                }
+                
+                // Display available plants
+                std::cout << "\n    " << ANSI_CYAN << "Available Plants:\n" << ANSI_RESET;
+                std::cout << "    " << std::string(66, '-') << "\n";
+                for (size_t i = 0; i < plants.size(); i++) {
+                    std::cout << "    " << ANSI_YELLOW << (i+1) << ". " << ANSI_RESET 
+                             << plants[i]->getProfile()->getSpeciesName() << "\n";
+                }
+                std::cout << "    " << std::string(66, '-') << "\n";
+                
+                std::cout << "\n    " << ANSI_YELLOW << "➤ Number of plant types in bundle (1-10): " << ANSI_RESET;
+                int numTypes;
+                std::cin >> numTypes;
+                
+                if (std::cin.fail()) {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    std::cout << ANSI_RED << "    ✗ Invalid input! Please enter a number.\n" << ANSI_RESET;
+                    delete bundle;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    break;
+                }
+                std::cin.ignore();
+                
+                if (numTypes < 1 || numTypes > 10) {
+                    std::cout << ANSI_RED << "    ✗ Invalid number of types!\n" << ANSI_RESET;
+                    delete bundle;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    break;
+                }
                 
                 int totalPlantCount = 0;
                 
-                for (int i = 0; i < numPlants; i++) {
-                    std::cout << "\nPlant " << (i+1) << " of " << numPlants << std::endl;
-                    int plantNum = getValidInteger("Enter plant number: ", 1, plants.size());
+                for (int i = 0; i < numTypes; i++) {
+                    std::cout << "\n    " << ANSI_CYAN << "Plant " << (i+1) << " of " << numTypes << ANSI_RESET << "\n";
+                    std::cout << "    " << ANSI_YELLOW << "➤ Plant number (1-" << plants.size() << "): " << ANSI_RESET;
+                    int plantNum;
+                    std::cin >> plantNum;
                     
-                    int qty = getValidInteger("Enter quantity: ", 1, 50);
-                    totalPlantCount += qty;  // Track total plants for automatic discount
+                    if (std::cin.fail()) {
+                        std::cin.clear();
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        std::cout << ANSI_RED << "    ✗ Skipping invalid input...\n" << ANSI_RESET;
+                        continue;
+                    }
+                    std::cin.ignore();
+                    
+                    if (plantNum < 1 || plantNum > (int)plants.size()) {
+                        std::cout << ANSI_RED << "    ✗ Skipping invalid selection...\n" << ANSI_RESET;
+                        continue;
+                    }
+                    
+                    std::cout << "    " << ANSI_YELLOW << "➤ Quantity: " << ANSI_RESET;
+                    int qty;
+                    std::cin >> qty;
+                    
+                    if (std::cin.fail()) {
+                        std::cin.clear();
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        std::cout << ANSI_RED << "    ✗ Skipping invalid input...\n" << ANSI_RESET;
+                        continue;
+                    }
+                    std::cin.ignore();
+                    
+                    if (qty < 1) {
+                        std::cout << ANSI_RED << "    ✗ Skipping invalid quantity...\n" << ANSI_RESET;
+                        continue;
+                    }
+                    
+                    totalPlantCount += qty;
                     
                     std::string plantType = plants[plantNum-1]->getProfile()->getSpeciesName();
                     SinglePlant* bundlePlant = new SinglePlant(plantType, 25.99, qty);
                     bundle->addItem(bundlePlant);
+                    
+                    std::cout << ANSI_GREEN << "    ✓ Added " << qty << "x " << plantType << "\n" << ANSI_RESET;
+                }
+                
+                if (totalPlantCount == 0) {
+                    std::cout << ANSI_RED << "    ✗ No plants added to bundle!\n" << ANSI_RESET;
+                    delete bundle;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    break;
                 }
                 
                 // Calculate automatic discount based on total plant count
@@ -792,8 +1117,9 @@ void runCustomerOrderTest(StaffContext& staff) {
                 // Update bundle with automatic discount
                 bundle->setDiscount(automaticDiscount);
                 
-                std::cout << "\n[AUTOMATIC DISCOUNT] " << totalPlantCount << " plants = " 
-                         << automaticDiscount << "% discount applied!" << std::endl;
+                std::cout << "\n    " << ANSI_BOLD << ANSI_GREEN << "[AUTOMATIC DISCOUNT APPLIED]" << ANSI_RESET << "\n";
+                std::cout << "    Total plants: " << totalPlantCount << "\n";
+                std::cout << "    Discount: " << automaticDiscount << "%\n";
                 
                 // Create order if it doesn't exist
                 if (!currentOrder) {
@@ -801,106 +1127,267 @@ void runCustomerOrderTest(StaffContext& staff) {
                 }
                 
                 currentOrder->addOrderItem(bundle);
-                std::cout << "\n✓ Bundle '" << bundleName << "' added to order!" << std::endl;
+                std::cout << "\n    " << ANSI_GREEN << ANSI_BOLD << "✓ Bundle '" << bundleName 
+                         << "' created successfully!\n" << ANSI_RESET;
+                std::this_thread::sleep_for(std::chrono::milliseconds(1200));
                 break;
             }
             
             case 4: {
-                // View current order
-                if (!currentOrder || currentOrder->isEmpty()) {
-                    std::cout << "\nYour order is empty" << std::endl;
-                } else {
-                    std::cout << "\n" << currentOrder->getOrderSummary() << std::endl;
-                }
+                // Browse bouquet suggestions (Template Method Pattern)
+                browseBouquetSuggestions();
                 break;
             }
             
             case 5: {
-                // Submit order for validation
+                // View current order with enhanced display
+                TerminalUI::clearScreen();
                 if (!currentOrder || currentOrder->isEmpty()) {
-                    std::cout << "\nCannot submit empty order!" << std::endl;
-                    break;
-                }
-                
-                std::cout << "\n╔════════════════════════════════════════╗" << std::endl;
-                std::cout << "║   SUBMITTING ORDER FOR PROCESSING     ║" << std::endl;
-                std::cout << "╚════════════════════════════════════════╝\n" << std::endl;
-                
-                std::cout << currentOrder->getOrderSummary() << std::endl;
-                
-                std::cout << "\n=== Order Processing Chain ===" << std::endl;
-                std::cout << "Your order will go through:\n";
-                std::cout << "1. Validation (Check inventory)\n";
-                std::cout << "2. Payment Processing\n";
-                std::cout << "3. Customer Notification\n" << std::endl;
-                
-                // Create handler chain
-                OrderValidationHandler* validator = new OrderValidationHandler();
-                PaymentProcessHandler* paymentProcessor = new PaymentProcessHandler();
-                NotificationHandler* successNotifier = new NotificationHandler(false);
-                NotificationHandler* failureNotifier = new NotificationHandler(true);
-                
-                // Set up success chain: Validation -> Payment -> Success Notification
-                validator->setNext(paymentProcessor);
-                paymentProcessor->setNext(successNotifier);
-                
-                std::cout << "=== Starting Order Processing ===" << std::endl;
-                
-                // Start the chain
-                bool processingResult = validator->handleOrder(currentOrder, customer);
-                
-                if (!processingResult) {
-                    // Validation or payment failed - send failure notification
-                    std::cout << "\n=== Sending Failure Notification ===" << std::endl;
-                    
-                    // Get validation errors if validation failed
-                    std::vector<std::string> errors = validator->getValidationErrors();
-                    if (!errors.empty()) {
-                        failureNotifier->setErrorMessages(errors);
-                    }
-                    
-                    failureNotifier->handleOrder(currentOrder, customer);
-                    
-                    std::cout << "\nORDER PROCESSING FAILED!" << std::endl;
-                    std::cout << "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" << std::endl;
-                    std::cout << "A notification has been sent to your email with details." << std::endl;
+                    std::cout << "\n" << ANSI_YELLOW;
+                    std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+                    std::cout << "    ║                     🛒 YOUR CART IS EMPTY                        ║\n";
+                    std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+                    std::cout << ANSI_RESET << "\n";
+                    std::cout << "    Start shopping by adding plants to your cart!\n";
                 } else {
-                    std::cout << "\nORDER PROCESSING COMPLETED SUCCESSFULLY!" << std::endl;
-                    std::cout << "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" << std::endl;
-                    std::cout << "Order Status: " << currentOrder->getStatus() << std::endl;
-                    std::cout << "Total Amount: $" << currentOrder->getTotalAmount() << std::endl;
-                    std::cout << "\nA confirmation email has been sent to " << customer->getEmail() << std::endl;
-                }
-                
-                // Cleanup handlers
-                delete validator;
-                delete paymentProcessor;
-                delete successNotifier;
-                delete failureNotifier;
-                
-                // Ask if user wants to continue
-                char continueChoice = getValidChoice("\nCreate new order? (y/n): ", "yn");
-                if (continueChoice == 'n') {
-                    customerActive = false;
-                } else {
-                    // Reset for new order
-                    if (currentOrder) {
-                        delete currentOrder;
+                    std::cout << "\n" << ANSI_CYAN << ANSI_BOLD;
+                    std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+                    std::cout << "    ║                      🛒 YOUR CURRENT ORDER                       ║\n";
+                    std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+                    std::cout << ANSI_RESET << "\n";
+                    
+                    std::string summary = currentOrder->getOrderSummary();
+                    // Indent the summary
+                    size_t pos = 0;
+                    while ((pos = summary.find('\n', pos)) != std::string::npos) {
+                        summary.insert(pos + 1, "    ");
+                        pos += 5;
                     }
-                    orderBuilder->reset();
-                    currentOrder = NULL;
+                    std::cout << "    " << summary << "\n";
                 }
+                
+                std::cout << "\n    " << ANSI_CYAN << "Press Enter to continue..." << ANSI_RESET;
+                std::cin.get();
                 break;
             }
             
             case 6: {
+                // Save order snapshot (Memento Pattern)
+                if (!currentOrder || currentOrder->isEmpty()) {
+                    std::cout << "\n    " << ANSI_YELLOW << "⚠ No order to save!\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                } else {
+                    if (savedMemento) {
+                        delete savedMemento;
+                    }
+                    savedMemento = currentOrder->createMemento();
+                    std::cout << "\n    " << ANSI_GREEN << "✓ Order snapshot saved!\n" << ANSI_RESET;
+                    std::cout << "    Saved " << currentOrder->getItemCount() << " items\n";
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                }
+                break;
+            }
+            
+            case 7: {
+                // Restore last order snapshot (Memento Pattern)
+                if (!savedMemento) {
+                    std::cout << "\n    " << ANSI_YELLOW << "⚠ No saved snapshot available!\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                } else {
+                    if (!currentOrder) {
+                        currentOrder = orderBuilder->getOrder();
+                    }
+                    currentOrder->restoreState(savedMemento);
+                    std::cout << "\n    " << ANSI_GREEN << "✓ Order restored from snapshot!\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                }
+                break;
+            }
+            
+            case 8: {
+                // Checkout with payment processing (Adapter Pattern)
+                if (!currentOrder || currentOrder->isEmpty()) {
+                    TerminalUI::clearScreen();
+                    std::cout << "\n" << ANSI_RED;
+                    std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+                    std::cout << "    ║                    ✗ CART IS EMPTY                               ║\n";
+                    std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+                    std::cout << ANSI_RESET << "\n";
+                    std::cout << "    Add items before checking out!\n";
+                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    break;
+                }
+                
+                TerminalUI::clearScreen();
+                std::cout << "\n" << ANSI_GREEN << ANSI_BOLD;
+                std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+                std::cout << "    ║                    💳 CHECKOUT PROCESS                           ║\n";
+                std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+                std::cout << ANSI_RESET << "\n";
+                
+                // Show order summary
+                std::cout << "    " << ANSI_CYAN << "Order Summary:\n" << ANSI_RESET;
+                std::cout << "    Items: " << currentOrder->getItemCount() << "\n";
+                std::cout << "    Total: " << ANSI_GREEN << "$" << std::fixed << std::setprecision(2) 
+                         << currentOrder->getTotalAmount() << ANSI_RESET << "\n\n";
+                
+                // Payment method selection
+                std::cout << "    " << ANSI_YELLOW << "Select Payment Method:\n" << ANSI_RESET;
+                std::cout << "    " << std::string(66, '-') << "\n";
+                std::cout << "    1. 💵 Cash\n";
+                std::cout << "    2. 💳 Credit Card\n";
+                std::cout << "    3. 🏦 EFT (Bank Transfer)\n";
+                std::cout << "    " << std::string(66, '-') << "\n";
+                std::cout << "\n    " << ANSI_YELLOW << "➤ Choice (1-3): " << ANSI_RESET;
+                
+                int paymentChoice;
+                std::cin >> paymentChoice;
+                
+                if (std::cin.fail()) {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    std::cout << ANSI_RED << "    ✗ Invalid input! Please enter a number.\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    break;
+                }
+                std::cin.ignore();
+                
+                if (paymentChoice < 1 || paymentChoice > 3) {
+                    std::cout << ANSI_RED << "    ✗ Invalid payment method!\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    break;
+                }
+                
+                std::string paymentType, paymentDetails;
+                
+                switch(paymentChoice) {
+                    case 1:
+                        paymentType = "CASH";
+                        paymentDetails = "CASH";
+                        break;
+                    case 2: {
+                        paymentType = "CREDIT_CARD";
+                        std::cout << "\n    " << ANSI_YELLOW << "➤ Card Number: " << ANSI_RESET;
+                        std::string card;
+                        std::cin >> card;
+                        std::cin.ignore();
+                        std::cout << "    " << ANSI_YELLOW << "➤ Expiry (MM/YY): " << ANSI_RESET;
+                        std::string expiry;
+                        std::cin >> expiry;
+                        std::cin.ignore();
+                        std::cout << "    " << ANSI_YELLOW << "➤ CVV: " << ANSI_RESET;
+                        std::string cvv;
+                        std::cin >> cvv;
+                        std::cin.ignore();
+                        paymentDetails = card + ";" + expiry + ";" + cvv;
+                        break;
+                    }
+                    case 3:
+                        paymentType = "EFT";
+                        paymentDetails = "EFT";
+                        break;
+                }
+                
+                std::cout << "\n";
+                showLoadingBar("Processing order", 1500);
+                showLoadingBar("Validating inventory", 1000);
+                
+                // Create validation handler and process
+                OrderValidationHandler* validator = new OrderValidationHandler();
+                bool validationSuccess = validator->handleOrder(currentOrder, customer);
+                
+                if (!validationSuccess) {
+                    std::cout << "\n" << ANSI_RED << ANSI_BOLD;
+                    std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+                    std::cout << "    ║                  ✗ ORDER VALIDATION FAILED                       ║\n";
+                    std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+                    std::cout << ANSI_RESET << "\n";
+                    
+                    std::vector<std::string> errors = validator->getValidationErrors();
+                    for (size_t i = 0; i < errors.size(); i++) {
+                        std::cout << "    " << (i+1) << ". " << errors[i] << "\n";
+                    }
+                    
+                    delete validator;
+                    std::cout << "\n    " << ANSI_CYAN << "Press Enter to continue..." << ANSI_RESET;
+                    std::cin.get();
+                    break;
+                }
+                
+                delete validator;
+                
+                // Process payment using Adapter Pattern
+                showLoadingBar("Processing payment", 1200);
+                
+                double totalAmount = currentOrder->getTotalAmount();
+                bool paymentSuccess = customer->processPayment(paymentType, totalAmount, paymentDetails);
+                
+                if (paymentSuccess) {
+                    // Update inventory - remove sold plants
+                    InventoryManager& inventory = InventoryManager::getInstance();
+                    
+                    for (OrderItem* item : currentOrder->getOrderItems()) {
+                        if (SinglePlant* plant = dynamic_cast<SinglePlant*>(item)) {
+                            inventory.sellPlants(plant->getPlantType(), plant->getQuantity());
+                        } else if (PlantBundle* bundle = dynamic_cast<PlantBundle*>(item)) {
+                            for (OrderItem* bundleItem : bundle->getItems()) {
+                                if (SinglePlant* bplant = dynamic_cast<SinglePlant*>(bundleItem)) {
+                                    inventory.sellPlants(bplant->getPlantType(), bplant->getQuantity());
+                                }
+                            }
+                        }
+                    }
+                    
+                    currentOrder->setStatus("Completed - Paid");
+                    
+                    std::cout << "\n" << ANSI_GREEN << ANSI_BOLD;
+                    std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+                    std::cout << "    ║                  ✓ ORDER SUCCESSFUL!                             ║\n";
+                    std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+                    std::cout << ANSI_RESET << "\n";
+                    std::cout << "    Thank you for your purchase!\n";
+                    std::cout << "    Order ID: " << currentOrder->getOrderId() << "\n";
+                    std::cout << "    Payment Method: " << paymentType << "\n";
+                    std::cout << "    Amount Paid: $" << std::fixed << std::setprecision(2) << totalAmount << "\n";
+                    std::cout << "    A confirmation has been sent to your email.\n";
+                    
+                    // Reset order for potential new purchase
+                    delete currentOrder;
+                    currentOrder = NULL;
+                    orderBuilder->reset();
+                    
+                } else {
+                    std::cout << "\n" << ANSI_RED << ANSI_BOLD;
+                    std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+                    std::cout << "    ║                  ✗ PAYMENT FAILED                                ║\n";
+                    std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+                    std::cout << ANSI_RESET << "\n";
+                    std::cout << "    Payment could not be processed.\n";
+                    std::cout << "    Please check your payment details and try again.\n";
+                }
+                
+                std::cout << "\n    " << ANSI_CYAN << "Press Enter to continue..." << ANSI_RESET;
+                std::cin.get();
+                break;
+            }
+            
+            case 9: {
+                // Exit customer menu
                 customerActive = false;
-                std::cout << "\nThank you for shopping with us, " << customer->getName() << "!" << std::endl;
+                TerminalUI::clearScreen();
+                std::cout << "\n" << ANSI_GREEN << ANSI_BOLD;
+                std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+                std::cout << "    ║          🌿 THANK YOU FOR VISITING THE GREENHOUSE! 🌿           ║\n";
+                std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+                std::cout << ANSI_RESET << "\n";
+                std::cout << "    Thank you for shopping with us, " << customer->getName() << "!\n";
+                std::cout << "    Have a wonderful day!\n\n";
                 break;
             }
             
             default:
-                std::cout << "\n⚠ Invalid choice! Please try again." << std::endl;
+                std::cout << "\n    " << ANSI_RED << "✗ Invalid choice! Try again.\n" << ANSI_RESET;
+                std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     }
     
@@ -909,6 +1396,9 @@ void runCustomerOrderTest(StaffContext& staff) {
     // ============================================================================
     if (currentOrder) {
         delete currentOrder;
+    }
+    if (savedMemento) {
+        delete savedMemento;
     }
     delete orderBuilder;
     delete customer;

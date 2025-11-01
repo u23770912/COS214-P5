@@ -11,10 +11,10 @@ OBJS := $(SRCS:.cpp=.o)
 INTEGRATED_TARGET = integrated_system
 DEMO_TARGET = demo
 
-.PHONY: all clean integrated demo
+.PHONY: all clean integrated demo run-integrated run-demo valgrind-integrated valgrind-demo
 
 # Build both executables by default
-all: integrated demo
+all: $(INTEGRATED_TARGET) $(DEMO_TARGET)
 
 # Integrated system target - complete greenhouse simulation + customer interaction
 integrated: $(INTEGRATED_TARGET)
