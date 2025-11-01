@@ -80,7 +80,7 @@ Shows all plants currently on the sales floor with their species names.
 ### 2. Add Single Plant to Order
 - Select a plant by number
 - Specify quantity
-- Plant is added to your order at $25.99 each
+- Plant is added to your order at R25.99 each
 
 ### 3. Add Plant Bundle to Order
 - Create a custom bundle
@@ -128,9 +128,9 @@ Enter your choice: 4
 ╠════════════════════════════════════════╣
 ║ ITEMS:                                ║
 ║ 1. 2x Aloe Vera (medium)              ║
-║    $51.98                             ║
+║    R51.98                             ║
 ╠════════════════════════════════════════╣
-║ TOTAL: $51.98                         ║
+║ TOTAL: R51.98                         ║
 ╚════════════════════════════════════════╝
 
 Enter your choice: 5
@@ -152,7 +152,7 @@ A cashier will now validate your order...
 ✅ ORDER VALIDATED SUCCESSFULLY!
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Order Status: Validated
-Total Amount: $51.98
+Total Amount: R51.98
 
 Your order is ready for payment processing!
 ```

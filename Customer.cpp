@@ -229,7 +229,7 @@ void Customer::viewCurrentOrder() {
     Order* tempOrder = orderBuilder->getOrder();
     if (tempOrder && !tempOrder->isEmpty()) {
         std::cout << tempOrder->getOrderSummary() << std::endl;
-        std::cout << "[TOTAL] Total: $" << std::fixed << std::setprecision(2) 
+        std::cout << "[TOTAL] Total: R" << std::fixed << std::setprecision(2) 
                   << tempOrder->getTotalAmount() << std::endl;
     } else {
         std::cout << "[ORDER] Order is empty." << std::endl;
@@ -254,7 +254,7 @@ bool Customer::finalizeOrder() {
     
     std::cout << "\n=== ORDER FINALIZED ===" << std::endl;
     std::cout << orderProduct->getOrderSummary() << std::endl;
-    std::cout << "[TOTAL] Final Total: $" << std::fixed << std::setprecision(2) 
+    std::cout << "[TOTAL] Final Total: R" << std::fixed << std::setprecision(2) 
               << orderProduct->getTotalAmount() << std::endl;
     std::cout << "\n[SUCCESS] Order is ready for execution!" << std::endl;
     std::cout << "[INFO] Use executeOrder() to place your order with staff." << std::endl;
@@ -330,7 +330,7 @@ void Customer::displayPlantDetails(const PlantProduct* plant, int index) {
             std::cout << " | Sun: " << sunNeeds;
         }
         
-        std::cout << " | $15.99"; // Default price - could be enhanced
+        std::cout << " | R15.99"; // Default price - could be enhanced
     } else {
         std::cout << "Unknown Plant";
     }

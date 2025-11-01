@@ -25,7 +25,7 @@ protected:
         logStep("Processing payment for customer: " + customer->getName());
         
         double totalAmount = order->calculateTotalAmount();
-        logStep("Total amount: $" + std::to_string(totalAmount));
+        logStep("Total amount: R" + std::to_string(totalAmount));
         
         // Simulate payment processing time
         logStep("Contacting payment gateway...");

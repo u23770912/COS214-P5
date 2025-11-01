@@ -303,7 +303,7 @@ int main() {
                     cout << "\nORDER PROCESSING COMPLETED SUCCESSFULLY!" << endl;
                     cout << "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" << endl;
                     cout << "Order Status: " << currentOrder->getStatus() << endl;
-                    cout << "Total Amount: $" << currentOrder->getTotalAmount() << endl;
+                    cout << "Total Amount: R" << currentOrder->getTotalAmount() << endl;
                     cout << "\nA confirmation email has been sent to " << customer->getEmail() << endl;
                 }
                 

@@ -1,4 +1,5 @@
 #include "InventoryManager.h"
+#include "PotDecorator/PotDecorator.h"
 #include "PlantProduct.h"
 #include <algorithm>
 #include <iostream>
@@ -257,4 +258,59 @@ void InventoryManager::markAsSold(PlantProduct* plant) {
                       << plant->getProfile()->getSpeciesName() << "]" << std::endl;
         }
     }
+}
+
+
+
+void InventoryManager::addCustomPot(Pot* pot) {
+    if (pot) {
+        potInventory.push_back(pot);
+        std::cout << "[Inventory] Added pot: ";
+        pot->print();
+        std::cout << std::endl;
+    }
+}
+
+Pot* InventoryManager::getPotByIndex(int index) {
+    if (index >= 0 && index < (int)potInventory.size()) {
+        return potInventory[index];
+    }
+    return nullptr;
+}
+
+void InventoryManager::displayPotInventory() const {
+    std::cout << "\n=== POT INVENTORY ===" << std::endl;
+    std::cout << "Total: " << potInventory.size() << " pots" << std::endl;
+    std::cout << std::string(70, '-') << std::endl;
+    
+    for (size_t i = 0; i < potInventory.size(); i++) {
+        std::cout << (i+1) << ". ";
+        potInventory[i]->print();
+        
+        PotDecorator* decorator = dynamic_cast<PotDecorator*>(potInventory[i]);
+        if (decorator) {
+            std::cout << " - R" << decorator->getPrice();
+        } else {
+            std::cout << " - R10.00";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::string(70, '-') << std::endl;
+}
+
+double InventoryManager::getTotalPotInventoryValue() const {
+    double total = 0.0;
+    for (Pot* pot : potInventory) {
+        PotDecorator* decorator = dynamic_cast<PotDecorator*>(pot);
+        if (decorator) {
+            total += decorator->getPrice();
+        } else {
+            total += 10.0;
+        }
+    }
+    return total;
+}
+
+int InventoryManager::getPotInventoryCount() const {
+    return potInventory.size();
 }

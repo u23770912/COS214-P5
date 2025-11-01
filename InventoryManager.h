@@ -32,6 +32,12 @@ class InventoryManager : public LifeCycleObserver {
         std::vector<PlantProduct*> soldPlants;  // Plants that have been sold
         std::vector<Pots*> potInventory;
 
+            void addCustomPot(Pot* pot);
+            Pot* getPotByIndex(int index);
+            void displayPotInventory() const;
+            double getTotalPotInventoryValue() const;
+            int getPotInventoryCount() const;
+
         int plantsInStock;
 
     public: 

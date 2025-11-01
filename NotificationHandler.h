@@ -51,7 +51,7 @@ private:
         if (!customer->getCellPhone().empty()) {
             logStep("Sending SMS notification to: " + customer->getCellPhone());
             std::cout << "\n[SMS]: Your order " << order->getOrderId() 
-                     << " has been confirmed! Total: $" << std::fixed << std::setprecision(2) 
+                     << " has been confirmed! Total: R" << std::fixed << std::setprecision(2) 
                      << order->getTotalAmount() << std::endl;
         }
         
@@ -139,7 +139,7 @@ private:
         confirmation << "ITEMS ORDERED:\n";
         confirmation << order->getOrderSummary() << "\n";
         
-        confirmation << "TOTAL AMOUNT: $" << std::fixed << std::setprecision(2) 
+        confirmation << "TOTAL AMOUNT: R" << std::fixed << std::setprecision(2) 
                     << order->getTotalAmount() << "\n\n";
         
         confirmation << "Your plants are ready for pickup or will be prepared for delivery.\n";

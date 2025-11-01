@@ -126,7 +126,7 @@ std::string Order::getOrderSummary() const {
             for (size_t j = desc.length() + 3; j < 38; j++) oss << " ";
             oss << "║\n";
             
-            oss << "║    $" << orderItems[i]->getPrice();
+            oss << "║    R" << orderItems[i]->getPrice();
             std::ostringstream priceStr;
             priceStr << std::fixed << std::setprecision(2) << orderItems[i]->getPrice();
             for (size_t j = priceStr.str().length() + 5; j < 38; j++) oss << " ";
@@ -135,7 +135,7 @@ std::string Order::getOrderSummary() const {
     }
     
     oss << "╠════════════════════════════════════════╣\n";
-    oss << "║ TOTAL: $" << totalAmount;
+    oss << "║ TOTAL: R" << totalAmount;
     std::ostringstream totalStr;
     totalStr << std::fixed << std::setprecision(2) << totalAmount;
     for (size_t i = totalStr.str().length() + 9; i < 38; i++) oss << " ";
