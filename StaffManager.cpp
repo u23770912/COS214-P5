@@ -3,22 +3,27 @@
 #include "CareCommand.h"
 #include "PlantProduct.h"
 
-StaffManager::StaffManager(StaffMember* dispatcher) 
+StaffManager::StaffManager(StaffMember *dispatcher)
     : staffDispatcher(dispatcher) {}
 
-StaffManager::~StaffManager() {
+StaffManager::~StaffManager()
+{
 }
 
-void StaffManager::update(PlantProduct* plant, const std::string& commandType) {
-    CareCommand* command = CareCommand::createCommand(commandType);
-    if (command) {
+void StaffManager::update(PlantProduct *plant, const std::string &commandType)
+{
+    CareCommand *command = CareCommand::createCommand(commandType);
+    if (command)
+    {
         command->setReceiver(plant);
         dispatchCommand(command);
     }
 }
 
-void StaffManager::dispatchCommand(Command* command) {
-    if (staffDispatcher && command) {
+void StaffManager::dispatchCommand(Command *command)
+{
+    if (staffDispatcher && command)
+    {
         staffDispatcher->dispatch(command);
     }
 }

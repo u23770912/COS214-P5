@@ -4,17 +4,18 @@
 #include "PlantState.h"
 #include <string>
 
-class ReadyForSaleState : public PlantState {
+class ReadyForSaleState : public PlantState
+{
 private:
     bool hasRequestedMove;
-    
+
 public:
     ReadyForSaleState() : hasRequestedMove(false) {}
-    
-    void onEnter(PlantProduct* plant) override;
-    void onExit(PlantProduct* plant) override;
+
+    void onEnter(PlantProduct *plant) override;
+    void onExit(PlantProduct *plant) override;
     std::string getName() const override { return "ReadyForSale"; }
-    void advanceState(PlantProduct* plant) override;
+    void advanceState(PlantProduct *plant) override;
 };
 
 #endif

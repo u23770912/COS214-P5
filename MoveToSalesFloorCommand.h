@@ -4,7 +4,8 @@
 #include "CareCommand.h"
 #include <iostream>
 
-class MoveToSalesFloorCommand : public CareCommand {
+class MoveToSalesFloorCommand : public CareCommand
+{
 public:
     // Constructor for prototype
     MoveToSalesFloorCommand() : CareCommand() {}
@@ -13,7 +14,8 @@ public:
     std::string getType() const override { return "MoveToSalesFloor"; }
     std::string getRequiredRole() const override { return "Sales"; }
 
-    CareCommand* clone() const override {
+    CareCommand *clone() const override
+    {
         return new MoveToSalesFloorCommand(*this);
     }
 };

@@ -5,12 +5,15 @@
 #include "PlantProduct.h"
 #include <iostream>
 
-class WaterCommand : public CareCommand {
+class WaterCommand : public CareCommand
+{
 public:
     WaterCommand() : CareCommand() {}
-    void execute() override {
+    void execute() override
+    {
         std::cout << "Executing Water Command..." << std::endl;
-        if (plantReceiver) {
+        if (plantReceiver)
+        {
             plantReceiver->performCare("Watering");
         }
     }
@@ -19,7 +22,8 @@ public:
 
     std::string getRequiredRole() const override { return "Greenhouse"; }
 
-    CareCommand* clone() const override {
+    CareCommand *clone() const override
+    {
         return new WaterCommand(*this);
     }
 };

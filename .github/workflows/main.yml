@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 name: C++ CI
 
 on:
@@ -70,3 +71,77 @@ jobs:
           else
             echo "No 'valgrind' target in Makefile. Skipping.";
           fi
+=======
+name: C++ CI
+
+on:
+  push:
+    branches: [ "Dev-Branch" ] # Triggers on pushes to the development branch
+  pull_request:
+    branches: [ "Dev-Branch" ] # Triggers on pull requests targeting the development branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential cmake valgrind
+
+      - name: Syntax Check (Compile Only)
+        shell: bash
+        run: |
+          # Use find to get all C++ source and header files, excluding the build directory
+          SOURCES=$(find . \( -name "*.cpp" -o -name "*.h" \) -not -path "./build/*")
+          if [ -z "$SOURCES" ]; then
+            echo "No source or header files found. Skipping syntax check."
+            exit 0
+          fi
+          echo "Found source and header files:"
+          echo "$SOURCES"
+          # Check all found files for syntax errors
+          g++ -std=c++11 -Wall -Werror -I. -fsyntax-only $SOURCES
+
+      - name: Configure and Build Project
+        shell: bash
+        run: |
+          if [ -f CMakeLists.txt ]; then
+            echo "CMakeLists.txt found. Configuring and building with CMake."
+            cmake -S . -B build
+            cmake --build build --config Release
+          elif [ -f Makefile ]; then
+            echo "Makefile found. Building with Make."
+            make clean
+            make
+          else
+            echo "ERROR: Neither CMakeLists.txt nor Makefile found." >&2
+            exit 1
+          fi
+
+      - name: Run CTest (if configured)
+        if: hashFiles('CMakeLists.txt') != ''
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Run Make Test Target (if available)
+        if: hashFiles('Makefile') != ''
+        shell: bash
+        run: |
+          if grep -q -E '^test:' Makefile; then
+            make test
+          else
+            echo "No 'test' target in Makefile. Skipping.";
+          fi
+
+      - name: Run Valgrind Target (if available)
+        if: hashFiles('Makefile') != ''
+        shell: bash
+        run: |
+          if grep -q -E '^valgrind:' Makefile; then
+            make valgrind
+          else
+            echo "No 'valgrind' target in Makefile. Skipping.";
+          fi
+>>>>>>> fd65c5d19d9f52f9ae7262e6183da576b4b8ec45

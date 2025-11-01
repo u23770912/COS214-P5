@@ -5,13 +5,16 @@
 #include "PlantProduct.h"
 #include <iostream>
 
-class FertilizeCommand : public CareCommand {
+class FertilizeCommand : public CareCommand
+{
 public:
     // Constructor for prototype
     FertilizeCommand() : CareCommand() {}
 
-    void execute() override {
-        if (plantReceiver) {
+    void execute() override
+    {
+        if (plantReceiver)
+        {
             plantReceiver->performCare("Fertilizing");
         }
     }
@@ -19,7 +22,8 @@ public:
     std::string getType() const override { return "Fertilizing"; }
     std::string getRequiredRole() const override { return "Greenhouse"; }
 
-    CareCommand* clone() const override {
+    CareCommand *clone() const override
+    {
         return new FertilizeCommand(*this);
     }
 };
