@@ -23,6 +23,22 @@ void PlantPot::add(GreenhouseComponent* component){
 
 }
 
-void PlantPot::print(){
-   std::cout << this->getId() << " - " << this->getInfo();
+void PlantPot::print(const std::string& prefix, bool isLast){
+   std::cout << prefix << (isLast ? "└── " : "├── ") 
+              << "PlantPot ID: " << id << ", Info: " << info << std::endl;
+}
+
+void PlantPot::remove(GreenhouseComponent *)
+{
+    std::cerr << "Error: Cannot remove component from a PlantPot (leaf)." << std::endl;
+}
+
+void PlantPot::display()
+{
+   this->print("", true);
+}
+
+void PlantPot::getPlantCount()
+{
+    //
 }

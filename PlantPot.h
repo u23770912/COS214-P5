@@ -17,7 +17,11 @@ public:
     std::string getInfo();
 
     void add(GreenhouseComponent*) override; 
-    void print() override;
+    void print(const std::string& prefix , bool isLast) override;
+    
+    void remove(GreenhouseComponent*) override;
+    void display() override;
+    void getPlantCount() override;
 };
 
 

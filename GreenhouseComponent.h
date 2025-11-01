@@ -3,12 +3,11 @@
 
 #include <iostream>
 
-
 class GreenhouseComponent {
     public: 
         GreenhouseComponent();
         virtual ~GreenhouseComponent();
-        virtual void print() = 0;
+        virtual void print(const std::string& prefix = "", bool isLast = true) = 0;
         virtual void add(GreenhouseComponent* item) = 0;
         virtual void display() = 0;
         virtual void getPlantCount() = 0;
