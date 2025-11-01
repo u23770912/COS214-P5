@@ -8,8 +8,8 @@ SRCS := $(wildcard *.cpp) $(wildcard SuggestionTemplate/*.cpp)
 OBJS := $(SRCS:.cpp=.o)
 
 # Executable targets
-INTEGRATED_TARGET = integrated_system
-DEMO_TARGET = demo
+INTEGRATED_TARGET = greenhouse
+#DEMO_TARGET = demo
 
 .PHONY: all clean integrated demo run-integrated run-demo valgrind-integrated valgrind-demo
 
