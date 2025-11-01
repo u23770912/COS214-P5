@@ -105,6 +105,9 @@ class Customer : public CustomerSubject {
         void restoreLastOrder();
         void viewOrderHistory();
 
+    // Suggestion browsing (e.g., bouquet/event suggestions)
+    void browseBouquetSuggestions(const std::string& eventType);
+
         // Adapter pattern - payment processing
         bool processPayment(const std::string& paymentType, double amount, const std::string& paymentDetails = "");
         void showPaymentOptions() const;

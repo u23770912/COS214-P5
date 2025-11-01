@@ -5,6 +5,10 @@
 #include <ctime>
 #include <algorithm>
 
+#include "OrderItem.h"
+#include "SinglePlant.h"
+#include "PlantBundle.h"
+
 // Definition of static member
 std::vector<Order*> Order::allOrders;
 
@@ -191,13 +195,10 @@ const std::vector<std::string>& Order::getItems() const
 //     return items;
 // }
 
-std::string Order::getOrderDetails(const std::string& customerFilter) const
-{
+std::string Order::getOrderDetails(const std::string& customerFilter) const {
     std::stringstream details;
 
-    if (customerFilter.empty())
-    {
-        // details for this single order
+    if (customerFilter.empty()) {
         details << "Order ID: " << orderId << "\n";
         details << "Customer Name: " << customerName << "\n";
         details << "Items:\n";
@@ -206,32 +207,26 @@ std::string Order::getOrderDetails(const std::string& customerFilter) const
         return details.str();
     }
 
-    if (customerFilter == "ALL")
-    {
+    if (customerFilter == "ALL") {
         details << "All orders for all customers:\n";
-        for (auto order : allOrders)
-        {
+        for (auto order : allOrders) {
             details << "----------------------\n";
-            details << order->getOrderDetails(""); // single-order details
+            details << order->getOrderDetails("");
         }
         return details.str();
     }
 
-    // Filter by specific customer name
     details << "All orders for " << customerFilter << ":\n";
     bool found = false;
-    for (auto order : allOrders)
-    {
-        if (order->getCustomerName() == customerFilter)
-        {
+    for (auto order : allOrders) {
+        if (order->getCustomerName() == customerFilter) {
             found = true;
             details << "----------------------\n";
             details << order->getOrderDetails("");
         }
     }
 
-    if (!found)
-    {
+    if (!found) {
         details << "(no orders found for " << customerFilter << ")\n";
     }
 
@@ -239,39 +234,140 @@ std::string Order::getOrderDetails(const std::string& customerFilter) const
 }
 
 OrderMemento* Order::createMemento() const {
-       std::stringstream state;
-       state << orderId << "\n" << customerName << "\n" << status << "\n";
-       
-       // Save orderItems (the actual order content)
-       state << orderItems.size() << "\n";
-       for (const auto* item : orderItems) {
-           state << item->getName() << "|" 
-                 << item->getQuantity() << "|" 
-                 << item->getPrice() << "\n";
-       }
-       
-       return new OrderMemento(state.str());
-   }
+    std::stringstream state;
+    
+    // Save order metadata
+    state << orderId << "\n";
+    state << customerName << "\n";
+    state << orderDate << "\n";
+    state << status << "\n";
+    state << totalAmount << "\n";
+    
+    // Save number of order items
+    state << orderItems.size() << "\n";
+    
+    // Save each order item's description and details
+    for (const auto* item : orderItems) {
+        // Check if it's a SinglePlant or PlantBundle
+        if (const SinglePlant* plant = dynamic_cast<const SinglePlant*>(item)) {
+            state << "PLANT|" << plant->getPlantType() << "|" 
+                  << plant->getQuantity() << "|" << plant->getPrice() / plant->getQuantity() 
+                  << "|" << plant->getSize() << "\n";
+        } else if (const PlantBundle* bundle = dynamic_cast<const PlantBundle*>(item)) {
+            state << "BUNDLE|" << bundle->getName() << "|" 
+                  << bundle->getQuantity() << "|" << bundle->getDiscount() 
+                  << "|" << bundle->getItemCount() << "\n";
+            
+            // Save bundle items
+            for (const auto* bundleItem : bundle->getItems()) {
+                if (const SinglePlant* bplant = dynamic_cast<const SinglePlant*>(bundleItem)) {
+                    state << "  BPLANT|" << bplant->getPlantType() << "|" 
+                          << bplant->getQuantity() << "|" << bplant->getPrice() / bplant->getQuantity() 
+                          << "|" << bplant->getSize() << "\n";
+                }
+            }
+        }
+    }
+    
+    return new OrderMemento(state.str());
+}
 
-void Order::restoreState(const OrderMemento* memento)
-{
+void Order::restoreState(const OrderMemento* memento) {
     if (!memento) return;
 
     std::string s = memento->getState();
     std::stringstream state(s);
+    
+    // Restore order metadata
     std::getline(state, orderId);
     std::getline(state, customerName);
+    std::getline(state, orderDate);
+    std::getline(state, status);
     state >> totalAmount;
     state.ignore(); // eat newline after totalAmount
-
-    items.clear();
-    std::string item;
-    while (std::getline(state, item))
-    {
-        if (!item.empty()) items.push_back(item);
+    
+    // Clear existing order items
+    for (auto* item : orderItems) {
+        delete item;
     }
+    orderItems.clear();
+    
+    // Restore number of items
+    size_t numItems;
+    state >> numItems;
+    state.ignore(); // eat newline
+    
+    // Restore each order item
+    for (size_t i = 0; i < numItems; i++) {
+        std::string line;
+        std::getline(state, line);
+        
+        std::stringstream lineStream(line);
+        std::string itemType;
+        std::getline(lineStream, itemType, '|');
+        
+        if (itemType == "PLANT") {
+            std::string plantType, size;
+            int quantity;
+            double price;
+            
+            std::getline(lineStream, plantType, '|');
+            lineStream >> quantity;
+            lineStream.ignore(); // skip '|'
+            lineStream >> price;
+            lineStream.ignore(); // skip '|'
+            std::getline(lineStream, size);
+            
+            SinglePlant* plant = new SinglePlant(plantType, price, quantity, size);
+            orderItems.push_back(plant);
+            
+        } else if (itemType == "BUNDLE") {
+            std::string bundleName;
+            int quantity, itemCount;
+            double discount;
+            
+            std::getline(lineStream, bundleName, '|');
+            lineStream >> quantity;
+            lineStream.ignore(); // skip '|'
+            lineStream >> discount;
+            lineStream.ignore(); // skip '|'
+            lineStream >> itemCount;
+            
+            PlantBundle* bundle = new PlantBundle(bundleName, "Mixed", quantity, discount);
+            
+            // Restore bundle items
+            for (int j = 0; j < itemCount; j++) {
+                std::string bline;
+                std::getline(state, bline);
+                
+                std::stringstream blineStream(bline);
+                std::string bitemType;
+                std::getline(blineStream, bitemType, '|');
+                
+                if (bitemType == "  BPLANT") {
+                    std::string bplantType, bsize;
+                    int bquantity;
+                    double bprice;
+                    
+                    std::getline(blineStream, bplantType, '|');
+                    blineStream >> bquantity;
+                    blineStream.ignore();
+                    blineStream >> bprice;
+                    blineStream.ignore();
+                    std::getline(blineStream, bsize);
+                    
+                    SinglePlant* bplant = new SinglePlant(bplantType, bprice, bquantity, bsize);
+                    bundle->addItem(bplant);
+                }
+            }
+            
+            orderItems.push_back(bundle);
+        }
+    }
+    
+    // Recalculate total
+    calculateTotalAmount();
 }
-
 const std::vector<Order*>& Order::getAllOrders()
 {
     return allOrders;

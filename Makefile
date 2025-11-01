@@ -1,54 +1,59 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -g -std=c++11 -Wall -I. # <-- Add -I. here
+CXXFLAGS = -g -std=c++11 -Wall -I.
 LDFLAGS =
 
-# Find all .cpp files in the current directory and subdirectories
-SRCS := $(wildcard *.cpp)
+# Find all .cpp files in current directory and subdirectories
+SRCS := $(wildcard *.cpp) $(wildcard SuggestionTemplate/*.cpp)
 OBJS := $(SRCS:.cpp=.o)
 
-# Name of the final executable
-TARGET = greenhouse
-TEST_ORDER_TARGET = test_customer_order
-CONCURRENT_DEMO_TARGET = concurrent_demo
-MEMENTO_ADAPTER_TEST_TARGET = test_memento_adapter
+# Executable targets
 INTEGRATED_TARGET = integrated_system
-CUSTOMER_ORDER_TARGET = customer_order_test
+DEMO_TARGET = demo
 
-.PHONY: all clean test valgrind integrated customer_order
+.PHONY: all clean integrated demo
 
-all: $(TARGET)
+# Build both executables by default
+all: integrated demo
 
-# Integrated system target - runs both greenhouse simulation and customer order test
+# Integrated system target - complete greenhouse simulation + customer interaction
 integrated: $(INTEGRATED_TARGET)
 
-$(INTEGRATED_TARGET): $(filter-out main.o CustomerOrderTest.o, $(OBJS)) integrated_main.o
+$(INTEGRATED_TARGET): $(filter-out main.o CustomerOrderTest.o DemoMain.o newMain.o, $(OBJS)) integrated_main.o
 	$(CXX) $(LDFLAGS) -o $@ $^
-	@echo "Integrated system built successfully!"
-	@echo "Run with: ./$(INTEGRATED_TARGET)"
+	@echo "✓ Integrated system built successfully!"
+	@echo "  Run with: ./$(INTEGRATED_TARGET)"
 
-# Customer order test target - standalone order system test
-customer_order: $(CUSTOMER_ORDER_TARGET)
+# Demo target - demonstration of design patterns
+demo: $(DEMO_TARGET)
 
-$(CUSTOMER_ORDER_TARGET): $(filter-out main.o integrated_main.o, $(OBJS)) CustomerOrderTest.o
+$(DEMO_TARGET): $(filter-out main.o CustomerOrderTest.o integrated_main.o newMain.o, $(OBJS)) DemoMain.o
 	$(CXX) $(LDFLAGS) -o $@ $^
-	@echo "Customer order test built successfully!"
-	@echo "Run with: ./$(CUSTOMER_ORDER_TARGET)"
-
-$(TARGET): $(OBJS)
-	$(CXX) $(LDFLAGS) -o $@ $^
+	@echo "✓ Demo built successfully!"
+	@echo "  Run with: ./$(DEMO_TARGET)"
 
 # Generic rule to compile .cpp files to .o files
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+# Clean all build artifacts
 clean:
-	rm -f $(OBJS) $(TARGET) $(INTEGRATED_TARGET) $(CUSTOMER_ORDER_TARGET) *.gcda *.gcno *.gcov coverage.info
+	rm -f $(OBJS) $(INTEGRATED_TARGET) $(DEMO_TARGET)
+	rm -f SuggestionTemplate/*.o
+	rm -f *.gcda *.gcno *.gcov coverage.info
 	rm -rf out
+	@echo "✓ Clean complete"
 
-# Add your test and valgrind rules here if needed
-test:
-	@echo "No test target defined."
+# Convenience targets
+run-integrated: integrated
+	./$(INTEGRATED_TARGET)
 
-valgrind: all
-	valgrind --leak-check=full ./$(TARGET)
+run-demo: demo
+	./$(DEMO_TARGET)
+
+# Memory leak checking
+valgrind-integrated: integrated
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(INTEGRATED_TARGET)
+
+valgrind-demo: demo
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(DEMO_TARGET)
