@@ -853,7 +853,7 @@ void runCustomerOrderTest(StaffContext& staff) {
     Customer* customer = new Customer(name, email, phone);
     
     // Attach staff manager as observer to customer
-    customer->attachObserver(staff.manager);
+    customer->attachObserver(static_cast<CustomerObserver*>(staff.manager));
     
     std::cout << "\n    " << ANSI_GREEN << "✓ Welcome, " << name << "! 🌿\n" << ANSI_RESET;
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
