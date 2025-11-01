@@ -45,9 +45,13 @@
  */
 
 #include <algorithm>
+#include <cctype>
+#include <cfloat>
 #include <chrono>
+#include <climits>
 #include <iomanip>
 #include <iostream>
+#include <limits>
 #include <map>
 #include <sstream>
 #include <string>
@@ -76,6 +80,7 @@
 // Customer Order Infrastructure
 #include "Customer.h"
 #include "Order.h"
+#include "OrderUIFacade.h"
 #include "ConcreteOrderBuilder.h"
 #include "SinglePlant.h"
 #include "PlantBundle.h"
@@ -506,25 +511,156 @@ void runGreenhouseSimulation(StaffContext& staff) {
     // Note: plants are now owned by InventoryManager, profiles need manual cleanup
 }
 
+// ============================================================================
+// Input Validation Helper Functions (C++98 compatible)
+// ============================================================================
+
 /**
- * @brief Run the customer order interaction test
+ * @brief Get validated integer input from user
+ */
+int getValidInteger(const std::string& prompt, int min = INT_MIN, int max = INT_MAX) {
+    std::string input;
+    int value;
+    
+    while (true) {
+        std::cout << prompt;
+        std::getline(std::cin, input);
+        
+        // Remove leading/trailing whitespace
+        input.erase(0, input.find_first_not_of(" \t"));
+        input.erase(input.find_last_not_of(" \t") + 1);
+        
+        if (input.empty()) {
+            std::cout << "Error: Please enter a valid number.\n";
+            continue;
+        }
+        
+        std::stringstream ss(input);
+        if (ss >> value && ss.eof()) {
+            if (value >= min && value <= max) {
+                return value;
+            } else {
+                std::cout << "Error: Please enter a number between " << min << " and " << max << ".\n";
+            }
+        } else {
+            std::cout << "Error: Please enter a valid integer number.\n";
+        }
+    }
+}
+
+/**
+ * @brief Get validated string input from user
+ */
+std::string getValidString(const std::string& prompt) {
+    std::string input;
+    
+    while (true) {
+        std::cout << prompt;
+        std::getline(std::cin, input);
+        
+        // Remove leading/trailing whitespace
+        input.erase(0, input.find_first_not_of(" \t"));
+        input.erase(input.find_last_not_of(" \t") + 1);
+        
+        if (!input.empty()) {
+            return input;
+        }
+        
+        std::cout << "Error: Please enter a valid non-empty value.\n";
+    }
+}
+
+/**
+ * @brief Get validated choice from user
+ */
+char getValidChoice(const std::string& prompt, const std::string& validChoices) {
+    std::string input;
+    
+    while (true) {
+        std::cout << prompt;
+        std::getline(std::cin, input);
+        
+        // Remove leading/trailing whitespace and convert to lowercase
+        input.erase(0, input.find_first_not_of(" \t"));
+        input.erase(input.find_last_not_of(" \t") + 1);
+        
+        if (input.length() == 1) {
+            char choice = std::tolower(input[0]);
+            if (validChoices.find(choice) != std::string::npos) {
+                return choice;
+            }
+        }
+        
+        std::cout << "Error: Please enter one of these options: ";
+        for (size_t i = 0; i < validChoices.length(); i++) {
+            std::cout << validChoices[i];
+            if (i < validChoices.length() - 1) std::cout << ", ";
+        }
+        std::cout << "\n";
+    }
+}
+
+/**
+ * @brief Display interactive customer menu
+ */
+void displayCustomerMenu() {
+    std::cout << "\n╔════════════════════════════════════════╗" << std::endl;
+    std::cout << "║     CUSTOMER ORDER MENU               ║" << std::endl;
+    std::cout << "╠════════════════════════════════════════╣" << std::endl;
+    std::cout << "║ 1. View Available Plants              ║" << std::endl;
+    std::cout << "║ 2. Add Single Plant to Order          ║" << std::endl;
+    std::cout << "║ 3. Add Plant Bundle to Order          ║" << std::endl;
+    std::cout << "║ 4. View Current Order                 ║" << std::endl;
+    std::cout << "║ 5. Submit Order for Validation        ║" << std::endl;
+    std::cout << "║ 6. Exit Customer Menu                 ║" << std::endl;
+    std::cout << "╚════════════════════════════════════════╝" << std::endl;
+}
+
+/**
+ * @brief Display available plants in a formatted table
+ */
+void displayAvailablePlants() {
+    std::vector<PlantProduct*> plants = InventoryManager::getInstance().getReadyForSalePlants();
+
+    std::cout << "\n┌────────────────────────────────────────┐" << std::endl;
+    std::cout << "│     AVAILABLE PLANTS FOR SALE         │" << std::endl;
+    std::cout << "├────────────────────────────────────────┤" << std::endl;
+    
+    if (plants.empty()) {
+        std::cout << "│  No plants available                  │" << std::endl;
+    } else {
+        for (size_t i = 0; i < plants.size(); i++) {
+            std::cout << "│ " << (i+1) << ". " << plants[i]->getProfile()->getSpeciesName();
+            
+            // Pad to align
+            std::string name = plants[i]->getProfile()->getSpeciesName();
+            for (size_t j = name.length(); j < 30; j++) std::cout << " ";
+            std::cout << " │" << std::endl;
+        }
+    }
+    std::cout << "└────────────────────────────────────────┘" << std::endl;
+}
+
+/**
+ * @brief Run the interactive customer order experience
  * 
- * This function simulates a customer placing an order, demonstrating:
- * 1. Viewing available plants from the sales floor
- * 2. Building an order with individual plants and bundles
- * 3. Automatic discount calculation
- * 4. Order validation through the staff chain
- * 5. Payment processing
- * 6. Order confirmation
+ * This function provides an interactive menu-driven interface where the user can:
+ * 1. View available plants from the sales floor
+ * 2. Add individual plants to their order
+ * 3. Create plant bundles with automatic discounts
+ * 4. View their current order
+ * 5. Submit order for validation through the staff chain
+ * 6. Exit when finished
  * 
- * The test uses the same inventory populated by the greenhouse simulation,
- * ensuring end-to-end integration.
+ * The function uses the same inventory populated by the greenhouse simulation,
+ * ensuring end-to-end integration. All interactions use the TerminalUI facade
+ * and proper design patterns (Builder, Chain of Responsibility, Observer).
  * 
  * @param staff Staff context with configured teams
  */
 void runCustomerOrderTest(StaffContext& staff) {
-    TerminalUI::printHeader("PHASE 2: CUSTOMER ORDER SIMULATION");
-    TerminalUI::printInfo("Initializing customer order system...");
+    TerminalUI::printHeader("PHASE 2: INTERACTIVE CUSTOMER ORDER EXPERIENCE");
+    TerminalUI::printInfo("Welcome to the greenhouse customer order system!");
     std::cout << std::endl;
     
     // ============================================================================
@@ -536,161 +672,249 @@ void runCustomerOrderTest(StaffContext& staff) {
     
     if (availablePlants == 0) {
         TerminalUI::printWarning("No plants available on sales floor!");
-        TerminalUI::printInfo("Skipping customer order test.");
+        TerminalUI::printInfo("Skipping customer order experience.");
         return;
     }
     
     std::cout << std::endl;
     
     // ============================================================================
-    // Phase 2.2: Create customer
+    // Phase 2.2: Gather customer information
     // ============================================================================
-    TerminalUI::printSection("CUSTOMER CREATION");
-    Customer* customer = new Customer("Test Customer", "test@greenhouse.com", "555-0100");
+    TerminalUI::printSection("CUSTOMER INFORMATION");
+    std::string name = getValidString("Enter your name: ");
+    std::string email = getValidString("Enter your email: ");
+    std::string phone = getValidString("Enter your phone: ");
+    
+    Customer* customer = new Customer(name, email, phone);
     
     // Attach staff manager as observer to customer
     customer->attachObserver(staff.manager);
     
-    TerminalUI::printSuccess("Customer created: " + customer->getName());
-    TerminalUI::printInfo("Email: " + customer->getEmail());
-    TerminalUI::printInfo("Phone: " + customer->getCellPhone());
+    std::cout << "\n";
+    TerminalUI::printSuccess("Welcome, " + name + "!");
+    TerminalUI::printInfo("Email: " + email);
+    TerminalUI::printInfo("Phone: " + phone);
     std::cout << std::endl;
     
     // ============================================================================
-    // Phase 2.3: Customer views available plants
+    // Phase 2.3: Create order builder
     // ============================================================================
-    TerminalUI::printSection("STEP 1: VIEW AVAILABLE PLANTS");
-    customer->displayAvailableItems();
-    std::cout << std::endl;
-    
-    // ============================================================================
-    // Phase 2.4: Create order builder
-    // ============================================================================
-    TerminalUI::printSection("STEP 2: BUILD ORDER");
     ConcreteOrderBuilder* orderBuilder = new ConcreteOrderBuilder(customer->getName());
-    Order* currentOrder = orderBuilder->getOrder();
+    Order* currentOrder = NULL;
     
     // ============================================================================
-    // Phase 2.5: Add plants to order
+    // Phase 2.4: Interactive menu loop
     // ============================================================================
-    std::vector<PlantProduct*> salesPlants = InventoryManager::getInstance().getReadyForSalePlants();
+    bool customerActive = true;
     
-    // Add first plant (quantity 2)
-    if (salesPlants.size() > 0) {
-        std::string plantType = salesPlants[0]->getProfile()->getSpeciesName();
-        SinglePlant* plant1 = new SinglePlant(plantType, 25.99, 2, "Medium");
-        currentOrder->addOrderItem(plant1);
-        TerminalUI::printSuccess("Added 2x " + plantType + " to order");
-    }
-    
-    // Add second plant (quantity 3)
-    if (salesPlants.size() > 1) {
-        std::string plantType = salesPlants[1]->getProfile()->getSpeciesName();
-        SinglePlant* plant2 = new SinglePlant(plantType, 29.99, 3, "Large");
-        currentOrder->addOrderItem(plant2);
-        TerminalUI::printSuccess("Added 3x " + plantType + " to order");
-    }
-    
-    // ============================================================================
-    // Phase 2.6: Create a bundle with automatic discount
-    // ============================================================================
-    if (salesPlants.size() >= 3) {
-        TerminalUI::printInfo("Creating plant bundle...");
-        PlantBundle* bundle = new PlantBundle("Garden Starter Bundle", "Custom", 1, 0.0);
+    while (customerActive) {
+        displayCustomerMenu();
         
-        // Add plants to bundle
-        for (size_t i = 2; i < std::min(size_t(5), salesPlants.size()); ++i) {
-            std::string plantType = salesPlants[i]->getProfile()->getSpeciesName();
-            SinglePlant* bundlePlant = new SinglePlant(plantType, 25.99, 1, "Medium");
-            bundle->addItem(bundlePlant);
-        }
+        int choice = getValidInteger("Enter your choice: ", 1, 6);
         
-        // Calculate automatic discount (5 plants total in order = 5% discount)
-        bundle->setDiscount(5.0);
-        currentOrder->addOrderItem(bundle);
-        TerminalUI::printSuccess("Added 'Garden Starter Bundle' with 5% automatic discount");
-    }
-    
-    std::cout << std::endl;
-    
-    // ============================================================================
-    // Phase 2.7: View current order
-    // ============================================================================
-    TerminalUI::printSection("STEP 3: REVIEW ORDER");
-    std::cout << currentOrder->getOrderSummary() << std::endl;
-    
-    // ============================================================================
-    // Phase 2.8: Submit order for validation
-    // ============================================================================
-    TerminalUI::printSection("STEP 4: ORDER VALIDATION & PROCESSING");
-    TerminalUI::printInfo("Submitting order through validation chain...");
-    std::cout << std::endl;
-    
-    // Create handler chain
-    OrderValidationHandler* validator = new OrderValidationHandler();
-    PaymentProcessHandler* paymentProcessor = new PaymentProcessHandler();
-    NotificationHandler* successNotifier = new NotificationHandler(false);
-    NotificationHandler* failureNotifier = new NotificationHandler(true);
-    
-    // Set up success chain: Validation -> Payment -> Success Notification
-    validator->setNext(paymentProcessor);
-    paymentProcessor->setNext(successNotifier);
-    
-    TerminalUI::printInfo("Order processing chain configured:");
-    std::cout << "  1. Inventory Validation" << std::endl;
-    std::cout << "  2. Payment Processing" << std::endl;
-    std::cout << "  3. Customer Notification" << std::endl;
-    std::cout << std::endl;
-    
-    // Start the chain
-    TerminalUI::printInfo("Starting order processing...");
-    std::cout << std::endl;
-    
-    bool processingResult = validator->handleOrder(currentOrder, customer);
-    
-    std::cout << std::endl;
-    
-    // ============================================================================
-    // Phase 2.9: Display order result
-    // ============================================================================
-    if (!processingResult) {
-        TerminalUI::printError("ORDER PROCESSING FAILED!");
-        TerminalUI::printDivider('=');
-        
-        // Get validation errors if validation failed
-        std::vector<std::string> errors = validator->getValidationErrors();
-        if (!errors.empty()) {
-            TerminalUI::printWarning("Validation errors:");
-            for (size_t i = 0; i < errors.size(); ++i) {
-                std::cout << "  - " << errors[i] << std::endl;
+        switch (choice) {
+            case 1: {
+                // View available plants
+                displayAvailablePlants();
+                break;
             }
-            failureNotifier->setErrorMessages(errors);
+            
+            case 2: {
+                // Add single plant to order
+                displayAvailablePlants();
+                
+                std::vector<PlantProduct*> plants = InventoryManager::getInstance().getReadyForSalePlants();
+                
+                if (plants.empty()) {
+                    std::cout << "\nNo plants available!" << std::endl;
+                    break;
+                }
+                
+                int plantNum = getValidInteger("\nEnter plant number to add (1-" + 
+                                               std::to_string(plants.size()) + "): ", 
+                                               1, plants.size());
+                
+                int quantity = getValidInteger("Enter quantity: ", 1, 100);
+                
+                // Create order if it doesn't exist
+                if (!currentOrder) {
+                    currentOrder = orderBuilder->getOrder();
+                }
+                
+                // Add plant to order
+                std::string plantType = plants[plantNum-1]->getProfile()->getSpeciesName();
+                SinglePlant* plant = new SinglePlant(plantType, 25.99, quantity);
+                currentOrder->addOrderItem(plant);
+                
+                std::cout << "\n✓ Added " << quantity << "x " << plantType << " to order" << std::endl;
+                break;
+            }
+            
+            case 3: {
+                // Add plant bundle
+                std::cout << "\n=== Create Plant Bundle ===" << std::endl;
+                std::string bundleName = getValidString("Enter bundle name: ");
+                
+                // We'll calculate automatic discount after adding plants
+                PlantBundle* bundle = new PlantBundle(bundleName, "Custom", 1, 0.0);
+                
+                // Show available plants
+                displayAvailablePlants();
+                std::vector<PlantProduct*> plants = InventoryManager::getInstance().getReadyForSalePlants();
+                
+                if (plants.empty()) {
+                    std::cout << "\nNo plants available for bundle!" << std::endl;
+                    delete bundle;
+                    break;
+                }
+                
+                int numPlants = getValidInteger("\nHow many different plants in bundle? ", 1, 10);
+                
+                int totalPlantCount = 0;
+                
+                for (int i = 0; i < numPlants; i++) {
+                    std::cout << "\nPlant " << (i+1) << " of " << numPlants << std::endl;
+                    int plantNum = getValidInteger("Enter plant number: ", 1, plants.size());
+                    
+                    int qty = getValidInteger("Enter quantity: ", 1, 50);
+                    totalPlantCount += qty;  // Track total plants for automatic discount
+                    
+                    std::string plantType = plants[plantNum-1]->getProfile()->getSpeciesName();
+                    SinglePlant* bundlePlant = new SinglePlant(plantType, 25.99, qty);
+                    bundle->addItem(bundlePlant);
+                }
+                
+                // Calculate automatic discount based on total plant count
+                OrderUIFacade* facade = customer->getUIFacade();
+                double automaticDiscount = facade->calculateAutomaticDiscount(totalPlantCount);
+                
+                // Update bundle with automatic discount
+                bundle->setDiscount(automaticDiscount);
+                
+                std::cout << "\n[AUTOMATIC DISCOUNT] " << totalPlantCount << " plants = " 
+                         << automaticDiscount << "% discount applied!" << std::endl;
+                
+                // Create order if it doesn't exist
+                if (!currentOrder) {
+                    currentOrder = orderBuilder->getOrder();
+                }
+                
+                currentOrder->addOrderItem(bundle);
+                std::cout << "\n✓ Bundle '" << bundleName << "' added to order!" << std::endl;
+                break;
+            }
+            
+            case 4: {
+                // View current order
+                if (!currentOrder || currentOrder->isEmpty()) {
+                    std::cout << "\nYour order is empty" << std::endl;
+                } else {
+                    std::cout << "\n" << currentOrder->getOrderSummary() << std::endl;
+                }
+                break;
+            }
+            
+            case 5: {
+                // Submit order for validation
+                if (!currentOrder || currentOrder->isEmpty()) {
+                    std::cout << "\nCannot submit empty order!" << std::endl;
+                    break;
+                }
+                
+                std::cout << "\n╔════════════════════════════════════════╗" << std::endl;
+                std::cout << "║   SUBMITTING ORDER FOR PROCESSING     ║" << std::endl;
+                std::cout << "╚════════════════════════════════════════╝\n" << std::endl;
+                
+                std::cout << currentOrder->getOrderSummary() << std::endl;
+                
+                std::cout << "\n=== Order Processing Chain ===" << std::endl;
+                std::cout << "Your order will go through:\n";
+                std::cout << "1. Validation (Check inventory)\n";
+                std::cout << "2. Payment Processing\n";
+                std::cout << "3. Customer Notification\n" << std::endl;
+                
+                // Create handler chain
+                OrderValidationHandler* validator = new OrderValidationHandler();
+                PaymentProcessHandler* paymentProcessor = new PaymentProcessHandler();
+                NotificationHandler* successNotifier = new NotificationHandler(false);
+                NotificationHandler* failureNotifier = new NotificationHandler(true);
+                
+                // Set up success chain: Validation -> Payment -> Success Notification
+                validator->setNext(paymentProcessor);
+                paymentProcessor->setNext(successNotifier);
+                
+                std::cout << "=== Starting Order Processing ===" << std::endl;
+                
+                // Start the chain
+                bool processingResult = validator->handleOrder(currentOrder, customer);
+                
+                if (!processingResult) {
+                    // Validation or payment failed - send failure notification
+                    std::cout << "\n=== Sending Failure Notification ===" << std::endl;
+                    
+                    // Get validation errors if validation failed
+                    std::vector<std::string> errors = validator->getValidationErrors();
+                    if (!errors.empty()) {
+                        failureNotifier->setErrorMessages(errors);
+                    }
+                    
+                    failureNotifier->handleOrder(currentOrder, customer);
+                    
+                    std::cout << "\nORDER PROCESSING FAILED!" << std::endl;
+                    std::cout << "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" << std::endl;
+                    std::cout << "A notification has been sent to your email with details." << std::endl;
+                } else {
+                    std::cout << "\nORDER PROCESSING COMPLETED SUCCESSFULLY!" << std::endl;
+                    std::cout << "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" << std::endl;
+                    std::cout << "Order Status: " << currentOrder->getStatus() << std::endl;
+                    std::cout << "Total Amount: $" << currentOrder->getTotalAmount() << std::endl;
+                    std::cout << "\nA confirmation email has been sent to " << customer->getEmail() << std::endl;
+                }
+                
+                // Cleanup handlers
+                delete validator;
+                delete paymentProcessor;
+                delete successNotifier;
+                delete failureNotifier;
+                
+                // Ask if user wants to continue
+                char continueChoice = getValidChoice("\nCreate new order? (y/n): ", "yn");
+                if (continueChoice == 'n') {
+                    customerActive = false;
+                } else {
+                    // Reset for new order
+                    if (currentOrder) {
+                        delete currentOrder;
+                    }
+                    orderBuilder->reset();
+                    currentOrder = NULL;
+                }
+                break;
+            }
+            
+            case 6: {
+                customerActive = false;
+                std::cout << "\nThank you for shopping with us, " << customer->getName() << "!" << std::endl;
+                break;
+            }
+            
+            default:
+                std::cout << "\n⚠ Invalid choice! Please try again." << std::endl;
         }
-        
-        failureNotifier->handleOrder(currentOrder, customer);
-        TerminalUI::printInfo("A failure notification has been sent to " + customer->getEmail());
-    } else {
-        TerminalUI::printSuccess("ORDER PROCESSING COMPLETED SUCCESSFULLY!");
-        TerminalUI::printDivider('=');
-        TerminalUI::printInfo("Order Status: " + currentOrder->getStatus());
-        TerminalUI::printInfo("Total Amount: $" + std::to_string(currentOrder->getTotalAmount()));
-        TerminalUI::printInfo("Confirmation email sent to " + customer->getEmail());
     }
     
-    std::cout << std::endl;
-    
     // ============================================================================
-    // Cleanup
+    // Cleanup customer resources
     // ============================================================================
-    delete validator;
-    delete paymentProcessor;
-    delete successNotifier;
-    delete failureNotifier;
-    delete currentOrder;
+    if (currentOrder) {
+        delete currentOrder;
+    }
     delete orderBuilder;
     delete customer;
     
-    TerminalUI::printSuccess("Customer order test complete!");
+    TerminalUI::printSuccess("Customer interaction complete!");
+    std::cout << std::endl;
 }
 
 /**
