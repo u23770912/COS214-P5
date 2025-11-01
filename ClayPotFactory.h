@@ -25,5 +25,4 @@ public:
      */
     Pot *createPot(std::string size, std::string shape, bool drainage) override;
 };
-
 #endif

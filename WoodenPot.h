@@ -24,5 +24,4 @@ public:
     void print() override;
     std::string getPotType() const override;
 };
-
 #endif
