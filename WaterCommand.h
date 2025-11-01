@@ -1,13 +1,13 @@
 #ifndef WATER_COMMAND_H
 #define WATER_COMMAND_H
 
-#include "CareCommand.h"
+#include "Command.h"
 #include "PlantProduct.h"
 #include <iostream>
 
-class WaterCommand : public CareCommand {
+class WaterCommand : public Command {
 public:
-    WaterCommand() : CareCommand() {}
+    WaterCommand() : Command() {}
     void execute() override {
         std::cout << "Executing Water Command..." << std::endl;
         if (plantReceiver) {
@@ -19,7 +19,7 @@ public:
 
     std::string getRequiredRole() const override { return "Greenhouse"; }
 
-    CareCommand* clone() const override {
+    Command* clone() const override {
         return new WaterCommand(*this);
     }
 };

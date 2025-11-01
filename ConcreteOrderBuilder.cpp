@@ -7,11 +7,12 @@
 
 ConcreteOrderBuilder::ConcreteOrderBuilder(const std::string& customerName)
     : currentOrder(nullptr), customerName(customerName), orderCounter(0) {
-    reset();
+    // Don't create an order until it's actually needed - this prevents memory leaks
 }
 
 ConcreteOrderBuilder::~ConcreteOrderBuilder() {
-    // Don't delete currentOrder here - it's returned to the customer
+    // Clean up any uncompleted order that wasn't taken by the customer
+    delete currentOrder;
 }
 
 std::string ConcreteOrderBuilder::generateOrderId() {
@@ -53,7 +54,11 @@ Order* ConcreteOrderBuilder::getOrder() {
     if (!currentOrder) {
         reset();
     }
-    return currentOrder;
+    
+    // Transfer ownership to caller - set to nullptr so destructor won't delete it
+    Order* order = currentOrder;
+    currentOrder = nullptr;
+    return order;
 }
 
 void ConcreteOrderBuilder::reset() {

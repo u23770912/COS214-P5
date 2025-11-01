@@ -1,12 +1,15 @@
 #include "Customer.h"
 #include "ConcreteOrderBuilder.h"
+#include "OrderDirector.h"
+#include "OrderUIFacade.h"
 #include "PlaceOrderCommand.h"
 #include "Order.h"
 #include "InventoryManager.h"
 #include "PlantProduct.h"
-#include "StaffManager.h"
-#include "BridgeDP/PlantSpeciesProfile.h"
+#include "CustomerObserver.h"
+#include "PlantSpeciesProfile.h"
 #include "OrderHistory.h"
+#include "StaffManager.h"
 #include <iostream>
 #include <iomanip>
 
@@ -18,31 +21,38 @@
 #include "CreditCardAdaptee.h"
 #include "EFTAdaptee.h"
 
-#include "SuggestionTemplate/BouquetSuggestionFactory.h"
-
 #include <vector>
 #include <map>
-#include <string>
-
-using namespace std;
+#include <algorithm>
 
 Customer::Customer(const std::string& name, const std::string& email, const std::string& cellPhone)
-    : name(name), email(email), cellPhone(cellPhone), orderBuilder(nullptr), orderProduct(nullptr), placeOrderCommand(nullptr), staffObserver(nullptr) {
-    // Initialize the order builder
+    : name(name), email(email), cellPhone(cellPhone), orderBuilder(0), orderDirector(0), uiFacade(0), orderProduct(0), placeOrderCommand(0), 
+      staffObserver(0), orderHistory(0), cashSystem(0), creditCardSystem(0), eftSystem(0) {
+    // Initialize the order builder - Customer's core responsibility
     orderBuilder = new ConcreteOrderBuilder(name);
+    
+    // Initialize the order director with the builder
+    orderDirector = new OrderDirector(orderBuilder);
+    
+    // Initialize UI facade - Separates UI concerns from business logic
+    uiFacade = new OrderUIFacade(this);
+    
+    // Initialize order history (Memento pattern)
     orderHistory = new OrderHistory();
-
-    // Initialize payment systems
+    
+    // Initialize payment systems (Adapter pattern)
     initializePaymentSystems();
 }
 
 Customer::~Customer() {
+    delete uiFacade;
+    delete orderDirector;
     delete orderBuilder;
     delete orderProduct;
     delete placeOrderCommand;
     delete orderHistory;
-
-    // Cleanup payment systems
+    
+    // Clean up payment systems
     cleanupPaymentSystems();
 }
 
@@ -59,26 +69,16 @@ std::string Customer::getCellPhone() const {
 }
 
 Order* Customer::createOrder() {
-    std::cout << "\n=== Welcome " << name << "! Let's create your order ===" << std::endl;
-    
-    // Clean up any previous order
-    delete orderProduct;
-    delete placeOrderCommand;
-    orderProduct = nullptr;
-    placeOrderCommand = nullptr;
+    // Customer focuses only on order creation logic, UI handled by facade
+    cleanupPreviousOrder();
     
     // Reset the builder for a new order
     orderBuilder->reset();
     
-    std::cout << "✓ New order session started!" << std::endl;
-    std::cout << "Use the interactive methods to build your order:" << std::endl;
-    std::cout << "1. displayAvailableItems() - See what's available" << std::endl;
-    std::cout << "2. addPlantToOrder(index, quantity) - Add plants" << std::endl;
-    std::cout << "3. addBundleToOrder(name, indices) - Create bundles" << std::endl;
-    std::cout << "4. viewCurrentOrder() - Review your order" << std::endl;
-    std::cout << "5. finalizeOrder() - Complete the order" << std::endl;
+    // Use facade to display welcome message and instructions
+    uiFacade->displayOrderCreationWelcome();
     
-    return nullptr; // Order will be created when finalized
+    return 0; // Order will be created when finalized
 }
 
 bool Customer::executeOrder() {
@@ -92,13 +92,13 @@ bool Customer::executeOrder() {
         return false;
     }
     
-    std::cout << "\n=== EXECUTING ORDER ===" << std::endl;
-    std::cout << "Customer: " << name << " (" << email << ")" << std::endl;
+    // Use facade to display execution summary
+    uiFacade->displayOrderExecutionSummary();
     std::cout << "Order Summary:\n" << orderProduct->getOrderSummary() << std::endl;
     
     // Step 1: Request staff validation FIRST (as designed!)
     std::cout << "\n[STEP 1] Requesting Staff Validation..." << std::endl;
-    if (!requestStaffValidation(orderProduct)) {
+    if (!requestValidation(orderProduct)) {
         std::cout << "[ERROR] Staff validation failed - cannot proceed with order" << std::endl;
         return false;
     }
@@ -120,59 +120,27 @@ bool Customer::executeOrder() {
     }
 }
 
+// ============= UI Operations (Delegated to Facade) =============
+// All customer-facing UI operations are delegated to OrderUIFacade
+// This maintains separation of concerns and keeps Customer focused on business logic
+
 void Customer::displayAvailableItems() {
-    std::cout << "\n=== AVAILABLE PLANTS IN NURSERY ===" << std::endl;
-    
-    auto availablePlants = getAvailablePlantsFromInventory();
-    
-    if (availablePlants.empty()) {
-        std::cout << "[ERROR] Sorry! No plants are currently available for sale." << std::endl;
-        std::cout << "Please check back later or contact staff." << std::endl;
-        return;
-    }
-    
-    std::cout << "We have " << availablePlants.size() << " plants ready for sale:" << std::endl;
-    std::cout << std::string(60, '-') << std::endl;
-    
-    for (size_t i = 0; i < availablePlants.size(); ++i) {
-        displayPlantDetails(availablePlants[i], i + 1);
-    }
-    
-    std::cout << std::string(60, '-') << std::endl;
-    std::cout << "[INFO] To add a plant: addPlantToOrder(number, quantity)" << std::endl;
-    std::cout << "[INFO] Example: addPlantToOrder(1, 2) adds 2 of item #1" << std::endl;
+    // Delegate to OrderUIFacade which internally uses TerminalUI for display
+    uiFacade->displayAvailableItems();
+}
+
+void Customer::viewCurrentOrder() {
+    // Delegate to OrderUIFacade which internally uses TerminalUI for display
+    uiFacade->viewCurrentOrder();
 }
 
 bool Customer::addPlantToOrder(int plantIndex, int quantity) {
-    auto availablePlants = getAvailablePlantsFromInventory();
-    
-    // Validate input
-    if (plantIndex < 1 || plantIndex > static_cast<int>(availablePlants.size())) {
-        std::cout << "[ERROR] Invalid plant number. Please choose between 1 and " 
-                  << availablePlants.size() << std::endl;
-        return false;
-    }
-    
-    if (quantity <= 0) {
-        std::cout << "[ERROR] Quantity must be greater than 0." << std::endl;
-        return false;
-    }
-    
-    PlantProduct* selectedPlant = availablePlants[plantIndex - 1];
-    std::string plantType = selectedPlant->getProfile()->getSpeciesName();
-    
-    std::cout << "\n[SUCCESS] Adding " << quantity << "x " << plantType 
-              << " to your order..." << std::endl;
-    
-    // Notify staff of customer interaction
-    notifyStaffOfInteraction("PlantSelection", 
-        "Customer selected " + std::to_string(quantity) + "x " + plantType);
-    
-    // Use the builder to add the plant
-    orderBuilder->buildPlant(plantType, quantity);
-    
-    std::cout << "[COMPLETE] Plant added successfully!" << std::endl;
-    return true;
+    // Delegate to facade which handles:
+    // 1. Validation of plant index and quantity
+    // 2. Automatic discount calculation
+    // 3. UI feedback via TerminalUI
+    // 4. Adding plant to order via builder
+    return uiFacade->addPlantToOrderWithAutoDiscount(plantIndex, quantity);
 }
 
 bool Customer::addBundleToOrder(const std::string& bundleName, const std::vector<int>& plantIndices, double discount) {
@@ -213,7 +181,7 @@ bool Customer::addBundleToOrder(const std::string& bundleName, const std::vector
     }
     
     std::cout << "[BUNDLE] Bundle created successfully!" << std::endl;
-    return true;
+    return uiFacade->addBundleToOrderWithAutoDiscount(bundleName, plantIndices);
 }
 
 void Customer::viewCurrentOrder() {
@@ -229,7 +197,7 @@ void Customer::viewCurrentOrder() {
     Order* tempOrder = orderBuilder->getOrder();
     if (tempOrder && !tempOrder->isEmpty()) {
         std::cout << tempOrder->getOrderSummary() << std::endl;
-        std::cout << "[TOTAL] Total: R" << std::fixed << std::setprecision(2) 
+        std::cout << "[TOTAL] Total: $" << std::fixed << std::setprecision(2) 
                   << tempOrder->getTotalAmount() << std::endl;
     } else {
         std::cout << "[ORDER] Order is empty." << std::endl;
@@ -243,7 +211,7 @@ bool Customer::finalizeOrder() {
         return false;
     }
     
-    // Get the final order from builder
+    // Core business logic: finalize the order
     delete orderProduct;
     orderProduct = orderBuilder->getOrder();
     
@@ -252,12 +220,11 @@ bool Customer::finalizeOrder() {
         return false;
     }
     
-    std::cout << "\n=== ORDER FINALIZED ===" << std::endl;
+    // Use facade to display finalization confirmation
     std::cout << orderProduct->getOrderSummary() << std::endl;
     std::cout << "[TOTAL] Final Total: R" << std::fixed << std::setprecision(2) 
               << orderProduct->getTotalAmount() << std::endl;
-    std::cout << "\n[SUCCESS] Order is ready for execution!" << std::endl;
-    std::cout << "[INFO] Use executeOrder() to place your order with staff." << std::endl;
+    uiFacade->displayFinalOrderConfirmation();
     
     return true;
 }
@@ -267,49 +234,50 @@ ConcreteOrderBuilder* Customer::getOrderBuilder() {
     return dynamic_cast<ConcreteOrderBuilder*>(orderBuilder);
 }
 
-// Staff interaction methods - Observer pattern implementation
-void Customer::setStaffObserver(StaffManager* staff) {
-    staffObserver = staff;
-    std::cout << "[SYSTEM] Customer " << name << " connected to staff system" << std::endl;
-}
+// ============= Observer Pattern Implementation (Pure Pattern) =============
 
-void Customer::notifyStaffOfInteraction(const std::string& interactionType, const std::string& details) {
-    if (staffObserver) {
-        std::cout << "[STAFF] Customer " << name << " requesting staff assistance: " << interactionType << std::endl;
-        if (!details.empty()) {
-            std::cout << "   Details: " << details << std::endl;
+// Override from CustomerSubject - notifies all observers
+void Customer::notifyInteraction(const std::string& interactionType, const std::string& details) {
+    std::cout << "[CUSTOMER NOTIFICATION] " << name << " - " << interactionType << std::endl;
+    if (!details.empty()) {
+        std::cout << "   Details: " << details << std::endl;
+    }
+    
+    // Notify all attached observers
+    for (CustomerObserver* observer : observers) {
+        if (observer) {
+            observer->updateCustomerInteraction(this, interactionType, details);
         }
-        // Notify staff through observer pattern
-        // staffObserver->handleCustomerInteraction(this, interactionType, details);
-    } else {
-        std::cout << "[WARNING] No staff available - customer service request ignored" << std::endl;
     }
 }
 
-bool Customer::requestStaffValidation(Order* order) {
-    if (!staffObserver) {
-        std::cout << "[ERROR] No staff available for order validation" << std::endl;
+// Override from CustomerSubject - requests validation from observers
+bool Customer::requestValidation(Order* order) {
+    if (observers.empty()) {
+        std::cout << "[ERROR] No staff observers available for order validation" << std::endl;
         return false;
     }
     
-    std::cout << "\n[STAFF REQUEST] REQUESTING STAFF VALIDATION" << std::endl;
+    std::cout << "\n[VALIDATION REQUEST] Sending to staff observers..." << std::endl;
     std::cout << "Customer: " << name << " (" << email << ")" << std::endl;
     std::cout << "Order ID: " << order->getOrderId() << std::endl;
     
-    notifyStaffOfInteraction("OrderValidation", "Customer needs order validation for " + order->getOrderId());
+    // Try each observer until one validates successfully
+    for (CustomerObserver* observer : observers) {
+        if (observer && observer->validateCustomerOrder(order, this)) {
+            std::cout << "[SUCCESS] Order validated by staff" << std::endl;
+            return true;
+        }
+    }
     
-    // In a real system, this would be asynchronous
-    // For demo, we'll simulate staff processing
-    std::cout << "[PROCESSING] Staff processing validation request..." << std::endl;
-    
-    // Simulate staff validation through chain
-    return true; // For now, always succeed
+    std::cout << "[FAILED] No staff could validate the order" << std::endl;
+    return false;
 }
 
-// Helper methods
-std::vector<PlantProduct*> Customer::getAvailablePlantsFromInventory() {
-    InventoryManager& inventory = InventoryManager::getInstance();
-    return inventory.getReadyForSalePlants();
+// Convenience methods for attaching/detaching observers
+void Customer::attachObserver(CustomerObserver* observer) {
+    attach(observer);
+    std::cout << "[SYSTEM] Staff observer registered for customer: " << name << std::endl;
 }
 
 void Customer::displayPlantDetails(const PlantProduct* plant, int index) {
@@ -330,52 +298,115 @@ void Customer::displayPlantDetails(const PlantProduct* plant, int index) {
             std::cout << " | Sun: " << sunNeeds;
         }
         
-        std::cout << " | R15.99"; // Default price - could be enhanced
+        std::cout << " | $15.99"; // Default price - could be enhanced
     } else {
-        std::cout << "Unknown Plant";
+        std::cout << "Failed to construct order via Director." << std::endl;
+        notifyInteraction("ORDER_CONSTRUCTION_FAILED", "Director failed to build order");
     }
-    std::cout << std::endl;
+    
+    return orderProduct;
 }
+
+Order* Customer::constructSimplePlantOrder(const std::string& plantType, int quantity) {
+    std::cout << "\n=== Constructing Simple Plant Order ===" << std::endl;
+    std::cout << "Plant: " << plantType << ", Quantity: " << quantity << std::endl;
+    
+    // Clean up any previous order
+    delete orderProduct;
+    orderProduct = 0;
+    
+    // Notify observers
+    notifyInteraction("SIMPLE_PLANT_ORDER", "Constructing simple plant order: " + plantType);
+    
+    // Use director to construct
+    orderProduct = orderDirector->constructSimplePlantOrder(plantType, quantity);
+    
+    if (orderProduct) {
+        std::cout << "Simple plant order constructed successfully!" << std::endl;
+    }
+    
+    return orderProduct;
+}
+
+Order* Customer::constructPlantWithPotOrder(const std::string& plantType, const std::string& potType, int quantity) {
+    std::cout << "\n=== Constructing Plant with Pot Order ===" << std::endl;
+    std::cout << "Plant: " << plantType << ", Pot: " << potType << ", Quantity: " << quantity << std::endl;
+    
+    // Clean up any previous order
+    delete orderProduct;
+    orderProduct = 0;
+    
+    // Notify observers
+    notifyInteraction("PLANT_POT_ORDER", "Constructing plant+pot order: " + plantType + " + " + potType);
+    
+    // Use director to construct
+    orderProduct = orderDirector->constructPlantWithPotOrder(plantType, potType, quantity);
+    
+    if (orderProduct) {
+        std::cout << "Plant with pot order constructed successfully!" << std::endl;
+    }
+    
+    return orderProduct;
+}
+
+Order* Customer::constructBundleOrder(const std::string& bundleName, 
+                                     const std::vector<std::string>& plantTypes,
+                                     const std::vector<int>& quantities, 
+                                     double discount) {
+    std::cout << "\n=== Constructing Bundle Order ===" << std::endl;
+    std::cout << "Bundle: " << bundleName << ", Discount: " << discount << "%" << std::endl;
+    
+    // Clean up any previous order
+    delete orderProduct;
+    orderProduct = 0;
+    
+    // Notify observers
+    notifyInteraction("BUNDLE_ORDER", "Constructing bundle order: " + bundleName);
+    
+    // Use director to construct
+    orderProduct = orderDirector->constructBundleOrder(bundleName, plantTypes, quantities, discount);
+    
+    if (orderProduct) {
+        std::cout << "Bundle order constructed successfully!" << std::endl;
+    }
+    
+    return orderProduct;
+}
+
+// ============= Additional Methods from Sales Floor Integration =============
 
 // Memento pattern - order history methods
 void Customer::saveCurrentOrder() {
-    // First, get or create the current order from builder
-    ConcreteOrderBuilder* concreteBuilder = dynamic_cast<ConcreteOrderBuilder*>(orderBuilder);
-    if (!concreteBuilder || !concreteBuilder->hasCurrentOrder()) {
-        std::cout << "[MEMENTO] No order to save - order not built yet" << std::endl;
-        return;
-    }
-    
-    // Get the current order if we don't have it yet (DON'T delete it first)
-    if (!orderProduct) {
-        orderProduct = orderBuilder->getOrder();
-    }
-    
-    if (orderProduct && !orderProduct->isEmpty()) {
+    if(orderProduct && !orderProduct->isEmpty()) {
         orderHistory->saveOrder(orderProduct);
-        std::cout << "[MEMENTO] Current order saved to history (Item count: " 
-                  << orderProduct->getItemCount() << ")" << std::endl;
+        std::cout << "[SAVED] Current order saved to history" << std::endl;
     } else {
-        std::cout << "[MEMENTO] No order to save - order is empty" << std::endl;
+        std::cout << "[ERROR] No order to save" << std::endl;
     }
 }
 
-void Customer::restoreLastOrder() {
-    if (orderProduct) {
+void Customer::restoreLastOrder()
+{
+    if(orderProduct)
+    {
         orderHistory->undo(orderProduct);
-        std::cout << "[MEMENTO] Last order state restored from history" << std::endl;
+        std::cout << "[RESTORED] Last order state restored from history" << std::endl;
         viewCurrentOrder();
-    } else {
-        std::cout << "[MEMENTO] No order to restore" << std::endl;
+    }
+    else
+    {
+        std::cout << "[ERROR] No order to restore" << std::endl;
     }
 }
 
-void Customer::viewOrderHistory() {
-    std::cout << "\n=== ORDER HISTORY ===" << std::endl;
+void Customer::viewOrderHistory()
+{
+        std::cout << "\n=== ORDER HISTORY ===" << std::endl;
     std::cout << "You can restore previous order states using restoreLastOrder()" << std::endl;
     std::cout << "Current order: " << std::endl;
     viewCurrentOrder();
 }
+
 // Adapter pattern - payment processing //
 void Customer::initializePaymentSystems()
 {
@@ -391,11 +422,7 @@ void Customer::initializePaymentSystems()
     paymentAdapters["CREDIT_CARD"] = new CreditCardAdapter(creditCardSystem);
     paymentAdapters["EFT"] = new EFTAdapter(eftSystem);
     
-    std::cout << "[Payment] Registered payment methods: ";
-    for (const auto& pair : paymentAdapters) {
-        std::cout << pair.first << " ";
-    }
-    std::cout << std::endl;
+    std::cout << "[Payment] Available payment methods: CASH, CREDIT_CARD, EFT" << std::endl;
 }
 
 void Customer::cleanupPaymentSystems() {
@@ -425,14 +452,10 @@ bool Customer::processPayment(const std::string& paymentType, double amount,
     auto it = paymentAdapters.find(paymentType);
     if (it == paymentAdapters.end()) {
         std::cout << "\n[ERROR] Unsupported payment type: " << paymentType << std::endl;
-        std::cout << "Available methods: ";
-        for (const auto& pair : paymentAdapters) {
-            std::cout << pair.first << " ";
-        }
-        std::cout << std::endl;
+        std::cout << "Available methods: CASH, CREDIT_CARD, EFT" << std::endl;
         return false;
     }
-
+    
     // Process payment through the adapter
     std::cout << "\n[Processing] Using " << paymentType << " adapter..." << std::endl;
     bool success = it->second->processPayment(amount, email, paymentDetails);
@@ -449,10 +472,7 @@ bool Customer::processPayment(const std::string& paymentType, double amount,
 }
 
 bool Customer::isPaymentMethodSupported(const std::string& paymentType) const {
-    bool supported = paymentAdapters.find(paymentType) != paymentAdapters.end();
-    std::cout << "[DEBUG] Checking support for '" << paymentType << "': " 
-              << (supported ? "YES" : "NO") << std::endl;
-    return supported;
+    return paymentAdapters.find(paymentType) != paymentAdapters.end();
 }
 
 bool Customer::executeOrderWithPayment(const std::string& paymentType, 
@@ -545,24 +565,30 @@ void Customer::showPaymentOptions() const {
     std::cout << "\n" << std::string(44, '=') << std::endl;
 }
 
-//suggested Bouqeut
+// ============= Additional Staff Observer Methods (from salesfloor) =============
 
-void Customer::browseBouquetSuggestions(const std::string& eventType) {
-    BouquetSuggestionFactory& factory = BouquetSuggestionFactory::getInstance();
-    BouquetSuggestionTemplate* tmpl = factory.getTemplate(eventType);
-    
-    if (!tmpl) {
-        std::cout << "Sorry, we don't have suggestions for that event yet." << std::endl;
-        return;
+void Customer::setStaffObserver(StaffManager* staff) {
+    staffObserver = staff;
+    if (staff) {
+        // Also add to observers list for unified Observer pattern behavior
+        attachObserver(staff);
+        std::cout << "[SYSTEM] Staff observer set for customer: " << name << std::endl;
+    }
+}
+
+void Customer::notifyStaffOfInteraction(const std::string& interactionType, const std::string& details) {
+    // Delegate to the main Observer pattern notification method
+    // This eliminates code duplication and ensures all observers are notified
+    notifyInteraction(interactionType, details);
+}
+
+bool Customer::requestStaffValidation(Order* order) {
+    // Ensure the staffObserver is added to the observers list if not already there
+    if (staffObserver && std::find(observers.begin(), observers.end(), staffObserver) == observers.end()) {
+        attach(staffObserver);
     }
     
-    // The template method handles the entire algorithm!
-    std::vector<BouquetSuggestion> suggestions = tmpl->generateSuggestions();
-    
-    // Display suggestions
-    for (size_t i = 0; i < suggestions.size(); i++) {
-        std::cout << "\n[Option " << (i+1) << "]" << std::endl;
-        std::cout << suggestions[i].getDescription() << std::endl;
-        std::cout << std::string(60, '-') << std::endl;
-    }
+    // Delegate to the main Observer pattern validation method
+    // This eliminates code duplication and maintains consistent behavior
+    return requestValidation(order);
 }

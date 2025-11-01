@@ -12,8 +12,39 @@ InventoryManager::InventoryManager() : plantsInStock(0) {
 // Private destructor - automatic cleanup
 InventoryManager::~InventoryManager() {
     std::cout << "InventoryManager database shutting down." << std::endl;
-    // Note: We don't delete PlantProduct* or Pots* here as they may be owned elsewhere
-    // This class acts as a database registry, not owner of the objects
+    cleanup();
+}
+
+// Manual cleanup method - call before program exit
+void InventoryManager::cleanup() {
+    std::cout << "Cleaning up InventoryManager resources..." << std::endl;
+    
+    // Clean up greenhouse plants
+    for (PlantProduct* plant : greenHouseInventory) {
+        delete plant;
+    }
+    greenHouseInventory.clear();
+    
+    // Clean up plants ready for sale
+    for (PlantProduct* plant : readyForSalePlants) {
+        delete plant;
+    }
+    readyForSalePlants.clear();
+    
+    // Clean up sold plants
+    for (PlantProduct* plant : soldPlants) {
+        delete plant;
+    }
+    soldPlants.clear();
+    
+    // Clean up pots
+    // for (Pots* pot : potInventory) {
+    //     delete pot;
+    // }
+    // potInventory.clear();
+    
+    plantsInStock = 0;
+    std::cout << "InventoryManager cleanup complete." << std::endl;
 }
 
 // Meyer's Singleton - Thread-safe, automatic lifetime management
@@ -53,12 +84,12 @@ void InventoryManager::addPot(Pots* pot) {
     }
 }
 
-void InventoryManager::removePot(Pots* pot) {
-    auto it = std::find(potInventory.begin(), potInventory.end(), pot);
-    if (it != potInventory.end()) {
-        potInventory.erase(it);
-    }
-}
+// void InventoryManager::removePot(Pots* pot) {
+//     auto it = std::find(potInventory.begin(), potInventory.end(), pot);
+//     if (it != potInventory.end()) {
+//         potInventory.erase(it);
+//     }
+// }
 
 void InventoryManager::moveToSalesFloor(PlantProduct* plant) {
     if (plant) {

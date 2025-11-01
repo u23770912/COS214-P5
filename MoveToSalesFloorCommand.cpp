@@ -1,11 +1,12 @@
 #include "MoveToSalesFloorCommand.h"
 #include "PlantProduct.h"
-#include "StateDP/ReadyForSaleState.h"
+#include "ReadyForSaleState.h"
 #include "InventoryManager.h"
 #include <iostream>
 
 MoveToSalesFloorCommand::MoveToSalesFloorCommand() 
-    : Command(), plantReceiver(nullptr) {
+    : Command() {
+    plantReceiver = nullptr;
 }
 
 MoveToSalesFloorCommand::~MoveToSalesFloorCommand() {
@@ -13,7 +14,7 @@ MoveToSalesFloorCommand::~MoveToSalesFloorCommand() {
 }
 
 void MoveToSalesFloorCommand::setReceiver(PlantProduct* plant) {
-    plantReceiver = plant;
+    Command::setReceiver(plant);  // Use base class implementation
 }
 
 void MoveToSalesFloorCommand::execute() {
@@ -59,6 +60,6 @@ std::string MoveToSalesFloorCommand::getRequiredRole() const {
 
 Command* MoveToSalesFloorCommand::clone() const {
     MoveToSalesFloorCommand* cloned = new MoveToSalesFloorCommand();
-    cloned->plantReceiver = this->plantReceiver;
+    cloned->setReceiver(this->plantReceiver);  // Use setter to properly set base class member
     return cloned;
 }

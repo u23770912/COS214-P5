@@ -1,7 +1,7 @@
 #ifndef INVENTORY_MANAGER_H
 #define INVENTORY_MANAGER_H
 
-#include "LifecycleObserver.h"
+#include "LifeCycleObserver.h"
 #include "PlantProduct.h"
 #include <vector>
 
@@ -58,7 +58,7 @@ class InventoryManager : public LifeCycleObserver {
          */
         static InventoryManager& getInstance();
 
-        // From LifecycleObserver
+        // From LifeCycleObserver
         void update(PlantProduct* plant, const std::string& commandType) override;
 
         int getStockCount() const;
@@ -66,6 +66,9 @@ class InventoryManager : public LifeCycleObserver {
         std::vector<PlantProduct*> getGreenHouseInventory() const;
         std::vector<PlantProduct*> getReadyForSalePlants() const;
         std::vector<PlantProduct*> getSoldPlants() const;
+
+        // Manual cleanup method - call before program exit to avoid static destruction issues
+        void cleanup();
         std::vector<Pots*> getPotInventory() const;
 
         void addPot(Pots* pot);

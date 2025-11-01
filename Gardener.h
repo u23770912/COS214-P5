@@ -2,8 +2,10 @@
 #define GARDENER_H
 
 #include "GreenhouseStaff.h"
-#include "CareCommand.h"
+#include "Command.h"
 #include <iostream>
+
+#include "StaffMember.h"
 
 /**
  * @class Gardener
@@ -13,26 +15,29 @@
  * greenhouse team will be composed of instances of Gardener.
  */
 class Gardener : public GreenhouseStaff {
+
 public:
     void handleCommand(Command* command) override {
         if (!isBusy()) {
+            activePlant = command->getReceiver();
+            activeTask = command->getType();
+                setBusyFor(std::chrono::seconds(3));
             std::cout << "Gardener is handling the '" << command->getType() << "' command." << std::endl;
-            setBusy(true);
             command->execute();
-            setBusy(false);
             delete command;
         } else if (next != nullptr) {
             std::cout << "Gardener is busy, passing to next in the greenhouse team." << std::endl;
             next->handleCommand(command);
         } else {
-            std::cout << "All Gardeners are busy. The '" << command->getType() << "' task was dropped. Plant will wither." << std::endl;
-              // Only transition to withering if there is a plant associated with the command.
-           if(CareCommand* careCmd = dynamic_cast<CareCommand*>(command)) {
-               if (careCmd->getReceiver()) {
-                   careCmd->getReceiver()->transitionToWithering();
-               }
+            // Last handler in the chain is busy, queue the command
+            if (manager) {
+                std::cout << "All Gardeners are busy. Queueing the '" << command->getType() << "' task." << std::endl;
+                manager->queueUnhandledCommand(command);
+            } else {
+                // Fallback in case manager is not set
+                std::cout << "Error: Manager not set. The '" << command->getType() << "' task was dropped." << std::endl;
+                delete command;
             }
-            delete command;
         }
     }
 };

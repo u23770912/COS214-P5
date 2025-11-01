@@ -1,14 +1,14 @@
 #ifndef FERTILIZE_COMMAND_H
 #define FERTILIZE_COMMAND_H
 
-#include "CareCommand.h"
+#include "Command.h"
 #include "PlantProduct.h"
 #include <iostream>
 
-class FertilizeCommand : public CareCommand {
+class FertilizeCommand : public Command {
 public:
     // Constructor for prototype
-    FertilizeCommand() : CareCommand() {}
+    FertilizeCommand() : Command() {}
 
     void execute() override {
         if (plantReceiver) {
@@ -19,7 +19,7 @@ public:
     std::string getType() const override { return "Fertilizing"; }
     std::string getRequiredRole() const override { return "Greenhouse"; }
 
-    CareCommand* clone() const override {
+    Command* clone() const override {
         return new FertilizeCommand(*this);
     }
 };
