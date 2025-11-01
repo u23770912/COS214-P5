@@ -4,7 +4,8 @@
 #include <string>
 #include "PlantSpeciesProfile.h"
 
-class FlowerProfile : public PlantSpeciesProfile {
+class FlowerProfile : public PlantSpeciesProfile
+{
 public:
 	FlowerProfile(const std::string &species,
 				  const std::string &idealWater,

@@ -8,7 +8,8 @@
 #include <string>
 #include <vector>
 
-class PlantSpeciesProfile {
+class PlantSpeciesProfile
+{
 protected:
 	std::string speciesName;
 	std::map<std::string, std::string> properties;
@@ -18,92 +19,114 @@ public:
 
 	virtual std::string getSpeciesName() const { return speciesName; }
 
-	virtual std::string getProperty(const std::string &key) const {
+	virtual std::string getProperty(const std::string &key) const
+	{
 		std::map<std::string, std::string>::const_iterator it = properties.find(key);
 		return (it != properties.end()) ? it->second : std::string();
 	}
 
-	void setProperty(const std::string &key, const std::string &value) {
+	void setProperty(const std::string &key, const std::string &value)
+	{
 		properties[key] = value;
 	}
 
-	std::vector<std::string> getSupportedCareTypes() const {
+	std::vector<std::string> getSupportedCareTypes() const
+	{
 		std::vector<std::string> careTypes;
 		std::map<std::string, std::string>::const_iterator it = properties.find("supportedCareTypes");
-		if (it == properties.end()) {
+		if (it == properties.end())
+		{
 			return careTypes;
 		}
 
 		std::string token;
 		std::istringstream stream(it->second);
-		while (std::getline(stream, token, ',')) {
-			if (!token.empty()) {
+		while (std::getline(stream, token, ','))
+		{
+			if (!token.empty())
+			{
 				careTypes.push_back(token);
 			}
 		}
 		return careTypes;
 	}
 
-	int getStateDurationSeconds(const std::string &stateName, int defaultSeconds) const {
+	int getStateDurationSeconds(const std::string &stateName, int defaultSeconds) const
+	{
 		return getNumericProperty("stateDuration." + toLowerKey(stateName), defaultSeconds);
 	}
 
-	void setStateDurationSeconds(const std::string &stateName, int seconds) {
+	void setStateDurationSeconds(const std::string &stateName, int seconds)
+	{
 		properties["stateDuration." + toLowerKey(stateName)] = std::to_string(seconds);
 	}
 
-	int getCareIntervalSeconds(const std::string &careType, int defaultSeconds) const {
+	int getCareIntervalSeconds(const std::string &careType, int defaultSeconds) const
+	{
 		return getNumericProperty("careInterval." + toLowerKey(careType), defaultSeconds);
 	}
 
-	void setCareIntervalSeconds(const std::string &careType, int seconds) {
+	void setCareIntervalSeconds(const std::string &careType, int seconds)
+	{
 		properties["careInterval." + toLowerKey(careType)] = std::to_string(seconds);
 	}
 
-	static std::string sanitizeNumericString(const std::string &value, const std::string &fallback) {
+	static std::string sanitizeNumericString(const std::string &value, const std::string &fallback)
+	{
 		std::string digits;
-		for (std::string::const_iterator it = value.begin(); it != value.end(); ++it) {
-			if (std::isdigit(static_cast<unsigned char>(*it))) {
+		for (std::string::const_iterator it = value.begin(); it != value.end(); ++it)
+		{
+			if (std::isdigit(static_cast<unsigned char>(*it)))
+			{
 				digits.push_back(*it);
 			}
 		}
-		if (digits.empty()) {
+		if (digits.empty())
+		{
 			return fallback;
 		}
 		return digits;
 	}
 
 protected:
-	int getNumericProperty(const std::string &key, int defaultValue) const {
+	int getNumericProperty(const std::string &key, int defaultValue) const
+	{
 		std::map<std::string, std::string>::const_iterator it = properties.find(key);
-		if (it == properties.end() || it->second.empty()) {
+		if (it == properties.end() || it->second.empty())
+		{
 			return defaultValue;
 		}
 
 		const std::string &value = it->second;
 		std::string digits;
-		for (std::string::const_iterator vit = value.begin(); vit != value.end(); ++vit) {
-			if (std::isdigit(static_cast<unsigned char>(*vit))) {
+		for (std::string::const_iterator vit = value.begin(); vit != value.end(); ++vit)
+		{
+			if (std::isdigit(static_cast<unsigned char>(*vit)))
+			{
 				digits.push_back(*vit);
 			}
 		}
 
-		if (digits.empty()) {
+		if (digits.empty())
+		{
 			return defaultValue;
 		}
 
-		try {
+		try
+		{
 			return std::stoi(digits);
-		} catch (...) {
+		}
+		catch (...)
+		{
 			return defaultValue;
 		}
 	}
 
-	static std::string toLowerKey(const std::string &text) {
+	static std::string toLowerKey(const std::string &text)
+	{
 		std::string lowered = text;
-		std::transform(lowered.begin(), lowered.end(), lowered.begin(), [](unsigned char c) {
-			return static_cast<char>(std::tolower(c));
-		});
+		std::transform(lowered.begin(), lowered.end(), lowered.begin(), [](unsigned char c)
+					   { return static_cast<char>(std::tolower(c)); });
 		return lowered;
 	}
 };

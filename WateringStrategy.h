@@ -5,10 +5,11 @@
 
 // Strategy Interface (Strategy Pattern)
 // Defines an algorithm for applying water.
-class WateringStrategy : public CareStrategy {
+class WateringStrategy : public CareStrategy
+{
 public:
     // virtual ~WateringStrategy() {}
-    void applyCare(int amount, const std::string& careType) override;
+    void applyCare(int amount, const std::string &careType) override;
     std::string getName() const override { return "Standard Watering"; }
 };
 

@@ -4,9 +4,11 @@
 
 #include "CareStrategy.h"
 
-class MinimalPruningStrategy : public CareStrategy {
+class MinimalPruningStrategy : public CareStrategy
+{
 public:
-    virtual void applyCare(int amount, const std::string& careType) override {
+    virtual void applyCare(int amount, const std::string &careType) override
+    {
         // Implementation of minimal pruning logic
         std::cout << "Applying minimal pruning of amount " << amount << " for care type: " << careType << std::endl;
     }

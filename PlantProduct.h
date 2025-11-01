@@ -57,14 +57,14 @@ public:
     // --- Strategy ---
     void addStrategy(const std::string &careType, CareStrategy *strategy);
     void performCare(const std::string &careType);
-    
+
     // Get strategy name for a care type (for display purposes)
     std::string getStrategyNameForCareType(const std::string &careType) const;
 
     // --- Business Logic ---
     void advanceLifecycle();
     void notify(const std::string &commandType);
-    
+
     // --- Plant ID ---
     std::string getId() const { return plantId; }
 
