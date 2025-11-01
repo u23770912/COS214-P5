@@ -1,4 +1,5 @@
 #include "GreenhouseSystem.h"
+#include "PlantPot.h"
 
 GreenhouseSystem::GreenhouseSystem(): root(NULL), currentCategory(NULL){
 
@@ -48,7 +49,7 @@ GreenhouseBuilder* GreenhouseSystem::addSpecies(std::string name){
 
     currentCategory->add(species);
     // currentCategory = species;
-
+    currentCategory = species;
     return this;
 }
 
@@ -61,14 +62,18 @@ GreenhouseComponent* GreenhouseSystem::getGreenhouse(){
     return this->root;
 }
 
+GreenhouseBuilder *GreenhouseSystem::addPlant(PlantData *plant)
+{
+    if (!currentCategory)
+    {
+        std::cerr << "Error: Cannot add plant. No active group selected." << std::endl;
+        return this;
+    }
+    PlantPot* newPlant = new PlantPot(plant->getId(), plant->getInfo());
+    currentCategory->add(newPlant);
 
-
-
-
-
-
-
-
+    return this;
+}
 
 // #include "GreenhouseSystem.h"
 

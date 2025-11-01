@@ -27,6 +27,9 @@ class GreenhouseSystem : public GreenhouseBuilder
 
         // void addPlant(std::string id, std::string info) override;
         GreenhouseComponent* getGreenhouse() override;
+
+        GreenhouseBuilder* addPlant(PlantData* plant) override; // New function
+
 };
 
 

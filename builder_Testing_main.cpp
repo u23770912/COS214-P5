@@ -1,63 +1,40 @@
 #include <iostream>
 #include "GreenhouseSystem.h"
+#include "GreenhouseDirector.h"
 #include "PlantGroup.h"
 
 int main() {
-    // Create builder
+    // Create the Concrete Builder
     GreenhouseBuilder* greenhouseBuilder = new GreenhouseSystem();
 
-    greenhouseBuilder->reset();
+    // Create PlantData for the Director
+    std::vector<PlantData*> allPlants = {
+        new PlantData("Rose_001", "Hybrid Tea, Red", "Shrub", "Summer", 15.50),
+        new PlantData("Rose_002", "Floribunda, Pink", "Shrub", "Summer", 12.00),
+        new PlantData("Pine_001", "Eastern White Pine", "Tree", "Winter", 45.99),
+        new PlantData("Pine_002", "Scots Pine", "Tree", "Winter", 35.00)
+    };
+    // NOTE: For the Director to work, you must implement the construct()
+    // method in GreenhouseDirector.cpp to iterate through the plants 
+    // and call the appropriate builder methods.
+    GreenhouseDirector director(greenhouseBuilder);
+    director.setPlants(allPlants);
 
-    // Start building manually (testing chain)
-    greenhouseBuilder
-        ->addCategory("Summer")
-        ->addType("Shrub")
-        ->addSpecies("Rose")
-        ->addSpecies("Lavender")
-        ->addCategory("Winter")
-        ->addType("Tree")
-        ->addSpecies("Pine");
+    // 4. Instruct the Director to Construct the Greenhouse
+    // This call will reset the builder and call addCategory, addType, addSpecies, 
+    // and finally addPlant for each PlantData object.
+    GreenhouseComponent* greenhouse = director.construct();
 
-    // Get final structure
-    GreenhouseComponent* greenhouse = greenhouseBuilder->getGreenhouse();
-
-    // Print to verify structure
-    std::cout << "=== TEST GREENHOUSE STRUCTURE ===" << std::endl;
+    // 5. Print to verify structure (This should now include PlantPot leaves)
+    std::cout << "=== FINAL GREENHOUSE STRUCTURE ===" << std::endl;
+    // NOTE: Assuming your PlantPot::print() prints its ID/Info
     greenhouse->print();
 
     // Cleanup
+    for (PlantData* plant : allPlants) {
+        delete plant;
+    }
+// This should recursively delete the component hierarchy
     delete greenhouseBuilder;
     return 0;
 }
-
-
-// #include <iostream>
-// #include "GreenhouseSystem.h"
-// #include "PlantGroup.h"
-
-// int main() {
-//     // Create the builder
-//     GreenhouseBuilder* greenhouseBuilder = new GreenhouseSystem();
-
-//     greenhouseBuilder->reset();
-
-//     //  Build a simple structure manually
-//     greenhouseBuilder
-//         ->addCategory("Summer")
-//         ->addSpecies("Rose")
-//         ->addSpecies("Lavender")
-//         ->addCategory("Winter")
-//         ->addSpecies("Pine")
-//         ->addSpecies("Snowdrop");
-
-//     // Get the full greenhouse structure
-//     GreenhouseComponent* greenhouse = greenhouseBuilder->getGreenhouse();
-
-//     //  Print to verify
-//     std::cout << "🌿 Greenhouse Structure:" << std::endl;
-//     greenhouse->print();  // Assuming your PlantGroup implements a print() method
-
-//     // Clean up
-//     delete greenhouseBuilder;
-//     return 0;
-// }

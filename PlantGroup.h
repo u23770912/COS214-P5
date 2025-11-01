@@ -21,7 +21,7 @@ class PlantGroup: public GreenhouseComponent {
         void setName(std::string name);
         
         void add(GreenhouseComponent* item) override;
-        void print() override;
+        void print(const std::string& prefix , bool isLast) override;
         void display() override;
         void getPlantCount() override;
         void remove(GreenhouseComponent* item) override;
