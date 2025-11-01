@@ -3,7 +3,6 @@
 
 #include "StaffChainHandler.h"
 #include "Command.h"
-#include "CareCommand.h"
 #include <string>
 #include <map>
 #include <iostream>

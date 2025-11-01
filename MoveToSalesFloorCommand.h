@@ -1,23 +1,21 @@
 #ifndef MOVE_TO_SALES_FLOOR_COMMAND_H
 #define MOVE_TO_SALES_FLOOR_COMMAND_H
 
-#include "CareCommand.h"
-#include <iostream>
+#include "Command.h"
+#include <string>
 
-class MoveToSalesFloorCommand : public CareCommand
-{
-public:
-    // Constructor for prototype
-    MoveToSalesFloorCommand() : CareCommand() {}
-    void execute() override;
+class PlantProduct;
 
-    std::string getType() const override { return "MoveToSalesFloor"; }
-    std::string getRequiredRole() const override { return "Sales"; }
-
-    CareCommand *clone() const override
-    {
-        return new MoveToSalesFloorCommand(*this);
-    }
+class MoveToSalesFloorCommand : public Command {
+    public:
+        MoveToSalesFloorCommand();
+        ~MoveToSalesFloorCommand();
+        
+        void setReceiver(PlantProduct* plant) override;
+        void execute() override;
+        std::string getType() const override;
+        std::string getRequiredRole() const override;
+        Command* clone() const override;
 };
 
-#endif // MOVE_TO_SALES_FLOOR_COMMAND_H
+#endif

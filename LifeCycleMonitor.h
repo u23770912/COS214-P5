@@ -3,11 +3,8 @@
 
 #include <vector>
 #include <iostream>
-#include "LifeCycleObserver.h"
+#include "PlantProduct.h"
 
-class PlantProduct;
-
-class LifeCycleObserver;
 
 /**
  * @class LifeCycleMonitor
@@ -19,21 +16,21 @@ class LifeCycleObserver;
 
 class LifeCycleMonitor
 {
-private:
-    // LIST OF OF REGISTERS OBSERVER'S STORE IN A VECTOR
-    std::vector<LifeCycleObserver *> observers;
+    private:
+        // LIST OF OF REGISTERS OBSERVER'S STORE IN A VECTOR
+        std::vector<LifeCycleObserver *> observers;
 
-    // THE SPECIFIC PLANT PRODUCT BEING MONITORED
-    PlantProduct *subject;
+        // THE SPECIFIC PLANT PRODUCT BEING MONITORED
+        PlantProduct *subject;
 
-public:
-    LifeCycleMonitor(PlantProduct *plant);
+    public:
+        LifeCycleMonitor(PlantProduct *plant);
 
-    void registerObserver(LifeCycleObserver *observer);
+        void registerObserver(LifeCycleObserver *observer);
 
-    void removeObserver(LifeCycleObserver *observer);
+        void removeObserver(LifeCycleObserver *observer);
 
-    void notify(const std::string &commandTyp);
+        void notify(const std::string &commandType);
 };
 
 #endif

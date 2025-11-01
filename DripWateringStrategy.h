@@ -6,20 +6,11 @@
 
 class DripWateringStrategy : public CareStrategy
 {
-public:
-    void applyCare(int amount, const std::string &careType) override
-    {
-        if (careType == "drip" || careType == "water" || careType == "watering")
-        {
-            std::cout << "Applying " << amount << " ml of water via Drip System." << std::endl;
-        }
-        else
-        {
-            std::cout << "DripWateringStrategy does not handle care type: " << careType << std::endl;
-        }
-    }
+    public:
+    
+        void applyCare(int amount, const std::string &careType) override;
 
-    std::string getName() const override { return "Drip Watering"; }
+        std::string getName() const override;
 };
 
 #endif // DRIP_WATERING_STRATEGY_H

@@ -2,6 +2,7 @@
 #define WITHERINGSTATE_H
 
 #include "PlantState.h"
+#include <iostream>
 
 /**
  * @class WitheringState

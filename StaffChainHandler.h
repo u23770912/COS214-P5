@@ -9,12 +9,18 @@
 
 class StaffMember; // Forward declaration
 
-class StaffChainHandler
-{
+/**
+ * @class StaffChainHandler
+ * @brief Abstract base class for the Chain of Responsibility pattern for staff members.
+ * 
+ * This class represents the Handler in the Chain of Responsibility pattern.
+ * Each concrete staff member inherits from this class.
+ */
+class StaffChainHandler {
 protected:
-    StaffChainHandler *next;
-    StaffMember *manager; // Back-pointer to the dispatcher
-    PlantProduct *activePlant = nullptr;
+    StaffChainHandler* next;
+    StaffMember* manager; // Back-pointer to the dispatcher
+    PlantProduct* activePlant = nullptr;
     std::string activeTask;
     bool busy;
 
@@ -22,34 +28,83 @@ public:
     StaffChainHandler() : next(nullptr), manager(nullptr), busy(false) {}
     virtual ~StaffChainHandler() {}
 
-    void setNext(StaffChainHandler *next) { this->next = next; }
-    void setManager(StaffMember *mgr) { this->manager = mgr; } // Setter for the manager
-    bool isBusy() const { return activePlant != nullptr; }
-    void setBusy(bool status) { this->busy = status; }
-    const PlantProduct *getActivePlant() const { return activePlant; }
-    std::string getActiveTask() const { return activeTask; }
+    /**
+     * @brief Set the next handler in the chain
+     */
+    void setNext(StaffChainHandler* nextHandler) { 
+        next = nextHandler; 
+    }
 
-    void clearAssignment()
-    {
+    /**
+     * @brief Get the next handler in the chain
+     */
+    StaffChainHandler* getNext() const {
+        return next;
+    }
+
+    /**
+     * @brief Set the manager reference for queueing unhandled commands
+     */
+    void setManager(StaffMember* mgr) { 
+        manager = mgr; 
+    }
+
+    /**
+     * @brief Check if this staff member is busy
+     * Checks if there is an active plant assignment
+     */
+    bool isBusy() const {
+        return busy || activePlant != nullptr;
+    }
+
+    /**
+     * @brief Set the busy status of this staff member
+     */
+    void setBusy(bool status) {
+        busy = status;
+    }
+
+    /**
+     * @brief Get the currently active plant being worked on
+     */
+    const PlantProduct* getActivePlant() const { 
+        return activePlant; 
+    }
+
+    /**
+     * @brief Get the type of task currently being performed
+     */
+    std::string getActiveTask() const { 
+        return activeTask; 
+    }
+
+    /**
+     * @brief Clear the current assignment when task is complete
+     */
+    void clearAssignment() {
         activePlant = nullptr;
         activeTask.clear();
     }
 
-    virtual void setBusyFor(std::chrono::seconds duration)
-    {
+    /**
+     * @brief Set busy status for a specific duration (simulates task time)
+     * @param duration How long the staff member will be busy
+     */
+    virtual void setBusyFor(std::chrono::seconds duration) {
         busy = true;
-        std::thread([this, duration]()
-                    {
+        std::thread([this, duration]() {
             std::this_thread::sleep_for(duration);
             this->busy = false;
-            this->clearAssignment(); })
-            .detach();
+            this->clearAssignment();
+        }).detach();
     }
 
     /**
-     * @brief Handles a command or passes it to the next handler in the chain.
+     * @brief Handle a command or pass it to the next handler in the chain
+     * This is the core method of the Chain of Responsibility pattern
+     * @param command The command to handle
      */
-    virtual void handleCommand(Command *command) = 0;
+    virtual void handleCommand(Command* command) = 0;
 };
 
 #endif // STAFFCHAINHANDLER_H

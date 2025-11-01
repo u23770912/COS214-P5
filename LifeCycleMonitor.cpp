@@ -23,13 +23,13 @@ void LifeCycleMonitor::removeObserver(LifeCycleObserver *observer)
     }
 }
 
-void LifeCycleMonitor::notify(const std::string &commandTyp)
+void LifeCycleMonitor::notify(const std::string &commandType)
 {
     for (LifeCycleObserver *observer : observers)
     {
         if (observer != nullptr)
         {
-            observer->update(subject, commandTyp);
+            observer->update(subject, commandType);
         }
     }
 }

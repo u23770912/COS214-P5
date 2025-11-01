@@ -2,7 +2,7 @@
 #define GARDENER_H
 
 #include "GreenhouseStaff.h"
-#include "CareCommand.h"
+#include "Command.h"
 #include <iostream>
 
 #include "StaffMember.h"

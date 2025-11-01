@@ -26,7 +26,7 @@ private:
     std::chrono::steady_clock::time_point lastCareNotification;
 
     // Observer Pattern
-    LifeCycleObserver *monitor;
+    LifeCycleObserver* monitor;
     // Bridge Pattern
     PlantSpeciesProfile *speciesProfile;
     // Strategy Pattern
@@ -49,7 +49,7 @@ public:
     void resetLastCareTime();
 
     // --- Observer ---
-    void setObserver(LifeCycleObserver *obs) { monitor = obs; }
+    void setObserver(LifeCycleObserver* obs) { monitor = obs; }
 
     // --- Bridge ---
     PlantSpeciesProfile *getProfile() const;
