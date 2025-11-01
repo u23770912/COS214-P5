@@ -13,15 +13,15 @@
 
 class WoodenPot : public Pot
 {
-    public:
+public:
     /**
      * @brief Constructs a WoodenPot object
      * @param size The size of the wooden pot
      * @param shape The shape of the wooden pot
      * @param drainage Whether the wooden pot has drainage holes
      */
-        WoodenPot(std::string size, std::string shape, bool drainage);
-        void print() override;
+    WoodenPot(std::string size, std::string shape, bool drainage);
+    void print() override;
     std::string getPotType() const override;
 };
 
