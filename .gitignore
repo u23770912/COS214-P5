@@ -3,7 +3,7 @@
 *.obj
 
 # Executables
-greenhouse
+/greenhouse
 test_move_to_sales_floor
 test_*
 
@@ -20,6 +20,7 @@ out/
 # Documentation (if you want to ignore it)
 *.md
 !README.md
+!SETUP_GUIDE.md
 *.pdf
 
 # Build directories
