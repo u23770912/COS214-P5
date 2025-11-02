@@ -65,6 +65,7 @@ public:
     // GreenhouseComponent interface implementation
     void add(GreenhouseComponent* component) override; 
     void print() override;
+    void print(const std::string& prefix, bool isLast);  // Overloaded for tree printing
     void display() override;
     void getPlantCount() override;
     void remove(GreenhouseComponent* item) override;

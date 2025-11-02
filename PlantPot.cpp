@@ -49,6 +49,19 @@ void PlantPot::print() {
     }
 }
 
+void PlantPot::print(const std::string& prefix, bool isLast) {
+    std::cout << prefix << (isLast ? "└── " : "├── ") 
+              << "PlantPot ID: " << id << ", Info: " << info;
+    
+    if (plantRef) {
+        std::cout << " [" << plantRef->getProfile()->getSpeciesName() 
+                  << " - " << plantRef->getCurrentStateName() << "]";
+    } else {
+        std::cout << " [Empty]";
+    }
+    std::cout << std::endl;
+}
+
 void PlantPot::display() {
     std::cout << "  📍 Pot: " << getId();
     if (!info.empty()) {
