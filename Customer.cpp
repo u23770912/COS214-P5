@@ -8,7 +8,7 @@
 #include "PlantProduct.h"
 #include "CustomerObserver.h"
 #include "PlantSpeciesProfile.h"
-// #include "OrderHistory.h"
+#include "OrderHistory.h"
 #include "StaffManager.h"
 #include <iostream>
 #include <iomanip>
@@ -38,7 +38,7 @@ Customer::Customer(const std::string& name, const std::string& email, const std:
     uiFacade = new OrderUIFacade(this);
     
     // Initialize order history (Memento pattern)
-    // orderHistory = new OrderHistory();
+    orderHistory = new OrderHistory();
     
     // Initialize payment systems (Adapter pattern)
     initializePaymentSystems();
@@ -50,7 +50,7 @@ Customer::~Customer() {
     delete orderBuilder;
     delete orderProduct;
     delete placeOrderCommand;
-    // delete orderHistory;
+    delete orderHistory;
     
     // Clean up payment systems
     cleanupPaymentSystems();
@@ -344,7 +344,7 @@ Order* Customer::constructBundleOrder(const std::string& bundleName,
 // Memento pattern - order history methods
 void Customer::saveCurrentOrder() {
     if(orderProduct && !orderProduct->isEmpty()) {
-        // orderHistory->saveOrder(orderProduct);
+        orderHistory->saveOrder(orderProduct);
         std::cout << "[SAVED] Current order saved to history" << std::endl;
     } else {
         std::cout << "[ERROR] No order to save" << std::endl;
@@ -355,7 +355,7 @@ void Customer::restoreLastOrder()
 {
     if(orderProduct)
     {
-        // orderHistory->undo(orderProduct);
+        orderHistory->undo(orderProduct);
         std::cout << "[RESTORED] Last order state restored from history" << std::endl;
         viewCurrentOrder();
     }
@@ -367,9 +367,8 @@ void Customer::restoreLastOrder()
 
 void Customer::viewOrderHistory()
 {
-    std::cout << "\n=== ORDER HISTORY ===" << std::endl;
-    std::cout << "[INFO] Order history feature temporarily disabled" << std::endl;
-    // std::cout << "You can restore previous order states using restoreLastOrder()" << std::endl;
+        std::cout << "\n=== ORDER HISTORY ===" << std::endl;
+    std::cout << "You can restore previous order states using restoreLastOrder()" << std::endl;
     std::cout << "Current order: " << std::endl;
     viewCurrentOrder();
 }

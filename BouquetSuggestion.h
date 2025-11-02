@@ -39,7 +39,7 @@ struct BouquetSuggestion {
         
         oss << "\n   Wrapping: " << wrappingStyle << "\n";
         oss << "   Significance: " << significance << "\n";
-        oss << "   Price: $" << estimatedPrice;
+        oss << "   Price: R" << estimatedPrice;
         
         return oss.str();
     }

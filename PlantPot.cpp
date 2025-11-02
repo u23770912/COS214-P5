@@ -35,20 +35,6 @@ void PlantPot::add(GreenhouseComponent* component) {
     std::cout << "Cannot add children to PlantPot (leaf node)" << std::endl;
 }
 
-void PlantPot::print() {
-    if (plantRef) {
-        // Show pot with current plant - include species name
-        std::cout << "🪴 " << getId() << " → " 
-                  << plantRef->getId() << " ["
-                  << plantRef->getProfile()->getSpeciesName()
-                  << " - " << plantRef->getCurrentStateName() 
-                  << ", " << plantRef->getSecondsInCurrentState() << "s]" << std::endl;
-    } else {
-        // Show empty pot
-        std::cout << "🪴 " << getId() << " [Empty]" << std::endl;
-    }
-}
-
 void PlantPot::print(const std::string& prefix, bool isLast) {
     std::cout << prefix << (isLast ? "└── " : "├── ") 
               << "PlantPot ID: " << id << ", Info: " << info;

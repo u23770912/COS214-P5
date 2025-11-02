@@ -10,7 +10,7 @@ PlantProductLeaf::~PlantProductLeaf() {
     // This leaf is just a temporary reference in the greenhouse structure
 }
 
-void PlantProductLeaf::print() {
+void PlantProductLeaf::print(const std::string& prefix, bool isLast) {
     if (!plantRef) {
         std::cout << "[NULL PLANT]";
         return;

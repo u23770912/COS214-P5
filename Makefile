@@ -6,7 +6,7 @@ LDFLAGS = `pkg-config --libs gtk+-3.0`
 # Find all .cpp files in the current directory and subdirectories
 SRCS := $(wildcard *.cpp)
 # Exclude test files with their own main() functions
-SRCS := $(filter-out CustomerOrderTest.cpp DemoMain.cpp main_option_a_backup.cpp, $(SRCS))
+SRCS := $(filter-out CustomerOrderTest.cpp DemoMain.cpp main_option_a_backup.cpp builder_Testing_main.cpp, $(SRCS))
 OBJS := $(SRCS:.cpp=.o)
 
 # Name of the final executable

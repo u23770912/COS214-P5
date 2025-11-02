@@ -222,7 +222,7 @@ void displayPlantCatalog() {
         cout << BOLD << std::setw(20) << std::left << name << RESET;
         cout << " │ 💧 " << std::setw(12) << water;
         cout << " │ ☀️  " << std::setw(15) << sun;
-        cout << " │ " << GREEN << "$25.99" << RESET << "\n";
+        cout << " │ " << GREEN << "R25.99" << RESET << "\n";
     }
     
     cout << "    " << string(66, '-') << "\n";
@@ -516,7 +516,7 @@ void checkoutOrder(Order*& currentOrder, Customer* customer, ConcreteOrderBuilde
     // Show order summary
     cout << "    " << CYAN << "Order Summary:\n" << RESET;
     cout << "    Items: " << currentOrder->getItemCount() << "\n";
-    cout << "    Total: " << GREEN << "$" << std::fixed << std::setprecision(2) 
+    cout << "    Total: " << GREEN << "R" << std::fixed << std::setprecision(2) 
          << currentOrder->getTotalAmount() << RESET << "\n\n";
     
     // Payment method selection
@@ -627,7 +627,7 @@ void checkoutOrder(Order*& currentOrder, Customer* customer, ConcreteOrderBuilde
         cout << "    Thank you for your purchase!\n";
         cout << "    Order ID: " << currentOrder->getOrderId() << "\n";
         cout << "    Payment Method: " << paymentType << "\n";
-        cout << "    Amount Paid: $" << std::fixed << std::setprecision(2) << totalAmount << "\n";
+        cout << "    Amount Paid: R" << std::fixed << std::setprecision(2) << totalAmount << "\n";
         cout << "    A confirmation has been sent to your email.\n";
     } else {
         cout << "\n" << RED << BOLD;

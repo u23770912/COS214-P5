@@ -43,32 +43,42 @@ void PlantGroup::add(GreenhouseComponent* item){
 //     std::cout << ")]";
 // }
 
-void PlantGroup::print() {
-    printRecursive("", true);  // start recursion
+void PlantGroup::print(const std::string& prefix = "", bool isLast = true) {
+    // Print the current group's name (e.g., "Greenhouse", "Summer")
+    std::cout << prefix << (isLast ? "└── " : "├── ") << name << std::endl; 
+
+    // Calculate the prefix for all children
+    std::string childPrefix = prefix + (isLast ? "    " : "│   "); 
+
+    // Iterate through all children
+    for (size_t i = 0; i < children.size(); ++i) {
+        bool childIsLast = (i == children.size() - 1);
+        
+        // CRITICAL STEP: Call the child's print() method with the new prefix and last flag.
+        // This ensures recursion continues down the tree.
+        children[i]->print(childPrefix, childIsLast); 
+    }
 }
 
-void PlantGroup::printRecursive(const std::string& prefix, bool isLast) {
-    std::cout << prefix;
-    if (!prefix.empty()) {
-        std::cout << (isLast ? "└── " : "├── ");
-    }
-    std::cout << name << std::endl;
+/*void PlantGroup::printRecursive(const std::string& prefix, bool isLast) {
+    std::cout << prefix << (isLast ? "└── " : "├── ") << name << std::endl;
 
+    std::string newPrefix = prefix + (isLast ? "    " : "│   ");
+
+   
     for (size_t i = 0; i < children.size(); ++i) {
-        bool lastChild = (i == children.size() - 1);
-        std::string newPrefix = prefix + (isLast ? "    " : "│   ");
+        bool childIsLast = (i == children.size() - 1);
         
-        // Try to see if the child is another group
+        // Since PlantGroup::print() calls printRecursive, we need the logic here
         PlantGroup* childGroup = dynamic_cast<PlantGroup*>(children[i]);
         if (childGroup) {
-            childGroup->printRecursive(newPrefix, lastChild);
+            
+            childGroup->printRecursive(newPrefix, childIsLast);
         } else {
-            // Just call the component’s own print method
-            std::cout << newPrefix << (lastChild ? "└── " : "├── ");
-            children[i]->print();
+            children[i]->print(newPrefix, childIsLast); // This will call the PlantPot::print()
         }
     }
-}
+}*/
 
 void PlantGroup::display() {
     print();

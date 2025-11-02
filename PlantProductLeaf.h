@@ -52,7 +52,7 @@ public:
     PlantProduct* getPlant() const { return plantRef; }
     
     // GreenhouseComponent interface implementation
-    void print() override;
+    void print(const std::string& prefix = "", bool isLast = true) override;
     void display() override;
     void add(GreenhouseComponent* item) override;
     void remove(GreenhouseComponent* item) override;
