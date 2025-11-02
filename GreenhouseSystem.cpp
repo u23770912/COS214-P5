@@ -1,4 +1,6 @@
 #include "GreenhouseSystem.h"
+#include "PlantPot.h"
+#include "PlantData.h"
 
 GreenhouseSystem::GreenhouseSystem(): root(NULL), currentCategory(NULL), lastSpeciesNode(NULL){
 
@@ -49,13 +51,26 @@ GreenhouseBuilder* GreenhouseSystem::addSpecies(std::string name){
     lastSpeciesNode = dynamic_cast<PlantGroup*>(species);
 
     currentCategory->add(species);
-    // currentCategory = species;
+    currentCategory = species;
 
     return this;
 }
 
 PlantGroup* GreenhouseSystem::getLastSpeciesNode() {
     return lastSpeciesNode;
+}
+
+GreenhouseBuilder *GreenhouseSystem::addPlant(PlantData *plant)
+{
+    if (!currentCategory)
+    {
+        std::cerr << "Error: Cannot add plant. No active group selected." << std::endl;
+        return this;
+    }
+    PlantPot* newPlant = new PlantPot(plant->getId(), plant->getInfo());
+    currentCategory->add(newPlant);
+
+    return this;
 }
 
 // void GreenhouseSystem::addPlant(std::string id, std::string info){

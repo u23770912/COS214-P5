@@ -8,6 +8,8 @@
 #include "PlantGroup.h"
 #include <map> 
 
+class PlantData;
+
 class GreenhouseSystem : public GreenhouseBuilder
 {
 
@@ -25,6 +27,7 @@ class GreenhouseSystem : public GreenhouseBuilder
         GreenhouseBuilder* addCategory(std::string name) override;
         GreenhouseBuilder* addType(std::string name) override;
         GreenhouseBuilder* addSpecies(std::string name) override;
+        GreenhouseBuilder* addPlant(PlantData* plant) override;
 
         // void addPlant(std::string id, std::string info) override;
         GreenhouseComponent* getGreenhouse() override;
