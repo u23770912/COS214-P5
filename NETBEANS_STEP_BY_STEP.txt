@@ -1,0 +1,146 @@
+╔══════════════════════════════════════════════════════════════════╗
+║           NETBEANS STEP-BY-STEP WALKTHROUGH                     ║
+╚══════════════════════════════════════════════════════════════════╝
+
+STEP 1: CREATE NEW PROJECT IN NETBEANS
+═══════════════════════════════════════════════════════════════════
+
+1. Open NetBeans IDE
+
+2. Click: File → New Project
+
+3. In the New Project window:
+   Categories: Choose JAVA WITH ANT  ← NOT Maven, NOT Gradle!
+   Projects: Choose Java Application
+   
+   [Why Ant? Simplest - no dependency management needed]
+
+4. Click Next
+
+5. Project Settings:
+   Project Name: GreenhouseGUI
+   Project Location: (default is fine)
+   ☑ Create Main Class (checked)
+   Main Class: greenhouse.MainGUI
+   
+6. Click Finish
+
+═══════════════════════════════════════════════════════════════════
+STEP 2: ADD YOUR API CLASS
+═══════════════════════════════════════════════════════════════════
+
+1. In Projects panel (left), you will see:
+   GreenhouseGUI
+   └── Source Packages
+       └── greenhouse
+           └── MainGUI.java
+
+2. Right-click on greenhouse package
+3. Click: New → Java Class
+4. Class Name: GreenhouseAPI
+5. Click Finish
+
+6. Copy content from:
+   NetBeansGUI/src/greenhouse/GreenhouseAPI.java
+   
+   HOW TO COPY:
+   - Open File Explorer (Windows Explorer)
+   - Navigate to: C:\Users\socce\Documents\COS214\Prac5\NetBeansGUI\src\greenhouse\
+   - Right-click GreenhouseAPI.java
+   - Open with: Notepad (or any text editor)
+   - Select All (Ctrl+A)
+   - Copy (Ctrl+C)
+   
+7. Paste into the NetBeans file, replacing everything
+   
+   IN NETBEANS:
+   - You should already have GreenhouseAPI.java open
+   - Select All the auto-generated code (Ctrl+A)
+   - Paste the copied content (Ctrl+V)
+   - This replaces the empty template with the real code
+   
+8. Save (Ctrl+S)
+
+═══════════════════════════════════════════════════════════════════
+STEP 3: UPDATE MAIN GUI
+═══════════════════════════════════════════════════════════════════
+
+1. Open: greenhouse → MainGUI.java
+2. Delete all auto-generated code
+3. Copy from: NetBeansGUI/src/greenhouse/MainGUI.java
+4. Paste, replacing everything
+5. Save (Ctrl+S)
+
+═══════════════════════════════════════════════════════════════════
+STEP 4: SET EXECUTABLE PATH
+═══════════════════════════════════════════════════════════════════
+
+The Java GUI needs to know WHERE your C++ greenhouse program is located.
+
+In MainGUI.java, around line 29, you'll see:
+   String exePath = "./greenhouse";
+
+This means "look for greenhouse in the current directory" - but NetBeans 
+runs from a different location, so it won't find it!
+
+WHAT TO CHANGE:
+
+✅ BEST OPTION - Run through WSL (since greenhouse is compiled for Linux):
+   String exePath = "wsl";
+   
+   Then find the constructor and change it to pass the full path as argument:
+   
+   OLD CODE (line 24-27):
+     ProcessBuilder pb = new ProcessBuilder(exePath);
+     pb.redirectErrorStream(true);
+     process = pb.start();
+   
+   NEW CODE:
+     ProcessBuilder pb = new ProcessBuilder(exePath, 
+         "/mnt/c/Users/socce/Documents/COS214/Prac5/greenhouse");
+     pb.redirectErrorStream(true);
+     process = pb.start();
+   
+   [This tells Java: "Run wsl, then run /mnt/c/.../greenhouse inside WSL"]
+
+Option 2 - Direct WSL command (simpler):
+   String exePath = "wsl";
+   
+   And in GreenhouseAPI.java constructor, change line 24 to:
+     ProcessBuilder pb = new ProcessBuilder("wsl", 
+         "/mnt/c/Users/socce/Documents/COS214/Prac5/greenhouse");
+   
+Option 3 - Windows Path with escaped backslashes:
+   String exePath = "C:\\\\Users\\\\socce\\\\Documents\\\\COS214\\\\Prac5\\\\greenhouse.exe";
+   
+   [Note: FOUR backslashes \\\\\\\\ in the document = TWO \\\\ in Java code]
+   
+⚠️ IMPORTANT: The backslash issue is tricky! Use Option 1 with forward slashes!
+
+HOW TO CHANGE IT:
+
+1. In NetBeans, make sure MainGUI.java is open
+2. Press Ctrl+F (Find)
+3. Search for: String exePath
+4. You'll see the line with "./greenhouse"
+5. Change "./greenhouse" to your full path (see options above)
+6. Make sure it's in quotes: "your/path/here"
+
+Save (Ctrl+S)!
+
+WHY THIS MATTERS:
+When you click "Run" in NetBeans, the Java program will execute this:
+  Process p = new ProcessBuilder(exePath).start();
+  
+It launches your C++ program and talks to it. If the path is wrong,
+you'll get "Failed to connect to greenhouse system" error.
+
+═══════════════════════════════════════════════════════════════════
+STEP 5: RUN
+═══════════════════════════════════════════════════════════════════
+
+1. Right-click MainGUI.java
+2. Run File (Shift+F6)
+3. GUI window opens showing your plants!
+
+═══════════════════════════════════════════════════════════════════

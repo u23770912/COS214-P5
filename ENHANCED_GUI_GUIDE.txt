@@ -1,0 +1,319 @@
+===============================================================================
+              ENHANCED GREENHOUSE MANAGEMENT SYSTEM - USER GUIDE
+===============================================================================
+
+OVERVIEW:
+---------
+The enhanced system now includes a full-featured management GUI with 5 tabs:
+1. Plant Monitor - View and manage all plants
+2. Worker Management - Add and track workers
+3. Customer Orders - Create orders with shopping cart
+4. Dashboard - View statistics and metrics
+5. Live Feed - Real-time activity log
+
+ARCHITECTURE:
+-------------
+- Terminal (Option 2): Runs full autonomous simulation
+  - Shows plant growth cycles
+  - Displays worker activities
+  - Processes orders automatically
+  - Visualizes greenhouse structure
+
+- GUI (NetBeans): Management interface
+  - Add new plants dynamically
+  - Hire workers
+  - Create customer orders
+  - Monitor system status
+  - View live activity feed
+
+SETUP INSTRUCTIONS:
+-------------------
+
+1. Compile the C++ backend:
+   cd /mnt/c/Users/socce/Documents/COS214/Prac5
+   make
+
+2. Open NetBeans project:
+   - Open NetBeans IDE
+   - File > Open Project
+   - Navigate to: C:\Users\socce\Documents\COS214\Prac5\NetBeansGUI
+   - Open the project
+
+3. Copy files to NetBeans (if needed):
+   - Copy GreenhouseAPI.java to src/greenhouse/
+   - Copy MainGUI.java to src/greenhouse/
+
+4. Verify the path in MainGUI.java (line ~27):
+   String exePath = "/mnt/c/Users/socce/Documents/COS214/Prac5/greenhouse";
+   (Should be correct already)
+
+5. Build and run from NetBeans:
+   - Right-click project > Build
+   - Right-click project > Run
+
+USING THE ENHANCED GUI:
+-----------------------
+
+TAB 1: PLANT MONITOR
+--------------------
+View all plants in the greenhouse with their current state.
+
+FEATURES:
+- Table showing: ID, Name, Type, State, Price
+- "Refresh" button - Update plant list
+- "Add Plant" button - Create new plants
+  * Opens dialog with fields: Species, Type, Pot Type, Price
+  * Example: Species=Rose, Type=Flower, Pot=Clay, Price=25.50
+- "Advance Lifecycle" button - Manually progress selected plant
+
+WORKFLOW:
+1. Click "Refresh" to load current plants
+2. Select a plant to see its details
+3. Click "Add Plant" to create new plants
+4. Click "Advance Lifecycle" to manually grow selected plant
+
+
+TAB 2: WORKER MANAGEMENT
+------------------------
+View and manage greenhouse workers.
+
+FEATURES:
+- Table showing: ID, Name, Role
+- "Refresh" button - Update worker list
+- "Add Worker" button - Hire new workers
+  * Opens dialog with fields: Name, Role
+  * Example: Name=John, Role=Gardener
+
+WORKFLOW:
+1. Click "Refresh" to see current workers
+2. Click "Add Worker" to hire new staff
+3. Workers appear in both GUI and terminal simulation
+
+
+TAB 3: CUSTOMER ORDERS
+----------------------
+Create orders using a shopping cart system.
+
+FEATURES:
+- Shopping cart list
+- "Add Selected Plant" - Add plant from Plant Monitor tab to cart
+- "Remove" - Remove item from cart
+- "Checkout" - Process the order
+
+WORKFLOW:
+1. Go to Plant Monitor tab
+2. Select a plant you want to order
+3. Switch to Customer Orders tab
+4. Click "Add Selected Plant"
+5. Repeat for multiple plants
+6. Click "Checkout" to process order
+7. Order total is calculated and confirmed
+
+
+TAB 4: DASHBOARD
+----------------
+View system statistics and metrics.
+
+FEATURES:
+- Total Plants count
+- Healthy Plants count
+- Total Orders count
+- Revenue (total sales)
+- "Refresh Stats" button
+
+WORKFLOW:
+1. Click "Refresh Stats" to update metrics
+2. View current system status
+3. Track revenue and order history
+
+
+TAB 5: LIVE FEED
+----------------
+Real-time activity log showing all system events.
+
+FEATURES:
+- Timestamped log entries
+- Shows all actions: plant creation, worker additions, orders
+- "Clear Feed" button to reset log
+
+EVENTS LOGGED:
+- System initialization
+- Plant loads/refreshes
+- Worker loads/refreshes
+- Plant additions
+- Worker additions
+- Cart operations
+- Order creation
+- Errors and warnings
+
+
+RUNNING BOTH SYSTEMS SIMULTANEOUSLY:
+------------------------------------
+
+TERMINAL SIMULATION (Option 2):
+1. Open WSL terminal
+2. cd /mnt/c/Users/socce/Documents/COS214/Prac5
+3. ./greenhouse
+4. Select option 2 (Run lifecycle simulation)
+5. Watch autonomous growth and worker activities
+
+GUI MANAGEMENT INTERFACE:
+1. Run from NetBeans (as described above)
+2. GUI connects to separate C++ backend instance
+3. Both systems share data through InventoryManager
+
+BENEFITS:
+- Terminal shows live simulation with ASCII art
+- GUI provides management controls
+- Both can run independently
+- Changes in GUI affect terminal's inventory
+- Both systems access same plant/worker data
+
+
+TESTING THE COMPLETE SYSTEM:
+-----------------------------
+
+1. START TERMINAL SIMULATION:
+   ./greenhouse
+   Select option 2
+   Observe autonomous plant growth cycles
+
+2. START GUI:
+   Run from NetBeans
+   See initial plants loaded
+
+3. TEST PLANT ADDITION:
+   - Click "Add Plant" in GUI
+   - Fill: Species=Tulip, Type=Flower, Pot=Plastic, Price=15.00
+   - Click OK
+   - Verify plant appears in Plant Monitor table
+   - Check terminal to see if plant added to inventory
+
+4. TEST WORKER MANAGEMENT:
+   - Click Worker Management tab
+   - Click "Add Worker"
+   - Fill: Name=Sarah, Role=Florist
+   - Click OK
+   - Verify worker appears in table
+
+5. TEST ORDER CREATION:
+   - Go to Plant Monitor tab
+   - Select a plant
+   - Go to Customer Orders tab
+   - Click "Add Selected Plant"
+   - Add more plants if desired
+   - Click "Checkout"
+   - Verify order confirmation shows total price
+   - Check Dashboard to see updated revenue
+
+6. TEST LIVE FEED:
+   - Go to Live Feed tab
+   - Perform various actions
+   - Verify all actions are logged with timestamps
+
+7. TEST LIFECYCLE ADVANCEMENT:
+   - Select plant in Plant Monitor
+   - Click "Advance Lifecycle"
+   - Refresh to see new state
+   - Check Live Feed for confirmation
+
+
+TROUBLESHOOTING:
+----------------
+
+PROBLEM: GUI won't connect
+SOLUTION: 
+- Verify greenhouse binary is compiled: make
+- Check path in MainGUI.java line ~27
+- Ensure using forward slashes in path
+- Try running ./greenhouse manually first
+
+PROBLEM: "Not a valid Win32 application"
+SOLUTION:
+- The GUI automatically runs through WSL
+- Make sure WSL is installed and working
+- Path must start with /mnt/c/...
+
+PROBLEM: ADD_PLANT fails
+SOLUTION:
+- Ensure all fields are filled in dialog
+- Price must be valid number (use dot for decimal)
+- Species/Type should be text only
+
+PROBLEM: Orders not processing
+SOLUTION:
+- Make sure cart has items
+- Plants must be in "ReadyForSale" state
+- Check Live Feed for error messages
+
+PROBLEM: Workers not showing
+SOLUTION:
+- Click "Refresh" after adding workers
+- Workers are stored in StaffManager
+- Check if worker was actually created in C++ backend
+
+
+COMMAND REFERENCE (C++ Backend):
+--------------------------------
+The GUI communicates with C++ using these commands:
+
+GET_PLANTS - Retrieve all plants
+GET_STATS - Get system statistics  
+ADVANCE <id> - Advance plant lifecycle
+ADD_PLANT <species> <type> <pot> <price> - Create new plant
+GET_WORKERS - Retrieve all workers
+ADD_WORKER <name> <role> - Hire new worker
+CREATE_ORDER <id1> <id2> ... - Process order with plant IDs
+EXIT - Close connection
+
+
+TIPS FOR BEST EXPERIENCE:
+--------------------------
+1. Keep both terminal and GUI running for full visualization
+2. Use GUI for management tasks (adding, ordering)
+3. Use terminal to watch autonomous simulation
+4. Check Live Feed to debug any issues
+5. Refresh tabs regularly to see latest data
+6. Use Dashboard to track system performance
+
+
+DEMO WORKFLOW:
+--------------
+1. Start terminal simulation (option 2)
+2. Start GUI from NetBeans
+3. Add 3 new plants with different species
+4. Add 2 workers
+5. Create an order with 2 plants
+6. Watch terminal show plant growth
+7. Check Dashboard for updated stats
+8. Review Live Feed for complete activity log
+
+
+FEATURES IMPLEMENTED:
+---------------------
+✅ Add Plant button - Create new plants from GUI
+✅ Worker Management - View and hire workers
+✅ Customer Orders - Shopping cart and checkout
+✅ Live Feed - Real-time activity logging
+✅ Dashboard Statistics - System metrics
+✅ Lifecycle Management - Manual plant progression
+✅ WSL Integration - Automatic path detection
+✅ Error Handling - Proper error messages
+
+
+ARCHITECTURE BENEFITS:
+----------------------
+- Separation of concerns: Simulation vs Management
+- Independent operation: Both systems can run alone
+- Shared data: InventoryManager links both systems
+- Flexibility: Use terminal OR GUI or BOTH
+- Scalability: Easy to add more GUI features
+- Maintainability: Clean API boundary
+
+
+For technical details, see:
+- NETBEANS_STEP_BY_STEP.txt - NetBeans setup guide
+- OPTION_A_USAGE.txt - Architecture documentation
+- Source files in NetBeansGUI/src/greenhouse/
+
+===============================================================================

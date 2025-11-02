@@ -82,7 +82,6 @@
 #include "GreenhouseComponent.h"
 #include "PlantPot.h"
 #include "GreenhouseGUI.h"
-#include "NetworkServer.h"
 
 // Customer Order Infrastructure
 #include "Customer.h"
@@ -113,9 +112,6 @@
 // Forward declarations
 struct StaffContext;
 void runGreenhouseSimulation(StaffContext& staff);
-void runIntegratedSimulation(StaffContext& staff, GreenhouseManager* ghManager,
-                            std::vector<PlantSpeciesProfile*>& profiles,
-                            std::vector<PlantProduct*>& plants);
 void runCustomerOrderTest(StaffContext& staff);
 
 /**
@@ -1478,271 +1474,6 @@ void cleanup(StaffContext& ctx, std::vector<PlantSpeciesProfile*>& profiles) {
  * 
  * @return 0 on successful execution
  */
-
-/**
- * @brief Run integrated simulation with real-time GUI support (Option B)
- * 
- * This function runs the plant lifecycle simulation while simultaneously
- * listening for GUI commands on a network socket. The GUI can:
- * - Add plants in real-time
- * - Add workers in real-time
- * - Query current state
- * - Advance specific plants
- * 
- * All changes are immediately visible in both the terminal display and GUI.
- */
-void runIntegratedSimulation(StaffContext& staff, GreenhouseManager* ghManager,
-                            std::vector<PlantSpeciesProfile*>& profiles,
-                            std::vector<PlantProduct*>& plants) {
-    
-    // Set greenhouse manager for MoveToSalesFloorCommand
-    MoveToSalesFloorCommand::setGreenhouseManager(ghManager);
-    
-    // Start network server for GUI communication
-    NetworkServer server;
-    const int GUI_PORT = 8765;
-    
-    if (!server.start(GUI_PORT)) {
-        TerminalUI::printError("Failed to start network server on port " + std::to_string(GUI_PORT));
-        TerminalUI::printInfo("Continuing with terminal-only mode...");
-    } else {
-        TerminalUI::printSuccess("GUI server started on port " + std::to_string(GUI_PORT));
-        TerminalUI::printInfo("Connect GUI to localhost:" + std::to_string(GUI_PORT));
-    }
-    
-    // Simulation parameters
-    const int maxSimulationSeconds = 300; // 5 minutes
-    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-    std::map<std::string, std::string> stateHistory;
-    int loopCounter = 0;
-    
-    TerminalUI::printInfo("Starting integrated simulation with GUI support...");
-    std::cout << "\n" << ANSI_CYAN << "Press Ctrl+C to stop simulation" << ANSI_RESET << "\n\n";
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-    
-    while (true) {
-        // Try to accept GUI client if not connected (non-blocking)
-        if (!server.isClientConnected()) {
-            server.acceptClient();
-        }
-        
-        // Check for GUI commands (non-blocking)
-        std::string command;
-        if (server.isClientConnected() && server.readCommand(command)) {
-            std::istringstream iss(command);
-            std::string cmd;
-            iss >> cmd;
-            
-            if (cmd == "GET_PLANTS") {
-                auto allPlants = InventoryManager::getInstance().getGreenHouseInventory();
-                std::ostringstream response;
-                response << "PLANTS " << allPlants.size() << "\n";
-                for (size_t i = 0; i < allPlants.size(); i++) {
-                    PlantProduct* plant = allPlants[i];
-                    response << i << "|" 
-                            << plant->getId() << "|"
-                            << plant->getProfile()->getSpeciesName() << "|"
-                            << plant->getCurrentStateName() << "|"
-                            << "25.99\n";
-                }
-                response << "END";
-                server.sendResponse(response.str());
-                
-            } else if (cmd == "GET_STATS") {
-                auto allPlants = InventoryManager::getInstance().getGreenHouseInventory();
-                int total = allPlants.size();
-                int healthy = 0;
-                for (auto* plant : allPlants) {
-                    std::string state = plant->getCurrentStateName();
-                    if (state != "Withering") healthy++;
-                }
-                std::ostringstream response;
-                response << "STATS\n";
-                response << "total_plants|" << total << "\n";
-                response << "healthy_plants|" << healthy << "\n";
-                response << "orders|0\n";
-                response << "revenue|0.00\n";
-                response << "END";
-                server.sendResponse(response.str());
-                
-            } else if (cmd == "ADD_PLANT") {
-                std::string species, type, pot;
-                double price;
-                iss >> species >> type >> pot >> price;
-                
-                // Create appropriate profile based on type with distinct durations
-                PlantSpeciesProfile* profile = NULL;
-                if (type == "Flower") {
-                    profile = new FlowerProfile(species, "200ml", "Partial Sun", "Loamy");
-                    std::cout << "[ADD_PLANT] Created Flower with 20s state duration" << std::endl;
-                } else if (type == "Tree") {
-                    profile = new TreeProfile(species, "300ml", "Full Sun", "Well-drained");
-                    std::cout << "[ADD_PLANT] Created Tree with 30s state duration" << std::endl;
-                } else if (type == "Succulent") {
-                    profile = new SucculentProfile(species, "100ml", "Bright Indirect", "Sandy");
-                    std::cout << "[ADD_PLANT] Created Succulent with 25s state duration" << std::endl;
-                } else {
-                    profile = new FlowerProfile(species, "200ml", "Partial Sun", "Loamy");
-                    std::cout << "[ADD_PLANT] Created default Flower profile" << std::endl;
-                }
-                
-                std::string plantId = "Plant_" + std::to_string(plants.size());
-                PlantProduct* newPlant = new PlantProduct(plantId, profile);
-                
-                // CRITICAL: Attach StaffManager as observer so care commands are generated
-                newPlant->setObserver(staff.manager);
-                
-                InventoryManager::getInstance().addToGreenhouse(newPlant);
-                ghManager->addPlantToStructure(newPlant);
-                profiles.push_back(profile);
-                plants.push_back(newPlant);
-                
-                std::cout << "[ADD_PLANT] " << plantId << " (" << species << " - " << type << ") created successfully" << std::endl;
-                server.sendResponse("OK " + plantId + " created successfully");
-                
-            } else if (cmd == "ADD_WORKER") {
-                std::string name, role;
-                iss >> name >> role;
-                
-                StaffChainHandler* worker = NULL;
-                std::string teamRole;
-                if (role == "Gardener" || role == "gardener") {
-                    worker = new Gardener();
-                    teamRole = "Greenhouse"; // Must match getRequiredRole() in care commands
-                } else {
-                    worker = new Cashier();
-                    teamRole = "Sales";
-                }
-                
-                worker->setManager(staff.dispatcher);
-                
-                // Link new worker into the chain
-                if (!staff.handlers.empty()) {
-                    // Find last worker of same type and link
-                    for (int i = staff.handlers.size() - 1; i >= 0; i--) {
-                        bool sameType = (teamRole == "Greenhouse" && dynamic_cast<Gardener*>(staff.handlers[i])) ||
-                                       (teamRole == "Sales" && dynamic_cast<Cashier*>(staff.handlers[i]));
-                        if (sameType) {
-                            staff.handlers[i]->setNext(worker);
-                            break;
-                        }
-                    }
-                }
-                
-                staff.handlers.push_back(worker);
-                staff.roster.push_back(std::make_pair(name, worker));
-                
-                // Register first worker of each team with dispatcher
-                bool isFirstOfTeam = true;
-                for (size_t i = 0; i < staff.handlers.size() - 1; i++) {
-                    bool sameType = (teamRole == "Greenhouse" && dynamic_cast<Gardener*>(staff.handlers[i])) ||
-                                   (teamRole == "Sales" && dynamic_cast<Cashier*>(staff.handlers[i]));
-                    if (sameType) {
-                        isFirstOfTeam = false;
-                        break;
-                    }
-                }
-                if (isFirstOfTeam) {
-                    staff.dispatcher->registerTeam(teamRole, worker);
-                    std::cout << "[INTEGRATED] Registered first " << teamRole << " team worker: " << name << std::endl;
-                } else {
-                    std::cout << "[INTEGRATED] Added " << teamRole << " worker to existing chain: " << name << std::endl;
-                }
-                
-                server.sendResponse("OK Worker " + name + " hired as " + role);
-                
-            } else if (cmd == "GET_WORKERS") {
-                std::ostringstream response;
-                response << "WORKERS " << staff.roster.size() << "\n";
-                for (size_t i = 0; i < staff.roster.size(); i++) {
-                    std::string workerName = staff.roster[i].first;
-                    StaffChainHandler* handler = staff.roster[i].second;
-                    
-                    std::string role = "Worker";
-                    if (dynamic_cast<Gardener*>(handler)) {
-                        role = "Gardener";
-                    } else if (dynamic_cast<Cashier*>(handler)) {
-                        role = "Cashier";
-                    }
-                    
-                    response << i << "|" << workerName << "|" << role << "\n";
-                }
-                response << "END";
-                server.sendResponse(response.str());
-                
-            } else if (cmd == "ADVANCE") {
-                int plantId;
-                iss >> plantId;
-                auto allPlants = InventoryManager::getInstance().getGreenHouseInventory();
-                if (plantId >= 0 && plantId < (int)allPlants.size()) {
-                    allPlants[plantId]->advanceLifecycle();
-                    server.sendResponse("OK Lifecycle advanced for plant " + std::to_string(plantId));
-                } else {
-                    server.sendResponse("ERROR Invalid plant ID");
-                }
-                
-            } else if (cmd == "PRINT_STRUCTURE") {
-                std::cout << "\n[GUI REQUEST] Printing greenhouse structure..." << std::endl;
-                ghManager->displayGreenhouseStructure();
-                server.sendResponse("OK Structure printed to terminal");
-                
-            } else if (cmd == "EXIT") {
-                server.sendResponse("OK Goodbye");
-                break;
-            }
-        }
-        
-        // Advance all plant lifecycles
-        auto allPlants = InventoryManager::getInstance().getGreenHouseInventory();
-        for (size_t i = 0; i < allPlants.size(); ++i) {
-            allPlants[i]->advanceLifecycle();
-        }
-        
-        // Process staff command queue
-        if (loopCounter % 2 == 0) {
-            staff.dispatcher->processUnhandledQueue();
-        }
-        
-        // Calculate elapsed time
-        std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-        int elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - start).count();
-        
-        // Update state history
-        for (size_t i = 0; i < allPlants.size(); ++i) {
-            std::string plantId = allPlants[i]->getId();
-            std::string currentState = allPlants[i]->getCurrentStateName();
-            if (stateHistory.find(plantId) == stateHistory.end()) {
-                stateHistory[plantId] = currentState;
-            }
-        }
-        
-        // Display live status
-        TerminalUI::clearScreen();
-        TerminalUI::printHeader("GREENHOUSE - INTEGRATED MODE (Option B)");
-        TerminalUI::printSection("SIMULATION CLOCK");
-        TerminalUI::printInfo("Elapsed: " + std::to_string(elapsed) + "s | " +
-                            "Plants: " + std::to_string(allPlants.size()) + " | " +
-                            "Workers: " + std::to_string(staff.roster.size()));
-        TerminalUI::printInfo("GUI Server: " + std::string(server.isClientConnected() ? "CONNECTED" : "Waiting..."));
-        
-        displayStateTransitions(allPlants, stateHistory);
-        renderPlantVisualizer(allPlants);
-        displayStaffStatus(staff.roster);
-        
-        // Check termination
-        if (elapsed >= maxSimulationSeconds) {
-            TerminalUI::printWarning("Simulation time limit reached");
-            break;
-        }
-        
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        loopCounter++;
-    }
-    
-    server.stop();
-    TerminalUI::printSuccess("Integrated simulation completed");
-}
-
 int main() {
     // ============================================================================
     // Launch Mode Selection
@@ -1754,11 +1485,10 @@ int main() {
     std::cout << "\n";
     std::cout << "Select launch mode:\n";
     std::cout << "  1. Desktop GUI Mode (GTK+)\n";
-    std::cout << "  2. Integrated Mode - Terminal + GUI (Option B - RECOMMENDED)\n";
-    std::cout << "  3. Command Mode (for NetBeans GUI - Option A)\n";
-    std::cout << "  4. Console Simulation Mode (original)\n";
+    std::cout << "  2. Console Simulation Mode (original)\n";
+    std::cout << "  3. Command Mode (for NetBeans GUI integration)\n";
     std::cout << "\n";
-    std::cout << "Enter choice (1-4): ";
+    std::cout << "Enter choice (1-3): ";
     
     int modeChoice = 0;
     std::cin >> modeChoice;
@@ -1799,51 +1529,6 @@ int main() {
         cleanup(staff, profiles);
         
         return 0;
-        
-    } else if (modeChoice == 2) {
-        // ============================================================================
-        // OPTION B - INTEGRATED MODE (RECOMMENDED)
-        // Terminal simulation + Real-time GUI via network socket
-        // ============================================================================
-        
-        std::cout << "\n";
-        std::cout << "╔════════════════════════════════════════════════════════════╗\n";
-        std::cout << "║              INTEGRATED MODE - OPTION B                    ║\n";
-        std::cout << "╠════════════════════════════════════════════════════════════╣\n";
-        std::cout << "║  This mode runs the terminal simulation while listening    ║\n";
-        std::cout << "║  for GUI commands on a network socket (port 8765).         ║\n";
-        std::cout << "║                                                            ║\n";
-        std::cout << "║  Features:                                                 ║\n";
-        std::cout << "║  ✓ Real-time terminal visualization                        ║\n";
-        std::cout << "║  ✓ GUI can connect and add plants/workers                  ║\n";
-        std::cout << "║  ✓ Changes instantly visible in both terminal and GUI      ║\n";
-        std::cout << "║  ✓ Single unified state                                    ║\n";
-        std::cout << "╚════════════════════════════════════════════════════════════╝\n";
-        std::cout << "\n";
-        
-        // Initialize system
-        registerCareCommands();
-        StaffContext staff = createStaffContext();
-        
-        GreenhouseManager* ghManager = new GreenhouseManager();
-        ghManager->buildGreenhouseStructure();
-        
-        // START EMPTY - user adds everything via GUI
-        std::vector<PlantSpeciesProfile*> profiles;
-        std::vector<PlantProduct*> plants;
-        
-        std::cout << "Press Enter to start integrated simulation...";
-        std::cin.get();
-        
-        // Run integrated simulation
-        runIntegratedSimulation(staff, ghManager, profiles, plants);
-        
-        // Cleanup
-        delete ghManager;
-        cleanup(staff, profiles);
-        
-        return 0;
-        
     } else if (modeChoice == 3) {
         // ============================================================================
         // COMMAND MODE - For NetBeans GUI Integration

@@ -1,0 +1,86 @@
+
+Instructions for running Option A:
+
+═══════════════════════════════════════════════════════════════════
+OPTION A: TERMINAL + GUI SPLIT APPROACH
+═══════════════════════════════════════════════════════════════════
+
+HOW TO USE:
+-----------
+
+1. TERMINAL WINDOW - Start the Simulation
+   Open WSL Terminal:
+   $ cd /mnt/c/Users/socce/Documents/COS214/Prac5
+   $ ./greenhouse
+   > Select: 2 (Console Simulation Mode)
+   
+   This runs:
+   ✓ Autonomous plant lifecycle (seeds → planted → growing → blooming)
+   ✓ Worker tasks (watering, pruning, fertilizing) - VISIBLE
+   ✓ State transitions with timers
+   ✓ Beautiful console visualization
+   
+   LEAVE THIS RUNNING while you use the GUI!
+
+2. NETBEANS GUI - Management Controls
+   In NetBeans:
+   > Run MainGUI.java (Shift+F6)
+   
+   This provides:
+   ✓ View all plants and their states
+   ✓ View statistics
+   ✓ Place customer orders
+   ✓ View available products
+   
+   The GUI queries the C++ backend for current data.
+
+═══════════════════════════════════════════════════════════════════
+WHAT YOU SEE:
+═══════════════════════════════════════════════════════════════════
+
+TERMINAL WINDOW:
+  [STATE] Plant entered Growing state (30 seconds)
+  [CARE] Watering strategy applied: Drip Irrigation
+  [CARE] Pruning strategy applied: Standard Pruning
+  [STATE] Plant transitioned to Blooming
+  ... autonomous simulation continues ...
+
+GUI WINDOW:
+  Tab 1: Plant Monitor
+    - Table of all plants
+    - Click refresh to see latest states
+    - Select plant → Advance lifecycle manually
+  
+  Tab 2: Dashboard
+    - Total plants: 8
+    - Healthy plants: 3
+    - Orders: 0
+    - Revenue: $0.00
+
+BOTH work with the SAME data - they share the InventoryManager!
+
+═══════════════════════════════════════════════════════════════════
+TO MAKE IT MORE USEFUL - NEXT STEPS:
+═══════════════════════════════════════════════════════════════════
+
+I can add to the GUI:
+
+1. ADD PLANT Dialog
+   - Button: "Add New Plant"
+   - Form: Species, Type, Pot material, Price
+   - Sends: ADD_PLANT command to C++
+   - Plant appears in terminal simulation!
+
+2. MANAGER CONTROLS
+   - Start/Stop simulation remotely
+   - Add workers
+   - View worker tasks
+
+3. CUSTOMER ORDERS Enhanced
+   - Browse blooming plants
+   - Shopping cart
+   - Checkout process
+   - Order confirmation
+
+Would you like me to add these features now?
+Or is the current split (Terminal=simulation, GUI=viewing) enough?

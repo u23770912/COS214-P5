@@ -1,0 +1,162 @@
+╔══════════════════════════════════════════════════════════════════╗
+║     HYBRID ARCHITECTURE: Terminal Simulation + GUI Management   ║
+╚══════════════════════════════════════════════════════════════════╝
+
+CURRENT ISSUE:
+═════════════
+The GUI is too simple - it only shows static data. The real simulation
+with autonomous plant growth, worker tasks, and visualization happens
+in the console mode, but you want GUI controls!
+
+SOLUTION: HYBRID APPROACH
+══════════════════════════════════════════════════════════════════
+
+Run TWO things side-by-side:
+
+1. TERMINAL WINDOW (Console Mode - Option 2)
+   ├── Autonomous plant lifecycle (planted → growing → blooming)
+   ├── Worker task visualization (watering, pruning, fertilizing)
+   ├── Real-time state updates
+   ├── Beautiful console graphics
+   └── THIS ALREADY WORKS! ✅
+
+2. GUI WINDOW (NetBeans)
+   ├── Control Panel - Start/Stop simulation
+   ├── Add new plants (species, pot type, location)
+   ├── Add new workers (gardeners, cashiers)
+   ├── Customer orders interface
+   ├── View current plant inventory
+   └── Management dashboard
+
+HOW IT WORKS:
+═════════════
+
+OPTION A: TWO SEPARATE PROGRAMS (EASIEST)
+------------------------------------------
+Run them independently:
+
+Terminal 1: Console simulation runs autonomously
+  $ ./greenhouse
+  > Select: 2 (Console mode)
+  > Watch plants grow, workers care for them
+
+Window 2: NetBeans GUI for management
+  > Add plants → they appear in terminal
+  > Place orders → terminal processes them
+  > View statistics
+
+They communicate through:
+  - Shared inventory file (plants.dat)
+  - Shared orders file (orders.dat)
+  - OR simple socket communication
+
+
+OPTION B: INTEGRATED - GUI LAUNCHES TERMINAL (BETTER)
+------------------------------------------------------
+GUI has "Start Simulation" button that:
+  1. Opens terminal window
+  2. Runs: wsl gnome-terminal -- ./greenhouse
+  3. Terminal shows live simulation
+  4. GUI shows management controls
+  5. They talk via commands/files
+
+
+OPTION C: GUI WITH EMBEDDED CONSOLE (ADVANCED)
+-----------------------------------------------
+NetBeans GUI has:
+  - JTextArea showing console output
+  - Buttons for management
+  - Live feed from C++ terminal output
+  - Best of both worlds in one window!
+
+═══════════════════════════════════════════════════════════════════
+RECOMMENDED: OPTION B - INTEGRATED LAUNCH
+═══════════════════════════════════════════════════════════════════
+
+Let me create this for you:
+
+GUI WILL HAVE:
+1. Manager Dashboard Tab
+   - Add Plant button → Opens dialog (species, pot, price)
+   - Add Worker button → Opens dialog (name, role)
+   - Start/Stop Simulation buttons
+   - Current inventory list
+
+2. Simulation View Tab
+   - Embedded console output OR
+   - Button to "Open Simulation Terminal"
+   - Shows plant lifecycle progress
+
+3. Orders Tab
+   - Customer can browse available plants
+   - Add to cart
+   - Checkout (creates order)
+   - View order history
+
+4. Statistics Tab
+   - Total plants by state
+   - Worker productivity
+   - Revenue
+   - Charts/graphs
+
+THE TERMINAL (runs when you click "Start Simulation"):
+- Shows the full console simulation
+- Autonomous plant growth
+- Worker task visualization
+- Real-time updates
+- All your existing beautiful output!
+
+═══════════════════════════════════════════════════════════════════
+WHAT NEEDS TO BE ADDED TO C++:
+═══════════════════════════════════════════════════════════════════
+
+New commands for Command Mode (option 3):
+
+ADD_PLANT <species> <type> <pot> <price>
+  - Creates new plant
+  - Adds to inventory
+  - Returns: OK <plantId> or ERROR
+
+ADD_WORKER <name> <role>
+  - Hires new worker
+  - Returns: OK <workerId> or ERROR
+
+START_AUTONOMOUS
+  - Starts the simulation loop
+  - Plants grow autonomously
+  - Workers perform tasks
+  - Continues until STOP command
+
+STOP_AUTONOMOUS
+  - Pauses the simulation
+
+CREATE_ORDER <plantId1,plantId2,...>
+  - Places customer order
+  - Returns: OK <orderId> <total> or ERROR
+
+GET_WORKER_STATS
+  - Returns worker productivity data
+
+═══════════════════════════════════════════════════════════════════
+WHICH APPROACH DO YOU PREFER?
+═══════════════════════════════════════════════════════════════════
+
+A) Keep it simple - Run terminal and GUI separately
+   - Terminal: ./greenhouse (option 2) for simulation
+   - GUI: Management and viewing only
+   - PRO: Easy, works now
+   - CON: Two separate programs
+
+B) Integrated - GUI launches terminal window
+   - One "Start" button in GUI
+   - Opens terminal for simulation
+   - GUI controls management
+   - PRO: Professional, integrated
+   - CON: Slightly more complex
+
+C) Embedded - Console output inside GUI window
+   - Everything in one window
+   - PRO: Most polished
+   - CON: Most work
+
+I recommend B! Shall I implement it?

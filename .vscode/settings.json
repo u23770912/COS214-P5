@@ -50,6 +50,8 @@
                 "span": "cpp",
                 "chrono": "cpp",
                 "thread": "cpp",
-                "climits": "cpp"
+                "climits": "cpp",
+                "cfloat": "cpp",
+                "cstring": "cpp"
         }
 }

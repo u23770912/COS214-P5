@@ -14,6 +14,7 @@ class GreenhouseSystem : public GreenhouseBuilder
     private: 
         GreenhouseComponent* root;
         GreenhouseComponent* currentCategory;
+        PlantGroup* lastSpeciesNode;
         // std::map<std::string, PlantGroup*> categories;
         // std::map<std::string, PlantGroup*> types;
 
@@ -27,6 +28,7 @@ class GreenhouseSystem : public GreenhouseBuilder
 
         // void addPlant(std::string id, std::string info) override;
         GreenhouseComponent* getGreenhouse() override;
+        PlantGroup* getLastSpeciesNode();
 };
 
 

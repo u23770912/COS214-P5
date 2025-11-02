@@ -1,0 +1,72 @@
+===============================================================================
+                   OPTION B - QUICK REFERENCE CARD
+===============================================================================
+
+FILES CHANGED:
+==============
+✓ GreenhouseAPI.java  - Uses Socket (not Process)
+✓ MainGUI.java        - Connects to localhost:8765
+
+STARTUP SEQUENCE:
+=================
+1. ./greenhouse           → Start C++ server
+2. Select: 2              → Integrated mode
+3. Press Enter            → Start simulation
+4. Run NetBeans GUI       → Connects automatically
+5. Add plants/workers     → See in both instantly!
+
+WHAT YOU'LL SEE:
+================
+C++ Terminal:
+  "Server started on port 8765"
+  "GUI Server: CONNECTED"
+  Real-time plant visualization
+
+Java GUI:
+  "Connected to greenhouse server"
+  5 tabs with dropdowns
+  Add plants/workers instantly
+
+KEY CHANGES:
+============
+OLD: api = new GreenhouseAPI("/path/to/greenhouse");
+NEW: api = new GreenhouseAPI("localhost", 8765);
+
+OLD: Launches separate C++ process
+NEW: Connects to running server
+
+BENEFITS:
+=========
+✓ Real-time synchronization
+✓ Single unified state
+✓ Terminal and GUI always match
+✓ Professional architecture
+
+TESTING:
+========
+1. Start C++ server (option 2)
+2. Start GUI
+3. Add plant → appears in terminal ✓
+4. Add worker → appears in terminal ✓
+5. Wait → plants grow automatically ✓
+6. Refresh GUI → see updated states ✓
+
+TROUBLESHOOTING:
+================
+Connection refused?
+  → Start C++ server FIRST
+
+Plants not syncing?
+  → Check terminal shows "CONNECTED"
+
+Port in use?
+  → Kill old process: pkill greenhouse
+
+BUILD FAILED?
+  → Clean and Build in NetBeans
+
+THAT'S IT!
+==========
+Option B is ready to use with real-time synchronization! 🎉
+
+===============================================================================
