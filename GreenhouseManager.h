@@ -32,6 +32,7 @@ private:
     
     // Track all plant pots for easy removal
     std::map<std::string, PlantPot*> plantPots;  // plantID -> pot
+    std::map<std::string, PlantGroup*> plantPotParents;  // plantID -> parent group
     
 public:
     GreenhouseManager();

@@ -52,6 +52,17 @@
                 "thread": "cpp",
                 "climits": "cpp",
                 "cfloat": "cpp",
-                "cstring": "cpp"
+                "cstring": "cpp",
+                "charconv": "cpp",
+                "condition_variable": "cpp",
+                "set": "cpp",
+                "optional": "cpp",
+                "ratio": "cpp",
+                "format": "cpp",
+                "mutex": "cpp",
+                "semaphore": "cpp",
+                "stop_token": "cpp",
+                "cinttypes": "cpp",
+                "variant": "cpp"
         }
 }

@@ -3,6 +3,7 @@
 #include "Pot.h"
 #include <algorithm>
 #include <iostream>
+#include <set>
 
 // Private constructor
 InventoryManager::InventoryManager() : plantsInStock(0)
@@ -22,25 +23,28 @@ void InventoryManager::cleanup()
 {
     std::cout << "Cleaning up InventoryManager resources..." << std::endl;
 
-    // Clean up greenhouse plants
-    for (PlantProduct *plant : greenHouseInventory)
-    {
+    // Use a set to track unique plant pointers (avoid double deletion)
+    std::set<PlantProduct*> allPlants;
+    
+    // Collect all unique plant pointers
+    for (PlantProduct *plant : greenHouseInventory) {
+        if (plant) allPlants.insert(plant);
+    }
+    for (PlantProduct *plant : readyForSalePlants) {
+        if (plant) allPlants.insert(plant);
+    }
+    for (PlantProduct *plant : soldPlants) {
+        if (plant) allPlants.insert(plant);
+    }
+    
+    // Delete each plant exactly once
+    for (PlantProduct *plant : allPlants) {
         delete plant;
     }
+    
+    // Clear all vectors
     greenHouseInventory.clear();
-
-    // Clean up plants ready for sale
-    for (PlantProduct *plant : readyForSalePlants)
-    {
-        delete plant;
-    }
     readyForSalePlants.clear();
-
-    // Clean up sold plants
-    for (PlantProduct *plant : soldPlants)
-    {
-        delete plant;
-    }
     soldPlants.clear();
 
     // Clean up pots

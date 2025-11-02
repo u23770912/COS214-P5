@@ -109,8 +109,9 @@ bool GreenhouseManager::addPlantToStructure(PlantProduct* plant) {
     // Add pot to species node
     speciesNode->add(pot);
     
-    // Track the pot for later removal
+    // Track the pot and its parent for later removal
     plantPots[plant->getId()] = pot;
+    plantPotParents[plant->getId()] = speciesNode;
     
     return true;
 }
@@ -121,16 +122,22 @@ bool GreenhouseManager::removePlantFromStructure(const std::string& plantId) {
     }
     
     PlantPot* pot = plantPots[plantId];
+    PlantGroup* parent = plantPotParents[plantId];
     
     // Remove plant reference from pot (aggregation - doesn't delete PlantProduct)
     pot->removePlant();
     
-    // Note: Removing pot from parent requires parent reference
-    // For now, we'll just delete the pot and remove from tracking
-    // The parent PlantGroup should handle cleanup
+    // Remove pot from parent group WITHOUT deleting it
+    if (parent) {
+        parent->removeWithoutDelete(pot);
+    }
     
+    // Now we can safely delete the pot
     delete pot;
+    
+    // Remove from tracking maps
     plantPots.erase(plantId);
+    plantPotParents.erase(plantId);
     
     return true;
 }
