@@ -5,11 +5,17 @@
 #include <string>
 
 class PlantProduct;
+class GreenhouseManager;
 
 class MoveToSalesFloorCommand : public Command {
+    private:
+        static GreenhouseManager* greenhouseManager;
+        
     public:
         MoveToSalesFloorCommand();
         ~MoveToSalesFloorCommand();
+        
+        static void setGreenhouseManager(GreenhouseManager* manager);
         
         void setReceiver(PlantProduct* plant) override;
         void execute() override;

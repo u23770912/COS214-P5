@@ -12,7 +12,7 @@ TreeProfile::TreeProfile(const std::string &species,
 	setProperty("idealPruning", "artistic");
 	setProperty("idealSunlight", sunlight.empty() ? "Full Sun" : sunlight);
 	setProperty("idealSoil", soil.empty() ? "Well-drained" : soil);
-	setProperty("maxDaysWithoutCare", "7");
+	setProperty("maxDaysWithoutCare", "2");
 	setProperty("supportedCareTypes", "water,fertilize,prune_artistic,prune_standard,drip");
 
 	setStateDurationSeconds("Planted", 30);

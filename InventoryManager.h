@@ -95,6 +95,13 @@ public:
     bool sellPlants(const std::string &plantType, int quantity);
     void removeFromSalesFloor(PlantProduct *plant);
     void markAsSold(PlantProduct *plant);
+    
+    // Custom pot management methods
+    void addCustomPot(Pot* pot);
+    Pot* getPotByIndex(int index);
+    void displayPotInventory() const;
+    double getTotalPotInventoryValue() const;
+    int getPotInventoryCount() const;
 };
 
 #endif // INVENTORY_MANAGER_H

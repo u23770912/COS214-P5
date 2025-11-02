@@ -55,10 +55,15 @@ void StaffManager::update(PlantProduct* plant, const std::string& commandType) {
     } else {
         std::cout << "[STAFF MANAGER] Error: Failed to create command of type '" 
                   << commandType << "'." << std::endl;
-        std::cout << "[STAFF MANAGER] Plant may be transitioning to withering state..." << std::endl;
         
-        // If command creation fails, transition plant to withering
-        plant->transitionToWithering();
+        // ReadyForSale plants should NEVER wither - they're in a terminal state
+        if (plant->getCurrentStateName() == "ReadyForSale") {
+            std::cout << "[STAFF MANAGER] Plant is ReadyForSale - skipping wither (terminal state)" << std::endl;
+        } else {
+            std::cout << "[STAFF MANAGER] Plant may be transitioning to withering state..." << std::endl;
+            // If command creation fails, transition plant to withering
+            plant->transitionToWithering();
+        }
     }
 }
 
