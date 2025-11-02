@@ -696,7 +696,12 @@ bool OrderUIFacade::addPlantWithCustomizedPot(int plantIndex, int quantity) {
         return false;
     }
     
-    std::string selectedPlantType = plants[plantIndex-1]->getProfile()->getSpeciesName();
+    PlantProduct* selectedPlant = plants[plantIndex-1];
+    std::string selectedPlantType = selectedPlant->getProfile()->getSpeciesName();
+    
+    // Get price from profile property, default to 25.99 if not set
+    std::string priceStr = selectedPlant->getProfile()->getProperty("price");
+    double plantPrice = priceStr.empty() ? 25.99 : std::stod(priceStr);
     
     std::cout << "\n" << ANSI_GREEN << ANSI_BOLD;
     std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
@@ -704,7 +709,8 @@ bool OrderUIFacade::addPlantWithCustomizedPot(int plantIndex, int quantity) {
     std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
     std::cout << ANSI_RESET << "\n";
     
-    std::cout << "    Selected Plant: " << ANSI_BOLD << selectedPlantType << ANSI_RESET << "\n";
+    std::cout << "    Selected Plant: " << ANSI_BOLD << selectedPlantType << ANSI_RESET 
+             << " (R" << std::fixed << std::setprecision(2) << plantPrice << " each)\n";
     std::cout << "    Quantity: " << quantity << "\n\n";
     
     // Configure pot
@@ -742,17 +748,17 @@ bool OrderUIFacade::addPlantWithCustomizedPot(int plantIndex, int quantity) {
         }
     }
     
-    // Use customer's builder to add plant with pot through proper builder method
+    // Use customer's builder to add plant with pot through proper builder method using PlantProduct data
     ConcreteOrderBuilder* builder = customer->getOrderBuilder();
     if (builder) {
         std::string potDesc = getPotDescription(potConfig);
         
-        // Use the builder method instead of creating items directly
-        builder->buildPlantWithCustomizedPot(selectedPlantType, potDesc, potConfig.totalPrice, quantity);
+        // Use the new builder method that accepts PlantProduct for accurate pricing
+        builder->buildPlantWithCustomizedPotFromProduct(selectedPlant, potDesc, potConfig.totalPrice, quantity);
         
         delete pot;  // Clean up pot object
         
-        double totalComboPrice = 25.99 + potConfig.totalPrice;
+        double totalComboPrice = plantPrice + potConfig.totalPrice;
         std::cout << "\n    " << ANSI_GREEN << ANSI_BOLD << "✓ Added " << quantity << "x " 
                  << selectedPlantType << " + " << potDesc << " to cart!\n" << ANSI_RESET;
         std::cout << "    Price per combo: R" << std::fixed << std::setprecision(2) << totalComboPrice << "\n";

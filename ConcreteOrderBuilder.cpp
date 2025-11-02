@@ -2,6 +2,8 @@
 #include "Order.h"
 #include "SinglePlant.h"
 #include "PlantBundle.h"
+#include "PlantProduct.h"
+#include "PlantSpeciesProfile.h"
 #include <sstream>
 #include <ctime>
 
@@ -55,14 +57,14 @@ Order* ConcreteOrderBuilder::getOrder() {
         reset();
     }
     
-    // Transfer ownership to caller - set to nullptr so destructor won't delete it
-    Order* order = currentOrder;
-    currentOrder = nullptr;
-    return order;
+    // Return reference to current order WITHOUT transferring ownership
+    // Builder retains ownership until explicitly reset or destroyed
+    return currentOrder;
 }
 
 void ConcreteOrderBuilder::reset() {
-    // Don't delete old order - caller owns it after getOrder()
+    // Delete old order if it exists (builder retains ownership)
+    delete currentOrder;
     currentOrder = new Order(generateOrderId(), customerName);
 }
 
@@ -171,5 +173,54 @@ void ConcreteOrderBuilder::addBundleToOrder(PlantBundle* bundle) {
     if (bundle) {
         currentOrder->addOrderItem(bundle);
     }
+}
+
+void ConcreteOrderBuilder::buildPlantFromProduct(PlantProduct* plantProduct, 
+                                                 int quantity, 
+                                                 const std::string& size) {
+    if (!currentOrder) {
+        reset();
+    }
+    
+    if (!plantProduct) {
+        return;  // Safety check
+    }
+    
+    // Get accurate plant information from PlantProduct
+    std::string plantType = plantProduct->getProfile()->getSpeciesName();
+    
+    // Get price from profile property, default to 25.99 if not set
+    std::string priceStr = plantProduct->getProfile()->getProperty("price");
+    double plantPrice = priceStr.empty() ? 25.99 : std::stod(priceStr);
+    
+    // Create SinglePlant with accurate data from PlantProduct
+    SinglePlant* plant = new SinglePlant(plantType, plantPrice, quantity, size);
+    currentOrder->addOrderItem(plant);
+}
+
+void ConcreteOrderBuilder::buildPlantWithCustomizedPotFromProduct(PlantProduct* plantProduct,
+                                                                  const std::string& potDescription, 
+                                                                  double potPrice, 
+                                                                  int quantity, 
+                                                                  const std::string& size) {
+    if (!currentOrder) {
+        reset();
+    }
+    
+    if (!plantProduct) {
+        return;  // Safety check
+    }
+    
+    // Get accurate plant information from PlantProduct
+    std::string plantType = plantProduct->getProfile()->getSpeciesName();
+    
+    // Get price from profile property, default to 25.99 if not set
+    std::string priceStr = plantProduct->getProfile()->getProperty("price");
+    double plantPrice = priceStr.empty() ? 25.99 : std::stod(priceStr);
+    
+    // Create plant with customized pot using accurate plant data
+    SinglePlant* plant = new SinglePlant(plantType, plantPrice, quantity, size);
+    plant->addPot(potDescription, potPrice);
+    currentOrder->addOrderItem(plant);
 }
 

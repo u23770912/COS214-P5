@@ -8,6 +8,7 @@
 #include <string>
 
 class Order;
+class PlantProduct;
 
 /**
  * @brief Concrete implementation of OrderBuilder
@@ -44,6 +45,13 @@ public:
     void buildCustomizedPot(const std::string& potDescription, double potPrice, int quantity);
     void buildPlantWithCustomizedPot(const std::string& plantType, const std::string& potDescription, 
                                     double potPrice, int quantity, const std::string& size = "medium");
+    
+    // Methods using PlantProduct for accurate plant data
+    void buildPlantFromProduct(PlantProduct* plantProduct, int quantity, const std::string& size = "medium");
+    void buildPlantWithCustomizedPotFromProduct(PlantProduct* plantProduct, 
+                                                const std::string& potDescription, 
+                                                double potPrice, int quantity, 
+                                                const std::string& size = "medium");
     
     // Method to add pre-created bundle to order
     void addBundleToOrder(PlantBundle* bundle);
