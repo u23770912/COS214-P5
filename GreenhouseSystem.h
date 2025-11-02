@@ -8,12 +8,15 @@
 #include "PlantGroup.h"
 #include <map> 
 
+class PlantData;
+
 class GreenhouseSystem : public GreenhouseBuilder
 {
 
     private: 
         GreenhouseComponent* root;
         GreenhouseComponent* currentCategory;
+        PlantGroup* lastSpeciesNode;
         // std::map<std::string, PlantGroup*> categories;
         // std::map<std::string, PlantGroup*> types;
 
@@ -24,12 +27,11 @@ class GreenhouseSystem : public GreenhouseBuilder
         GreenhouseBuilder* addCategory(std::string name) override;
         GreenhouseBuilder* addType(std::string name) override;
         GreenhouseBuilder* addSpecies(std::string name) override;
+        GreenhouseBuilder* addPlant(PlantData* plant) override;
 
         // void addPlant(std::string id, std::string info) override;
         GreenhouseComponent* getGreenhouse() override;
-
-        GreenhouseBuilder* addPlant(PlantData* plant) override; // New function
-
+        PlantGroup* getLastSpeciesNode();
 };
 
 

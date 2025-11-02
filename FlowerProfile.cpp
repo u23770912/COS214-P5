@@ -12,7 +12,7 @@ FlowerProfile::FlowerProfile(const std::string &species,
 	setProperty("idealPruning", "standard");
 	setProperty("idealSunlight", sunlight.empty() ? "Partial Sun" : sunlight);
 	setProperty("idealSoil", soil.empty() ? "Loamy" : soil);
-	setProperty("maxDaysWithoutCare", "5");
+	setProperty("maxDaysWithoutCare", "2");
 	setProperty("supportedCareTypes", "water,mist,fertilize,prune_standard");
 
 	setStateDurationSeconds("Planted", 20);

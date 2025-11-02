@@ -49,10 +49,12 @@ void Cashier::handleCommand(Command* command) {
             // No manager to queue with - handle based on command type
             // Check if command has a plant receiver (care commands that affect plant health)
             if (command->getReceiver()) {
-                // Only wither if it's not a MoveToSalesFloorCommand
+                // Only wither if it's not a MoveToSalesFloorCommand and plant is not ReadyForSale
                 MoveToSalesFloorCommand* moveCmd = dynamic_cast<MoveToSalesFloorCommand*>(command);
-                if (moveCmd == 0) {  // C++98 compatible null check
-                    command->getReceiver()->transitionToWithering();
+                PlantProduct* plant = command->getReceiver();
+                
+                if (moveCmd == 0 && plant->getCurrentStateName() != "ReadyForSale") {  // C++98 compatible
+                    plant->transitionToWithering();
                 }
             }
             

@@ -47,20 +47,28 @@ OrderMemento* OrderHistory::getMemento(std::size_t index) const
 
 void OrderHistory::saveOrder(Order* order)
 {
+    // Memento pattern temporarily disabled - Order class doesn't have createMemento() yet
+    // TODO: Implement createMemento() and restoreState() in Order class
+    /*
     if (order == nullptr)
     {
         return;
     }
     OrderMemento* m = order->createMemento();
     addMemento(m);
+    */
 }
 
 void OrderHistory::undo(Order* order)
 {
+    // Memento pattern temporarily disabled - Order class doesn't have restoreState() yet
+    // TODO: Implement createMemento() and restoreState() in Order class
+    /*
     if (order == nullptr) return;
     if (history.empty()) return;
 
     OrderMemento* m = history.back();
     order->restoreState(m);
     removeMemento(history.size() - 1);
+    */
 }

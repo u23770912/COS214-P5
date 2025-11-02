@@ -70,11 +70,7 @@ std::string Customer::getCellPhone() const {
 
 Order* Customer::createOrder() {
     // Customer focuses only on order creation logic, UI handled by facade
-    // Clean up previous order if exists
-    delete orderProduct;
-    orderProduct = 0;
-    delete placeOrderCommand;
-    placeOrderCommand = 0;
+    cleanupPreviousOrder();
     
     // Reset the builder for a new order
     orderBuilder->reset();
@@ -147,6 +143,15 @@ bool Customer::addPlantToOrder(int plantIndex, int quantity) {
     return uiFacade->addPlantToOrderWithAutoDiscount(plantIndex, quantity);
 }
 
+bool Customer::addBundleToOrder(const std::string& bundleName, const std::vector<int>& plantIndices) {
+    // Delegate to facade which handles:
+    // 1. Bundle creation and validation
+    // 2. Automatic discount calculation based on total plants
+    // 3. UI feedback via TerminalUI
+    // 4. Adding bundle to order via builder
+    return uiFacade->addBundleToOrderWithAutoDiscount(bundleName, plantIndices);
+}
+
 bool Customer::finalizeOrder() {
     ConcreteOrderBuilder* concreteBuilder = dynamic_cast<ConcreteOrderBuilder*>(orderBuilder);
     if (!concreteBuilder || !concreteBuilder->hasCurrentOrder()) {
@@ -165,7 +170,7 @@ bool Customer::finalizeOrder() {
     
     // Use facade to display finalization confirmation
     std::cout << orderProduct->getOrderSummary() << std::endl;
-    std::cout << "[TOTAL] Final Total: R" << std::fixed << std::setprecision(2) 
+    std::cout << "[TOTAL] Final Total: $" << std::fixed << std::setprecision(2) 
               << orderProduct->getTotalAmount() << std::endl;
     uiFacade->displayFinalOrderConfirmation();
     
@@ -175,11 +180,6 @@ bool Customer::finalizeOrder() {
 // Public method to get access to the builder for building the order
 ConcreteOrderBuilder* Customer::getOrderBuilder() {
     return dynamic_cast<ConcreteOrderBuilder*>(orderBuilder);
-}
-
-// Public method to get access to the UI facade
-OrderUIFacade* Customer::getUIFacade() {
-    return uiFacade;
 }
 
 // ============= Observer Pattern Implementation (Pure Pattern) =============
@@ -226,6 +226,117 @@ bool Customer::requestValidation(Order* order) {
 void Customer::attachObserver(CustomerObserver* observer) {
     attach(observer);
     std::cout << "[SYSTEM] Staff observer registered for customer: " << name << std::endl;
+}
+
+void Customer::detachObserver(CustomerObserver* observer) {
+    detach(observer);
+    std::cout << "[SYSTEM] Staff observer unregistered for customer: " << name << std::endl;
+}
+
+// Helper methods for facade integration
+OrderUIFacade* Customer::getUIFacade() {
+    return uiFacade;
+}
+
+void Customer::cleanupPreviousOrder() {
+    if (orderProduct) {
+        delete orderProduct;
+        orderProduct = 0;
+    }
+}
+
+
+
+// Director-based construction methods
+
+Order* Customer::construct() {
+    std::cout << "\n=== Using Director to construct default order ===" << std::endl;
+    
+    // Clean up any previous order
+    delete orderProduct;
+    orderProduct = 0;
+    
+    // Notify observers about order construction
+    notifyInteraction("ORDER_CONSTRUCTION_STARTED", "Customer initiated order construction via Director");
+    
+    // Use the director to construct the order
+    orderProduct = orderDirector->construct();
+    
+    if (orderProduct) {
+        std::cout << "Order successfully constructed via Director!" << std::endl;
+        notifyInteraction("ORDER_CONSTRUCTED", "Director successfully built order");
+    } else {
+        std::cout << "Failed to construct order via Director." << std::endl;
+        notifyInteraction("ORDER_CONSTRUCTION_FAILED", "Director failed to build order");
+    }
+    
+    return orderProduct;
+}
+
+Order* Customer::constructSimplePlantOrder(const std::string& plantType, int quantity) {
+    std::cout << "\n=== Constructing Simple Plant Order ===" << std::endl;
+    std::cout << "Plant: " << plantType << ", Quantity: " << quantity << std::endl;
+    
+    // Clean up any previous order
+    delete orderProduct;
+    orderProduct = 0;
+    
+    // Notify observers
+    notifyInteraction("SIMPLE_PLANT_ORDER", "Constructing simple plant order: " + plantType);
+    
+    // Use director to construct
+    orderProduct = orderDirector->constructSimplePlantOrder(plantType, quantity);
+    
+    if (orderProduct) {
+        std::cout << "Simple plant order constructed successfully!" << std::endl;
+    }
+    
+    return orderProduct;
+}
+
+Order* Customer::constructPlantWithPotOrder(const std::string& plantType, const std::string& potType, int quantity) {
+    std::cout << "\n=== Constructing Plant with Pot Order ===" << std::endl;
+    std::cout << "Plant: " << plantType << ", Pot: " << potType << ", Quantity: " << quantity << std::endl;
+    
+    // Clean up any previous order
+    delete orderProduct;
+    orderProduct = 0;
+    
+    // Notify observers
+    notifyInteraction("PLANT_POT_ORDER", "Constructing plant+pot order: " + plantType + " + " + potType);
+    
+    // Use director to construct
+    orderProduct = orderDirector->constructPlantWithPotOrder(plantType, potType, quantity);
+    
+    if (orderProduct) {
+        std::cout << "Plant with pot order constructed successfully!" << std::endl;
+    }
+    
+    return orderProduct;
+}
+
+Order* Customer::constructBundleOrder(const std::string& bundleName, 
+                                     const std::vector<std::string>& plantTypes,
+                                     const std::vector<int>& quantities, 
+                                     double discount) {
+    std::cout << "\n=== Constructing Bundle Order ===" << std::endl;
+    std::cout << "Bundle: " << bundleName << ", Discount: " << discount << "%" << std::endl;
+    
+    // Clean up any previous order
+    delete orderProduct;
+    orderProduct = 0;
+    
+    // Notify observers
+    notifyInteraction("BUNDLE_ORDER", "Constructing bundle order: " + bundleName);
+    
+    // Use director to construct
+    orderProduct = orderDirector->constructBundleOrder(bundleName, plantTypes, quantities, discount);
+    
+    if (orderProduct) {
+        std::cout << "Bundle order constructed successfully!" << std::endl;
+    }
+    
+    return orderProduct;
 }
 
 // ============= Additional Methods from Sales Floor Integration =============

@@ -77,6 +77,13 @@
 #include "TreeProfile.h"
 #include "InventoryManager.h"
 
+// Greenhouse Structure and Visualization
+#include "GreenhouseManager.h"
+#include "GreenhouseComponent.h"
+#include "PlantPot.h"
+#include "GreenhouseGUI.h"
+#include "NetworkServer.h"
+
 // Customer Order Infrastructure
 #include "Customer.h"
 #include "Order.h"
@@ -87,8 +94,9 @@
 #include "OrderValidationHandler.h"
 #include "PaymentProcessHandler.h"
 #include "NotificationHandler.h"
-#include "OrderMemento.h"
-#include "SuggestionTemplate/BouquetSuggestionFactory.h"
+#include "BouquetSuggestionFactory.h"
+#include "BouquetSuggestion.h"
+// #include "OrderMemento.h"
 
 // UI Infrastructure
 #include "TerminalUI.h"
@@ -106,6 +114,9 @@
 // Forward declarations
 struct StaffContext;
 void runGreenhouseSimulation(StaffContext& staff);
+void runIntegratedSimulation(StaffContext& staff, GreenhouseManager* ghManager,
+                            std::vector<PlantSpeciesProfile*>& profiles,
+                            std::vector<PlantProduct*>& plants);
 void runCustomerOrderTest(StaffContext& staff);
 
 /**
@@ -162,73 +173,16 @@ StaffContext createStaffContext() {
     StaffContext ctx;
 
     // ============================================================================
-    // Create Greenhouse Team (5 Gardeners)
+    // Initialize empty staff context - workers added via GUI
     // ============================================================================
-    Gardener* gardener1 = new Gardener();
-    Gardener* gardener2 = new Gardener();
-    Gardener* gardener3 = new Gardener();
-    Gardener* gardener4 = new Gardener();
-    Gardener* gardener5 = new Gardener();
     
-    // Chain the gardeners together
-    gardener1->setNext(gardener2);
-    gardener2->setNext(gardener3);
-    gardener3->setNext(gardener4);
-    gardener4->setNext(gardener5);
-
-    // ============================================================================
-    // Create Sales Team (3 Cashiers)
-    // ============================================================================
-    Cashier* cashier1 = new Cashier();
-    Cashier* cashier2 = new Cashier();
-    Cashier* cashier3 = new Cashier();
-    
-    // Chain the cashiers together
-    cashier1->setNext(cashier2);
-    cashier2->setNext(cashier3);
-
-    // ============================================================================
-    // Store all handlers for cleanup and roster display
-    // ============================================================================
-    ctx.handlers.push_back(gardener1);
-    ctx.handlers.push_back(gardener2);
-    ctx.handlers.push_back(gardener3);
-    ctx.handlers.push_back(gardener4);
-    ctx.handlers.push_back(gardener5);
-    ctx.handlers.push_back(cashier1);
-    ctx.handlers.push_back(cashier2);
-    ctx.handlers.push_back(cashier3);
-
-    ctx.roster.push_back(std::make_pair(std::string("Gardener 1"), gardener1));
-    ctx.roster.push_back(std::make_pair(std::string("Gardener 2"), gardener2));
-    ctx.roster.push_back(std::make_pair(std::string("Gardener 3"), gardener3));
-    ctx.roster.push_back(std::make_pair(std::string("Gardener 4"), gardener4));
-    ctx.roster.push_back(std::make_pair(std::string("Gardener 5"), gardener5));
-    ctx.roster.push_back(std::make_pair(std::string("Cashier 1"), cashier1));
-    ctx.roster.push_back(std::make_pair(std::string("Cashier 2"), cashier2));
-    ctx.roster.push_back(std::make_pair(std::string("Cashier 3"), cashier3));
-
-    // ============================================================================
-    // Create dispatcher and register teams
-    // ============================================================================
+    // Create minimal dispatcher
     ctx.dispatcher = new StaffMember();
-    ctx.dispatcher->registerTeam("Greenhouse", gardener1);  // Head of greenhouse chain
-    ctx.dispatcher->registerTeam("Sales", cashier1);        // Head of sales chain
-
-    // ============================================================================
-    // Create staff manager (Observer for plants and customers)
-    // ============================================================================
+    
+    // Create staff manager
     ctx.manager = new StaffManager(ctx.dispatcher);
 
-    // ============================================================================
-    // CRITICAL: Set manager back-reference for ALL handlers
-    // This allows handlers to queue commands when entire chain is busy
-    // ============================================================================
-    for (size_t i = 0; i < ctx.handlers.size(); ++i) {
-        ctx.handlers[i]->setManager(ctx.dispatcher);
-    }
-
-    TerminalUI::printSuccess("Staff teams configured (5 Gardeners, 3 Cashiers)");
+    TerminalUI::printSuccess("Staff system initialized (empty - add workers via GUI)");
     return ctx;
 }
 
@@ -242,40 +196,14 @@ StaffContext createStaffContext() {
  */
 std::vector<PlantSpeciesProfile*> createProfiles() {
     std::vector<PlantSpeciesProfile*> profiles;
-    
-    // Create profiles with accurate pricing data
-    PlantSpeciesProfile* rose = new FlowerProfile("Rose", "250ml", "Partial Sun", "Loamy");
-    rose->setProperty("price", "25.99");
-    profiles.push_back(rose);
-    
-    PlantSpeciesProfile* bonsai = new TreeProfile("Bonsai", "180ml", "Full Sun", "Well-drained");
-    bonsai->setProperty("price", "45.00");
-    profiles.push_back(bonsai);
-    
-    PlantSpeciesProfile* aloe = new SucculentProfile("Aloe Vera", "120ml", "Bright Indirect", "Sandy");
-    aloe->setProperty("price", "15.50");
-    profiles.push_back(aloe);
-    
-    PlantSpeciesProfile* oak = new TreeProfile("Oak Sapling", "300ml", "Full Sun", "Clay");
-    oak->setProperty("price", "35.00");
-    profiles.push_back(oak);
-    
-    PlantSpeciesProfile* orchid = new FlowerProfile("Orchid", "200ml", "Shade", "Bark Mix");
-    orchid->setProperty("price", "28.99");
-    profiles.push_back(orchid);
-    
-    PlantSpeciesProfile* echeveria = new SucculentProfile("Echeveria", "100ml", "Full Sun", "Gritty Mix");
-    echeveria->setProperty("price", "12.75");
-    profiles.push_back(echeveria);
-    
-    PlantSpeciesProfile* maple = new TreeProfile("Maple", "350ml", "Full Sun", "Loamy");
-    maple->setProperty("price", "40.00");
-    profiles.push_back(maple);
-    
-    PlantSpeciesProfile* tulip = new FlowerProfile("Tulip", "150ml", "Full Sun", "Well-drained");
-    tulip->setProperty("price", "18.50");
-    profiles.push_back(tulip);
-    
+    profiles.push_back(new FlowerProfile("Rose", "250ml", "Partial Sun", "Loamy"));
+    profiles.push_back(new TreeProfile("Bonsai", "180ml", "Full Sun", "Well-drained"));
+    profiles.push_back(new SucculentProfile("Aloe Vera", "120ml", "Bright Indirect", "Sandy"));
+    profiles.push_back(new TreeProfile("Oak Sapling", "300ml", "Full Sun", "Clay"));
+    profiles.push_back(new FlowerProfile("Orchid", "200ml", "Shade", "Bark Mix"));
+    profiles.push_back(new SucculentProfile("Echeveria", "100ml", "Full Sun", "Gritty Mix"));
+    profiles.push_back(new TreeProfile("Maple", "350ml", "Full Sun", "Loamy"));
+    profiles.push_back(new FlowerProfile("Tulip", "150ml", "Full Sun", "Well-drained"));
     return profiles;
 }
 
@@ -445,24 +373,38 @@ bool allPlantsReady(const std::vector<PlantProduct*>& plants) {
  */
 void runGreenhouseSimulation(StaffContext& staff) {
     TerminalUI::printHeader("PHASE 1: GREENHOUSE LIFECYCLE SIMULATION");
-    TerminalUI::printInfo("Initializing greenhouse with plant inventory...");
+    TerminalUI::printInfo("Starting with empty greenhouse - use GUI or commands to add plants...");
     
     // ============================================================================
-    // Phase 1.1: Create plants and add to greenhouse
+    // Phase 1.1: Initialize empty plant vectors
     // ============================================================================
-    std::vector<PlantSpeciesProfile*> profiles = createProfiles();
-    std::vector<PlantProduct*> plants = createPlants(profiles, staff.manager);
+    std::vector<PlantSpeciesProfile*> profiles;  // Start empty
+    std::vector<PlantProduct*> plants;  // Start empty
     
-    TerminalUI::printSuccess(std::to_string(plants.size()) + " plants created");
+    TerminalUI::printInfo("Greenhouse initialized with 0 plants");
+    TerminalUI::printInfo("Use GUI or commands to add plants and workers");
 
-    // Add plants to the inventory manager (Greenhouse)
-    for (size_t i = 0; i < plants.size(); ++i) {
-        InventoryManager::getInstance().addToGreenhouse(plants[i]);
-    }
+    TerminalUI::printInfo("Greenhouse initialized with 0 plants");
+    TerminalUI::printInfo("Use GUI or commands to add plants and workers");
+
+    // ============================================================================
+    // Phase 1.1.5: Build and Visualize Greenhouse Structure
+    // ============================================================================
+    std::cout << "\n";
+    TerminalUI::printInfo("Building greenhouse organizational structure...");
     
-    TerminalUI::printSuccess("All plants added to greenhouse inventory");
-    TerminalUI::printInfo("Greenhouse inventory count: " + 
-                         std::to_string(InventoryManager::getInstance().getGreenHouseInventory().size()));
+    GreenhouseManager* ghManager = new GreenhouseManager();
+    ghManager->buildGreenhouseStructure();
+    
+    TerminalUI::printSuccess("Greenhouse structure built (empty - add plants via GUI)");
+    
+    // Display the empty greenhouse structure
+    ghManager->displayGreenhouseStructure();
+    
+    std::cout << "\n" << ANSI_CYAN << "Press Enter to start lifecycle simulation..." << ANSI_RESET;
+    std::cin.ignore();
+    std::cin.get();
+    std::cout << "\n";
 
     // ============================================================================
     // Phase 1.2: Simulate plant lifecycle
@@ -575,6 +517,10 @@ void runGreenhouseSimulation(StaffContext& staff) {
     TerminalUI::printSuccess("Greenhouse simulation complete!");
     TerminalUI::printInfo("Plants ready for sale: " + std::to_string(readyForSale));
     std::cout << std::endl;
+    
+    // Cleanup greenhouse manager
+    delete ghManager;
+    TerminalUI::printInfo("Greenhouse structure cleaned up");
     
     // Keep profile pointers for cleanup later
     // Note: plants are now owned by InventoryManager, profiles need manual cleanup
@@ -692,17 +638,15 @@ void displayCustomerMenu() {
     std::cout << "    ╠══════════════════════════════════════════════════════════════════╣\n";
     std::cout << ANSI_RESET;
     
-    std::cout << "    ║  " << ANSI_GREEN << " 1" << ANSI_RESET << " │ 🌺 Browse Available Plants                                 ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << " 2" << ANSI_RESET << " │ 🛒 Add Single Plant to Cart                                ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << " 3" << ANSI_RESET << " │ 🎁 Create Custom Plant Bundle                              ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << " 4" << ANSI_RESET << " │ 🏺 Buy Pot Only                                            ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << " 5" << ANSI_RESET << " │ 🌱 Add Plant with Pot to Cart                              ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << " 6" << ANSI_RESET << " │ 💐 Browse Event Bouquet Suggestions                        ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << " 7" << ANSI_RESET << " │ 👀 View Current Order                                      ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << " 8" << ANSI_RESET << " │ 💾 Save Order Snapshot (Memento)                           ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << " 9" << ANSI_RESET << " │ ⏮  Restore Last Order Snapshot                             ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << "10" << ANSI_RESET << " │ 💳 Checkout & Payment                                      ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << "11" << ANSI_RESET << " │ 🚪 Exit                                                    ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "1" << ANSI_RESET << " │ 🌺 Browse Available Plants                                  ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "2" << ANSI_RESET << " │ 🛒 Add Single Plant to Cart                                 ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "3" << ANSI_RESET << " │ 🎁 Create Custom Plant Bundle                               ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "4" << ANSI_RESET << " │ 💐 Browse Event Bouquet Suggestions                         ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "5" << ANSI_RESET << " │ 👀 View Current Order                                       ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "6" << ANSI_RESET << " │ 💾 Save Order Snapshot (Memento)                            ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "7" << ANSI_RESET << " │ ⏮  Restore Last Order Snapshot                              ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "8" << ANSI_RESET << " │ 💳 Checkout & Payment                                       ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "9" << ANSI_RESET << " │ 🚪 Exit                                                     ║\n";
     
     std::cout << ANSI_CYAN << ANSI_BOLD;
     std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
@@ -739,15 +683,11 @@ void displayAvailablePlants() {
         std::string water = plants[i]->getProfile()->getProperty("idealWater");
         std::string sun = plants[i]->getProfile()->getProperty("idealSunlight");
         
-        // Get price from profile property, default to 25.99 if not set
-        std::string priceStr = plants[i]->getProfile()->getProperty("price");
-        double plantPrice = priceStr.empty() ? 25.99 : std::stod(priceStr);
-        
         std::cout << "    " << ANSI_YELLOW << std::setw(2) << (i+1) << ". " << ANSI_RESET;
         std::cout << ANSI_BOLD << std::setw(20) << std::left << name << ANSI_RESET;
         std::cout << " │ 💧 " << std::setw(12) << water;
         std::cout << " │ ☀️  " << std::setw(15) << sun;
-        std::cout << " │ " << ANSI_GREEN << "R" << std::fixed << std::setprecision(2) << plantPrice << ANSI_RESET << "\n";
+        std::cout << " │ " << ANSI_GREEN << "$25.99" << ANSI_RESET << "\n";
     }
     
     std::cout << "    " << std::string(66, '-') << "\n";
@@ -767,6 +707,12 @@ void browseBouquetSuggestions() {
     std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
     std::cout << ANSI_RESET << "\n";
     
+    std::cout << "    [INFO] Bouquet suggestions feature temporarily disabled\n";
+    std::cout << "\n    " << ANSI_CYAN << "Press Enter to return to menu..." << ANSI_RESET;
+    std::cin.ignore();
+    std::cin.get();
+    
+    /* Temporarily disabled - will be re-enabled when files are moved to root
     BouquetSuggestionFactory& factory = BouquetSuggestionFactory::getInstance();
     std::vector<std::string> events = factory.getAvailableEvents();
     
@@ -795,6 +741,7 @@ void browseBouquetSuggestions() {
     std::cout << "\n    " << ANSI_CYAN << "Press Enter to return to menu..." << ANSI_RESET;
     std::cin.ignore();
     std::cin.get();
+    */
 }
 
 /**
@@ -885,15 +832,17 @@ void runCustomerOrderTest(StaffContext& staff) {
     Customer* customer = new Customer(name, email, phone);
     
     // Attach staff manager as observer to customer
-    customer->attachObserver(staff.manager);
+    customer->attachObserver(static_cast<CustomerObserver*>(staff.manager));
     
     std::cout << "\n    " << ANSI_GREEN << "✓ Welcome, " << name << "! 🌿\n" << ANSI_RESET;
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     
     // ============================================================================
-    // Phase 2.3: Memento support (Customer has its own builder internally)
+    // Phase 2.3: Create order builder and memento support
     // ============================================================================
-    OrderMemento* savedMemento = NULL;  // For memento pattern demonstration
+    ConcreteOrderBuilder* orderBuilder = new ConcreteOrderBuilder(customer->getName());
+    Order* currentOrder = NULL;
+    // OrderMemento* savedMemento = NULL;  // For memento pattern demonstration (temporarily disabled)
     
     // ============================================================================
     // Phase 2.4: Enhanced Interactive menu loop with extended features
@@ -924,7 +873,7 @@ void runCustomerOrderTest(StaffContext& staff) {
         
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         
-        if (choice < 1 || choice > 11) {
+        if (choice < 1 || choice > 9) {
             std::cout << "\n    " << ANSI_RED << "✗ Invalid choice! Try again.\n" << ANSI_RESET;
             std::this_thread::sleep_for(std::chrono::seconds(1));
             continue;
@@ -963,15 +912,11 @@ void runCustomerOrderTest(StaffContext& staff) {
                     std::string water = plants[i]->getProfile()->getProperty("idealWater");
                     std::string sun = plants[i]->getProfile()->getProperty("idealSunlight");
                     
-                    // Get price from profile property, default to 25.99 if not set
-                    std::string priceStr = plants[i]->getProfile()->getProperty("price");
-                    double plantPrice = priceStr.empty() ? 25.99 : std::stod(priceStr);
-                    
                     std::cout << "    " << ANSI_YELLOW << std::setw(2) << (i+1) << ". " << ANSI_RESET;
                     std::cout << ANSI_BOLD << std::setw(20) << std::left << name_p << ANSI_RESET;
                     std::cout << " │ 💧 " << std::setw(12) << water;
                     std::cout << " │ ☀️  " << std::setw(15) << sun;
-                    std::cout << " │ " << ANSI_GREEN << "R" << std::fixed << std::setprecision(2) << plantPrice << ANSI_RESET << "\n";
+                    std::cout << " │ " << ANSI_GREEN << "$25.99" << ANSI_RESET << "\n";
                 }
                 std::cout << "    " << std::string(66, '-') << "\n";
                 
@@ -1013,23 +958,17 @@ void runCustomerOrderTest(StaffContext& staff) {
                     break;
                 }
                 
-                // Use builder to add plant to order with accurate PlantProduct data
-                PlantProduct* selectedPlant = plants[plantNum-1];
-                std::string plantType = selectedPlant->getProfile()->getSpeciesName();
-                
-                // Get price from profile property, default to 25.99 if not set
-                std::string priceStr = selectedPlant->getProfile()->getProperty("price");
-                double plantPrice = priceStr.empty() ? 25.99 : std::stod(priceStr);
-                
-                ConcreteOrderBuilder* builder = customer->getOrderBuilder();
-                if (builder) {
-                    builder->buildPlantFromProduct(selectedPlant, quantity);
-                    std::cout << "\n    " << ANSI_GREEN << "✓ Added " << quantity << "x " << plantType 
-                             << " @ R" << std::fixed << std::setprecision(2) << plantPrice 
-                             << " each to cart!\n" << ANSI_RESET;
-                } else {
-                    std::cout << ANSI_RED << "    ✗ Unable to access order builder!\n" << ANSI_RESET;
+                // Create order if it doesn't exist
+                if (!currentOrder) {
+                    currentOrder = orderBuilder->getOrder();
                 }
+                
+                // Add plant to order
+                std::string plantType = plants[plantNum-1]->getProfile()->getSpeciesName();
+                SinglePlant* plant = new SinglePlant(plantType, 25.99, quantity);
+                currentOrder->addOrderItem(plant);
+                
+                std::cout << "\n    " << ANSI_GREEN << "✓ Added " << quantity << "x " << plantType << " to cart!\n" << ANSI_RESET;
                 std::this_thread::sleep_for(std::chrono::milliseconds(800));
                 break;
             }
@@ -1136,19 +1075,11 @@ void runCustomerOrderTest(StaffContext& staff) {
                     
                     totalPlantCount += qty;
                     
-                    // Use PlantProduct for accurate plant data
-                    PlantProduct* selectedPlant = plants[plantNum-1];
-                    std::string plantType = selectedPlant->getProfile()->getSpeciesName();
-                    
-                    // Get price from profile property, default to 25.99 if not set
-                    std::string priceStr = selectedPlant->getProfile()->getProperty("price");
-                    double plantPrice = priceStr.empty() ? 25.99 : std::stod(priceStr);
-                    
-                    SinglePlant* bundlePlant = new SinglePlant(plantType, plantPrice, qty);
+                    std::string plantType = plants[plantNum-1]->getProfile()->getSpeciesName();
+                    SinglePlant* bundlePlant = new SinglePlant(plantType, 25.99, qty);
                     bundle->addItem(bundlePlant);
                     
-                    std::cout << ANSI_GREEN << "    ✓ Added " << qty << "x " << plantType 
-                             << " @ R" << std::fixed << std::setprecision(2) << plantPrice << " each\n" << ANSI_RESET;
+                    std::cout << ANSI_GREEN << "    ✓ Added " << qty << "x " << plantType << "\n" << ANSI_RESET;
                 }
                 
                 if (totalPlantCount == 0) {
@@ -1169,120 +1100,28 @@ void runCustomerOrderTest(StaffContext& staff) {
                 std::cout << "    Total plants: " << totalPlantCount << "\n";
                 std::cout << "    Discount: " << automaticDiscount << "%\n";
                 
-                // Use builder method to add bundle to order (Builder Pattern)
-                ConcreteOrderBuilder* builder = customer->getOrderBuilder();
-                if (builder) {
-                    builder->addBundleToOrder(bundle);
-                    std::cout << "\n    " << ANSI_GREEN << ANSI_BOLD << "✓ Bundle '" << bundleName 
-                             << "' created successfully!\n" << ANSI_RESET;
-                } else {
-                    std::cout << ANSI_RED << "    ✗ Unable to access order builder!\n" << ANSI_RESET;
-                    delete bundle;
+                // Create order if it doesn't exist
+                if (!currentOrder) {
+                    currentOrder = orderBuilder->getOrder();
                 }
+                
+                currentOrder->addOrderItem(bundle);
+                std::cout << "\n    " << ANSI_GREEN << ANSI_BOLD << "✓ Bundle '" << bundleName 
+                         << "' created successfully!\n" << ANSI_RESET;
                 std::this_thread::sleep_for(std::chrono::milliseconds(1200));
                 break;
             }
             
             case 4: {
-                // Buy Pot Only - Using facade for unified interface
-                TerminalUI::clearScreen();
-                
-                // Get quantity first
-                std::cout << "\n    " << ANSI_YELLOW << "➤ How many pots would you like? " << ANSI_RESET;
-                int potQty;
-                std::cin >> potQty;
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                
-                if (potQty < 1) {
-                    std::cout << ANSI_RED << "    ✗ Invalid quantity!\n" << ANSI_RESET;
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
-                    break;
-                }
-                
-                // Use facade to handle pot customization and ordering (facade uses builder internally)
-                OrderUIFacade* facade = customer->getUIFacade();
-                if (facade && facade->addCustomizedPotToOrder(potQty)) {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1200));
-                } else {
-                    std::cout << ANSI_RED << "    ✗ Failed to add pot to order!\n" << ANSI_RESET;
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
-                }
-                break;
-            }
-            
-            case 5: {
-                // Add Plant with Pot to Cart - Using facade for unified interface
-                TerminalUI::clearScreen();
-                std::cout << "\n" << ANSI_GREEN << ANSI_BOLD;
-                std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
-                std::cout << "    ║               🌱 PLANT + POT COMBINATION 🏺                      ║\n";
-                std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
-                std::cout << ANSI_RESET << "\n";
-                
-                std::vector<PlantProduct*> plants = InventoryManager::getInstance().getReadyForSalePlants();
-                
-                if (plants.empty()) {
-                    std::cout << ANSI_RED << "    ✗ No plants available!\n" << ANSI_RESET;
-                    std::cout << "\n    " << ANSI_CYAN << "Press Enter to continue..." << ANSI_RESET;
-                    std::cin.get();
-                    break;
-                }
-                
-                // Step 1: Select plant
-                std::cout << ANSI_CYAN << "    Step 1: Select Plant\n" << ANSI_RESET;
-                std::cout << "    " << std::string(66, '-') << "\n";
-                
-                for (size_t i = 0; i < plants.size(); i++) {
-                    std::string name_p = plants[i]->getProfile()->getSpeciesName();
-                    std::cout << "    " << ANSI_YELLOW << std::setw(2) << (i+1) << ". " << ANSI_RESET;
-                    std::cout << ANSI_BOLD << name_p << ANSI_RESET << " - " << ANSI_GREEN << "R25.99" << ANSI_RESET << "\n";
-                }
-                std::cout << "    " << std::string(66, '-') << "\n";
-                
-                std::cout << "\n    " << ANSI_YELLOW << "➤ Enter plant number (1-" << plants.size() << "): " << ANSI_RESET;
-                int plantNum;
-                std::cin >> plantNum;
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                
-                if (plantNum < 1 || plantNum > (int)plants.size()) {
-                    std::cout << ANSI_RED << "    ✗ Invalid selection!\n" << ANSI_RESET;
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
-                    break;
-                }
-                
-                std::cout << "    " << ANSI_YELLOW << "➤ Quantity: " << ANSI_RESET;
-                int plantQty;
-                std::cin >> plantQty;
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                
-                if (plantQty < 1) {
-                    std::cout << ANSI_RED << "    ✗ Invalid quantity!\n" << ANSI_RESET;
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
-                    break;
-                }
-                
-                // Use facade to handle plant + pot customization (facade uses builder internally)
-                OrderUIFacade* facade = customer->getUIFacade();
-                if (facade && facade->addPlantWithCustomizedPot(plantNum, plantQty)) {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1200));
-                } else {
-                    std::cout << ANSI_RED << "    ✗ Failed to add plant with pot to order!\n" << ANSI_RESET;
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
-                }
-                break;
-            }
-            
-            case 6: {
                 // Browse bouquet suggestions (Template Method Pattern)
                 browseBouquetSuggestions();
                 break;
             }
             
-            case 7: {
+            case 5: {
                 // View current order with enhanced display
                 TerminalUI::clearScreen();
-                ConcreteOrderBuilder* builder = customer->getOrderBuilder();
-                if (!builder || !builder->hasCurrentOrder()) {
+                if (!currentOrder || currentOrder->isEmpty()) {
                     std::cout << "\n" << ANSI_YELLOW;
                     std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
                     std::cout << "    ║                     🛒 YOUR CART IS EMPTY                        ║\n";
@@ -1296,17 +1135,14 @@ void runCustomerOrderTest(StaffContext& staff) {
                     std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
                     std::cout << ANSI_RESET << "\n";
                     
-                    Order* currentOrder = builder->getOrder();
-                    if (currentOrder && !currentOrder->isEmpty()) {
-                        std::string summary = currentOrder->getOrderSummary();
-                        // Indent the summary
-                        size_t pos = 0;
-                        while ((pos = summary.find('\n', pos)) != std::string::npos) {
-                            summary.insert(pos + 1, "    ");
-                            pos += 5;
-                        }
-                        std::cout << "    " << summary << "\n";
+                    std::string summary = currentOrder->getOrderSummary();
+                    // Indent the summary
+                    size_t pos = 0;
+                    while ((pos = summary.find('\n', pos)) != std::string::npos) {
+                        summary.insert(pos + 1, "    ");
+                        pos += 5;
                     }
+                    std::cout << "    " << summary << "\n";
                 }
                 
                 std::cout << "\n    " << ANSI_CYAN << "Press Enter to continue..." << ANSI_RESET;
@@ -1314,11 +1150,11 @@ void runCustomerOrderTest(StaffContext& staff) {
                 break;
             }
             
-            case 8: {
+            case 6: {
                 // Save order snapshot (Memento Pattern)
-                ConcreteOrderBuilder* builder = customer->getOrderBuilder();
-                Order* currentOrder = builder ? builder->getOrder() : nullptr;
-                
+                std::cout << "\n    " << ANSI_YELLOW << "⚠ Order snapshot feature temporarily disabled!\n" << ANSI_RESET;
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+                /*
                 if (!currentOrder || currentOrder->isEmpty()) {
                     std::cout << "\n    " << ANSI_YELLOW << "⚠ No order to save!\n" << ANSI_RESET;
                     std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -1331,31 +1167,32 @@ void runCustomerOrderTest(StaffContext& staff) {
                     std::cout << "    Saved " << currentOrder->getItemCount() << " items\n";
                     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
                 }
+                */
                 break;
             }
             
-            case 9: {
+            case 7: {
                 // Restore last order snapshot (Memento Pattern)
+                std::cout << "\n    " << ANSI_YELLOW << "⚠ Order restore feature temporarily disabled!\n" << ANSI_RESET;
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+                /*
                 if (!savedMemento) {
                     std::cout << "\n    " << ANSI_YELLOW << "⚠ No saved snapshot available!\n" << ANSI_RESET;
                     std::this_thread::sleep_for(std::chrono::seconds(1));
                 } else {
-                    ConcreteOrderBuilder* builder = customer->getOrderBuilder();
-                    Order* currentOrder = builder ? builder->getOrder() : nullptr;
-                    if (currentOrder) {
-                        currentOrder->restoreState(savedMemento);
-                        std::cout << "\n    " << ANSI_GREEN << "✓ Order restored from snapshot!\n" << ANSI_RESET;
-                        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                    if (!currentOrder) {
+                        currentOrder = orderBuilder->getOrder();
                     }
+                    currentOrder->restoreState(savedMemento);
+                    std::cout << "\n    " << ANSI_GREEN << "✓ Order restored from snapshot!\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
                 }
+                */
                 break;
             }
             
-            case 10: {
+            case 8: {
                 // Checkout with payment processing (Adapter Pattern)
-                ConcreteOrderBuilder* builder = customer->getOrderBuilder();
-                Order* currentOrder = builder ? builder->getOrder() : nullptr;
-                
                 if (!currentOrder || currentOrder->isEmpty()) {
                     TerminalUI::clearScreen();
                     std::cout << "\n" << ANSI_RED;
@@ -1501,8 +1338,10 @@ void runCustomerOrderTest(StaffContext& staff) {
                     std::cout << "    Amount Paid: $" << std::fixed << std::setprecision(2) << totalAmount << "\n";
                     std::cout << "    A confirmation has been sent to your email.\n";
                     
-                    // Reset order for potential new purchase - builder handles cleanup
-                    builder->reset();
+                    // Reset order for potential new purchase
+                    delete currentOrder;
+                    currentOrder = NULL;
+                    orderBuilder->reset();
                     
                 } else {
                     std::cout << "\n" << ANSI_RED << ANSI_BOLD;
@@ -1519,7 +1358,7 @@ void runCustomerOrderTest(StaffContext& staff) {
                 break;
             }
             
-            case 11: {
+            case 9: {
                 // Exit customer menu
                 customerActive = false;
                 TerminalUI::clearScreen();
@@ -1542,10 +1381,16 @@ void runCustomerOrderTest(StaffContext& staff) {
     // ============================================================================
     // Cleanup customer resources
     // ============================================================================
+    if (currentOrder) {
+        delete currentOrder;
+    }
+    /*
     if (savedMemento) {
         delete savedMemento;
     }
-    delete customer;  // Customer destructor handles orderBuilder cleanup
+    */
+    delete orderBuilder;
+    delete customer;
     
     TerminalUI::printSuccess("Customer interaction complete!");
     std::cout << std::endl;
@@ -1634,7 +1479,438 @@ void cleanup(StaffContext& ctx, std::vector<PlantSpeciesProfile*>& profiles) {
  * 
  * @return 0 on successful execution
  */
+
+/**
+ * @brief Run integrated simulation with real-time GUI support (Option B)
+ * 
+ * This function runs the plant lifecycle simulation while simultaneously
+ * listening for GUI commands on a network socket. The GUI can:
+ * - Add plants in real-time
+ * - Add workers in real-time
+ * - Query current state
+ * - Advance specific plants
+ * 
+ * All changes are immediately visible in both the terminal display and GUI.
+ */
+void runIntegratedSimulation(StaffContext& staff, GreenhouseManager* ghManager,
+                            std::vector<PlantSpeciesProfile*>& profiles,
+                            std::vector<PlantProduct*>& plants) {
+    
+    // Set greenhouse manager for MoveToSalesFloorCommand
+    MoveToSalesFloorCommand::setGreenhouseManager(ghManager);
+    
+    // Start network server for GUI communication
+    NetworkServer server;
+    const int GUI_PORT = 8765;
+    
+    if (!server.start(GUI_PORT)) {
+        TerminalUI::printError("Failed to start network server on port " + std::to_string(GUI_PORT));
+        TerminalUI::printInfo("Continuing with terminal-only mode...");
+    } else {
+        TerminalUI::printSuccess("GUI server started on port " + std::to_string(GUI_PORT));
+        TerminalUI::printInfo("Connect GUI to localhost:" + std::to_string(GUI_PORT));
+    }
+    
+    // Simulation parameters
+    const int maxSimulationSeconds = 300; // 5 minutes
+    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+    std::map<std::string, std::string> stateHistory;
+    int loopCounter = 0;
+    
+    TerminalUI::printInfo("Starting integrated simulation with GUI support...");
+    std::cout << "\n" << ANSI_CYAN << "Press Ctrl+C to stop simulation" << ANSI_RESET << "\n\n";
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    
+    while (true) {
+        // Try to accept GUI client if not connected (non-blocking)
+        if (!server.isClientConnected()) {
+            server.acceptClient();
+        }
+        
+        // Check for GUI commands (non-blocking)
+        std::string command;
+        if (server.isClientConnected() && server.readCommand(command)) {
+            std::istringstream iss(command);
+            std::string cmd;
+            iss >> cmd;
+            
+            if (cmd == "GET_PLANTS") {
+                auto allPlants = InventoryManager::getInstance().getGreenHouseInventory();
+                std::ostringstream response;
+                response << "PLANTS " << allPlants.size() << "\n";
+                for (size_t i = 0; i < allPlants.size(); i++) {
+                    PlantProduct* plant = allPlants[i];
+                    response << i << "|" 
+                            << plant->getId() << "|"
+                            << plant->getProfile()->getSpeciesName() << "|"
+                            << plant->getCurrentStateName() << "|"
+                            << "25.99\n";
+                }
+                response << "END";
+                server.sendResponse(response.str());
+                
+            } else if (cmd == "GET_STATS") {
+                auto allPlants = InventoryManager::getInstance().getGreenHouseInventory();
+                int total = allPlants.size();
+                int healthy = 0;
+                for (auto* plant : allPlants) {
+                    std::string state = plant->getCurrentStateName();
+                    if (state != "Withering") healthy++;
+                }
+                std::ostringstream response;
+                response << "STATS\n";
+                response << "total_plants|" << total << "\n";
+                response << "healthy_plants|" << healthy << "\n";
+                response << "orders|0\n";
+                response << "revenue|0.00\n";
+                response << "END";
+                server.sendResponse(response.str());
+                
+            } else if (cmd == "ADD_PLANT") {
+                std::string species, type, pot;
+                double price;
+                iss >> species >> type >> pot >> price;
+                
+                // Create appropriate profile based on type with distinct durations
+                PlantSpeciesProfile* profile = NULL;
+                if (type == "Flower") {
+                    profile = new FlowerProfile(species, "200ml", "Partial Sun", "Loamy");
+                    std::cout << "[ADD_PLANT] Created Flower with 20s state duration" << std::endl;
+                } else if (type == "Tree") {
+                    profile = new TreeProfile(species, "300ml", "Full Sun", "Well-drained");
+                    std::cout << "[ADD_PLANT] Created Tree with 30s state duration" << std::endl;
+                } else if (type == "Succulent") {
+                    profile = new SucculentProfile(species, "100ml", "Bright Indirect", "Sandy");
+                    std::cout << "[ADD_PLANT] Created Succulent with 25s state duration" << std::endl;
+                } else {
+                    profile = new FlowerProfile(species, "200ml", "Partial Sun", "Loamy");
+                    std::cout << "[ADD_PLANT] Created default Flower profile" << std::endl;
+                }
+                
+                std::string plantId = "Plant_" + std::to_string(plants.size());
+                PlantProduct* newPlant = new PlantProduct(plantId, profile);
+                
+                // CRITICAL: Attach StaffManager as observer so care commands are generated
+                newPlant->setObserver(staff.manager);
+                
+                InventoryManager::getInstance().addToGreenhouse(newPlant);
+                ghManager->addPlantToStructure(newPlant);
+                profiles.push_back(profile);
+                plants.push_back(newPlant);
+                
+                std::cout << "[ADD_PLANT] " << plantId << " (" << species << " - " << type << ") created successfully" << std::endl;
+                server.sendResponse("OK " + plantId + " created successfully");
+                
+            } else if (cmd == "ADD_WORKER") {
+                std::string name, role;
+                iss >> name >> role;
+                
+                StaffChainHandler* worker = NULL;
+                std::string teamRole;
+                if (role == "Gardener" || role == "gardener") {
+                    worker = new Gardener();
+                    teamRole = "Greenhouse"; // Must match getRequiredRole() in care commands
+                } else {
+                    worker = new Cashier();
+                    teamRole = "Sales";
+                }
+                
+                worker->setManager(staff.dispatcher);
+                
+                // Link new worker into the chain
+                if (!staff.handlers.empty()) {
+                    // Find last worker of same type and link
+                    for (int i = staff.handlers.size() - 1; i >= 0; i--) {
+                        bool sameType = (teamRole == "Greenhouse" && dynamic_cast<Gardener*>(staff.handlers[i])) ||
+                                       (teamRole == "Sales" && dynamic_cast<Cashier*>(staff.handlers[i]));
+                        if (sameType) {
+                            staff.handlers[i]->setNext(worker);
+                            break;
+                        }
+                    }
+                }
+                
+                staff.handlers.push_back(worker);
+                staff.roster.push_back(std::make_pair(name, worker));
+                
+                // Register first worker of each team with dispatcher
+                bool isFirstOfTeam = true;
+                for (size_t i = 0; i < staff.handlers.size() - 1; i++) {
+                    bool sameType = (teamRole == "Greenhouse" && dynamic_cast<Gardener*>(staff.handlers[i])) ||
+                                   (teamRole == "Sales" && dynamic_cast<Cashier*>(staff.handlers[i]));
+                    if (sameType) {
+                        isFirstOfTeam = false;
+                        break;
+                    }
+                }
+                if (isFirstOfTeam) {
+                    staff.dispatcher->registerTeam(teamRole, worker);
+                    std::cout << "[INTEGRATED] Registered first " << teamRole << " team worker: " << name << std::endl;
+                } else {
+                    std::cout << "[INTEGRATED] Added " << teamRole << " worker to existing chain: " << name << std::endl;
+                }
+                
+                server.sendResponse("OK Worker " + name + " hired as " + role);
+                
+            } else if (cmd == "GET_WORKERS") {
+                std::ostringstream response;
+                response << "WORKERS " << staff.roster.size() << "\n";
+                for (size_t i = 0; i < staff.roster.size(); i++) {
+                    std::string workerName = staff.roster[i].first;
+                    StaffChainHandler* handler = staff.roster[i].second;
+                    
+                    std::string role = "Worker";
+                    if (dynamic_cast<Gardener*>(handler)) {
+                        role = "Gardener";
+                    } else if (dynamic_cast<Cashier*>(handler)) {
+                        role = "Cashier";
+                    }
+                    
+                    response << i << "|" << workerName << "|" << role << "\n";
+                }
+                response << "END";
+                server.sendResponse(response.str());
+                
+            } else if (cmd == "ADVANCE") {
+                int plantId;
+                iss >> plantId;
+                auto allPlants = InventoryManager::getInstance().getGreenHouseInventory();
+                if (plantId >= 0 && plantId < (int)allPlants.size()) {
+                    allPlants[plantId]->advanceLifecycle();
+                    server.sendResponse("OK Lifecycle advanced for plant " + std::to_string(plantId));
+                } else {
+                    server.sendResponse("ERROR Invalid plant ID");
+                }
+                
+            } else if (cmd == "GET_INVENTORY") {
+                // Get plants available for sale (on sales floor)
+                auto salesFloorPlants = InventoryManager::getInstance().getReadyForSalePlants();
+                std::ostringstream response;
+                response << "INVENTORY " << salesFloorPlants.size() << "\n";
+                for (auto* plant : salesFloorPlants) {
+                    response << plant->getId() << "|"
+                            << plant->getProfile()->getSpeciesName() << "|"
+                            << plant->getCurrentStateName() << "|"
+                            << "25.99\n";
+                }
+                response << "END";
+                server.sendResponse(response.str());
+                
+            } else if (cmd == "SUGGEST_BOUQUET") {
+                std::string eventType;
+                iss >> eventType;
+                
+                BouquetSuggestionTemplate* tmpl = BouquetSuggestionFactory::getInstance().getTemplate(eventType);
+                if (!tmpl) {
+                    server.sendResponse("ERROR Unknown event type: " + eventType);
+                } else {
+                    std::vector<BouquetSuggestion> suggestions = tmpl->generateSuggestions();
+                    std::ostringstream response;
+                    response << "SUGGESTIONS\n";
+                    response << "═══ " << eventType << " Bouquet Options ═══\n\n";
+                    
+                    for (const auto& suggestion : suggestions) {
+                        response << "🌸 " << suggestion.bouquetName << " - $" 
+                                << std::fixed << std::setprecision(2) << suggestion.estimatedPrice << "\n";
+                        response << "   Flowers: ";
+                        
+                        for (size_t i = 0; i < suggestion.flowerTypes.size(); i++) {
+                            response << suggestion.quantities[i] << "x " << suggestion.flowerTypes[i];
+                            if (i < suggestion.flowerTypes.size() - 1) response << ", ";
+                        }
+                        
+                        response << "\n   Colors: " << suggestion.colorScheme << "\n";
+                        response << "   " << suggestion.significance << "\n";
+                        
+                        // Check inventory availability
+                        response << "   Stock: ";
+                        bool allAvailable = true;
+                        for (size_t i = 0; i < suggestion.flowerTypes.size(); i++) {
+                            int available = InventoryManager::getInstance().getAvailablePlantCount(suggestion.flowerTypes[i]);
+                            int needed = suggestion.quantities[i];
+                            if (available < needed) {
+                                allAvailable = false;
+                            }
+                        }
+                        if (allAvailable) {
+                            response << "✓ Available\n";
+                        } else {
+                            response << "⚠ Limited availability\n";
+                        }
+                        response << "\n";
+                    }
+                    
+                    response << "END";
+                    server.sendResponse(response.str());
+                }
+                
+            } else if (cmd == "CREATE_ORDER") {
+                std::vector<std::string> plantIds;
+                std::string id;
+                while (iss >> id) {
+                    plantIds.push_back(id);
+                }
+                
+                if (plantIds.empty()) {
+                    server.sendResponse("ERROR No plants specified");
+                } else {
+                    // Remove plants from sales floor inventory
+                    auto salesFloorPlants = InventoryManager::getInstance().getReadyForSalePlants();
+                    int soldCount = 0;
+                    
+                    for (const auto& plantId : plantIds) {
+                        // Find plant by ID
+                        for (auto* plant : salesFloorPlants) {
+                            if (plant->getId() == plantId) {
+                                InventoryManager::getInstance().removeFromSalesFloor(plant);
+                                InventoryManager::getInstance().markAsSold(plant);
+                                soldCount++;
+                                std::cout << "[ORDER] Sold plant: " << plantId << std::endl;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    double total = soldCount * 25.99;
+                    std::ostringstream response;
+                    response << "OK Order created successfully! Total: $" 
+                            << std::fixed << std::setprecision(2) << total 
+                            << " (" << soldCount << " plants sold)";
+                    server.sendResponse(response.str());
+                    
+                    std::cout << "[ORDER] Completed order | Plants sold: " << soldCount 
+                             << " | Total: $" << total << std::endl;
+                }
+                
+            } else if (cmd == "PRINT_STRUCTURE") {
+                std::cout << "\n[GUI REQUEST] Printing greenhouse structure..." << std::endl;
+                ghManager->displayGreenhouseStructure();
+                server.sendResponse("OK Structure printed to terminal");
+                
+            } else if (cmd == "EXIT") {
+                server.sendResponse("OK Goodbye");
+                break;
+            }
+        }
+        
+        // Advance all plant lifecycles
+        auto allPlants = InventoryManager::getInstance().getGreenHouseInventory();
+        for (size_t i = 0; i < allPlants.size(); ++i) {
+            allPlants[i]->advanceLifecycle();
+        }
+        
+        // Process staff command queue
+        if (loopCounter % 2 == 0) {
+            staff.dispatcher->processUnhandledQueue();
+        }
+        
+        // Calculate elapsed time
+        std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+        int elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - start).count();
+        
+        // Update state history
+        for (size_t i = 0; i < allPlants.size(); ++i) {
+            std::string plantId = allPlants[i]->getId();
+            std::string currentState = allPlants[i]->getCurrentStateName();
+            if (stateHistory.find(plantId) == stateHistory.end()) {
+                stateHistory[plantId] = currentState;
+            }
+        }
+        
+        // Display live status
+        TerminalUI::clearScreen();
+        TerminalUI::printHeader("GREENHOUSE - INTEGRATED MODE (Option B)");
+        TerminalUI::printSection("SIMULATION CLOCK");
+        TerminalUI::printInfo("Elapsed: " + std::to_string(elapsed) + "s | " +
+                            "Plants: " + std::to_string(allPlants.size()) + " | " +
+                            "Workers: " + std::to_string(staff.roster.size()));
+        TerminalUI::printInfo("GUI Server: " + std::string(server.isClientConnected() ? "CONNECTED" : "Waiting..."));
+        
+        displayStateTransitions(allPlants, stateHistory);
+        renderPlantVisualizer(allPlants);
+        displayStaffStatus(staff.roster);
+        
+        // Check termination
+        if (elapsed >= maxSimulationSeconds) {
+            TerminalUI::printWarning("Simulation time limit reached");
+            break;
+        }
+        
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        loopCounter++;
+    }
+    
+    server.stop();
+    TerminalUI::printSuccess("Integrated simulation completed");
+}
+
 int main() {
+    // ============================================================================
+    // Launch Mode Selection
+    // ============================================================================
+    std::cout << "\n";
+    std::cout << "╔════════════════════════════════════════════════════════════╗\n";
+    std::cout << "║   GREENHOUSE MANAGEMENT SYSTEM - LAUNCH MODE SELECTION     ║\n";
+    std::cout << "╚════════════════════════════════════════════════════════════╝\n";
+    std::cout << "\n";
+    std::cout << "Select launch mode:\n";
+    std::cout << "  1. Integrated Mode - C++ Backend + Java GUI (RECOMMENDED)\n";
+    std::cout << "  2. Console Simulation Mode\n";
+    std::cout << "\n";
+    std::cout << "Enter choice (1-2): ";
+    
+    int modeChoice = 0;
+    std::cin >> modeChoice;
+    std::cin.ignore(); // Clear newline
+    
+    if (modeChoice == 1) {
+        // ============================================================================
+        // INTEGRATED MODE (RECOMMENDED)
+        // Terminal simulation + Real-time GUI via network socket
+        // ============================================================================
+        
+        std::cout << "\n";
+        std::cout << "╔════════════════════════════════════════════════════════════╗\n";
+        std::cout << "║              INTEGRATED MODE                               ║\n";
+        std::cout << "╠════════════════════════════════════════════════════════════╣\n";
+        std::cout << "║  This mode runs the terminal simulation while listening    ║\n";
+        std::cout << "║  for GUI commands on a network socket (port 8765).         ║\n";
+        std::cout << "║                                                            ║\n";
+        std::cout << "║  Features:                                                 ║\n";
+        std::cout << "║  ✓ Real-time terminal visualization                        ║\n";
+        std::cout << "║  ✓ GUI can connect and add plants/workers                  ║\n";
+        std::cout << "║  ✓ Changes instantly visible in both terminal and GUI      ║\n";
+        std::cout << "║  ✓ Single unified state                                    ║\n";
+        std::cout << "╚════════════════════════════════════════════════════════════╝\n";
+        std::cout << "\n";
+        
+        // Initialize system
+        registerCareCommands();
+        StaffContext staff = createStaffContext();
+        
+        GreenhouseManager* ghManager = new GreenhouseManager();
+        ghManager->buildGreenhouseStructure();
+        
+        // START EMPTY - user adds everything via GUI
+        std::vector<PlantSpeciesProfile*> profiles;
+        std::vector<PlantProduct*> plants;
+        
+        std::cout << "Press Enter to start integrated simulation...";
+        std::cin.get();
+        
+        // Run integrated simulation
+        runIntegratedSimulation(staff, ghManager, profiles, plants);
+        
+        // Cleanup
+        delete ghManager;
+        cleanup(staff, profiles);
+        
+        return 0;
+    }
+    
+    // ============================================================================
+    // CONSOLE MODE - Original Simulation
+    // ============================================================================
     // ============================================================================
     // System Initialization
     // ============================================================================
