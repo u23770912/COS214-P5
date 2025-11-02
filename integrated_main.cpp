@@ -666,15 +666,17 @@ void displayCustomerMenu() {
     std::cout << "    ╠══════════════════════════════════════════════════════════════════╣\n";
     std::cout << ANSI_RESET;
     
-    std::cout << "    ║  " << ANSI_GREEN << "1" << ANSI_RESET << " │ 🌺 Browse Available Plants                                  ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << "2" << ANSI_RESET << " │ 🛒 Add Single Plant to Cart                                 ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << "3" << ANSI_RESET << " │ 🎁 Create Custom Plant Bundle                               ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << "4" << ANSI_RESET << " │ 💐 Browse Event Bouquet Suggestions                         ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << "5" << ANSI_RESET << " │ 👀 View Current Order                                       ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << "6" << ANSI_RESET << " │ 💾 Save Order Snapshot (Memento)                            ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << "7" << ANSI_RESET << " │ ⏮  Restore Last Order Snapshot                              ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << "8" << ANSI_RESET << " │ 💳 Checkout & Payment                                       ║\n";
-    std::cout << "    ║  " << ANSI_GREEN << "9" << ANSI_RESET << " │ 🚪 Exit                                                     ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << " 1" << ANSI_RESET << " │ 🌺 Browse Available Plants                                 ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << " 2" << ANSI_RESET << " │ 🛒 Add Single Plant to Cart                                ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << " 3" << ANSI_RESET << " │ 🎁 Create Custom Plant Bundle                              ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << " 4" << ANSI_RESET << " │ 🏺 Buy Pot Only                                            ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << " 5" << ANSI_RESET << " │ 🌱 Add Plant with Pot to Cart                              ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << " 6" << ANSI_RESET << " │ 💐 Browse Event Bouquet Suggestions                        ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << " 7" << ANSI_RESET << " │ 👀 View Current Order                                      ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << " 8" << ANSI_RESET << " │ 💾 Save Order Snapshot (Memento)                           ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << " 9" << ANSI_RESET << " │ ⏮  Restore Last Order Snapshot                             ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "10" << ANSI_RESET << " │ 💳 Checkout & Payment                                      ║\n";
+    std::cout << "    ║  " << ANSI_GREEN << "11" << ANSI_RESET << " │ 🚪 Exit                                                    ║\n";
     
     std::cout << ANSI_CYAN << ANSI_BOLD;
     std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
@@ -859,10 +861,8 @@ void runCustomerOrderTest(StaffContext& staff) {
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     
     // ============================================================================
-    // Phase 2.3: Create order builder and memento support
+    // Phase 2.3: Memento support (Customer has its own builder internally)
     // ============================================================================
-    ConcreteOrderBuilder* orderBuilder = new ConcreteOrderBuilder(customer->getName());
-    Order* currentOrder = NULL;
     OrderMemento* savedMemento = NULL;  // For memento pattern demonstration
     
     // ============================================================================
@@ -894,7 +894,7 @@ void runCustomerOrderTest(StaffContext& staff) {
         
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         
-        if (choice < 1 || choice > 9) {
+        if (choice < 1 || choice > 11) {
             std::cout << "\n    " << ANSI_RED << "✗ Invalid choice! Try again.\n" << ANSI_RESET;
             std::this_thread::sleep_for(std::chrono::seconds(1));
             continue;
@@ -979,17 +979,15 @@ void runCustomerOrderTest(StaffContext& staff) {
                     break;
                 }
                 
-                // Create order if it doesn't exist
-                if (!currentOrder) {
-                    currentOrder = orderBuilder->getOrder();
-                }
-                
-                // Add plant to order
+                // Use builder to add plant to order
                 std::string plantType = plants[plantNum-1]->getProfile()->getSpeciesName();
-                SinglePlant* plant = new SinglePlant(plantType, 25.99, quantity);
-                currentOrder->addOrderItem(plant);
-                
-                std::cout << "\n    " << ANSI_GREEN << "✓ Added " << quantity << "x " << plantType << " to cart!\n" << ANSI_RESET;
+                ConcreteOrderBuilder* builder = customer->getOrderBuilder();
+                if (builder) {
+                    builder->buildPlant(plantType, quantity);
+                    std::cout << "\n    " << ANSI_GREEN << "✓ Added " << quantity << "x " << plantType << " to cart!\n" << ANSI_RESET;
+                } else {
+                    std::cout << ANSI_RED << "    ✗ Unable to access order builder!\n" << ANSI_RESET;
+                }
                 std::this_thread::sleep_for(std::chrono::milliseconds(800));
                 break;
             }
@@ -1121,28 +1119,120 @@ void runCustomerOrderTest(StaffContext& staff) {
                 std::cout << "    Total plants: " << totalPlantCount << "\n";
                 std::cout << "    Discount: " << automaticDiscount << "%\n";
                 
-                // Create order if it doesn't exist
-                if (!currentOrder) {
-                    currentOrder = orderBuilder->getOrder();
+                // Use builder method to add bundle to order (Builder Pattern)
+                ConcreteOrderBuilder* builder = customer->getOrderBuilder();
+                if (builder) {
+                    builder->addBundleToOrder(bundle);
+                    std::cout << "\n    " << ANSI_GREEN << ANSI_BOLD << "✓ Bundle '" << bundleName 
+                             << "' created successfully!\n" << ANSI_RESET;
+                } else {
+                    std::cout << ANSI_RED << "    ✗ Unable to access order builder!\n" << ANSI_RESET;
+                    delete bundle;
                 }
-                
-                currentOrder->addOrderItem(bundle);
-                std::cout << "\n    " << ANSI_GREEN << ANSI_BOLD << "✓ Bundle '" << bundleName 
-                         << "' created successfully!\n" << ANSI_RESET;
                 std::this_thread::sleep_for(std::chrono::milliseconds(1200));
                 break;
             }
             
             case 4: {
+                // Buy Pot Only - Using facade for unified interface
+                TerminalUI::clearScreen();
+                
+                // Get quantity first
+                std::cout << "\n    " << ANSI_YELLOW << "➤ How many pots would you like? " << ANSI_RESET;
+                int potQty;
+                std::cin >> potQty;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                
+                if (potQty < 1) {
+                    std::cout << ANSI_RED << "    ✗ Invalid quantity!\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    break;
+                }
+                
+                // Use facade to handle pot customization and ordering (facade uses builder internally)
+                OrderUIFacade* facade = customer->getUIFacade();
+                if (facade && facade->addCustomizedPotToOrder(potQty)) {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1200));
+                } else {
+                    std::cout << ANSI_RED << "    ✗ Failed to add pot to order!\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                }
+                break;
+            }
+            
+            case 5: {
+                // Add Plant with Pot to Cart - Using facade for unified interface
+                TerminalUI::clearScreen();
+                std::cout << "\n" << ANSI_GREEN << ANSI_BOLD;
+                std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
+                std::cout << "    ║               🌱 PLANT + POT COMBINATION 🏺                      ║\n";
+                std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
+                std::cout << ANSI_RESET << "\n";
+                
+                std::vector<PlantProduct*> plants = InventoryManager::getInstance().getReadyForSalePlants();
+                
+                if (plants.empty()) {
+                    std::cout << ANSI_RED << "    ✗ No plants available!\n" << ANSI_RESET;
+                    std::cout << "\n    " << ANSI_CYAN << "Press Enter to continue..." << ANSI_RESET;
+                    std::cin.get();
+                    break;
+                }
+                
+                // Step 1: Select plant
+                std::cout << ANSI_CYAN << "    Step 1: Select Plant\n" << ANSI_RESET;
+                std::cout << "    " << std::string(66, '-') << "\n";
+                
+                for (size_t i = 0; i < plants.size(); i++) {
+                    std::string name_p = plants[i]->getProfile()->getSpeciesName();
+                    std::cout << "    " << ANSI_YELLOW << std::setw(2) << (i+1) << ". " << ANSI_RESET;
+                    std::cout << ANSI_BOLD << name_p << ANSI_RESET << " - " << ANSI_GREEN << "R25.99" << ANSI_RESET << "\n";
+                }
+                std::cout << "    " << std::string(66, '-') << "\n";
+                
+                std::cout << "\n    " << ANSI_YELLOW << "➤ Enter plant number (1-" << plants.size() << "): " << ANSI_RESET;
+                int plantNum;
+                std::cin >> plantNum;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                
+                if (plantNum < 1 || plantNum > (int)plants.size()) {
+                    std::cout << ANSI_RED << "    ✗ Invalid selection!\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    break;
+                }
+                
+                std::cout << "    " << ANSI_YELLOW << "➤ Quantity: " << ANSI_RESET;
+                int plantQty;
+                std::cin >> plantQty;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                
+                if (plantQty < 1) {
+                    std::cout << ANSI_RED << "    ✗ Invalid quantity!\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    break;
+                }
+                
+                // Use facade to handle plant + pot customization (facade uses builder internally)
+                OrderUIFacade* facade = customer->getUIFacade();
+                if (facade && facade->addPlantWithCustomizedPot(plantNum, plantQty)) {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1200));
+                } else {
+                    std::cout << ANSI_RED << "    ✗ Failed to add plant with pot to order!\n" << ANSI_RESET;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                }
+                break;
+            }
+            
+            case 6: {
                 // Browse bouquet suggestions (Template Method Pattern)
                 browseBouquetSuggestions();
                 break;
             }
             
-            case 5: {
+            case 7: {
                 // View current order with enhanced display
                 TerminalUI::clearScreen();
-                if (!currentOrder || currentOrder->isEmpty()) {
+                ConcreteOrderBuilder* builder = customer->getOrderBuilder();
+                if (!builder || !builder->hasCurrentOrder()) {
                     std::cout << "\n" << ANSI_YELLOW;
                     std::cout << "    ╔══════════════════════════════════════════════════════════════════╗\n";
                     std::cout << "    ║                     🛒 YOUR CART IS EMPTY                        ║\n";
@@ -1156,14 +1246,17 @@ void runCustomerOrderTest(StaffContext& staff) {
                     std::cout << "    ╚══════════════════════════════════════════════════════════════════╝\n";
                     std::cout << ANSI_RESET << "\n";
                     
-                    std::string summary = currentOrder->getOrderSummary();
-                    // Indent the summary
-                    size_t pos = 0;
-                    while ((pos = summary.find('\n', pos)) != std::string::npos) {
-                        summary.insert(pos + 1, "    ");
-                        pos += 5;
+                    Order* currentOrder = builder->getOrder();
+                    if (currentOrder && !currentOrder->isEmpty()) {
+                        std::string summary = currentOrder->getOrderSummary();
+                        // Indent the summary
+                        size_t pos = 0;
+                        while ((pos = summary.find('\n', pos)) != std::string::npos) {
+                            summary.insert(pos + 1, "    ");
+                            pos += 5;
+                        }
+                        std::cout << "    " << summary << "\n";
                     }
-                    std::cout << "    " << summary << "\n";
                 }
                 
                 std::cout << "\n    " << ANSI_CYAN << "Press Enter to continue..." << ANSI_RESET;
@@ -1171,8 +1264,11 @@ void runCustomerOrderTest(StaffContext& staff) {
                 break;
             }
             
-            case 6: {
+            case 8: {
                 // Save order snapshot (Memento Pattern)
+                ConcreteOrderBuilder* builder = customer->getOrderBuilder();
+                Order* currentOrder = builder ? builder->getOrder() : nullptr;
+                
                 if (!currentOrder || currentOrder->isEmpty()) {
                     std::cout << "\n    " << ANSI_YELLOW << "⚠ No order to save!\n" << ANSI_RESET;
                     std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -1188,24 +1284,28 @@ void runCustomerOrderTest(StaffContext& staff) {
                 break;
             }
             
-            case 7: {
+            case 9: {
                 // Restore last order snapshot (Memento Pattern)
                 if (!savedMemento) {
                     std::cout << "\n    " << ANSI_YELLOW << "⚠ No saved snapshot available!\n" << ANSI_RESET;
                     std::this_thread::sleep_for(std::chrono::seconds(1));
                 } else {
-                    if (!currentOrder) {
-                        currentOrder = orderBuilder->getOrder();
+                    ConcreteOrderBuilder* builder = customer->getOrderBuilder();
+                    Order* currentOrder = builder ? builder->getOrder() : nullptr;
+                    if (currentOrder) {
+                        currentOrder->restoreState(savedMemento);
+                        std::cout << "\n    " << ANSI_GREEN << "✓ Order restored from snapshot!\n" << ANSI_RESET;
+                        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
                     }
-                    currentOrder->restoreState(savedMemento);
-                    std::cout << "\n    " << ANSI_GREEN << "✓ Order restored from snapshot!\n" << ANSI_RESET;
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
                 }
                 break;
             }
             
-            case 8: {
+            case 10: {
                 // Checkout with payment processing (Adapter Pattern)
+                ConcreteOrderBuilder* builder = customer->getOrderBuilder();
+                Order* currentOrder = builder ? builder->getOrder() : nullptr;
+                
                 if (!currentOrder || currentOrder->isEmpty()) {
                     TerminalUI::clearScreen();
                     std::cout << "\n" << ANSI_RED;
@@ -1351,10 +1451,8 @@ void runCustomerOrderTest(StaffContext& staff) {
                     std::cout << "    Amount Paid: $" << std::fixed << std::setprecision(2) << totalAmount << "\n";
                     std::cout << "    A confirmation has been sent to your email.\n";
                     
-                    // Reset order for potential new purchase
-                    delete currentOrder;
-                    currentOrder = NULL;
-                    orderBuilder->reset();
+                    // Reset order for potential new purchase - builder handles cleanup
+                    builder->reset();
                     
                 } else {
                     std::cout << "\n" << ANSI_RED << ANSI_BOLD;
@@ -1371,7 +1469,7 @@ void runCustomerOrderTest(StaffContext& staff) {
                 break;
             }
             
-            case 9: {
+            case 11: {
                 // Exit customer menu
                 customerActive = false;
                 TerminalUI::clearScreen();
@@ -1394,14 +1492,10 @@ void runCustomerOrderTest(StaffContext& staff) {
     // ============================================================================
     // Cleanup customer resources
     // ============================================================================
-    if (currentOrder) {
-        delete currentOrder;
-    }
     if (savedMemento) {
         delete savedMemento;
     }
-    delete orderBuilder;
-    delete customer;
+    delete customer;  // Customer destructor handles orderBuilder cleanup
     
     TerminalUI::printSuccess("Customer interaction complete!");
     std::cout << std::endl;

@@ -136,3 +136,40 @@ bool ConcreteOrderBuilder::hasCurrentOrder() const {
 std::string ConcreteOrderBuilder::getCurrentCustomerName() const {
     return customerName;
 }
+
+void ConcreteOrderBuilder::buildCustomizedPot(const std::string& potDescription, 
+                                              double potPrice, int quantity) {
+    if (!currentOrder) {
+        reset();
+    }
+    
+    // Create pot as a SinglePlant item with dynamic pricing
+    SinglePlant* potItem = new SinglePlant(potDescription, potPrice, quantity);
+    currentOrder->addOrderItem(potItem);
+}
+
+void ConcreteOrderBuilder::buildPlantWithCustomizedPot(const std::string& plantType, 
+                                                       const std::string& potDescription, 
+                                                       double potPrice, 
+                                                       int quantity, 
+                                                       const std::string& size) {
+    if (!currentOrder) {
+        reset();
+    }
+    
+    // Create plant with customized pot
+    SinglePlant* plant = new SinglePlant(plantType, 25.99, quantity, size);
+    plant->addPot(potDescription, potPrice);
+    currentOrder->addOrderItem(plant);
+}
+
+void ConcreteOrderBuilder::addBundleToOrder(PlantBundle* bundle) {
+    if (!currentOrder) {
+        reset();
+    }
+    
+    if (bundle) {
+        currentOrder->addOrderItem(bundle);
+    }
+}
+

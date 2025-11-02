@@ -40,6 +40,14 @@ public:
     void buildCustomBundle(const std::string& bundleName, const std::string& bundleType,
                           double discount = 0.0);
     
+    // Enhanced pot ordering methods with dynamic pricing
+    void buildCustomizedPot(const std::string& potDescription, double potPrice, int quantity);
+    void buildPlantWithCustomizedPot(const std::string& plantType, const std::string& potDescription, 
+                                    double potPrice, int quantity, const std::string& size = "medium");
+    
+    // Method to add pre-created bundle to order
+    void addBundleToOrder(PlantBundle* bundle);
+    
     // Method to add individual items to current bundle
     void addPlantToCurrentBundle(const std::string& plantType, int quantity, 
                                 const std::string& size = "medium");

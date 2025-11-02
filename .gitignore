@@ -33,5 +33,6 @@ bin/
 
 #makefile
 .github/
+Makefile
 
 CustomerOrderTest.cpp

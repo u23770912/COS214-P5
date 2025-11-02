@@ -70,7 +70,11 @@ std::string Customer::getCellPhone() const {
 
 Order* Customer::createOrder() {
     // Customer focuses only on order creation logic, UI handled by facade
-    cleanupPreviousOrder();
+    // Clean up previous order if exists
+    delete orderProduct;
+    orderProduct = 0;
+    delete placeOrderCommand;
+    placeOrderCommand = 0;
     
     // Reset the builder for a new order
     orderBuilder->reset();
@@ -143,67 +147,6 @@ bool Customer::addPlantToOrder(int plantIndex, int quantity) {
     return uiFacade->addPlantToOrderWithAutoDiscount(plantIndex, quantity);
 }
 
-bool Customer::addBundleToOrder(const std::string& bundleName, const std::vector<int>& plantIndices, double discount) {
-    auto availablePlants = getAvailablePlantsFromInventory();
-    
-    if (plantIndices.empty()) {
-        std::cout << "[ERROR] Bundle must contain at least one plant." << std::endl;
-        return false;
-    }
-    
-    // Validate all indices
-    for (int index : plantIndices) {
-        if (index < 1 || index > static_cast<int>(availablePlants.size())) {
-            std::cout << "[ERROR] Invalid plant number " << index << ". Please choose between 1 and " 
-                      << availablePlants.size() << std::endl;
-            return false;
-        }
-    }
-    
-    std::cout << "\n[BUNDLE] Creating bundle: " << bundleName << " with " << discount << "% discount" << std::endl;
-    
-    // Notify staff of bundle creation
-    notifyStaffOfInteraction("BundleCreation", 
-        "Customer creating " + bundleName + " with " + std::to_string(plantIndices.size()) + " plants");
-    
-    // Use builder to create bundle
-    ConcreteOrderBuilder* concreteBuilder = dynamic_cast<ConcreteOrderBuilder*>(orderBuilder);
-    if (concreteBuilder) {
-        concreteBuilder->buildCustomBundle(bundleName, "Mixed", discount);
-        
-        // Add each plant to the bundle
-        for (int index : plantIndices) {
-            PlantProduct* plant = availablePlants[index - 1];
-            std::string plantType = plant->getProfile()->getSpeciesName();
-            concreteBuilder->addPlantToCurrentBundle(plantType, 1);
-            std::cout << "  [OK] Added " << plantType << " to bundle" << std::endl;
-        }
-    }
-    
-    std::cout << "[BUNDLE] Bundle created successfully!" << std::endl;
-    return uiFacade->addBundleToOrderWithAutoDiscount(bundleName, plantIndices);
-}
-
-void Customer::viewCurrentOrder() {
-    ConcreteOrderBuilder* concreteBuilder = dynamic_cast<ConcreteOrderBuilder*>(orderBuilder);
-    if (!concreteBuilder || !concreteBuilder->hasCurrentOrder()) {
-        std::cout << "\n[ORDER] Your order is currently empty." << std::endl;
-        std::cout << "[INFO] Use displayAvailableItems() to see what's available!" << std::endl;
-        return;
-    }
-    
-    std::cout << "\n=== YOUR CURRENT ORDER ===" << std::endl;
-    // Get a temporary order to display
-    Order* tempOrder = orderBuilder->getOrder();
-    if (tempOrder && !tempOrder->isEmpty()) {
-        std::cout << tempOrder->getOrderSummary() << std::endl;
-        std::cout << "[TOTAL] Total: $" << std::fixed << std::setprecision(2) 
-                  << tempOrder->getTotalAmount() << std::endl;
-    } else {
-        std::cout << "[ORDER] Order is empty." << std::endl;
-    }
-}
-
 bool Customer::finalizeOrder() {
     ConcreteOrderBuilder* concreteBuilder = dynamic_cast<ConcreteOrderBuilder*>(orderBuilder);
     if (!concreteBuilder || !concreteBuilder->hasCurrentOrder()) {
@@ -232,6 +175,11 @@ bool Customer::finalizeOrder() {
 // Public method to get access to the builder for building the order
 ConcreteOrderBuilder* Customer::getOrderBuilder() {
     return dynamic_cast<ConcreteOrderBuilder*>(orderBuilder);
+}
+
+// Public method to get access to the UI facade
+OrderUIFacade* Customer::getUIFacade() {
+    return uiFacade;
 }
 
 // ============= Observer Pattern Implementation (Pure Pattern) =============
@@ -278,99 +226,6 @@ bool Customer::requestValidation(Order* order) {
 void Customer::attachObserver(CustomerObserver* observer) {
     attach(observer);
     std::cout << "[SYSTEM] Staff observer registered for customer: " << name << std::endl;
-}
-
-void Customer::displayPlantDetails(const PlantProduct* plant, int index) {
-    std::cout << std::setw(3) << index << ". ";
-    
-    if (plant && plant->getProfile()) {
-        std::cout << std::setw(15) << plant->getProfile()->getSpeciesName();
-        std::cout << " | State: " << std::setw(12) << plant->getCurrentStateName();
-        
-        // Display plant care requirements if available
-        std::string waterNeeds = plant->getProfile()->getProperty("idealWater");
-        std::string sunNeeds = plant->getProfile()->getProperty("idealSunlight");
-        
-        if (!waterNeeds.empty()) {
-            std::cout << " | Water: " << waterNeeds;
-        }
-        if (!sunNeeds.empty()) {
-            std::cout << " | Sun: " << sunNeeds;
-        }
-        
-        std::cout << " | $15.99"; // Default price - could be enhanced
-    } else {
-        std::cout << "Failed to construct order via Director." << std::endl;
-        notifyInteraction("ORDER_CONSTRUCTION_FAILED", "Director failed to build order");
-    }
-    
-    return orderProduct;
-}
-
-Order* Customer::constructSimplePlantOrder(const std::string& plantType, int quantity) {
-    std::cout << "\n=== Constructing Simple Plant Order ===" << std::endl;
-    std::cout << "Plant: " << plantType << ", Quantity: " << quantity << std::endl;
-    
-    // Clean up any previous order
-    delete orderProduct;
-    orderProduct = 0;
-    
-    // Notify observers
-    notifyInteraction("SIMPLE_PLANT_ORDER", "Constructing simple plant order: " + plantType);
-    
-    // Use director to construct
-    orderProduct = orderDirector->constructSimplePlantOrder(plantType, quantity);
-    
-    if (orderProduct) {
-        std::cout << "Simple plant order constructed successfully!" << std::endl;
-    }
-    
-    return orderProduct;
-}
-
-Order* Customer::constructPlantWithPotOrder(const std::string& plantType, const std::string& potType, int quantity) {
-    std::cout << "\n=== Constructing Plant with Pot Order ===" << std::endl;
-    std::cout << "Plant: " << plantType << ", Pot: " << potType << ", Quantity: " << quantity << std::endl;
-    
-    // Clean up any previous order
-    delete orderProduct;
-    orderProduct = 0;
-    
-    // Notify observers
-    notifyInteraction("PLANT_POT_ORDER", "Constructing plant+pot order: " + plantType + " + " + potType);
-    
-    // Use director to construct
-    orderProduct = orderDirector->constructPlantWithPotOrder(plantType, potType, quantity);
-    
-    if (orderProduct) {
-        std::cout << "Plant with pot order constructed successfully!" << std::endl;
-    }
-    
-    return orderProduct;
-}
-
-Order* Customer::constructBundleOrder(const std::string& bundleName, 
-                                     const std::vector<std::string>& plantTypes,
-                                     const std::vector<int>& quantities, 
-                                     double discount) {
-    std::cout << "\n=== Constructing Bundle Order ===" << std::endl;
-    std::cout << "Bundle: " << bundleName << ", Discount: " << discount << "%" << std::endl;
-    
-    // Clean up any previous order
-    delete orderProduct;
-    orderProduct = 0;
-    
-    // Notify observers
-    notifyInteraction("BUNDLE_ORDER", "Constructing bundle order: " + bundleName);
-    
-    // Use director to construct
-    orderProduct = orderDirector->constructBundleOrder(bundleName, plantTypes, quantities, discount);
-    
-    if (orderProduct) {
-        std::cout << "Bundle order constructed successfully!" << std::endl;
-    }
-    
-    return orderProduct;
 }
 
 // ============= Additional Methods from Sales Floor Integration =============

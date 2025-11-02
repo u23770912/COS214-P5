@@ -382,8 +382,9 @@ void InventoryManager::markAsSold(PlantProduct *plant)
     }
 }
 
-
-
+// NOTE: The following methods are commented out because they're not declared in InventoryManager.h
+// If you need these methods, please add their declarations to the header file first
+/*
 void InventoryManager::addCustomPot(Pot* pot) {
     if (pot) {
         potInventory.push_back(pot);
@@ -436,3 +437,4 @@ double InventoryManager::getTotalPotInventoryValue() const {
 int InventoryManager::getPotInventoryCount() const {
     return potInventory.size();
 }
+*/
