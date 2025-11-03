@@ -30,5 +30,5 @@ bin/
 *~
 
 # Protected files - do not modify
-#Makefile
-#.github/
+ Makefile
+ .github/
