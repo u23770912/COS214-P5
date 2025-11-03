@@ -51,8 +51,8 @@ jobs:
           done
           echo "✓ Style check complete"
 
-      - name: Syntax Check (Compilation Test)
-        continue-on-error: true  # Don't fail on syntax warnings
+      - name: 📝 Syntax Check (Compilation Test)
+        continue-on-error: false  # Fail build if syntax errors found
         run: |
           echo "Performing syntax validation..."
           # Check all C++ files can be parsed (excluding known problematic files)
@@ -70,10 +70,14 @@ jobs:
           fi
           
           echo "Found $(echo "$SOURCES" | wc -l) files to check"
-          # Reduced warning level: only -Wall, no -Wextra or -pedantic
-          g++ -std=c++${{ env.CXX_STANDARD }} -Wall \
-            -I. -fsyntax-only $SOURCES 2>&1 | head -50 || true
-          echo "Syntax check complete"
+          # Syntax check with Wall
+          if g++ -std=c++${{ env.CXX_STANDARD }} -Wall \
+            -I. -fsyntax-only $SOURCES 2>&1 | head -50; then
+            echo "Syntax check passed"
+          else
+            echo "Syntax check failed"
+            exit 1
+          fi
 
   # ========================================
   # JOB 2: BUILD - Compile Application
@@ -209,7 +213,31 @@ jobs:
           echo "==================================="
 
   # ========================================
-  # JOB 4: SUCCESS NOTIFICATION
+  # JOB 4: COVERAGE (Optional)
+  # ========================================
+  coverage:
+    name: Code Coverage
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'pull_request'  # Only on PRs
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Coverage Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lcov gcovr
+
+      - name: Generate Coverage Report
+        continue-on-error: true
+        run: |
+          echo "Coverage analysis not yet configured"
+          echo "Add --coverage flags to enable code coverage"
+
+  # ========================================
+  # JOB 5: SUCCESS NOTIFICATION
   # ========================================
   success:
     name: Pipeline Success
