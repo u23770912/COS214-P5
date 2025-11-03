@@ -5,7 +5,7 @@
 #include <vector>
 #include "OrderItem.h"
 
-class OrderMemento;
+// class OrderMemento;
 
 /**
  * @brief Order class that contains order items and manages the order
@@ -43,6 +43,11 @@ public:
     double calculateTotalAmount();
     double getTotalAmount() const;
     
+    // Discount management
+    double calculateAutomaticDiscount() const;
+    double getDiscountPercentage() const;
+    double getTotalBeforeDiscount() const;
+    
     // Order operations
     std::string getOrderSummary() const;
     void clearOrder();
@@ -51,14 +56,15 @@ public:
     // Check if order is empty
     bool isEmpty() const;
 
-    // Memento pattern methods
-    OrderMemento* createMemento() const;
+    // Memento pattern methods (temporarily disabled)
+    // OrderMemento* createMemento() const;
+    // void restoreState(const OrderMemento* memento);
+    
     void addItem(const std::string& item, double price);
     void removeItem(const std::string& item);
     void clearItems();
     const std::vector<std::string>& getItems() const;
     std::string getOrderDetails(const std::string& customerFilter = "") const;
-    void restoreState(const OrderMemento* memento);
     static const std::vector<Order*>& getAllOrders();
 
 };

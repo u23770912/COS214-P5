@@ -40,18 +40,18 @@ private:
         std::string confirmation = generateOrderConfirmation(order, customer);
         
         // Simulate sending notification
-        logStep("Sending confirmation email to: " + customer->getEmail());
-        std::cout << "\n" << std::string(50, '=') << std::endl;
-        std::cout << "[EMAIL CONFIRMATION]" << std::endl;
-        std::cout << std::string(50, '=') << std::endl;
+        logStep("Sending email to: " + customer->getEmail());
+        std::cout << "\n" << std::string(40, '=') << std::endl;
+        std::cout << "[ORDER CONFIRMED]" << std::endl;
+        std::cout << std::string(40, '=') << std::endl;
         std::cout << confirmation << std::endl;
         std::cout << std::string(50, '=') << std::endl;
         
         // Simulate SMS notification if phone number is available
         if (!customer->getCellPhone().empty()) {
-            logStep("Sending SMS notification to: " + customer->getCellPhone());
-            std::cout << "\n[SMS]: Your order " << order->getOrderId() 
-                     << " has been confirmed! Total: $" << std::fixed << std::setprecision(2) 
+            logStep("Sending SMS to: " + customer->getCellPhone());
+            std::cout << "\n[SMS]: Order " << order->getOrderId() 
+                     << " confirmed. Total: R" << std::fixed << std::setprecision(2) 
                      << order->getTotalAmount() << std::endl;
         }
         
@@ -69,18 +69,18 @@ private:
         std::string notification = generateFailureNotification(order, customer);
         
         // Send email notification
-        logStep("Sending failure notification email to: " + customer->getEmail());
-        std::cout << "\n" << std::string(50, '=') << std::endl;
-        std::cout << "[EMAIL NOTIFICATION - ORDER ISSUE]" << std::endl;
-        std::cout << std::string(50, '=') << std::endl;
+        logStep("Sending email to: " + customer->getEmail());
+        std::cout << "\n" << std::string(40, '=') << std::endl;
+        std::cout << "[ORDER PROBLEM]" << std::endl;
+        std::cout << std::string(40, '=') << std::endl;
         std::cout << notification << std::endl;
         std::cout << std::string(50, '=') << std::endl;
         
         // Send SMS if phone available
         if (!customer->getCellPhone().empty()) {
-            logStep("Sending SMS notification to: " + customer->getCellPhone());
-            std::cout << "\n[SMS]: Your order " << order->getOrderId() 
-                     << " could not be processed. Please check your email for details." << std::endl;
+            logStep("Sending SMS to: " + customer->getCellPhone());
+            std::cout << "\n[SMS]: Order " << order->getOrderId() 
+                     << " failed. Please contact us." << std::endl;
         }
         
         // Update order status
@@ -93,34 +93,22 @@ private:
     std::string generateFailureNotification(Order* order, Customer* customer) {
         std::ostringstream notification;
         
-        notification << "Dear " << customer->getName() << ",\n\n";
-        notification << "We're sorry, but we encountered an issue with your order.\n\n";
-        notification << "ORDER DETAILS:\n";
-        notification << "Order ID: " << order->getOrderId() << "\n";
-        notification << "Order Date: " << order->getOrderDate() << "\n";
-        notification << "Status: " << order->getStatus() << "\n\n";
+        notification << "Hello " << customer->getName() << ",\n\n";
+        notification << "There was a problem with your order.\n\n";
+        notification << "Order: " << order->getOrderId() << "\n";
+        notification << "Date: " << order->getOrderDate() << "\n\n";
         
-        notification << "ISSUE(S) ENCOUNTERED:\n";
+        notification << "Problem:\n";
         if (errorMessages.empty()) {
-            notification << "- An unexpected error occurred during order processing.\n";
+            notification << "- Order could not be processed\n";
         } else {
             for (size_t i = 0; i < errorMessages.size(); i++) {
-                notification << (i+1) << ". " << errorMessages[i] << "\n";
+                notification << "- " << errorMessages[i] << "\n";
             }
         }
         
-        notification << "\nWHAT YOU CAN DO:\n";
-        notification << "- Modify your order and try again\n";
-        notification << "- Contact our staff for assistance\n";
-        notification << "- Check our website for updated availability\n\n";
-        
-        notification << "If you need immediate assistance, please contact us:\n";
-        notification << "Phone: (555) 123-4567\n";
-        notification << "Email: support@greengarden.com\n\n";
-        
-        notification << "We apologize for any inconvenience.\n\n";
-        notification << "Best regards,\n";
-        notification << "The Green Garden Team";
+        notification << "\nPlease visit us or contact staff for help.\n\n";
+        notification << "Green Garden Nursery";
         
         return notification.str();
     }
@@ -128,24 +116,18 @@ private:
     std::string generateOrderConfirmation(Order* order, Customer* customer) {
         std::ostringstream confirmation;
         
-        confirmation << "Dear " << customer->getName() << ",\n\n";
-        confirmation << "Thank you for your order at Green Garden Nursery!\n\n";
-        confirmation << "ORDER DETAILS:\n";
-        confirmation << "Order ID: " << order->getOrderId() << "\n";
-        confirmation << "Customer: " << customer->getName() << "\n";
-        confirmation << "Email: " << customer->getEmail() << "\n";
-        confirmation << "Order Date: " << order->getOrderDate() << "\n\n";
-        
-        confirmation << "ITEMS ORDERED:\n";
-        confirmation << order->getOrderSummary() << "\n";
-        
-        confirmation << "TOTAL AMOUNT: $" << std::fixed << std::setprecision(2) 
+        confirmation << "Hello " << customer->getName() << ",\n\n";
+        confirmation << "Your order is confirmed!\n\n";
+        confirmation << "Order: " << order->getOrderId() << "\n";
+        confirmation << "Date: " << order->getOrderDate() << "\n";
+        confirmation << "Total: R" << std::fixed << std::setprecision(2) 
                     << order->getTotalAmount() << "\n\n";
         
-        confirmation << "Your plants are ready for pickup or will be prepared for delivery.\n";
-        confirmation << "Thank you for choosing Green Garden Nursery!\n\n";
-        confirmation << "Best regards,\n";
-        confirmation << "The Green Garden Team";
+        confirmation << order->getOrderSummary() << "\n";
+        
+        confirmation << "Your plants are ready for collection.\n";
+        confirmation << "Thank you!\n\n";
+        confirmation << "Green Garden Nursery";
         
         return confirmation.str();
     }

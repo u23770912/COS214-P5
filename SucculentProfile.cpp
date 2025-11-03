@@ -12,7 +12,7 @@ SucculentProfile::SucculentProfile(const std::string &species,
 	setProperty("idealPruning", "minimal");
 	setProperty("idealSunlight", sunlight.empty() ? "Bright Indirect" : sunlight);
 	setProperty("idealSoil", soil.empty() ? "Sandy" : soil);
-	setProperty("maxDaysWithoutCare", "10");
+	setProperty("maxDaysWithoutCare", "4");
 	setProperty("supportedCareTypes", "water,fertilize,drip,pruning");
 
 	setStateDurationSeconds("Planted", 25);	  // You can change the duration for the Planted state here

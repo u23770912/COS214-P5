@@ -8,7 +8,7 @@ SRCS := $(wildcard *.cpp)
 
 # Test configuration - automatically find test files
 # Matches patterns: *_test.cpp, *Test.cpp, *_Testing_main.cpp, test_*.cpp
-TEST_FILES := $(wildcard *_test.cpp *Test.cpp *_Testing_main.cpp test_*.cpp)
+TEST_FILES := $(wildcard *_test.cpp *Test.cpp *_Testing_main.cpp test_*.cpp *_testing_main.cpp)
 
 # Exclude test files and main.cpp from regular sources
 SRCS := $(filter-out main.cpp $(TEST_FILES), $(SRCS))
@@ -85,15 +85,26 @@ list-tests:
 # Clean test executables
 clean-tests:
 	@rm -f $(TEST_TARGETS)
+	@rm -f $(TEST_FILES:.cpp=.o)
 
 # Clean everything
 clean: clean-tests
-	@rm -f $(OBJS) main.o $(TARGET) *.gcda *.gcno *.gcov coverage.info valgrind-report.txt
+	@rm -f $(OBJS) main.o $(TARGET) *.gcda *.gcno *.gcov coverage.info valgrind-*.txt
 	@rm -rf out
 
-valgrind: all
+valgrind: all build-tests
+	@echo "Running valgrind on main application..."
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
-		--verbose --log-file=valgrind-report.txt ./$(TARGET)
+		--verbose --log-file=valgrind-main.txt ./$(TARGET)
+	@echo ""
+	@echo "Running valgrind on test executables..."
+	@for test in $(TEST_TARGETS); do \
+		echo "Checking: $$test"; \
+		valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
+			--verbose --log-file=valgrind-$$test.txt ./$$test 2>&1 | head -20; \
+		echo ""; \
+	done
+	@echo "Valgrind reports saved to valgrind-*.txt files"
 
 # Help target
 help:

@@ -34,6 +34,7 @@ class PlantGroup: public GreenhouseComponent {
         void display() override;
         void getPlantCount() override;
         void remove(GreenhouseComponent* item) override;
+        void removeWithoutDelete(GreenhouseComponent* item);  // Remove from vector without deleting
 };
 
 #endif

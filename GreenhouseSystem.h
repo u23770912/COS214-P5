@@ -11,15 +11,17 @@
 #include "PlantGroup.h"
 #include <map> 
 
+class PlantData;
+
 class GreenhouseSystem : public GreenhouseBuilder
 {
 
     private: 
         GreenhouseComponent* root;
         GreenhouseComponent* currentCategory;
-       /* the current  category is the group that holds all the types of plants from winter to summer*/
-
-public:
+        PlantGroup* lastSpeciesNode;
+        // std::map<std::string, PlantGroup*> categories;
+        // std::map<std::string, PlantGroup*> types;
 
     public:
     /**
@@ -37,14 +39,11 @@ public:
      */
         GreenhouseBuilder* addType(std::string name) override;
         GreenhouseBuilder* addSpecies(std::string name) override;
+        GreenhouseBuilder* addPlant(PlantData* plant) override;
 
         // void addPlant(std::string id, std::string info) override;
         GreenhouseComponent* getGreenhouse() override;
-
-        GreenhouseBuilder* addPlant(PlantData* plant) override; // New function
-         /**
-     * @brief addPlant function so that the complex plants are added to the Greenhouse system( memory)
-     */
+        PlantGroup* getLastSpeciesNode();
 };
 
 

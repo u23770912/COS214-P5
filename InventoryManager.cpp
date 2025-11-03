@@ -3,6 +3,7 @@
 #include "Pot.h"
 #include <algorithm>
 #include <iostream>
+#include <set>
 
 // Private constructor
 InventoryManager::InventoryManager() : plantsInStock(0)
@@ -22,25 +23,28 @@ void InventoryManager::cleanup()
 {
     std::cout << "Cleaning up InventoryManager resources..." << std::endl;
 
-    // Clean up greenhouse plants
-    for (PlantProduct *plant : greenHouseInventory)
-    {
+    // Use a set to track unique plant pointers (avoid double deletion)
+    std::set<PlantProduct*> allPlants;
+    
+    // Collect all unique plant pointers
+    for (PlantProduct *plant : greenHouseInventory) {
+        if (plant) allPlants.insert(plant);
+    }
+    for (PlantProduct *plant : readyForSalePlants) {
+        if (plant) allPlants.insert(plant);
+    }
+    for (PlantProduct *plant : soldPlants) {
+        if (plant) allPlants.insert(plant);
+    }
+    
+    // Delete each plant exactly once
+    for (PlantProduct *plant : allPlants) {
         delete plant;
     }
+    
+    // Clear all vectors
     greenHouseInventory.clear();
-
-    // Clean up plants ready for sale
-    for (PlantProduct *plant : readyForSalePlants)
-    {
-        delete plant;
-    }
     readyForSalePlants.clear();
-
-    // Clean up sold plants
-    for (PlantProduct *plant : soldPlants)
-    {
-        delete plant;
-    }
     soldPlants.clear();
 
     // Clean up pots
@@ -379,4 +383,46 @@ void InventoryManager::markAsSold(PlantProduct *plant)
                       << plant->getProfile()->getSpeciesName() << "]" << std::endl;
         }
     }
+}
+
+void InventoryManager::addCustomPot(Pot* pot) {
+    if (pot) {
+        potInventory.push_back(pot);
+        std::cout << "[Inventory] Added pot: ";
+        pot->print();
+        std::cout << std::endl;
+    }
+}
+
+Pot* InventoryManager::getPotByIndex(int index) {
+    if (index >= 0 && index < (int)potInventory.size()) {
+        return potInventory[index];
+    }
+    return nullptr;
+}
+
+void InventoryManager::displayPotInventory() const {
+    std::cout << "\n=== POT INVENTORY ===" << std::endl;
+    std::cout << "Total: " << potInventory.size() << " pots" << std::endl;
+    std::cout << std::string(70, '-') << std::endl;
+    
+    for (size_t i = 0; i < potInventory.size(); i++) {
+        std::cout << (i+1) << ". ";
+        potInventory[i]->print();
+        std::cout << " - R" << potInventory[i]->getPrice();
+        std::cout << std::endl;
+    }
+    std::cout << std::string(70, '-') << std::endl;
+}
+
+double InventoryManager::getTotalPotInventoryValue() const {
+    double total = 0.0;
+    for (Pot* pot : potInventory) {
+        total += pot->getPrice();
+    }
+    return total;
+}
+
+int InventoryManager::getPotInventoryCount() const {
+    return potInventory.size();
 }

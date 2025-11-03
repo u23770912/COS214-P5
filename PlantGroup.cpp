@@ -94,3 +94,10 @@ void PlantGroup::remove(GreenhouseComponent* item) {
         children.erase(it);
     }
 }
+
+void PlantGroup::removeWithoutDelete(GreenhouseComponent* item) {
+    auto it = std::find(children.begin(), children.end(), item);
+    if (it != children.end()) {
+        children.erase(it);  // Just remove from vector, don't delete
+    }
+}

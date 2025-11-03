@@ -3,7 +3,7 @@
 *.obj
 
 # Executables
-greenhouse
+/greenhouse
 test_move_to_sales_floor
 test_*
 
@@ -17,9 +17,7 @@ out/
 # VS Code
 .vscode/
 
-# Documentation (if you want to ignore it)
-*.md
-!README.md
+# PDF files
 *.pdf
 
 # Build directories
@@ -31,7 +29,6 @@ bin/
 *.swp
 *~
 
-#makefile
-.github/
-
-CustomerOrderTest.cpp
+# Protected files - do not modify
+Makefile
+#.github/
