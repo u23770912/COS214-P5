@@ -70,15 +70,15 @@ jobs:
   # JOB 2: BUILD - Compile Application
   # ========================================
   build:
-    name: 🔨 Build Application
+    name: Build Application
     runs-on: ubuntu-latest
     needs: lint  # Run after lint job succeeds
     
     steps:
-      - name: 📥 Checkout Code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: 🔧 Install Build Dependencies
+      - name: Install Build Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -88,7 +88,7 @@ jobs:
             libgtk-3-dev \
             valgrind
 
-      - name: 📦 Cache Build Artifacts
+      - name: Cache Build Artifacts
         uses: actions/cache@v3
         with:
           path: |
@@ -98,7 +98,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-
 
-      - name: 🏗️ Build Project
+      - name: Build Project
         run: |
           echo "Building project..."
           if [ -f CMakeLists.txt ]; then
@@ -110,12 +110,12 @@ jobs:
             make clean
             make -j$(nproc)
           else
-            echo "❌ ERROR: No build system found"
+            echo "ERROR: No build system found"
             exit 1
           fi
-          echo "✅ Build successful"
+          echo "Build successful"
 
-      - name: 📤 Upload Build Artifacts
+      - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: greenhouse-executable
@@ -128,15 +128,15 @@ jobs:
   # JOB 3: TEST - Run Unit Tests
   # ========================================
   test:
-    name: 🧪 Run Tests
+    name: Run Tests
     runs-on: ubuntu-latest
     needs: build  # Run after build succeeds
     
     steps:
-      - name: 📥 Checkout Code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: 🔧 Install Test Dependencies
+      - name: Install Test Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -146,12 +146,12 @@ jobs:
             valgrind \
             lcov
 
-      - name: 📦 Download Build Artifacts
+      - name: Download Build Artifacts
         uses: actions/download-artifact@v3
         with:
           name: greenhouse-executable
 
-      - name: 🔨 Rebuild for Testing
+      - name: Rebuild for Testing
         run: |
           echo "Rebuilding with test configuration..."
           if [ -f Makefile ]; then
@@ -159,7 +159,7 @@ jobs:
             make -j$(nproc)
           fi
 
-      - name: 🧪 Run Unit Tests (if available)
+      - name: Run Unit Tests (if available)
         continue-on-error: false  # Fail build if tests fail
         run: |
           echo "Running unit tests..."
@@ -176,7 +176,7 @@ jobs:
             echo "⚠ No Makefile found, skipping tests"
           fi
 
-      - name: 🔍 Run Valgrind (Memory Leak Check)
+      - name: Run Valgrind (Memory Leak Check)
         continue-on-error: true  # Don't fail on memory leaks in CI
         timeout-minutes: 5
         run: |
@@ -188,7 +188,7 @@ jobs:
             echo "⚠ No valgrind target found"
           fi
 
-      - name: 📊 Generate Test Report
+      - name: Generate Test Report
         if: always()
         run: |
           echo "==================================="
@@ -203,21 +203,21 @@ jobs:
   # JOB 4: COVERAGE (Optional)
   # ========================================
   coverage:
-    name: 📊 Code Coverage
+    name: Code Coverage
     runs-on: ubuntu-latest
     needs: test
     if: github.event_name == 'pull_request'  # Only on PRs
     
     steps:
-      - name: 📥 Checkout Code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: 🔧 Install Coverage Tools
+      - name: Install Coverage Tools
         run: |
           sudo apt-get update
           sudo apt-get install -y lcov gcovr
 
-      - name: 📊 Generate Coverage Report
+      - name: Generate Coverage Report
         continue-on-error: true
         run: |
           echo "Coverage analysis not yet configured"
@@ -227,16 +227,16 @@ jobs:
   # JOB 5: SUCCESS NOTIFICATION
   # ========================================
   success:
-    name: ✅ Pipeline Success
+    name: Pipeline Success
     runs-on: ubuntu-latest
     needs: [lint, build, test]
     if: success()
     
     steps:
-      - name: 🎉 Success Message
+      - name: Success Message
         run: |
           echo "=========================================="
-          echo "   🎉 CI/CD PIPELINE COMPLETED 🎉"
+          echo "   CI/CD PIPELINE COMPLETED"
           echo "=========================================="
           echo "All checks passed successfully!"
           echo "✓ Lint: Passed"
