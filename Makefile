@@ -8,7 +8,7 @@ SRCS := $(wildcard *.cpp)
 
 # Test configuration - automatically find test files
 # Matches patterns: *_test.cpp, *Test.cpp, *_Testing_main.cpp, test_*.cpp
-TEST_FILES := $(wildcard *_test.cpp *Test.cpp *_Testing_main.cpp test_*.cpp)
+TEST_FILES := $(wildcard *_test.cpp *Test.cpp *_Testing_main.cpp test_*.cpp *_testing_main.cpp)
 
 # Exclude test files and main.cpp from regular sources
 SRCS := $(filter-out main.cpp $(TEST_FILES), $(SRCS))
@@ -34,8 +34,12 @@ $(TARGET): $(MAIN_OBJS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Build individual test executables
+# Each test is built independently with only shared objects (no other test objects)
 $(TEST_TARGETS): %: %.cpp $(OBJS)
+	@echo "Building test: $@"
+	@rm -f $@.o
 	$(CXX) $(CXXFLAGS) $< $(OBJS) -o $@ $(LDFLAGS)
+	@rm -f $@.o
 
 # Build all test executables
 build-tests: $(TEST_TARGETS)
@@ -85,6 +89,7 @@ list-tests:
 # Clean test executables
 clean-tests:
 	@rm -f $(TEST_TARGETS)
+	@rm -f $(TEST_FILES:.cpp=.o)
 
 # Clean everything
 clean: clean-tests
