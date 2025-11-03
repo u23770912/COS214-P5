@@ -93,12 +93,22 @@ clean-tests:
 
 # Clean everything
 clean: clean-tests
-	@rm -f $(OBJS) main.o $(TARGET) *.gcda *.gcno *.gcov coverage.info valgrind-report.txt
+	@rm -f $(OBJS) main.o $(TARGET) *.gcda *.gcno *.gcov coverage.info valgrind-*.txt
 	@rm -rf out
 
-valgrind: all
+valgrind: all build-tests
+	@echo "Running valgrind on main application..."
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
-		--verbose --log-file=valgrind-report.txt ./$(TARGET)
+		--verbose --log-file=valgrind-main.txt ./$(TARGET)
+	@echo ""
+	@echo "Running valgrind on test executables..."
+	@for test in $(TEST_TARGETS); do \
+		echo "Checking: $$test"; \
+		valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
+			--verbose --log-file=valgrind-$$test.txt ./$$test 2>&1 | head -20; \
+		echo ""; \
+	done
+	@echo "Valgrind reports saved to valgrind-*.txt files"
 
 # Help target
 help:
