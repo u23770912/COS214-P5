@@ -51,7 +51,7 @@ jobs:
           done
           echo "✓ Style check complete"
 
-      - name: 📝 Syntax Check (Compilation Test)
+      - name: Syntax Check (Compilation Test)
         continue-on-error: false  # Fail build if syntax errors found
         run: |
           echo "Performing syntax validation..."
@@ -213,31 +213,7 @@ jobs:
           echo "==================================="
 
   # ========================================
-  # JOB 4: COVERAGE (Optional)
-  # ========================================
-  coverage:
-    name: Code Coverage
-    runs-on: ubuntu-latest
-    needs: test
-    if: github.event_name == 'pull_request'  # Only on PRs
-    
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Install Coverage Tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y lcov gcovr
-
-      - name: Generate Coverage Report
-        continue-on-error: true
-        run: |
-          echo "Coverage analysis not yet configured"
-          echo "Add --coverage flags to enable code coverage"
-
-  # ========================================
-  # JOB 5: SUCCESS NOTIFICATION
+  # JOB 4: SUCCESS NOTIFICATION
   # ========================================
   success:
     name: Pipeline Success
