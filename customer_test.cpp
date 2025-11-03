@@ -57,9 +57,9 @@
 // Pot System
 #include "Pot.h"
 #include "ClayPotFactory.h"
-#include "PotDecorator/ColorDecorator.h"
-#include "PotDecorator/TextureDecorator.h"
-#include "PotDecorator/PatternDecorator.h"
+#include "ColorDecorator.h"
+#include "TextureDecorator.h"
+#include "PatternDecorator.h"
 
 // Infrastructure
 #include "InventoryManager.h"

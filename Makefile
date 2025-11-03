@@ -1,12 +1,10 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -g -std=c++11 -Wall -I. -IPotDecorator `pkg-config --cflags gtk+-3.0`
+CXXFLAGS = -g -std=c++11 -Wall -I. `pkg-config --cflags gtk+-3.0`
 LDFLAGS = `pkg-config --libs gtk+-3.0`
 
 # Source files
 SRCS := $(wildcard *.cpp)
-# Include PotDecorator subdirectory files
-SRCS += $(wildcard PotDecorator/*.cpp)
 
 # Test configuration - automatically find test files
 # Matches patterns: *_test.cpp, *Test.cpp, *_Testing_main.cpp, test_*.cpp
