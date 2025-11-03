@@ -98,7 +98,7 @@ jobs:
             valgrind
 
       - name: Cache Build Artifacts
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             *.o
@@ -125,7 +125,7 @@ jobs:
           echo "Build successful"
 
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: greenhouse-executable
           path: |
@@ -156,7 +156,7 @@ jobs:
             lcov
 
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: greenhouse-executable
 
