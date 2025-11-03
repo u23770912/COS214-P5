@@ -5,7 +5,7 @@ LDFLAGS = `pkg-config --libs gtk+-3.0`
 
 # Source files
 SRCS := $(wildcard *.cpp)
-TEST_FILES := CustomerOrderTest.cpp DemoMain.cpp main_option_a_backup.cpp builder_Testing_main.cpp
+TEST_FILES := builder_Testing_main.cpp
 SRCS := $(filter-out main.cpp $(TEST_FILES), $(SRCS))
 OBJS := $(SRCS:.cpp=.o)
 
