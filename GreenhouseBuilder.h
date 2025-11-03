@@ -6,11 +6,11 @@
 #include "PlantData.h"
 #include "GreenhouseComponent.h"
 
-class GreenhouseBuilder
 /**
  * @class GreenhouseBuilder
  * @brief Abstract class that defines the interface for building different parts of a GreenhouseSystem.
  */
+class GreenhouseBuilder
 {
 
 public:
@@ -31,9 +31,6 @@ public:
 };
 
 #endif
-
-
-
 
 // #ifndef GREENHOUSEBUILDER_H
 // #define GREENHOUSEBUILDER_H
