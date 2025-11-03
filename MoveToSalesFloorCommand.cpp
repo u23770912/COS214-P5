@@ -2,7 +2,15 @@
 #include "PlantProduct.h"
 #include "ReadyForSaleState.h"
 #include "InventoryManager.h"
+#include "GreenhouseManager.h"
 #include <iostream>
+
+// Initialize static member
+GreenhouseManager* MoveToSalesFloorCommand::greenhouseManager = nullptr;
+
+void MoveToSalesFloorCommand::setGreenhouseManager(GreenhouseManager* manager) {
+    greenhouseManager = manager;
+}
 
 MoveToSalesFloorCommand::MoveToSalesFloorCommand() 
     : Command() {
@@ -34,6 +42,14 @@ void MoveToSalesFloorCommand::execute() {
     }
     
     std::cout << "Plant is ready for sale. Moving to sales floor inventory..." << std::endl;
+    
+    // Remove plant from greenhouse structure first
+    if (greenhouseManager) {
+        std::string plantId = plantReceiver->getId();
+        if (greenhouseManager->removePlantFromStructure(plantId)) {
+            std::cout << "Plant removed from greenhouse structure." << std::endl;
+        }
+    }
     
     // Get the inventory manager (Singleton) - using reference
     InventoryManager& inventory = InventoryManager::getInstance();

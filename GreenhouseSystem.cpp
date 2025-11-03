@@ -1,7 +1,8 @@
 #include "GreenhouseSystem.h"
 #include "PlantPot.h"
+#include "PlantData.h"
 
-GreenhouseSystem::GreenhouseSystem(): root(NULL), currentCategory(NULL){
+GreenhouseSystem::GreenhouseSystem(): root(NULL), currentCategory(NULL), lastSpeciesNode(NULL){
 
 }
 
@@ -18,6 +19,7 @@ void GreenhouseSystem::reset(){
     
     root = new PlantGroup("Greenhouse");
     currentCategory = root;
+    lastSpeciesNode = NULL;
 
 }
 
@@ -46,20 +48,16 @@ GreenhouseBuilder* GreenhouseSystem::addType(std::string name){
 GreenhouseBuilder* GreenhouseSystem::addSpecies(std::string name){
     
     GreenhouseComponent* species = new PlantGroup(name);
+    lastSpeciesNode = dynamic_cast<PlantGroup*>(species);
 
     currentCategory->add(species);
-    // currentCategory = species;
     currentCategory = species;
+
     return this;
 }
 
-// void GreenhouseSystem::addPlant(std::string id, std::string info){
-
-// }
-
-
-GreenhouseComponent* GreenhouseSystem::getGreenhouse(){
-    return this->root;
+PlantGroup* GreenhouseSystem::getLastSpeciesNode() {
+    return lastSpeciesNode;
 }
 
 GreenhouseBuilder *GreenhouseSystem::addPlant(PlantData *plant)
@@ -74,6 +72,24 @@ GreenhouseBuilder *GreenhouseSystem::addPlant(PlantData *plant)
 
     return this;
 }
+
+// void GreenhouseSystem::addPlant(std::string id, std::string info){
+
+// }
+
+
+GreenhouseComponent* GreenhouseSystem::getGreenhouse(){
+    return this->root;
+}
+
+
+
+
+
+
+
+
+
 
 // #include "GreenhouseSystem.h"
 

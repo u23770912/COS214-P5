@@ -44,6 +44,15 @@ void StaffMember::processUnhandledQueue() {
     Command* command = unhandledCommands.front();
     unhandledCommands.pop();
     
+    // Check if the plant is withering before re-dispatching
+    PlantProduct* plant = command->getReceiver();
+    if (plant && plant->getCurrentStateName() == "Withering") {
+        std::cout << "[STAFF MEMBER] Skipping command '" << command->getType() 
+                  << "' - plant is withering (no point in caring for dead plants)." << std::endl;
+        delete command; // Clean up the command to prevent memory leak
+        return;
+    }
+    
     std::cout << "[STAFF MEMBER] Re-dispatching command '" << command->getType() 
               << "' from the unhandled queue." << std::endl;
     
@@ -77,8 +86,13 @@ void StaffMember::dispatch(Command* command) {
         // (represents neglected plant care due to lack of staff)
         PlantProduct* plant = command->getReceiver();
         if (plant) {
-            std::cout << "[STAFF MEMBER] Plant will transition to withering due to lack of care." << std::endl;
-            plant->transitionToWithering();
+            // ReadyForSale plants should NEVER wither - they're in a terminal state
+            if (plant->getCurrentStateName() == "ReadyForSale") {
+                std::cout << "[STAFF MEMBER] Plant is ReadyForSale - skipping wither (terminal state)" << std::endl;
+            } else {
+                std::cout << "[STAFF MEMBER] Plant will transition to withering due to lack of care." << std::endl;
+                plant->transitionToWithering();
+            }
         }
         
         // Clean up the command
