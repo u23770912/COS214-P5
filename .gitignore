@@ -35,5 +35,8 @@ bin/
 #makefile
 .github/
 Makefile
+main.cpp
+SuggestionTemplate/
 *.sh
-NetBeansGUI/
+
+CustomerOrderTest.cpp
