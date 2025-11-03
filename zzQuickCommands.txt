@@ -1,3 +1,0 @@
-pkill -9 greenhouse; pkill -9 java; sleep 2; netstat -tuln 2>/dev/null | grep 8765 || ss -tuln 2>/dev/null | grep 8765 || echo "Port is free"
-[1]-  Killed                  ./greenhouse
-[2]+  Killed                  ./greenhouse
