@@ -5,7 +5,7 @@
 #include <vector>
 #include "OrderItem.h"
 
-// class OrderMemento;
+class OrderMemento;
 
 /**
  * @brief Order class that contains order items and manages the order
@@ -52,8 +52,8 @@ public:
     bool isEmpty() const;
 
     // Memento pattern methods (temporarily disabled)
-    // OrderMemento* createMemento() const;
-    // void restoreState(const OrderMemento* memento);
+    OrderMemento* createMemento() const;
+    void restoreState(const OrderMemento* memento);
     
     void addItem(const std::string& item, double price);
     void removeItem(const std::string& item);

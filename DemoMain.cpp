@@ -24,7 +24,7 @@
 #include "NotificationHandler.h"
 #include "OrderProcessHandler.h"
 #include "Command.h"
-#include "SuggestionTemplate/BouquetSuggestionFactory.h"
+#include "BouquetSuggestionFactory.h"
 
 using std::cout;
 using std::cin;
