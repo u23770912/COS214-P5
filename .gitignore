@@ -17,10 +17,7 @@ out/
 # VS Code
 .vscode/
 
-# Documentation (if you want to ignore it)
-*.md
-!README.md
-!SETUP_GUIDE.md
+# PDF files
 *.pdf
 
 # Build directories
@@ -32,8 +29,8 @@ bin/
 *.swp
 *~
 
-#makefile
-.github/
+# Protected files - do not modify
 Makefile
-*.sh
-NetBeansGUI/
+.github/
+
+CustomerOrderTest.cpp
