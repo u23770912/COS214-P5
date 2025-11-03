@@ -14,10 +14,10 @@
 #include "MetalPotFactory.h"
 #include "GlassPotFactory.h"
 #include "WoodenPotFactory.h"
-#include "PotDecorator/PotDecorator.h"
-#include "PotDecorator/ColorDecorator.h"
-#include "PotDecorator/FinishDecorator.h"
-#include "PotDecorator/PatternDecorator.h"
+#include "PotDecorator.h"
+#include "ColorDecorator.h"
+#include "FinishDecorator.h"
+#include "PatternDecorator.h"
 #include <iostream>
 #include <iomanip>
 #include <sstream>
