@@ -32,5 +32,3 @@ bin/
 # Protected files - do not modify
 Makefile
 .github/
-
-CustomerOrderTest.cpp
