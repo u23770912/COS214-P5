@@ -15,6 +15,15 @@ class PlantGroup: public GreenhouseComponent {
 
     public: 
         PlantGroup(std::string name);
+        /**
+     * @brief Parameterized constructor
+     * @param id Plant ID
+     * @param info Description
+     * @param type Type of plant
+     * @param category Category name
+     * @param price Unit price
+     * @param stockQuantity Quantity in stock
+     */
         ~PlantGroup();
         std::string getName();
 
