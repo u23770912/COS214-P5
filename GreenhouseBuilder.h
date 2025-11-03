@@ -6,6 +6,8 @@
 
 #include "GreenhouseComponent.h"
 
+class PlantData; // Forward declaration
+
 /**
  * @class GreenhouseBuilder
  * @brief Abstract class that defines the interface for building different parts of a GreenhouseSystem.
