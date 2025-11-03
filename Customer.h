@@ -83,6 +83,20 @@ class Customer : public CustomerSubject {
         
         // Convenience methods (delegates to base class)
         void attachObserver(CustomerObserver* observer);
+        void detachObserver(CustomerObserver* observer);
+        
+        // Helper methods
+        void cleanupPreviousOrder();
+        bool addBundleToOrder(const std::string& bundleName, const std::vector<int>& plantQuantities);
+        
+        // Director-based construction methods
+        Order* construct();
+        Order* constructSimplePlantOrder(const std::string& plantType, int quantity);
+        Order* constructPlantWithPotOrder(const std::string& plantType, const std::string& potType, int quantity);
+        Order* constructBundleOrder(const std::string& bundleName, 
+                                   const std::vector<std::string>& plantTypes, 
+                                   const std::vector<int>& quantities, 
+                                   double discount);
         
         // Staff interaction methods - Observer pattern (Convenience methods from salesfloor integration)
         void setStaffObserver(StaffManager* staff); // Convenience: sets staff and adds to observers
