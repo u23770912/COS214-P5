@@ -47,8 +47,8 @@ Customer::Customer(const std::string& name, const std::string& email, const std:
 Customer::~Customer() {
     delete uiFacade;
     delete orderDirector;
-    delete orderBuilder;
-    delete orderProduct;
+    delete orderBuilder;  // Builder will clean up its own order
+    // DON'T delete orderProduct - builder owns it
     delete placeOrderCommand;
     delete orderHistory;
     
@@ -171,8 +171,8 @@ bool Customer::finalizeOrder() {
         return false;
     }
     
-    // Core business logic: finalize the order
-    delete orderProduct;
+    // Core business logic: get reference to the current order
+    // Builder retains ownership, we just use the reference
     orderProduct = orderBuilder->getOrder();
     
     if (!orderProduct || orderProduct->isEmpty()) {
@@ -251,9 +251,14 @@ OrderUIFacade* Customer::getUIFacade() {
 }
 
 void Customer::cleanupPreviousOrder() {
-    if (orderProduct) {
-        delete orderProduct;
-        orderProduct = 0;
+    // Clear the order product reference (builder owns the actual order)
+    // We only nullify our pointer, we don't delete what builder owns
+    orderProduct = 0;
+    
+    // Clean up the command if it exists
+    if (placeOrderCommand) {
+        delete placeOrderCommand;
+        placeOrderCommand = 0;
     }
 }
 

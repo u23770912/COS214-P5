@@ -43,6 +43,11 @@ public:
     double calculateTotalAmount();
     double getTotalAmount() const;
     
+    // Discount management
+    double calculateAutomaticDiscount() const;
+    double getDiscountPercentage() const;
+    double getTotalBeforeDiscount() const;
+    
     // Order operations
     std::string getOrderSummary() const;
     void clearOrder();

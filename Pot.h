@@ -34,6 +34,13 @@ public:
     std::string getDrainage();
     std::string getShape();
     virtual std::string getPotType() const = 0;
+    
+    /**
+     * @brief Get the price of the pot (base price + decorations)
+     * @return Price in Rands (R)
+     * @details Base pots have R10 price, decorators add their costs
+     */
+    virtual double getPrice() const;
 };
 
 #endif
