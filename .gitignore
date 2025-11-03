@@ -29,4 +29,6 @@ bin/
 *.swp
 *~
 
-CustomerOrderTest.cpp
+# Protected files - do not modify
+Makefile
+.github/
