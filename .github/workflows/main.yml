@@ -21,10 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 📥 Checkout Code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: 🔧 Install Dependencies
+      - name: Install Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y cppcheck clang-format
@@ -42,7 +42,7 @@ jobs:
             . 2>&1 | tee cppcheck_report.txt || true
           echo "✓ Static analysis complete (see report for details)"
 
-      - name: 📊 Check Code Style (Optional)
+      - name: Check Code Style (Optional)
         continue-on-error: true
         run: |
           echo "Checking code formatting..."
@@ -51,7 +51,7 @@ jobs:
           done
           echo "✓ Style check complete"
 
-      - name: 📝 Syntax Check (Compilation Test)
+      - name: Syntax Check (Compilation Test)
         continue-on-error: true  # Don't fail on syntax warnings
         run: |
           echo "Performing syntax validation..."
@@ -73,7 +73,7 @@ jobs:
           # Reduced warning level: only -Wall, no -Wextra or -pedantic
           g++ -std=c++${{ env.CXX_STANDARD }} -Wall \
             -I. -fsyntax-only $SOURCES 2>&1 | head -50 || true
-          echo "✅ Syntax check complete"
+          echo "Syntax check complete"
 
   # ========================================
   # JOB 2: BUILD - Compile Application
