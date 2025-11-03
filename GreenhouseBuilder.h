@@ -10,8 +10,10 @@
  * @class GreenhouseBuilder
  * @brief Abstract class that defines the interface for building different parts of a GreenhouseSystem.
  */
+class PlantData;
 class GreenhouseBuilder
 {
+    
 
 public:
      /**< The greenhouse system being built */
