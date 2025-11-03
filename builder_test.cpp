@@ -20,12 +20,12 @@ int main() {
     GreenhouseDirector director(greenhouseBuilder);
     director.setPlants(allPlants);
 
-    // 4. Instruct the Director to Construct the Greenhouse
+    //  Instruct the Director to Construct the Greenhouse
     // This call will reset the builder and call addCategory, addType, addSpecies, 
     // and finally addPlant for each PlantData object.
     GreenhouseComponent* greenhouse = director.construct();
 
-    // 5. Print to verify structure (This should now include PlantPot leaves)
+    // Print to verify structure (This should now include PlantPot leaves)
     std::cout << "=== FINAL GREENHOUSE STRUCTURE ===" << std::endl;
     // NOTE: Assuming your PlantPot::print() prints its ID/Info
     greenhouse->print();
