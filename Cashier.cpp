@@ -26,6 +26,13 @@ void Cashier::handleCommand(Command* command) {
             // Use threaded busy simulation (2 seconds) - busy flag auto-cleared by setBusyFor
             setBusyFor(std::chrono::seconds(2));
             processMoveToSalesFloor(command);
+        } else if (command->getType() == "PlaceOrder") {
+            // PlaceOrder command - execute directly (validation chain happens inside execute())
+            setBusy(true);
+            std::cout << "[Cashier] Processing PlaceOrder command through Chain of Responsibility..." << std::endl;
+            command->execute();
+            setBusy(false);
+            clearAssignment();
         } else {
             // Execute other commands directly with manual busy management
             setBusy(true);

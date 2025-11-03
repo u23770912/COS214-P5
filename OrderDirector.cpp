@@ -77,8 +77,8 @@ Order* OrderDirector::constructBundleOrder(const std::string& bundleName,
     // Cast to ConcreteOrderBuilder to access extended functionality
     ConcreteOrderBuilder* concreteBuilder = dynamic_cast<ConcreteOrderBuilder*>(builder);
     if (concreteBuilder) {
-        // Step 1: Create the bundle
-        concreteBuilder->buildCustomBundle(bundleName, "Custom Bundle", discount);
+        // Step 1: Create the bundle (using new API)
+        concreteBuilder->buildPlantBundle(bundleName, discount);
         
         // Step 2: Add plants to the bundle
         for (size_t i = 0; i < plantTypes.size(); ++i) {
@@ -103,15 +103,15 @@ Order* OrderDirector::constructGardenStarterKit() {
     // Cast to ConcreteOrderBuilder to access extended functionality
     ConcreteOrderBuilder* concreteBuilder = dynamic_cast<ConcreteOrderBuilder*>(builder);
     if (concreteBuilder) {
-        // Step 1: Create a starter bundle with discount
-        concreteBuilder->buildCustomBundle("Garden Starter Kit", "Beginner Package", 15.0);
+        // Step 1: Create a starter bundle with discount (using new API)
+        concreteBuilder->buildPlantBundle("Garden Starter Kit", 15.0);
         
         // Step 2: Add essential plants for beginners
         concreteBuilder->addPlantToCurrentBundle("Aloe Vera", 1, "small");
         concreteBuilder->addPlantToCurrentBundle("Snake Plant", 1, "medium");
         concreteBuilder->addPlantToCurrentBundle("Pothos", 1, "small");
         
-        // Step 3: Add pots for the plants
+        // Step 3: Add pots for the plants (using legacy method - will be updated to use Pot decorators)
         concreteBuilder->buildPlantPot("Ceramic", 2);
         concreteBuilder->buildPlantPot("Terracotta", 1);
         
@@ -134,8 +134,8 @@ Order* OrderDirector::constructSucculentCollection() {
     // Cast to ConcreteOrderBuilder to access extended functionality
     ConcreteOrderBuilder* concreteBuilder = dynamic_cast<ConcreteOrderBuilder*>(builder);
     if (concreteBuilder) {
-        // Step 1: Create succulent collection bundle
-        concreteBuilder->buildCustomBundle("Succulent Paradise", "Succulent Collection", 20.0);
+        // Step 1: Create succulent collection bundle (using new API)
+        concreteBuilder->buildPlantBundle("Succulent Paradise", 20.0);
         
         // Step 2: Add various succulents
         concreteBuilder->addPlantToCurrentBundle("Aloe Vera", 2, "medium");
@@ -143,7 +143,7 @@ Order* OrderDirector::constructSucculentCollection() {
         concreteBuilder->addPlantToCurrentBundle("Echeveria", 3, "small");
         concreteBuilder->addPlantToCurrentBundle("Barrel Cactus", 1, "medium");
         
-        // Step 3: Add specialized pots
+        // Step 3: Add specialized pots (using legacy method - will be updated to use Pot decorators)
         concreteBuilder->buildPlantPot("Succulent", 4);
         concreteBuilder->buildPlantPot("Drainage", 3);
         

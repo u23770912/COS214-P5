@@ -47,8 +47,8 @@ Customer::Customer(const std::string& name, const std::string& email, const std:
 Customer::~Customer() {
     delete uiFacade;
     delete orderDirector;
-    delete orderBuilder;
-    delete orderProduct;
+    delete orderBuilder;  // Builder will clean up its own order
+    // DON'T delete orderProduct - builder owns it
     delete placeOrderCommand;
     delete orderHistory;
     
@@ -96,27 +96,39 @@ bool Customer::executeOrder() {
     uiFacade->displayOrderExecutionSummary();
     std::cout << "Order Summary:\n" << orderProduct->getOrderSummary() << std::endl;
     
-    // Step 1: Request staff validation FIRST (as designed!)
-    std::cout << "\n[STEP 1] Requesting Staff Validation..." << std::endl;
-    if (!requestValidation(orderProduct)) {
-        std::cout << "[ERROR] Staff validation failed - cannot proceed with order" << std::endl;
-        return false;
-    }
-    
-    std::cout << "[SUCCESS] Staff validation completed!" << std::endl;
-    
-    // Step 2: Create and execute the PlaceOrderCommand (after staff approval)
-    std::cout << "\n[STEP 2] Processing order through payment system..." << std::endl;
+    // Create PlaceOrderCommand and dispatch through Chain of Responsibility
+    // The command will be handled by Cashier (Sales staff) who will validate it
+    std::cout << "\n[STEP 1] Creating PlaceOrderCommand for staff validation..." << std::endl;
     delete placeOrderCommand;
     placeOrderCommand = new PlaceOrderCommand(orderProduct, this);
     
-    try {
-        placeOrderCommand->execute();
-        std::cout << "[SUCCESS] Order executed successfully!" << std::endl;
-        return true;
-    } catch (const std::exception& e) {
-        std::cout << "[ERROR] Order execution failed: " << e.what() << std::endl;
-        return false;
+    // Notify observers to dispatch command through chain
+    // This will route to Cashier through StaffManager -> StaffMember chain
+    std::cout << "\n[STEP 2] Dispatching order command to sales staff via Chain of Responsibility..." << std::endl;
+    
+    if (staffObserver) {
+        // Dispatch the command through the staff chain
+        staffObserver->dispatchCommand(placeOrderCommand);
+        
+        // Check if order was successfully validated and processed
+        if (placeOrderCommand->isExecuted()) {
+            std::cout << "[SUCCESS] Order executed successfully through staff chain!" << std::endl;
+            return true;
+        } else {
+            std::cout << "[ERROR] Order validation/processing failed in staff chain" << std::endl;
+            return false;
+        }
+    } else {
+        // Fallback: execute directly if no staff observer (shouldn't happen in normal flow)
+        std::cout << "[WARNING] No staff observer - executing command directly..." << std::endl;
+        try {
+            placeOrderCommand->execute();
+            std::cout << "[SUCCESS] Order executed successfully!" << std::endl;
+            return true;
+        } catch (const std::exception& e) {
+            std::cout << "[ERROR] Order execution failed: " << e.what() << std::endl;
+            return false;
+        }
     }
 }
 
@@ -159,8 +171,8 @@ bool Customer::finalizeOrder() {
         return false;
     }
     
-    // Core business logic: finalize the order
-    delete orderProduct;
+    // Core business logic: get reference to the current order
+    // Builder retains ownership, we just use the reference
     orderProduct = orderBuilder->getOrder();
     
     if (!orderProduct || orderProduct->isEmpty()) {
@@ -239,9 +251,14 @@ OrderUIFacade* Customer::getUIFacade() {
 }
 
 void Customer::cleanupPreviousOrder() {
-    if (orderProduct) {
-        delete orderProduct;
-        orderProduct = 0;
+    // Clear the order product reference (builder owns the actual order)
+    // We only nullify our pointer, we don't delete what builder owns
+    orderProduct = 0;
+    
+    // Clean up the command if it exists
+    if (placeOrderCommand) {
+        delete placeOrderCommand;
+        placeOrderCommand = 0;
     }
 }
 

@@ -1,12 +1,12 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -g -std=c++11 -Wall -I. `pkg-config --cflags gtk+-3.0`
-LDFLAGS = `pkg-config --libs gtk+-3.0`
+CXXFLAGS = -g -std=c++11 -Wall -I. -IPotDecorator `pkg-config --cflags gtk+-3.0`
+LDFLAGS = -pthread `pkg-config --libs gtk+-3.0`
 
 # Find all .cpp files in the current directory and subdirectories
-SRCS := $(wildcard *.cpp)
+SRCS := $(wildcard *.cpp) $(wildcard PotDecorator/*.cpp)
 # Exclude test files with their own main() functions
-SRCS := $(filter-out CustomerOrderTest.cpp DemoMain.cpp main_option_a_backup.cpp builder_Testing_main.cpp, $(SRCS))
+SRCS := $(filter-out customer_test.cpp DemoMain.cpp main_option_a_backup.cpp builder_Testing_main.cpp integrated_main.cpp customer_test.cpp, $(SRCS))
 OBJS := $(SRCS:.cpp=.o)
 
 # Name of the final executable

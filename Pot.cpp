@@ -26,3 +26,9 @@ std::string Pot::getDrainage()
 {
     return this->drainage ? "Yes" : "No";
 }
+
+double Pot::getPrice() const
+{
+    // Base price for all pots is R10.00
+    return 10.0;
+}

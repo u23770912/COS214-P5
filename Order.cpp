@@ -80,15 +80,55 @@ void Order::setStatus(const std::string& newStatus) {
 }
 
 double Order::calculateTotalAmount() {
-    totalAmount = 0.0;
+    // Calculate subtotal
+    double subtotal = 0.0;
     for (const auto* item : orderItems) {
-        totalAmount += item->getPrice();
+        subtotal += item->getPrice();
     }
+    
+    // Apply automatic discount based on order size
+    double discount = calculateAutomaticDiscount();
+    totalAmount = subtotal * (1.0 - discount / 100.0);
+    
     return totalAmount;
 }
 
 double Order::getTotalAmount() const {
     return totalAmount;
+}
+
+double Order::calculateAutomaticDiscount() const {
+    // Count total plants in order
+    int totalPlants = 0;
+    for (const auto* item : orderItems) {
+        if (const SinglePlant* plant = dynamic_cast<const SinglePlant*>(item)) {
+            totalPlants += plant->getQuantity();
+        } else if (const PlantBundle* bundle = dynamic_cast<const PlantBundle*>(item)) {
+            totalPlants += bundle->getQuantity();
+        }
+    }
+    
+    // Automatic discount tiers based on order size
+    if (totalPlants >= 10) {
+        return 30.0; // 30% discount for 10+ plants
+    } else if (totalPlants >= 6) {
+        return 15.0; // 15% discount for 6-9 plants
+    } else if (totalPlants >= 3) {
+        return 10.0; // 10% discount for 3-5 plants
+    }
+    return 0.0; // No discount for orders under 3 plants
+}
+
+double Order::getDiscountPercentage() const {
+    return calculateAutomaticDiscount();
+}
+
+double Order::getTotalBeforeDiscount() const {
+    double subtotal = 0.0;
+    for (const auto* item : orderItems) {
+        subtotal += item->getPrice();
+    }
+    return subtotal;
 }
 
 std::string Order::getOrderSummary() const {
