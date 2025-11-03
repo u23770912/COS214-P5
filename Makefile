@@ -5,7 +5,7 @@ LDFLAGS = `pkg-config --libs gtk+-3.0`
 
 # Source files
 SRCS := $(wildcard *.cpp)
-TEST_FILES := builder_Testing_main.cpp
+TEST_FILES := builder_Testing_main.cpp, test_madt.cpp
 SRCS := $(filter-out main.cpp $(TEST_FILES), $(SRCS))
 OBJS := $(SRCS:.cpp=.o)
 
@@ -14,7 +14,7 @@ TARGET = greenhouse
 MAIN_OBJS = $(OBJS) main.o
 
 # Test configuration
-WORKING_TESTS := builder_Testing_main.cpp
+WORKING_TESTS := builder_Testing_main.cpp, test_madt.cpp
 TEST_TARGETS := $(WORKING_TESTS:.cpp=)
 
 .PHONY: all clean test valgrind help unit-test run-tests clean-tests build-tests list-tests run-test
