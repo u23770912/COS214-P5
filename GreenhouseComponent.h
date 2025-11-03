@@ -1,3 +1,11 @@
+
+/**
+ * @file GreenhouseComponent.h
+ * @brief part of the compistite and builder
+ */
+
+
+
 #ifndef GREENHOUSECOMPONENT_H
 #define GREENHOUSECOMPONENT_H
 
