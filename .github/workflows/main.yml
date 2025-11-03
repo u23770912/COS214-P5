@@ -52,7 +52,7 @@ jobs:
           echo "✓ Style check complete"
 
       - name: 📝 Syntax Check (Compilation Test)
-        continue-on-error: true  # Don't fail on syntax warnings
+        continue-on-error: false  # Fail build on syntax errors
         run: |
           echo "Performing syntax validation..."
           # Check all C++ files can be parsed (excluding known problematic files)
@@ -60,6 +60,9 @@ jobs:
             -not -path "./build/*" \
             -not -path "./.git/*" \
             -not -name "*Test*.cpp" \
+            -not -name "*test*.cpp" \
+            -not -name "*_test.cpp" \
+            -not -name "*Testing*.cpp" \
             -not -name "DemoMain.cpp" \
             -not -name "GreenhouseGUI.*" \
             -not -name "main.cpp")
@@ -70,10 +73,15 @@ jobs:
           fi
           
           echo "Found $(echo "$SOURCES" | wc -l) files to check"
-          # Reduced warning level: only -Wall, no -Wextra or -pedantic
+          # Syntax check - fail on errors
           g++ -std=c++${{ env.CXX_STANDARD }} -Wall \
-            -I. -fsyntax-only $SOURCES 2>&1 | head -50 || true
-          echo "✅ Syntax check complete"
+            -I. -fsyntax-only $SOURCES 2>&1 | head -50
+          
+          if [ $? -ne 0 ]; then
+            echo "❌ Syntax errors found"
+            exit 1
+          fi
+          echo "✅ Syntax check passed"
 
   # ========================================
   # JOB 2: BUILD - Compile Application
