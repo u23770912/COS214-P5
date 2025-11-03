@@ -3,9 +3,9 @@ name: C++ CI/CD Pipeline
 # Trigger workflow on push or pull request to main branches
 on:
   push:
-    branches: [ "main", "Dev-Branch", "Unit-Test" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main", "Dev-Branch" ]
+    branches: [ "main" ]
 
 # Define reusable environment variables
 env:
