@@ -417,7 +417,7 @@ void InventoryManager::displayPotInventory() const {
 
 double InventoryManager::getTotalPotInventoryValue() const {
     double total = 0.0;
-    for (Pot* pot : potInventory) {
+    for (size_t i = 0; i < potInventory.size(); ++i) {
         total += 10.0; // Default base price
     }
     return total;
