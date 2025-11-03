@@ -15,7 +15,6 @@ PlantGroup::~PlantGroup(){
 
 }
 
-
 std::string PlantGroup::getName(){
     return this->name;
 }

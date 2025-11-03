@@ -7,10 +7,15 @@
 #include "GreenhouseComponent.h"
 
 class GreenhouseBuilder
+/**
+ * @class GreenhouseBuilder
+ * @brief Abstract class that defines the interface for building different parts of a GreenhouseSystem.
+ */
 {
 
 public:
-
+     /**< The greenhouse system being built */
+        /** @brief Virtual destructor */
     virtual ~GreenhouseBuilder();
 
     virtual void reset() = 0;
