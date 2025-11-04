@@ -55,8 +55,9 @@ void printTestResult(const string &test, bool passed)
 void waitForUser()
 {
     cout << "\nPress Enter to continue...";
-    cin.ignore(10000, '\n');
+    // cin.ignore(10000, '\n');
 }
+
 
 // ============================================================================
 // BRIDGE PATTERN TESTS - PlantSpeciesProfile hierarchy
@@ -464,53 +465,6 @@ void testCompleteLifecycle()
     delete profile;
 }
 
-void debugStateTransitions()
-{
-    cout << "\n\n================================================================================\n";
-    cout << "STATE TRANSITION DEBUG\n";
-    cout << "================================================================================\n\n";
-
-    FlowerProfile *debugProfile = new FlowerProfile("Debug Plant", "200", "Sun", "Soil");
-
-    // Set even shorter durations for debugging
-    debugProfile->setStateDurationSeconds("Planted", 2);
-    debugProfile->setStateDurationSeconds("InNursery", 2);
-    debugProfile->setStateDurationSeconds("Growing", 2);
-
-    PlantProduct *debugPlant = new PlantProduct("DEBUG_PLANT", debugProfile);
-
-    cout << "Debugging state conditions...\n";
-
-    for (int i = 0; i < 20; i++)
-    {
-        string state = debugPlant->getCurrentStateName();
-        int secondsInState = debugPlant->getSecondsInCurrentState();
-        int daysInState = debugPlant->getDaysInCurrentState();
-
-        cout << "Iteration " << i << ": " << state
-             << " (Seconds: " << secondsInState
-             << ", Days: " << daysInState << ")\n";
-
-        debugPlant->advanceLifecycle();
-
-        string newState = debugPlant->getCurrentStateName();
-        if (state != newState)
-        {
-            cout << "   ↳ TRANSITIONED TO: " << newState << "\n";
-
-            if (newState == "ReadyForSale")
-            {
-                cout << "   🎉 READY FOR SALE STATE REACHED!\n";
-                break;
-            }
-        }
-
-        this_thread::sleep_for(chrono::milliseconds(300));
-    }
-
-    delete debugPlant;
-    delete debugProfile;
-}
 
 // ============================================================================
 // INTEGRATED PATTERN TEST
@@ -782,7 +736,7 @@ int main()
     cout << "Goal: Reach ReadyForSaleState from PlantedState\n\n";
 
     testCompleteLifecycle();
-    debugStateTransitions();
+    
 
     // Run core pattern tests
     testBridgePattern();
