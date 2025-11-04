@@ -1,14 +1,14 @@
 # Testing with Multiple main() Functions
 
-## ✅ Setup Complete!
+## Setup Complete!
 
 Your project now supports **multiple test files with their own main() functions**. Each test compiles into its own executable and runs independently.
 
-## 📋 Current Tests
+## Current Tests
 
-- ✅ `builder_Testing_main.cpp` - Tests greenhouse builder pattern
+- `builder_Testing_main.cpp` - Tests greenhouse builder pattern
 
-## 🚀 Quick Commands
+## Quick Commands
 
 ```bash
 # List available tests
@@ -24,7 +24,7 @@ make run-test TEST=builder_Testing_main
 make build-tests
 ```
 
-## ➕ Adding New Tests
+## Adding New Tests
 
 ### Step 1: Create Your Test File
 
@@ -42,7 +42,7 @@ int main() {
     // Your test code here
     assert(1 + 1 == 2);
     
-    std::cout << "✅ All tests passed!" << std::endl;
+    std::cout << "All tests passed!" << std::endl;
     return 0;  // 0 = success, non-zero = failure
 }
 ```
@@ -68,16 +68,16 @@ make run-test TEST=my_new_test
 make test
 ```
 
-## 📊 Test Output
+## Test Output
 
 Your tests will show:
-- ✅ PASSED - if return 0
-- ❌ FAILED - if return non-zero or timeout
+- PASSED - if return 0
+- FAILED - if return non-zero or timeout
 
 Example output:
 ```
 ==========================================
-    🧪 Running All Tests
+     Running All Tests
 ==========================================
 
 ▶ Running: builder_Testing_main
@@ -88,15 +88,15 @@ Example output:
 ----------------------------------------
 
 ==========================================
-  📊 Test Summary
+  Test Summary
 ==========================================
-  ✅ Passed: 1
-  ❌ Failed: 0
-  📝 Total:  1
+  Passed: 1
+  Failed: 0
+  Total:  1
 ==========================================
 ```
 
-## 🤖 CI/CD Integration
+## CI/CD Integration
 
 Your tests run automatically in GitHub Actions whenever you push code:
 
@@ -110,16 +110,16 @@ Your tests run automatically in GitHub Actions whenever you push code:
 2. **Check results** at: https://github.com/u23770912/COS214-P5/actions
 
 3. **Pipeline runs**:
-   - ✅ Lint (code quality)
-   - ✅ Build (compilation)
-   - ✅ Test (runs `make test`)
-   - ✅ Valgrind (memory check)
+   - Lint (code quality)
+   - Build (compilation)
+   - Test (runs `make test`)
+   - Valgrind (memory check)
 
-## 💡 Test Guidelines
+## Test Guidelines
 
 ### Return Codes
-- `return 0` = Test passed ✅
-- `return 1` (or any non-zero) = Test failed ❌
+- `return 0` = Test passed 
+- `return 1` (or any non-zero) = Test failed 
 
 ### Example Test Structure
 ```cpp
@@ -165,7 +165,7 @@ make list-tests  # Check if test is registered
 - Review GitHub Actions logs
 - Test may need headless mode for GUI components
 
-## 📚 More Info
+## More Info
 
 - Full testing guide: `TESTING_GUIDE.md`
 - CI/CD documentation: `CI_CD_GUIDE.md`
@@ -173,6 +173,6 @@ make list-tests  # Check if test is registered
 
 ---
 
-**🎉 Your testing infrastructure is ready!**
+**Your testing infrastructure is ready!**
 
 Just create test files, add them to the Makefile, and run `make test`!
