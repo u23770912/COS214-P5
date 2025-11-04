@@ -95,6 +95,11 @@ public:
      */
     double getTotalAmount() const;
     
+    // Discount management
+    double calculateAutomaticDiscount() const;
+    double getDiscountPercentage() const;
+    double getTotalBeforeDiscount() const;
+    
     // Order operations
     /**
      * @brief Get a formatted summary of the order

@@ -3,33 +3,120 @@ CXX = g++
 CXXFLAGS = -g -std=c++11 -Wall -I. `pkg-config --cflags gtk+-3.0`
 LDFLAGS = `pkg-config --libs gtk+-3.0`
 
-# Find all .cpp files in the current directory and subdirectories
+# Source files
 SRCS := $(wildcard *.cpp)
-# Exclude test files with their own main() functions
-SRCS := $(filter-out CustomerOrderTest.cpp DemoMain.cpp main_option_a_backup.cpp builder_Testing_main.cpp, $(SRCS))
+
+# Test configuration - automatically find test files
+# Matches patterns: *_test.cpp, *Test.cpp, *_Testing_main.cpp, test_*.cpp
+TEST_FILES := $(wildcard *_test.cpp *Test.cpp *_Testing_main.cpp test_*.cpp *_testing_main.cpp)
+
+# Exclude test files and main.cpp from regular sources
+SRCS := $(filter-out main.cpp $(TEST_FILES), $(SRCS))
 OBJS := $(SRCS:.cpp=.o)
 
-# Name of the final executable
+# Main application
 TARGET = greenhouse
+MAIN_OBJS = $(OBJS) main.o
 
-.PHONY: all clean test valgrind
+# Generate test executable names (remove .cpp extension)
+TEST_TARGETS := $(TEST_FILES:.cpp=)
+
+.PHONY: all clean test valgrind help unit-test run-tests clean-tests build-tests list-tests run-test
 
 all: $(TARGET)
 
-$(TARGET): $(OBJS)
+# Build main application
+$(TARGET): $(MAIN_OBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
-# Generic rule to compile .cpp files to .o files
+# Compile .cpp files to .o files
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-clean:
-	rm -f $(OBJS) $(TARGET) *.gcda *.gcno *.gcov coverage.info
-	rm -rf out
+# Build individual test executables
+$(TEST_TARGETS): %: %.cpp $(OBJS)
+	$(CXX) $(CXXFLAGS) $< $(OBJS) -o $@ $(LDFLAGS)
 
-# Add your test and valgrind rules here if needed
-test:
-	@echo "No test target defined."
+# Build all test executables
+build-tests: $(TEST_TARGETS)
 
-valgrind: all
-	valgrind --leak-check=full ./$(TARGET)
+# Run all tests
+run-tests: build-tests
+	@PASS=0; FAIL=0; \
+	for test in $(TEST_TARGETS); do \
+		echo "Running: $$test"; \
+		if timeout 10s ./$$test; then \
+			echo "PASSED: $$test"; \
+			PASS=$$((PASS + 1)); \
+		else \
+			echo "FAILED: $$test"; \
+			FAIL=$$((FAIL + 1)); \
+		fi; \
+		echo ""; \
+	done; \
+	echo "Test Summary:"; \
+	echo "  Passed: $$PASS"; \
+	echo "  Failed: $$FAIL"; \
+	echo "  Total:  $$((PASS + FAIL))"; \
+	if [ $$FAIL -gt 0 ]; then exit 1; fi
+
+test: run-tests
+
+unit-test: run-tests
+
+# Run a specific test
+run-test: 
+	@if [ -z "$(TEST)" ]; then \
+		echo "ERROR: Please specify TEST=<test_name>"; \
+		echo "Available tests:"; \
+		for test in $(TEST_TARGETS); do echo "  - $$test"; done; \
+		exit 1; \
+	fi
+	@if [ ! -f "$(TEST)" ]; then \
+		$(MAKE) $(TEST); \
+	fi
+	@./$(TEST)
+
+# List all available tests
+list-tests:
+	@echo "Available test executables:"
+	@for test in $(TEST_TARGETS); do echo "  - $$test"; done
+
+# Clean test executables
+clean-tests:
+	@rm -f $(TEST_TARGETS)
+	@rm -f $(TEST_FILES:.cpp=.o)
+
+# Clean everything
+clean: clean-tests
+	@rm -f $(OBJS) main.o $(TARGET) *.gcda *.gcno *.gcov coverage.info valgrind-*.txt
+	@rm -rf out
+
+valgrind: all build-tests
+	@echo "Running valgrind on main application..."
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
+		--verbose --log-file=valgrind-main.txt ./$(TARGET)
+	@echo ""
+	@echo "Running valgrind on test executables..."
+	@for test in $(TEST_TARGETS); do \
+		echo "Checking: $$test"; \
+		valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
+			--verbose --log-file=valgrind-$$test.txt ./$$test 2>&1 | head -20; \
+		echo ""; \
+	done
+	@echo "Valgrind reports saved to valgrind-*.txt files"
+
+# Help target
+help:
+	@echo "Available targets:"
+	@echo "  make              - Build main application"
+	@echo "  make all          - Build main application"
+	@echo "  make build-tests  - Build all test executables"
+	@echo "  make test         - Build and run all tests"
+	@echo "  make run-tests    - Run all tests"
+	@echo "  make run-test TEST=<name> - Run specific test"
+	@echo "  make list-tests   - Show available tests"
+	@echo "  make valgrind     - Run memory leak analysis"
+	@echo "  make clean        - Remove all build artifacts"
+	@echo "  make clean-tests  - Remove test executables"
+	@echo "  make help         - Show this help message"

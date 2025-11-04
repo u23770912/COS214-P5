@@ -423,7 +423,7 @@ void TerminalUI::displayHelp() {
     std::cout << "  - Orders are validated for inventory availability" << std::endl;
     
     std::cout << "\n" << BOLD << "Need assistance?" << RESET << std::endl;
-    std::cout << "  Contact our staff at: support@greenhouse.com\n" << std::endl;
+    std::cout << "  Contact our staff for assistance\n" << std::endl;
 }
 
 void TerminalUI::displaySeparator() {

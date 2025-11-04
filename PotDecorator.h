@@ -23,6 +23,7 @@ public:
     
     virtual double getPrice() const;
     virtual void print() override = 0;
+    virtual std::string getPotType() const override;
 };
 
 #endif // POTDECORATOR_H

@@ -409,7 +409,7 @@ void InventoryManager::displayPotInventory() const {
     for (size_t i = 0; i < potInventory.size(); i++) {
         std::cout << (i+1) << ". ";
         potInventory[i]->print();
-        std::cout << " - R10.00"; // Default price if no decorator
+        std::cout << " - R" << potInventory[i]->getPrice();
         std::cout << std::endl;
     }
     std::cout << std::string(70, '-') << std::endl;
@@ -418,7 +418,7 @@ void InventoryManager::displayPotInventory() const {
 double InventoryManager::getTotalPotInventoryValue() const {
     double total = 0.0;
     for (Pot* pot : potInventory) {
-        total += 10.0; // Default base price
+        total += pot->getPrice();
     }
     return total;
 }
