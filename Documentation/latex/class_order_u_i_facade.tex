@@ -1,0 +1,73 @@
+\doxysection{Order\+UIFacade Class Reference}
+\hypertarget{class_order_u_i_facade}{}\label{class_order_u_i_facade}\index{OrderUIFacade@{OrderUIFacade}}
+
+
+Facade class for \doxylink{class_customer}{Customer} order UI operations.  
+
+
+
+
+{\ttfamily \#include $<$Order\+UIFacade.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_order_u_i_facade_aa27755139ed0df1440dc8c63b46f974d}\label{class_order_u_i_facade_aa27755139ed0df1440dc8c63b46f974d} 
+double {\bfseries calculate\+Automatic\+Discount} (int total\+Plants) const
+\item 
+\Hypertarget{class_order_u_i_facade_abfd1a0313b67bf7b0a1810acae7c1be0}\label{class_order_u_i_facade_abfd1a0313b67bf7b0a1810acae7c1be0} 
+std\+::vector$<$ \mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries get\+Available\+Plants\+From\+Inventory} ()
+\item 
+\Hypertarget{class_order_u_i_facade_a29cc0239f84a5a278bc3d088cf7d15e4}\label{class_order_u_i_facade_a29cc0239f84a5a278bc3d088cf7d15e4} 
+void {\bfseries display\+Plant\+Details} (const \mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}plant, int index)
+\item 
+\Hypertarget{class_order_u_i_facade_ad909f6bdb91ef1406dee628065a827b4}\label{class_order_u_i_facade_ad909f6bdb91ef1406dee628065a827b4} 
+int {\bfseries count\+Total\+Plants\+In\+Order} (\mbox{\hyperlink{class_concrete_order_builder}{Concrete\+Order\+Builder}} \texorpdfstring{$\ast$}{*}builder) const
+\item 
+\Hypertarget{class_order_u_i_facade_ad999e83b581cc53548c5c05025e2e2df}\label{class_order_u_i_facade_ad999e83b581cc53548c5c05025e2e2df} 
+{\bfseries Order\+UIFacade} (\mbox{\hyperlink{class_customer}{Customer}} \texorpdfstring{$\ast$}{*}customer)
+\item 
+\Hypertarget{class_order_u_i_facade_adaaf48477782e1f2be91b435cdf43a98}\label{class_order_u_i_facade_adaaf48477782e1f2be91b435cdf43a98} 
+void {\bfseries display\+Available\+Items} ()
+\item 
+\Hypertarget{class_order_u_i_facade_a918e9e74419b4f65a9e65b3b92f984fe}\label{class_order_u_i_facade_a918e9e74419b4f65a9e65b3b92f984fe} 
+void {\bfseries view\+Current\+Order} ()
+\item 
+\Hypertarget{class_order_u_i_facade_ac72772e394c1dde1b5006f9473b9795a}\label{class_order_u_i_facade_ac72772e394c1dde1b5006f9473b9795a} 
+bool {\bfseries add\+Plant\+To\+Order\+With\+Auto\+Discount} (int plant\+Index, int quantity)
+\item 
+\Hypertarget{class_order_u_i_facade_a1f7bef7d8f93527f8b6b3cf9ea02cc51}\label{class_order_u_i_facade_a1f7bef7d8f93527f8b6b3cf9ea02cc51} 
+bool {\bfseries add\+Bundle\+To\+Order\+With\+Auto\+Discount} (const std\+::string \&bundle\+Name, const std\+::vector$<$ int $>$ \&plant\+Indices)
+\item 
+\Hypertarget{class_order_u_i_facade_a2e71c5cea9a9fab2d8e9dc4798554d56}\label{class_order_u_i_facade_a2e71c5cea9a9fab2d8e9dc4798554d56} 
+void {\bfseries display\+Order\+Creation\+Welcome} ()
+\item 
+\Hypertarget{class_order_u_i_facade_a82fa62d901b830fd671ad690c8203457}\label{class_order_u_i_facade_a82fa62d901b830fd671ad690c8203457} 
+void {\bfseries display\+Order\+Execution\+Summary} ()
+\item 
+\Hypertarget{class_order_u_i_facade_abc00e20934e0e006aefa1b13f5a560e3}\label{class_order_u_i_facade_abc00e20934e0e006aefa1b13f5a560e3} 
+void {\bfseries display\+Final\+Order\+Confirmation} ()
+\item 
+\Hypertarget{class_order_u_i_facade_a504283e5076571198471d261d5c8a860}\label{class_order_u_i_facade_a504283e5076571198471d261d5c8a860} 
+void {\bfseries display\+Discount\+Information} () const
+\item 
+\Hypertarget{class_order_u_i_facade_a3403162015f86c6495672b51e1d9ab4a}\label{class_order_u_i_facade_a3403162015f86c6495672b51e1d9ab4a} 
+void {\bfseries display\+Order\+Instructions} () const
+\item 
+\Hypertarget{class_order_u_i_facade_a56c9528201403eed92355cea64273e93}\label{class_order_u_i_facade_a56c9528201403eed92355cea64273e93} 
+void {\bfseries set\+Customer} (\mbox{\hyperlink{class_customer}{Customer}} \texorpdfstring{$\ast$}{*}customer)
+\item 
+\Hypertarget{class_order_u_i_facade_a9734f8fe9f0c8e51b94dbccc34e67ca7}\label{class_order_u_i_facade_a9734f8fe9f0c8e51b94dbccc34e67ca7} 
+\mbox{\hyperlink{class_customer}{Customer}} \texorpdfstring{$\ast$}{*} {\bfseries get\+Customer} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Facade class for \doxylink{class_customer}{Customer} order UI operations. 
+
+Handles all terminal UI operations and user interactions for the order system. Separates UI concerns from \doxylink{class_customer}{Customer} business logic following the Facade pattern. Includes automatic discount calculation based on order size. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Order\+UIFacade.\+h\item 
+\mbox{\hyperlink{_order_u_i_facade_8cpp}{Order\+UIFacade.\+cpp}}\end{DoxyCompactItemize}

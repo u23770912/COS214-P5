@@ -1,0 +1,149 @@
+\doxysection{Order\+Validation\+Handler.\+h}
+\hypertarget{_order_validation_handler_8h_source}{}\label{_order_validation_handler_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ ORDERVALIDATIONHANDLER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ ORDERVALIDATIONHANDLER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}OrderProcessHandler.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}InventoryManager.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}SinglePlant.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}PlantBundle.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{class\ }OrderValidationHandler\ :\ \textcolor{keyword}{public}\ OrderProcessHandler\ \{}
+\DoxyCodeLine{00016\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00017\ \ \ \ \ std::vector<std::string>\ validationErrors;}
+\DoxyCodeLine{00018\ \ \ \ \ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ OrderValidationHandler()\ :\ OrderProcessHandler(\textcolor{stringliteral}{"{}Order\ Validation"{}})\ \{\}}
+\DoxyCodeLine{00021\ \ \ \ \ }
+\DoxyCodeLine{00022\ \ \ \ \ std::vector<std::string>\ getValidationErrors()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ validationErrors;}
+\DoxyCodeLine{00024\ \ \ \ \ \}}
+\DoxyCodeLine{00025\ \ \ \ \ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{bool}\ processOrder(\mbox{\hyperlink{class_order}{Order}}*\ order,\ \mbox{\hyperlink{class_customer}{Customer}}*\ customer)\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ validationErrors.clear();\ \textcolor{comment}{//\ Clear\ previous\ errors}}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}Checking\ inventory\ availability\ for\ all\ order\ items..."{}});}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!order\ ||\ order-\/>\mbox{\hyperlink{class_order_a39a41cee55588c5c382e635ac72834b9}{isEmpty}}())\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ error\ =\ \textcolor{stringliteral}{"{}Order\ is\ empty\ or\ invalid.\ Please\ add\ items\ to\ your\ order\ before\ submitting."{}};}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ validationErrors.push\_back(error);}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n[VALIDATION\ ERROR]\ "{}}\ <<\ error\ <<\ std::endl;}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inventory_manager}{InventoryManager}}\&\ inventory\ =\ \mbox{\hyperlink{class_inventory_manager_a383ec95aa11017add01705701c6cdfde}{InventoryManager::getInstance}}();}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ availablePlants\ =\ inventory.getReadyForSalePlants();}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}Available\ plants\ in\ sales\ floor:\ "{}}\ +\ std::to\_string(availablePlants.size()));}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (availablePlants.empty())\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ error\ =\ \textcolor{stringliteral}{"{}No\ plants\ are\ currently\ available\ on\ the\ sales\ floor.\ Please\ check\ back\ later\ or\ contact\ staff\ for\ assistance."{}};}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ validationErrors.push\_back(error);}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n[VALIDATION\ ERROR]\ "{}}\ <<\ error\ <<\ std::endl;}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Validate\ each\ order\ item}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ allValid\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}*\ orderItem\ :\ order-\/>\mbox{\hyperlink{class_order_aaf44ac2bde890988d65496fcfe980ed0}{getOrderItems}}())\ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!validateOrderItem(orderItem,\ availablePlants))\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ allValid\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!allValid)\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n╔════════════════════════════════════════╗"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}║\ \ \ \ \ VALIDATION\ FAILED\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ║"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}╚════════════════════════════════════════╝"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nThe\ following\ issues\ were\ found\ with\ your\ order:\(\backslash\)n"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ validationErrors.size();\ i++)\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ (i+1)\ <<\ \textcolor{stringliteral}{"{}.\ "{}}\ <<\ validationErrors[i]\ <<\ std::endl;}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nPlease\ modify\ your\ order\ and\ try\ again."{}}\ <<\ std::endl;}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}✓\ All\ items\ are\ available\ in\ inventory"{}});}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ order-\/>\mbox{\hyperlink{class_order_a0c0d356d8305b1874bf1c4d39d750e73}{setStatus}}(\textcolor{stringliteral}{"{}Validated"{}});}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00074\ \ \ \ \ \}}
+\DoxyCodeLine{00075\ \ \ \ \ }
+\DoxyCodeLine{00076\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{bool}\ validateOrderItem(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_order_item}{OrderItem}}*\ item,\ \textcolor{keyword}{const}\ std::vector<PlantProduct*>\&\ availablePlants)\ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ it's\ a\ SinglePlant}}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_single_plant}{SinglePlant}}*\ singlePlant\ =\ \textcolor{keyword}{dynamic\_cast<}\textcolor{keyword}{const\ }\mbox{\hyperlink{class_single_plant}{SinglePlant}}*\textcolor{keyword}{>}(item))\ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ validateSinglePlant(singlePlant,\ availablePlants);}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ it's\ a\ PlantBundle}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_plant_bundle}{PlantBundle}}*\ bundle\ =\ \textcolor{keyword}{dynamic\_cast<}\textcolor{keyword}{const\ }\mbox{\hyperlink{class_plant_bundle}{PlantBundle}}*\textcolor{keyword}{>}(item))\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ validatePlantBundle(bundle,\ availablePlants);}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ std::string\ error\ =\ \textcolor{stringliteral}{"{}Unknown\ order\ item\ type\ encountered."{}};}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ validationErrors.push\_back(error);}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}ERROR:\ "{}}\ +\ error);}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00091\ \ \ \ \ \}}
+\DoxyCodeLine{00092\ \ \ \ \ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{bool}\ validateSinglePlant(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_single_plant}{SinglePlant}}*\ plant,\ \textcolor{keyword}{const}\ std::vector<PlantProduct*>\&\ availablePlants)\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ std::string\ plantType\ =\ plant-\/>getPlantType();}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ requiredQuantity\ =\ plant-\/>getQuantity();}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ availableCount\ =\ 0;}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Count\ available\ plants\ of\ this\ type}}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}*\ availablePlant\ :\ availablePlants)\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (availablePlant-\/>getProfile()\ \&\&\ }
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ availablePlant-\/>getProfile()-\/>getSpeciesName()\ ==\ plantType)\ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ availableCount++;}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (availableCount\ >=\ requiredQuantity)\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}✓\ "{}}\ +\ plantType\ +\ \textcolor{stringliteral}{"{}:\ "{}}\ +\ std::to\_string(requiredQuantity)\ +\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\ required,\ "{}}\ +\ std::to\_string(availableCount)\ +\ \textcolor{stringliteral}{"{}\ available"{}});}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ error;}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (availableCount\ ==\ 0)\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ error\ =\ \textcolor{stringliteral}{"{}'"{}}\ +\ plantType\ +\ \textcolor{stringliteral}{"{}'\ is\ currently\ out\ of\ stock.\ We\ don't\ have\ any\ available\ at\ the\ moment."{}};}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ error\ =\ \textcolor{stringliteral}{"{}Insufficient\ '"{}}\ +\ plantType\ +\ \textcolor{stringliteral}{"{}'\ plants\ available.\ You\ requested\ "{}}\ +\ }
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(requiredQuantity)\ +\ \textcolor{stringliteral}{"{}\ but\ we\ only\ have\ "{}}\ +\ }
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(availableCount)\ +\ \textcolor{stringliteral}{"{}\ in\ stock."{}};}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ validationErrors.push\_back(error);}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ \ [✗]\ "{}}\ <<\ error\ <<\ std::endl;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00123\ \ \ \ \ \}}
+\DoxyCodeLine{00124\ \ \ \ \ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordtype}{bool}\ validatePlantBundle(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_plant_bundle}{PlantBundle}}*\ bundle,\ \textcolor{keyword}{const}\ std::vector<PlantProduct*>\&\ availablePlants)\ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}Validating\ bundle:\ "{}}\ +\ bundle-\/>getName());}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ bundleValid\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Validate\ all\ items\ in\ the\ bundle}}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}*\ bundleItem\ :\ bundle-\/>\mbox{\hyperlink{class_plant_bundle_a2f1fe408d343703d115ecedda1d5fcea}{getItems}}())\ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!validateOrderItem(bundleItem,\ availablePlants))\ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bundleValid\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (bundleValid)\ \{}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}✓\ Bundle\ '"{}}\ +\ bundle-\/>getName()\ +\ \textcolor{stringliteral}{"{}'\ validation\ completed"{}});}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ error\ =\ \textcolor{stringliteral}{"{}Bundle\ '"{}}\ +\ bundle-\/>getName()\ +\ \textcolor{stringliteral}{"{}'\ contains\ items\ that\ are\ not\ available."{}};}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Don't\ add\ to\ validationErrors\ as\ individual\ items\ already\ added\ their\ errors}}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}✗\ "{}}\ +\ error);}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ bundleValid;}
+\DoxyCodeLine{00145\ \ \ \ \ \}}
+\DoxyCodeLine{00146\ \};}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

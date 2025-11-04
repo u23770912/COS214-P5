@@ -1,0 +1,109 @@
+\doxysection{Payment\+Process\+Handler.\+h}
+\hypertarget{_payment_process_handler_8h_source}{}\label{_payment_process_handler_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PAYMENTPROCESSHANDLER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PAYMENTPROCESSHANDLER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}OrderProcessHandler.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}InventoryManager.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}SinglePlant.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}PlantBundle.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <random>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{class\ }PaymentProcessHandler\ :\ \textcolor{keyword}{public}\ OrderProcessHandler\ \{}
+\DoxyCodeLine{00017\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00018\ \ \ \ \ std::mt19937\ rng;}
+\DoxyCodeLine{00019\ \ \ \ \ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00021\ \ \ \ \ PaymentProcessHandler()\ :\ OrderProcessHandler(\textcolor{stringliteral}{"{}Payment\ Processing"{}}),\ rng(std::random\_device\{\}())\ \{\}}
+\DoxyCodeLine{00022\ \ \ \ \ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{bool}\ processOrder(\mbox{\hyperlink{class_order}{Order}}*\ order,\ \mbox{\hyperlink{class_customer}{Customer}}*\ customer)\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}Processing\ payment\ for\ customer:\ "{}}\ +\ customer-\/>getName());}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ totalAmount\ =\ order-\/>\mbox{\hyperlink{class_order_a76699a6fd67a3d581b77300cc4abc347}{calculateTotalAmount}}();}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}Total\ amount:\ R"{}}\ +\ std::to\_string(totalAmount));}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Simulate\ payment\ processing\ time}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}Contacting\ payment\ gateway..."{}});}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Simulate\ payment\ validation\ (90\%\ success\ rate)}}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ std::uniform\_int\_distribution<int>\ dist(1,\ 10);}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ paymentSuccess\ =\ (dist(rng)\ <=\ 9);}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (paymentSuccess)\ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}Payment\ authorized\ and\ processed\ successfully"{}});}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ order-\/>\mbox{\hyperlink{class_order_a0c0d356d8305b1874bf1c4d39d750e73}{setStatus}}(\textcolor{stringliteral}{"{}Paid"{}});}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remove\ sold\ plants\ from\ inventory}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}Updating\ inventory\ -\/\ removing\ sold\ plants\ from\ sales\ floor..."{}});}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{class_payment_process_handler_a627ba5d1289836c9761103717bbb2df9}{removeSoldPlantsFromInventory}}(order))\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}Inventory\ updated\ successfully"{}});}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ logStep(\textcolor{stringliteral}{"{}Payment\ confirmation\ sent\ to\ customer"{}});}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}[ERROR]\ Failed\ to\ update\ inventory\ after\ payment"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ order-\/>\mbox{\hyperlink{class_order_a0c0d356d8305b1874bf1c4d39d750e73}{setStatus}}(\textcolor{stringliteral}{"{}Payment\ Successful\ -\/\ Inventory\ Update\ Failed"{}});}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}[ERROR]\ Payment\ failed\ -\/\ Card\ declined\ or\ insufficient\ funds"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ order-\/>\mbox{\hyperlink{class_order_a0c0d356d8305b1874bf1c4d39d750e73}{setStatus}}(\textcolor{stringliteral}{"{}Payment\ Failed"{}});}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00057\ \ \ \ \ \}}
+\DoxyCodeLine{00058\ \ \ \ \ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_payment_process_handler_a627ba5d1289836c9761103717bbb2df9}{removeSoldPlantsFromInventory}}(\mbox{\hyperlink{class_order}{Order}}*\ order)\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inventory_manager}{InventoryManager}}\&\ inventory\ =\ \mbox{\hyperlink{class_inventory_manager_a383ec95aa11017add01705701c6cdfde}{InventoryManager::getInstance}}();}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Count\ plants\ by\ type\ in\ the\ order}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ std::map<std::string,\ int>\ plantCounts;}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<OrderItem*>\&\ items\ =\ order-\/>\mbox{\hyperlink{class_order_aaf44ac2bde890988d65496fcfe980ed0}{getOrderItems}}();}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{class_order_item}{OrderItem}}*\ item\ :\ items)\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_payment_process_handler_a23a1b06ef3aea47b2e3eecc4ea9d7cf9}{countPlantsInItem}}(item,\ plantCounts);}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sell\ each\ plant\ type}}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ allSold\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ pair\ :\ plantCounts)\ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ plantType\ =\ pair.first;}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ quantity\ =\ pair.second;}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!inventory.sellPlants(plantType,\ quantity))\ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}[ERROR]\ Could\ not\ sell\ "{}}\ <<\ quantity\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ plantType\ <<\ std::endl;}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ allSold\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ allSold;}
+\DoxyCodeLine{00088\ \ \ \ \ \}}
+\DoxyCodeLine{00089\ \ \ \ \ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_payment_process_handler_a23a1b06ef3aea47b2e3eecc4ea9d7cf9}{countPlantsInItem}}(\mbox{\hyperlink{class_order_item}{OrderItem}}*\ item,\ std::map<std::string,\ int>\&\ plantCounts)\ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!item)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ it's\ a\ SinglePlant}}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_single_plant}{SinglePlant}}*\ singlePlant\ =\ \textcolor{keyword}{dynamic\_cast<}\mbox{\hyperlink{class_single_plant}{SinglePlant}}*\textcolor{keyword}{>}(item);}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (singlePlant)\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ plantType\ =\ singlePlant-\/>getPlantType();}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ quantity\ =\ singlePlant-\/>getQuantity();}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ plantCounts[plantType]\ +=\ quantity;}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ it's\ a\ PlantBundle}}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_plant_bundle}{PlantBundle}}*\ bundle\ =\ \textcolor{keyword}{dynamic\_cast<}\mbox{\hyperlink{class_plant_bundle}{PlantBundle}}*\textcolor{keyword}{>}(item);}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (bundle)\ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<OrderItem*>\&\ bundleItems\ =\ bundle-\/>\mbox{\hyperlink{class_plant_bundle_a2f1fe408d343703d115ecedda1d5fcea}{getItems}}();}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{class_order_item}{OrderItem}}*\ bundleItem\ :\ bundleItems)\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_payment_process_handler_a23a1b06ef3aea47b2e3eecc4ea9d7cf9}{countPlantsInItem}}(bundleItem,\ plantCounts);}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00115\ \ \ \ \ \}}
+\DoxyCodeLine{00116\ \};}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

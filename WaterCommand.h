@@ -5,6 +5,12 @@
 #include "PlantProduct.h"
 #include <iostream>
 
+/**
+ * @brief Command class for watering plants
+ * 
+ * This class implements the Command pattern for watering operations.
+ * It executes the watering care action on plants in the greenhouse.
+ */
 class WaterCommand : public Command {
 public:
     WaterCommand() : Command() {}

@@ -1,0 +1,53 @@
+\doxysection{Greenhouse\+Manager.\+h}
+\hypertarget{_greenhouse_manager_8h_source}{}\label{_greenhouse_manager_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GREENHOUSEMANAGER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GREENHOUSEMANAGER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}GreenhouseSystem.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}PlantPot.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}PlantProduct.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}PlantGroup.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{class\ }GreenhouseManager\ \{}
+\DoxyCodeLine{00026\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{class_greenhouse_system}{GreenhouseSystem}}*\ builder;}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{class_greenhouse_component}{GreenhouseComponent}}*\ root;}
+\DoxyCodeLine{00029\ \ \ \ \ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{//\ Cache\ for\ quick\ lookup:\ maps\ species\ name\ to\ its\ GreenhouseComponent\ node}}
+\DoxyCodeLine{00031\ \ \ \ \ std::map<std::string,\ PlantGroup*>\ speciesNodes;}
+\DoxyCodeLine{00032\ \ \ \ \ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{//\ Track\ all\ plant\ pots\ for\ easy\ removal}}
+\DoxyCodeLine{00034\ \ \ \ \ std::map<std::string,\ PlantPot*>\ plantPots;\ \ \textcolor{comment}{//\ plantID\ -\/>\ pot}}
+\DoxyCodeLine{00035\ \ \ \ \ std::map<std::string,\ PlantGroup*>\ plantPotParents;\ \ \textcolor{comment}{//\ plantID\ -\/>\ parent\ group}}
+\DoxyCodeLine{00036\ \ \ \ \ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00038\ \ \ \ \ GreenhouseManager();}
+\DoxyCodeLine{00039\ \ \ \ \ \string~GreenhouseManager();}
+\DoxyCodeLine{00040\ \ \ \ \ }
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{class_greenhouse_component}{GreenhouseComponent}}*\ \mbox{\hyperlink{class_greenhouse_manager_afd0eacc0c7744653b5bfb8b5379b82b8}{buildGreenhouseStructure}}();}
+\DoxyCodeLine{00046\ \ \ \ \ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_greenhouse_manager_aa872e9be9aad9c592eb8ed17b70438f8}{addPlantToStructure}}(\mbox{\hyperlink{class_plant_product}{PlantProduct}}*\ plant);}
+\DoxyCodeLine{00053\ \ \ \ \ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_greenhouse_manager_a8f421497fa7f96e1789799e9d0fd036d}{removePlantFromStructure}}(\textcolor{keyword}{const}\ std::string\&\ plantId);}
+\DoxyCodeLine{00060\ \ \ \ \ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_greenhouse_manager_a66ced954161cb2cb54bc2915409414bc}{displayGreenhouseStructure}}();}
+\DoxyCodeLine{00065\ \ \ \ \ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_greenhouse_manager_ad447ce188ea51390e94cac6f0cd8d3a6}{displayPlantsByState}}(\textcolor{keyword}{const}\ std::string\&\ state);}
+\DoxyCodeLine{00071\ \ \ \ \ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_greenhouse_manager_a5a8f53f31762526f714110aa6e8cef55}{getTotalPlantCount}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00077\ \ \ \ \ }
+\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{class_greenhouse_component}{GreenhouseComponent}}*\ \mbox{\hyperlink{class_greenhouse_manager_a5e34bf8e3e4cab0a46d42f71d3053c0c}{getRoot}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ root;\ \}}
+\DoxyCodeLine{00083\ \ \ \ \ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_greenhouse_manager_a73a83b248a3962e3dd54a858eeb3c692}{registerSpeciesNode}}(\textcolor{keyword}{const}\ std::string\&\ speciesName,\ \mbox{\hyperlink{class_plant_group}{PlantGroup}}*\ node);}
+\DoxyCodeLine{00090\ \ \ \ \ }
+\DoxyCodeLine{00091\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00095\ \ \ \ \ \mbox{\hyperlink{class_plant_group}{PlantGroup}}*\ findSpeciesNode(\textcolor{keyword}{const}\ std::string\&\ speciesName);}
+\DoxyCodeLine{00096\ \};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ GREENHOUSEMANAGER\_H}}
+
+\end{DoxyCode}

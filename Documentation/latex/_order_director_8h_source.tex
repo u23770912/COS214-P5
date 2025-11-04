@@ -1,0 +1,50 @@
+\doxysection{Order\+Director.\+h}
+\hypertarget{_order_director_8h_source}{}\label{_order_director_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ ORDERDIRECTOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ ORDERDIRECTOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_order_builder}{OrderBuilder}};\ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{00008\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_order}{Order}};\ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{class\ }OrderDirector\ \{}
+\DoxyCodeLine{00018\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{class_order_builder}{OrderBuilder}}*\ builder;}
+\DoxyCodeLine{00020\ \ \ \ \ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ OrderDirector();}
+\DoxyCodeLine{00023\ \ \ \ \ OrderDirector(\mbox{\hyperlink{class_order_builder}{OrderBuilder}}*\ builder);}
+\DoxyCodeLine{00024\ \ \ \ \ \string~OrderDirector();}
+\DoxyCodeLine{00025\ \ \ \ \ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_order_director_af12aecb104e0bf2d0cfe618d73ddeabc}{setBuilder}}(\mbox{\hyperlink{class_order_builder}{OrderBuilder}}*\ builder);}
+\DoxyCodeLine{00031\ \ \ \ \ }
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{class_order_builder}{OrderBuilder}}*\ \mbox{\hyperlink{class_order_director_a07edbf2dcc3f5e8a8c9f03235c9eceac}{getBuilder}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00037\ \ \ \ \ }
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{class_order}{Order}}*\ \mbox{\hyperlink{class_order_director_af091c3f5b5aab7a6c1542d6a3aa211da}{construct}}();}
+\DoxyCodeLine{00044\ \ \ \ \ }
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{class_order}{Order}}*\ \mbox{\hyperlink{class_order_director_a1b7927033a6b374b996d6a8dce3925b6}{constructSimplePlantOrder}}(\textcolor{keyword}{const}\ std::string\&\ plantType,\ \textcolor{keywordtype}{int}\ quantity);}
+\DoxyCodeLine{00052\ \ \ \ \ }
+\DoxyCodeLine{00060\ \ \ \ \ \mbox{\hyperlink{class_order}{Order}}*\ \mbox{\hyperlink{class_order_director_ad63c028df2db7a3148741fe4054212b4}{constructPlantWithPotOrder}}(\textcolor{keyword}{const}\ std::string\&\ plantType,\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ potType,\ \textcolor{keywordtype}{int}\ quantity);}
+\DoxyCodeLine{00062\ \ \ \ \ }
+\DoxyCodeLine{00071\ \ \ \ \ \mbox{\hyperlink{class_order}{Order}}*\ \mbox{\hyperlink{class_order_director_aceabf10d97b840b7942be96e7a7ae83f}{constructBundleOrder}}(\textcolor{keyword}{const}\ std::string\&\ bundleName,}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::string>\&\ plantTypes,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<int>\&\ quantities,}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ discount);}
+\DoxyCodeLine{00075\ \ \ \ \ }
+\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{class_order}{Order}}*\ \mbox{\hyperlink{class_order_director_a3c94c9ff43c4bafb0203923f8a5518f2}{constructGardenStarterKit}}();}
+\DoxyCodeLine{00082\ \ \ \ \ }
+\DoxyCodeLine{00088\ \ \ \ \ \mbox{\hyperlink{class_order}{Order}}*\ \mbox{\hyperlink{class_order_director_adf1953a0beecb88638f32e0355240ef9}{constructSucculentCollection}}();}
+\DoxyCodeLine{00089\ \ \ \ \ }
+\DoxyCodeLine{00090\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{bool}\ validateBuilder()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00096\ \ \ \ \ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{void}\ resetBuilder();}
+\DoxyCodeLine{00101\ \};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ ORDERDIRECTOR\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,228 @@
+\doxysection{Plant\+Product Class Reference}
+\hypertarget{class_plant_product}{}\label{class_plant_product}\index{PlantProduct@{PlantProduct}}
+
+
+Main plant product class that integrates multiple design patterns.  
+
+
+
+
+{\ttfamily \#include $<$Plant\+Product.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_plant_product_afadafde1f8fd81945e2ea00e0d0de69c}{Plant\+Product}} (const std\+::string \&id, \mbox{\hyperlink{class_plant_species_profile}{Plant\+Species\+Profile}} \texorpdfstring{$\ast$}{*}profile)
+\begin{DoxyCompactList}\small\item\em Construct a new Plant Product. \end{DoxyCompactList}\item 
+\Hypertarget{class_plant_product_a3dab54af64bab8e2b6ca76f1a07c1165}\label{class_plant_product_a3dab54af64bab8e2b6ca76f1a07c1165} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Plant\+Product} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_plant_product_a1dc679735ec7a9c001cd595d94b720d9}{transition\+To}} (\mbox{\hyperlink{class_plant_state}{Plant\+State}} \texorpdfstring{$\ast$}{*}state)
+\begin{DoxyCompactList}\small\item\em Transition plant to a new state. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_plant_product_a75bb54a0d829d53f374ab07faae214c3}{get\+Current\+State\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Get the name of the current state. \end{DoxyCompactList}\item 
+\Hypertarget{class_plant_product_a65ba6bbcfeea8b5642b88a7035084012}\label{class_plant_product_a65ba6bbcfeea8b5642b88a7035084012} 
+void {\bfseries transition\+To\+Withering} ()
+\begin{DoxyCompactList}\small\item\em Force transition to withering state. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_plant_product_af2b1a1e2cce73c2c4cbf1bf59dd15f85}{get\+Days\+In\+Current\+State}} () const
+\begin{DoxyCompactList}\small\item\em Get days spent in current state. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_plant_product_ae173ae1e854ee83e75b4d648ccb82e17}{get\+Seconds\+In\+Current\+State}} () const
+\begin{DoxyCompactList}\small\item\em Get seconds spent in current state. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_plant_product_a6eb89bc0005a9edfdf3f5ccae03f4212}{get\+Seconds\+Since\+Last\+Care}} () const
+\begin{DoxyCompactList}\small\item\em Get seconds since last care action. \end{DoxyCompactList}\item 
+\Hypertarget{class_plant_product_a7790cfb554857030a79b0072f880cca4}\label{class_plant_product_a7790cfb554857030a79b0072f880cca4} 
+void {\bfseries reset\+Last\+Care\+Time} ()
+\begin{DoxyCompactList}\small\item\em Reset the last care timestamp. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_plant_product_a089b8d1d906d7fef5752772a7dc61cd3}{set\+Observer}} (\mbox{\hyperlink{class_life_cycle_observer}{Life\+Cycle\+Observer}} \texorpdfstring{$\ast$}{*}obs)
+\begin{DoxyCompactList}\small\item\em Set the lifecycle observer. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_plant_species_profile}{Plant\+Species\+Profile}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_plant_product_a760eee9b9dfc0cd62a3585e0a4dabbdb}{get\+Profile}} () const
+\begin{DoxyCompactList}\small\item\em Get the plant\textquotesingle{}s species profile. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_plant_product_abf3c25a131e54ee9d3082f3a807a6403}{add\+Strategy}} (const std\+::string \&care\+Type, \mbox{\hyperlink{class_care_strategy}{Care\+Strategy}} \texorpdfstring{$\ast$}{*}strategy)
+\begin{DoxyCompactList}\small\item\em Add a care strategy. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_plant_product_af25b4492d3f546e6b1ea20b5803f79f3}{perform\+Care}} (const std\+::string \&care\+Type)
+\begin{DoxyCompactList}\small\item\em Perform a care action. \end{DoxyCompactList}\item 
+\Hypertarget{class_plant_product_ab429e1b13c620e930c30e2012407ab03}\label{class_plant_product_ab429e1b13c620e930c30e2012407ab03} 
+std\+::string {\bfseries get\+Strategy\+Name\+For\+Care\+Type} (const std\+::string \&care\+Type) const
+\item 
+\Hypertarget{class_plant_product_a0be8a5d7f1321edbf9ffcabc6357fe98}\label{class_plant_product_a0be8a5d7f1321edbf9ffcabc6357fe98} 
+void {\bfseries advance\+Lifecycle} ()
+\item 
+\Hypertarget{class_plant_product_acc3394d825010f5d2819f1c6316b1017}\label{class_plant_product_acc3394d825010f5d2819f1c6316b1017} 
+void {\bfseries notify} (const std\+::string \&command\+Type)
+\item 
+\Hypertarget{class_plant_product_afdb0055b5d77055e0af694b6c469b323}\label{class_plant_product_afdb0055b5d77055e0af694b6c469b323} 
+std\+::string {\bfseries get\+Id} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Main plant product class that integrates multiple design patterns. 
+
+This class serves as the context for multiple design patterns\+:
+\begin{DoxyItemize}
+\item State Pattern\+: Manages plant lifecycle states
+\item Observer Pattern\+: Notifies observers of plant state changes
+\item Bridge Pattern\+: Abstracts plant species characteristics
+\item Strategy Pattern\+: Implements different care strategies
+\end{DoxyItemize}
+
+Each plant has a unique ID, species profile, and can transition through various states during its lifecycle while receiving different types of care. 
+
+\label{doc-constructors}
+\Hypertarget{class_plant_product_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_plant_product_afadafde1f8fd81945e2ea00e0d0de69c}\index{PlantProduct@{PlantProduct}!PlantProduct@{PlantProduct}}
+\index{PlantProduct@{PlantProduct}!PlantProduct@{PlantProduct}}
+\doxysubsubsection{\texorpdfstring{PlantProduct()}{PlantProduct()}}
+{\footnotesize\ttfamily \label{class_plant_product_afadafde1f8fd81945e2ea00e0d0de69c} 
+Plant\+Product\+::\+Plant\+Product (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{id}{, }\item[{\mbox{\hyperlink{class_plant_species_profile}{Plant\+Species\+Profile}} \texorpdfstring{$\ast$}{*}}]{profile}{}\end{DoxyParamCaption})}
+
+
+
+Construct a new Plant Product. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & Unique identifier for the plant \\
+\hline
+{\em profile} & Species profile containing plant characteristics \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_plant_product_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_plant_product_abf3c25a131e54ee9d3082f3a807a6403}\index{PlantProduct@{PlantProduct}!addStrategy@{addStrategy}}
+\index{addStrategy@{addStrategy}!PlantProduct@{PlantProduct}}
+\doxysubsubsection{\texorpdfstring{addStrategy()}{addStrategy()}}
+{\footnotesize\ttfamily \label{class_plant_product_abf3c25a131e54ee9d3082f3a807a6403} 
+void Plant\+Product\+::add\+Strategy (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{care\+Type}{, }\item[{\mbox{\hyperlink{class_care_strategy}{Care\+Strategy}} \texorpdfstring{$\ast$}{*}}]{strategy}{}\end{DoxyParamCaption})}
+
+
+
+Add a care strategy. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em care\+Type} & Type of care (e.\+g., "{}\+Watering"{}, "{}\+Fertilizing"{}) \\
+\hline
+{\em strategy} & Strategy implementation for the care type \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_plant_product_a75bb54a0d829d53f374ab07faae214c3}\index{PlantProduct@{PlantProduct}!getCurrentStateName@{getCurrentStateName}}
+\index{getCurrentStateName@{getCurrentStateName}!PlantProduct@{PlantProduct}}
+\doxysubsubsection{\texorpdfstring{getCurrentStateName()}{getCurrentStateName()}}
+{\footnotesize\ttfamily \label{class_plant_product_a75bb54a0d829d53f374ab07faae214c3} 
+std\+::string Plant\+Product\+::get\+Current\+State\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the name of the current state. 
+
+\begin{DoxyReturn}{Returns}
+String representing current state 
+\end{DoxyReturn}
+\Hypertarget{class_plant_product_af2b1a1e2cce73c2c4cbf1bf59dd15f85}\index{PlantProduct@{PlantProduct}!getDaysInCurrentState@{getDaysInCurrentState}}
+\index{getDaysInCurrentState@{getDaysInCurrentState}!PlantProduct@{PlantProduct}}
+\doxysubsubsection{\texorpdfstring{getDaysInCurrentState()}{getDaysInCurrentState()}}
+{\footnotesize\ttfamily \label{class_plant_product_af2b1a1e2cce73c2c4cbf1bf59dd15f85} 
+int Plant\+Product\+::get\+Days\+In\+Current\+State (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get days spent in current state. 
+
+\begin{DoxyReturn}{Returns}
+Number of days in current state 
+\end{DoxyReturn}
+\Hypertarget{class_plant_product_a760eee9b9dfc0cd62a3585e0a4dabbdb}\index{PlantProduct@{PlantProduct}!getProfile@{getProfile}}
+\index{getProfile@{getProfile}!PlantProduct@{PlantProduct}}
+\doxysubsubsection{\texorpdfstring{getProfile()}{getProfile()}}
+{\footnotesize\ttfamily \label{class_plant_product_a760eee9b9dfc0cd62a3585e0a4dabbdb} 
+\mbox{\hyperlink{class_plant_species_profile}{Plant\+Species\+Profile}} \texorpdfstring{$\ast$}{*} Plant\+Product\+::get\+Profile (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the plant\textquotesingle{}s species profile. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to the plant\textquotesingle{}s species profile 
+\end{DoxyReturn}
+\Hypertarget{class_plant_product_ae173ae1e854ee83e75b4d648ccb82e17}\index{PlantProduct@{PlantProduct}!getSecondsInCurrentState@{getSecondsInCurrentState}}
+\index{getSecondsInCurrentState@{getSecondsInCurrentState}!PlantProduct@{PlantProduct}}
+\doxysubsubsection{\texorpdfstring{getSecondsInCurrentState()}{getSecondsInCurrentState()}}
+{\footnotesize\ttfamily \label{class_plant_product_ae173ae1e854ee83e75b4d648ccb82e17} 
+int Plant\+Product\+::get\+Seconds\+In\+Current\+State (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get seconds spent in current state. 
+
+\begin{DoxyReturn}{Returns}
+Number of seconds in current state 
+\end{DoxyReturn}
+\Hypertarget{class_plant_product_a6eb89bc0005a9edfdf3f5ccae03f4212}\index{PlantProduct@{PlantProduct}!getSecondsSinceLastCare@{getSecondsSinceLastCare}}
+\index{getSecondsSinceLastCare@{getSecondsSinceLastCare}!PlantProduct@{PlantProduct}}
+\doxysubsubsection{\texorpdfstring{getSecondsSinceLastCare()}{getSecondsSinceLastCare()}}
+{\footnotesize\ttfamily \label{class_plant_product_a6eb89bc0005a9edfdf3f5ccae03f4212} 
+int Plant\+Product\+::get\+Seconds\+Since\+Last\+Care (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get seconds since last care action. 
+
+\begin{DoxyReturn}{Returns}
+Number of seconds since last care 
+\end{DoxyReturn}
+\Hypertarget{class_plant_product_af25b4492d3f546e6b1ea20b5803f79f3}\index{PlantProduct@{PlantProduct}!performCare@{performCare}}
+\index{performCare@{performCare}!PlantProduct@{PlantProduct}}
+\doxysubsubsection{\texorpdfstring{performCare()}{performCare()}}
+{\footnotesize\ttfamily \label{class_plant_product_af25b4492d3f546e6b1ea20b5803f79f3} 
+void Plant\+Product\+::perform\+Care (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{care\+Type}{}\end{DoxyParamCaption})}
+
+
+
+Perform a care action. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em care\+Type} & Type of care to perform \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_plant_product_a089b8d1d906d7fef5752772a7dc61cd3}\index{PlantProduct@{PlantProduct}!setObserver@{setObserver}}
+\index{setObserver@{setObserver}!PlantProduct@{PlantProduct}}
+\doxysubsubsection{\texorpdfstring{setObserver()}{setObserver()}}
+{\footnotesize\ttfamily \label{class_plant_product_a089b8d1d906d7fef5752772a7dc61cd3} 
+void Plant\+Product\+::set\+Observer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_life_cycle_observer}{Life\+Cycle\+Observer}} \texorpdfstring{$\ast$}{*}}]{obs}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set the lifecycle observer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em obs} & Observer to notify of lifecycle events \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_plant_product_a1dc679735ec7a9c001cd595d94b720d9}\index{PlantProduct@{PlantProduct}!transitionTo@{transitionTo}}
+\index{transitionTo@{transitionTo}!PlantProduct@{PlantProduct}}
+\doxysubsubsection{\texorpdfstring{transitionTo()}{transitionTo()}}
+{\footnotesize\ttfamily \label{class_plant_product_a1dc679735ec7a9c001cd595d94b720d9} 
+void Plant\+Product\+::transition\+To (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_plant_state}{Plant\+State}} \texorpdfstring{$\ast$}{*}}]{state}{}\end{DoxyParamCaption})}
+
+
+
+Transition plant to a new state. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em state} & New state to transition to \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Plant\+Product.\+h\item 
+Plant\+Product.\+cpp\end{DoxyCompactItemize}

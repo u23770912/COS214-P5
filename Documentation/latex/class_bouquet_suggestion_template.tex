@@ -1,0 +1,86 @@
+\doxysection{Bouquet\+Suggestion\+Template Class Reference}
+\hypertarget{class_bouquet_suggestion_template}{}\label{class_bouquet_suggestion_template}\index{BouquetSuggestionTemplate@{BouquetSuggestionTemplate}}
+
+
+Template Method Pattern\+: Abstract class defining the algorithm skeleton.  
+
+
+
+
+{\ttfamily \#include $<$Bouquet\+Suggestion\+Template.\+h$>$}
+
+Inheritance diagram for Bouquet\+Suggestion\+Template\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.581921cm]{class_bouquet_suggestion_template}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_bouquet_suggestion_template_a1412212ea2f59e0cbb16419870401118}\label{class_bouquet_suggestion_template_a1412212ea2f59e0cbb16419870401118} 
+std\+::vector$<$ \mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} $>$ {\bfseries generate\+Suggestions} () const
+\begin{DoxyCompactList}\small\item\em TEMPLATE METHOD -\/ Defines the algorithm skeleton This is the core of the Template Method Pattern. \end{DoxyCompactList}\item 
+\Hypertarget{class_bouquet_suggestion_template_aba0c73526079bec496b6024419db5372}\label{class_bouquet_suggestion_template_aba0c73526079bec496b6024419db5372} 
+std\+::string {\bfseries get\+Event\+Type} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_bouquet_suggestion_template_abefd6466ab5168f02f5344cc8898c82b}\label{class_bouquet_suggestion_template_abefd6466ab5168f02f5344cc8898c82b} 
+virtual std\+::string {\bfseries get\+Event\+Emoji} () const =0
+\item 
+\Hypertarget{class_bouquet_suggestion_template_ab96e93fbe0d3bfc965a1a73d1920775d}\label{class_bouquet_suggestion_template_ab96e93fbe0d3bfc965a1a73d1920775d} 
+virtual std\+::string {\bfseries get\+Event\+Message} () const =0
+\item 
+\Hypertarget{class_bouquet_suggestion_template_a6ae1d949618c135175fcba8b569d938c}\label{class_bouquet_suggestion_template_a6ae1d949618c135175fcba8b569d938c} 
+virtual \mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} {\bfseries create\+Standard\+Bouquet} () const =0
+\item 
+\Hypertarget{class_bouquet_suggestion_template_a07f97aeebab90c483a7aa7e4d726ef3f}\label{class_bouquet_suggestion_template_a07f97aeebab90c483a7aa7e4d726ef3f} 
+virtual \mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} {\bfseries create\+Premium\+Bouquet} () const =0
+\item 
+\Hypertarget{class_bouquet_suggestion_template_a39bec58c2299157dc5e97bed74749215}\label{class_bouquet_suggestion_template_a39bec58c2299157dc5e97bed74749215} 
+virtual \mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} {\bfseries create\+Budget\+Bouquet} () const =0
+\item 
+\Hypertarget{class_bouquet_suggestion_template_a10af0384481602edcf87cca992746529}\label{class_bouquet_suggestion_template_a10af0384481602edcf87cca992746529} 
+virtual void {\bfseries add\+Seasonal\+Flowers} (\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \&bouquet) const
+\item 
+\Hypertarget{class_bouquet_suggestion_template_a21f29b0b78e373df11a3e8dd06c596d4}\label{class_bouquet_suggestion_template_a21f29b0b78e373df11a3e8dd06c596d4} 
+virtual std\+::string {\bfseries get\+Wrapping\+Style} (const std\+::string \&tier) const
+\item 
+\Hypertarget{class_bouquet_suggestion_template_a05412cd34454533340e317c9509cbcf9}\label{class_bouquet_suggestion_template_a05412cd34454533340e317c9509cbcf9} 
+virtual void {\bfseries customize\+For\+Event} (\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \&bouquet) const
+\item 
+\Hypertarget{class_bouquet_suggestion_template_a10b286fa19f3e2cd64f893a23231e3fb}\label{class_bouquet_suggestion_template_a10b286fa19f3e2cd64f893a23231e3fb} 
+void {\bfseries set\+Base\+Properties} (\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \&bouquet, const std\+::string \&name, const std\+::vector$<$ std\+::string $>$ \&flowers, const std\+::vector$<$ int $>$ \&quantities, const std\+::string \&colors, double price, const std\+::string \&significance) const
+\item 
+\Hypertarget{class_bouquet_suggestion_template_add1973a04a7c593a97da757a13b8ec36}\label{class_bouquet_suggestion_template_add1973a04a7c593a97da757a13b8ec36} 
+void {\bfseries display\+Event\+Header} () const
+\item 
+\Hypertarget{class_bouquet_suggestion_template_a976f242a8acfcac9f9fac1a5cad1f17d}\label{class_bouquet_suggestion_template_a976f242a8acfcac9f9fac1a5cad1f17d} 
+void {\bfseries display\+Summary} (const std\+::vector$<$ \mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} $>$ \&suggestions) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_bouquet_suggestion_template_a8e9913d9ff73a065ec47e6351da54cc7}\label{class_bouquet_suggestion_template_a8e9913d9ff73a065ec47e6351da54cc7} 
+std\+::string {\bfseries event\+Type}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Template Method Pattern\+: Abstract class defining the algorithm skeleton. 
+
+The template method \doxylink{class_bouquet_suggestion_template_a1412212ea2f59e0cbb16419870401118}{generate\+Suggestions()} defines the structure\+:
+\begin{DoxyEnumerate}
+\item Display event message
+\item Create standard option
+\item Create premium option
+\item Create budget option
+\item Add event-\/specific decorations
+\item Return all suggestions 
+\end{DoxyEnumerate}
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Bouquet\+Suggestion\+Template.\+h\end{DoxyCompactItemize}

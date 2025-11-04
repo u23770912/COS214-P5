@@ -1,0 +1,72 @@
+\doxysection{Wedding\+Bouquet\+Template.\+h}
+\hypertarget{_wedding_bouquet_template_8h_source}{}\label{_wedding_bouquet_template_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ WEDDING\_BOUQUET\_TEMPLATE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ WEDDING\_BOUQUET\_TEMPLATE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}BouquetSuggestionTemplate.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{using\ namespace\ }std;}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }WeddingBouquetTemplate\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_bouquet_suggestion_template}{BouquetSuggestionTemplate}}\ \{}
+\DoxyCodeLine{00013\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ WeddingBouquetTemplate()\ \{\ eventType\ =\ \textcolor{stringliteral}{"{}Wedding"{}};\ \}}
+\DoxyCodeLine{00015\ \ \ \ \ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00017\ \ \ \ \ std::string\ getEventEmoji()\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}💍"{}};\ \}}
+\DoxyCodeLine{00018\ \ \ \ \ }
+\DoxyCodeLine{00019\ \ \ \ \ std::string\ getEventMessage()\textcolor{keyword}{\ const\ override\ }\{\ }
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Celebrate\ love\ with\ elegant\ wedding\ bouquets!"{}};\ }
+\DoxyCodeLine{00021\ \ \ \ \ \}}
+\DoxyCodeLine{00022\ \ \ \ \ }
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\ createStandardBouquet()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\ bouquet;}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ setBaseProperties(bouquet,\ \textcolor{stringliteral}{"{}Classic\ Romance"{}},}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}Rose"{}},\ \textcolor{stringliteral}{"{}Baby's\ Breath"{}},\ \textcolor{stringliteral}{"{}Lily"{}}\},}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \{12,\ 20,\ 6\},}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}White\ \&\ Ivory"{}},}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ 150.00,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Timeless\ elegance\ symbolizing\ pure\ love"{}});}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ bouquet;}
+\DoxyCodeLine{00032\ \ \ \ \ \}}
+\DoxyCodeLine{00033\ \ \ \ \ }
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\ createPremiumBouquet()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\ bouquet;}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ setBaseProperties(bouquet,\ \textcolor{stringliteral}{"{}Royal\ Elegance"{}},}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}Orchid"{}},\ \textcolor{stringliteral}{"{}Calla\ Lily"{}},\ \textcolor{stringliteral}{"{}Rose"{}},\ \textcolor{stringliteral}{"{}Peony"{}}\},}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \{10,\ 8,\ 15,\ 12\},}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Deep\ Purple\ \&\ White\ with\ Gold\ Accents"{}},}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ 250.00,}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Luxurious\ sophistication\ for\ grand\ celebrations"{}});}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ bouquet;}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00044\ \ \ \ \ }
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\ createBudgetBouquet()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\ bouquet;}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ setBaseProperties(bouquet,\ \textcolor{stringliteral}{"{}Sweet\ Beginning"{}},}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}Rose"{}},\ \textcolor{stringliteral}{"{}Carnation"{}},\ \textcolor{stringliteral}{"{}Baby's\ Breath"{}}\},}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \{8,\ 10,\ 15\},}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Soft\ Pink\ \&\ White"{}},}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ 95.00,}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Beautiful\ simplicity\ for\ intimate\ ceremonies"{}});}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ bouquet;}
+\DoxyCodeLine{00054\ \ \ \ \ \}}
+\DoxyCodeLine{00055\ \ \ \ \ }
+\DoxyCodeLine{00056\ \ \ \ \ std::string\ getWrappingStyle(\textcolor{keyword}{const}\ std::string\&\ tier)\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tier\ ==\ \textcolor{stringliteral}{"{}premium"{}})\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Velvet\ Ribbon\ with\ Crystal\ Brooch\ \&\ Pearls"{}};}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tier\ ==\ \textcolor{stringliteral}{"{}budget"{}})\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Satin\ Ribbon"{}};}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Elegant\ Lace\ with\ Ribbon"{}};}
+\DoxyCodeLine{00060\ \ \ \ \ \}}
+\DoxyCodeLine{00061\ \ \ \ \ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ customizeForEvent(\mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\&\ bouquet)\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ bouquet.occasion\ =\ \textcolor{stringliteral}{"{}Bridal\ Ceremony"{}};}
+\DoxyCodeLine{00064\ \ \ \ \ \}}
+\DoxyCodeLine{00065\ \};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ WEDDING\_BOUQUET\_TEMPLATE\_H}}
+
+\end{DoxyCode}

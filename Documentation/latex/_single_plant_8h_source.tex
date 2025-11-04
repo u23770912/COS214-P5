@@ -1,0 +1,36 @@
+\doxysection{Single\+Plant.\+h}
+\hypertarget{_single_plant_8h_source}{}\label{_single_plant_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ SINGLEPLANT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ SINGLEPLANT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}OrderItem.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }SinglePlant\ :\ \textcolor{keyword}{public}\ OrderItem\ \{}
+\DoxyCodeLine{00011\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00012\ \ \ \ \ std::string\ plantType;}
+\DoxyCodeLine{00013\ \ \ \ \ std::string\ size;}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{bool}\ hasPot;}
+\DoxyCodeLine{00015\ \ \ \ \ std::string\ potType;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ SinglePlant(\textcolor{keyword}{const}\ std::string\&\ plantType,\ \textcolor{keywordtype}{double}\ price,\ \textcolor{keywordtype}{int}\ quantity,\ }
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ size\ =\ \textcolor{stringliteral}{"{}medium"{}});}
+\DoxyCodeLine{00020\ \ \ \ \ \string~SinglePlant();}
+\DoxyCodeLine{00021\ \ \ \ \ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{//\ Override\ OrderItem\ methods}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{double}\ getPrice()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00024\ \ \ \ \ std::string\ getDescription()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00025\ \ \ \ \ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{//\ SinglePlant\ specific\ methods}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ addPot(\textcolor{keyword}{const}\ std::string\&\ potType,\ \textcolor{keywordtype}{double}\ potPrice);}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ removePot();}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{bool}\ hasPlantPot()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ \ \ \ \ std::string\ getPlantType()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00031\ \ \ \ \ std::string\ getSize()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00032\ \ \ \ \ std::string\ getPotType()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ \};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

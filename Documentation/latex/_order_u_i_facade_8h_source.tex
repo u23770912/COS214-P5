@@ -1,0 +1,57 @@
+\doxysection{Order\+UIFacade.\+h}
+\hypertarget{_order_u_i_facade_8h_source}{}\label{_order_u_i_facade_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ ORDERUIFACADE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ ORDERUIFACADE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_customer}{Customer}};\ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{00008\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_order}{Order}};\ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_plant_product}{PlantProduct}};\ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_concrete_order_builder}{ConcreteOrderBuilder}};\ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{class\ }OrderUIFacade\ \{}
+\DoxyCodeLine{00020\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{class_customer}{Customer}}*\ customer;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{//\ Public\ method\ for\ testing\ automatic\ discount\ logic}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{double}\ calculateAutomaticDiscount(\textcolor{keywordtype}{int}\ totalPlants)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00026\ \ \ \ \ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{//\ Helper\ methods\ for\ UI\ display}}
+\DoxyCodeLine{00028\ \ \ \ \ std::vector<PlantProduct*>\ getAvailablePlantsFromInventory();}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ displayPlantDetails(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_plant_product}{PlantProduct}}*\ plant,\ \textcolor{keywordtype}{int}\ index);}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{int}\ countTotalPlantsInOrder(\mbox{\hyperlink{class_concrete_order_builder}{ConcreteOrderBuilder}}*\ builder)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00031\ \ \ \ \ }
+\DoxyCodeLine{00032\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00033\ \ \ \ \ OrderUIFacade(\mbox{\hyperlink{class_customer}{Customer}}*\ customer);}
+\DoxyCodeLine{00034\ \ \ \ \ \string~OrderUIFacade();}
+\DoxyCodeLine{00035\ \ \ \ \ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{//\ Main\ UI\ methods\ -\/\ handle\ all\ customer-\/facing\ terminal\ operations}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ displayAvailableItems();}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ viewCurrentOrder();}
+\DoxyCodeLine{00039\ \ \ \ \ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ Enhanced\ order\ building\ with\ automatic\ discount\ application}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{bool}\ addPlantToOrderWithAutoDiscount(\textcolor{keywordtype}{int}\ plantIndex,\ \textcolor{keywordtype}{int}\ quantity);}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{bool}\ addBundleToOrderWithAutoDiscount(\textcolor{keyword}{const}\ std::string\&\ bundleName,\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<int>\&\ plantIndices);}
+\DoxyCodeLine{00044\ \ \ \ \ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{//\ Display\ methods\ for\ order\ management}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ displayOrderCreationWelcome();}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ displayOrderExecutionSummary();}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ displayFinalOrderConfirmation();}
+\DoxyCodeLine{00049\ \ \ \ \ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//\ Utility\ methods}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ displayDiscountInformation()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ displayOrderInstructions()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \ \ \ \ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{//\ Set\ customer\ reference\ (for\ flexibility)}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{void}\ setCustomer(\mbox{\hyperlink{class_customer}{Customer}}*\ customer);}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{class_customer}{Customer}}*\ getCustomer()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00057\ \};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ ORDERUIFACADE\_H}}
+
+\end{DoxyCode}

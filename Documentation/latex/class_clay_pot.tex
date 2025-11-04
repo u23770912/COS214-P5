@@ -1,0 +1,97 @@
+\doxysection{Clay\+Pot Class Reference}
+\hypertarget{class_clay_pot}{}\label{class_clay_pot}\index{ClayPot@{ClayPot}}
+
+
+Represents a pot made of clay material.  
+
+
+
+
+{\ttfamily \#include $<$Clay\+Pot.\+h$>$}
+
+Inheritance diagram for Clay\+Pot\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_clay_pot}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_clay_pot_a00f621d736e71d2aefe63e592656b30b}{Clay\+Pot}} (std\+::string size, std\+::string shape, bool drainage)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_clay_pot}{Clay\+Pot} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_clay_pot_ae8333728845210af1396e0d8b6d0202f}{print}} () override
+\item 
+std\+::string \mbox{\hyperlink{class_clay_pot_a215d5436456c143cd834bee1083a20d0}{get\+Pot\+Type}} () const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_pot}{Pot}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_pot_a46a8f96ed4f950e471b11ed01298da10}{Pot}} (std\+::string size, std\+::string shape, bool drainage)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_pot}{Pot} object. \end{DoxyCompactList}\item 
+std\+::string {\bfseries get\+Size} ()
+\item 
+std\+::string {\bfseries get\+Drainage} ()
+\item 
+std\+::string {\bfseries get\+Shape} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a pot made of clay material. 
+
+This class is a concrete implementation of the \doxylink{class_pot}{Pot} base class, specifically for pots made from clay. 
+
+\label{doc-constructors}
+\Hypertarget{class_clay_pot_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_clay_pot_a00f621d736e71d2aefe63e592656b30b}\index{ClayPot@{ClayPot}!ClayPot@{ClayPot}}
+\index{ClayPot@{ClayPot}!ClayPot@{ClayPot}}
+\doxysubsubsection{\texorpdfstring{ClayPot()}{ClayPot()}}
+{\footnotesize\ttfamily \label{class_clay_pot_a00f621d736e71d2aefe63e592656b30b} 
+Clay\+Pot\+::\+Clay\+Pot (\begin{DoxyParamCaption}\item[{std\+::string}]{size}{, }\item[{std\+::string}]{shape}{, }\item[{bool}]{drainage}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_clay_pot}{Clay\+Pot} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & The size of the clay pot \\
+\hline
+{\em shape} & The shape of the clay pot \\
+\hline
+{\em drainage} & Whether the clay pot has drainage holes \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_clay_pot_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_clay_pot_a215d5436456c143cd834bee1083a20d0}\index{ClayPot@{ClayPot}!getPotType@{getPotType}}
+\index{getPotType@{getPotType}!ClayPot@{ClayPot}}
+\doxysubsubsection{\texorpdfstring{getPotType()}{getPotType()}}
+{\footnotesize\ttfamily \label{class_clay_pot_a215d5436456c143cd834bee1083a20d0} 
+std\+::string Clay\+Pot\+::get\+Pot\+Type (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_pot}{Pot}}.
+
+\Hypertarget{class_clay_pot_ae8333728845210af1396e0d8b6d0202f}\index{ClayPot@{ClayPot}!print@{print}}
+\index{print@{print}!ClayPot@{ClayPot}}
+\doxysubsubsection{\texorpdfstring{print()}{print()}}
+{\footnotesize\ttfamily \label{class_clay_pot_ae8333728845210af1396e0d8b6d0202f} 
+void Clay\+Pot\+::print (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_pot}{Pot}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Clay\+Pot.\+h\item 
+Clay\+Pot.\+cpp\end{DoxyCompactItemize}

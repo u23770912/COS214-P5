@@ -1,0 +1,46 @@
+\doxysection{Staff\+Manager.\+h}
+\hypertarget{_staff_manager_8h_source}{}\label{_staff_manager_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ STAFFMANAGER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ STAFFMANAGER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}LifeCycleObserver.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CustomerObserver.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_staff_member}{StaffMember}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_plant_product}{PlantProduct}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_command}{Command}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_order}{Order}};}
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_customer}{Customer}};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{class\ }StaffManager\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_life_cycle_observer}{LifeCycleObserver}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_customer_observer}{CustomerObserver}}\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_staff_member}{StaffMember}}*\ staffDispatcher;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Interactive\ and\ automated\ mode\ have\ been\ removed\ from\ system\ so\ we\ need\ to\ fix\ all\ automated\ and\ interactive\ mode\ fucntionality}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_plant_product}{PlantProduct}}*\ pendingPlant;}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ std::string\ expectedCommandType;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ StaffManager(\mbox{\hyperlink{class_staff_member}{StaffMember}}*\ dispatcher);}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \string~StaffManager();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{comment}{//visitor\ management\ removed}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ Core\ Methods\ -\/-\/-\/}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ resolvePendingTask(\textcolor{keyword}{const}\ std::string\&\ userInput);}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update(\mbox{\hyperlink{class_plant_product}{PlantProduct}}*\ plant,\ \textcolor{keyword}{const}\ std::string\&\ commandType)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_staff_manager_a64787f051f1accc39dd9239218cfbc20}{updateCustomerInteraction}}(\mbox{\hyperlink{class_customer}{Customer}}*\ customer,\ \textcolor{keyword}{const}\ std::string\&\ interactionType,\ \textcolor{keyword}{const}\ std::string\&\ details\ =\ \textcolor{stringliteral}{"{}"{}})\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_staff_manager_a7a0b3c17dafda146fa47afd35d360ee9}{validateCustomerOrder}}(\mbox{\hyperlink{class_order}{Order}}*\ order,\ \mbox{\hyperlink{class_customer}{Customer}}*\ customer)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ dispatchCommand(\mbox{\hyperlink{class_command}{Command}}*\ command);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ STAFFMANAGER\_H}}
+
+\end{DoxyCode}

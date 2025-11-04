@@ -1,0 +1,53 @@
+\doxysection{Command Class Reference}
+\hypertarget{class_command}{}\label{class_command}\index{Command@{Command}}
+Inheritance diagram for Command\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.230769cm]{class_command}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_command_a6fd7d9bd8df8bfc881e4d6c7cd1878b7}\label{class_command_a6fd7d9bd8df8bfc881e4d6c7cd1878b7} 
+virtual void {\bfseries execute} ()=0
+\item 
+\Hypertarget{class_command_a2a8ec5166a62d6b05e89b64858b1f9f5}\label{class_command_a2a8ec5166a62d6b05e89b64858b1f9f5} 
+virtual std\+::string {\bfseries get\+Type} () const =0
+\item 
+\Hypertarget{class_command_a4b8693c4193d5f9b5a4df308c741a493}\label{class_command_a4b8693c4193d5f9b5a4df308c741a493} 
+virtual std\+::string {\bfseries get\+Required\+Role} () const =0
+\item 
+\Hypertarget{class_command_a8e63d3060c9c507cefa007e53a88128f}\label{class_command_a8e63d3060c9c507cefa007e53a88128f} 
+virtual \mbox{\hyperlink{class_command}{Command}} \texorpdfstring{$\ast$}{*} {\bfseries clone} () const =0
+\item 
+\Hypertarget{class_command_a199a8defffc7663cd7830bde0d0a1b36}\label{class_command_a199a8defffc7663cd7830bde0d0a1b36} 
+virtual void {\bfseries set\+Receiver} (\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}plant)
+\item 
+\Hypertarget{class_command_a1e685c30b2823ddc1cbbf4033aa0b193}\label{class_command_a1e685c30b2823ddc1cbbf4033aa0b193} 
+virtual \mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*} {\bfseries get\+Receiver} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_command_a5ee5ef6acaede4733a2c50104b311b50}\label{class_command_a5ee5ef6acaede4733a2c50104b311b50} 
+static void {\bfseries register\+Command} (const std\+::string \&type, \mbox{\hyperlink{class_command}{Command}} \texorpdfstring{$\ast$}{*}prototype)
+\item 
+\Hypertarget{class_command_a565309bf7a4e209a7cd4fb66d92e9755}\label{class_command_a565309bf7a4e209a7cd4fb66d92e9755} 
+static \mbox{\hyperlink{class_command}{Command}} \texorpdfstring{$\ast$}{*} {\bfseries create\+Command} (const std\+::string \&type)
+\item 
+\Hypertarget{class_command_a2b64761616817a76effb867a10e60eb7}\label{class_command_a2b64761616817a76effb867a10e60eb7} 
+static void {\bfseries cleanup\+Prototypes} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_command_a7736872780f06a9a87033ad553f5043e}\label{class_command_a7736872780f06a9a87033ad553f5043e} 
+\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*} {\bfseries plant\+Receiver}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Command.\+h\item 
+Command.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,265 @@
+\doxysection{Plant\+Bundle Class Reference}
+\hypertarget{class_plant_bundle}{}\label{class_plant_bundle}\index{PlantBundle@{PlantBundle}}
+
+
+Concrete composite class representing a bundle of plants (Composite pattern) This is a Composite in the Composite pattern.  
+
+
+
+
+{\ttfamily \#include $<$Plant\+Bundle.\+h$>$}
+
+Inheritance diagram for Plant\+Bundle\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_plant_bundle}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_plant_bundle_a3ea34591787d1ec3612546182788ff15}{Plant\+Bundle}} (const std\+::string \&bundle\+Name, const std\+::string \&bundle\+Type, int quantity=1, double discount=0.\+0)
+\begin{DoxyCompactList}\small\item\em Construct a new Plant Bundle. \end{DoxyCompactList}\item 
+\Hypertarget{class_plant_bundle_a6afe9bce29adf03dd00297b3d43bac5e}\label{class_plant_bundle_a6afe9bce29adf03dd00297b3d43bac5e} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Plant\+Bundle} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_plant_bundle_abbebe831d31b9b2a13e48447b3a9fdb6}{get\+Price}} () const override
+\begin{DoxyCompactList}\small\item\em Get the total price of the bundle after discount. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_plant_bundle_aaa3a1267b2af57b0ed9652c759c2bd02}{get\+Description}} () const override
+\begin{DoxyCompactList}\small\item\em Get a formatted description of the bundle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_plant_bundle_a5b9a212e610a2d78dcadaf720ed72ae6}{add\+Item}} (\mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*}item) override
+\begin{DoxyCompactList}\small\item\em Add an item to the bundle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_plant_bundle_a1cba3bde01c06a02203b066817a46990}{remove\+Item}} (\mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*}item) override
+\begin{DoxyCompactList}\small\item\em Remove an item from the bundle. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_plant_bundle_a2f1fe408d343703d115ecedda1d5fcea}{get\+Items}} () const override
+\begin{DoxyCompactList}\small\item\em Get all items in the bundle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_plant_bundle_a10dda8a8fc01e883e28fcc0333d197db}{set\+Discount}} (double discount\+Percentage)
+\begin{DoxyCompactList}\small\item\em Set the discount percentage for the bundle. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_plant_bundle_aa363657785e24e48d79192815f2bed58}{get\+Discount}} () const
+\begin{DoxyCompactList}\small\item\em Get the current discount percentage. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_plant_bundle_a121280a7ba93d05fdda2b8a0b7e005c8}{get\+Bundle\+Type}} () const
+\begin{DoxyCompactList}\small\item\em Get the type of bundle. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_plant_bundle_aaf40b62414884edc20bf698416e94b10}{get\+Item\+Count}} () const
+\begin{DoxyCompactList}\small\item\em Get number of items in the bundle. \end{DoxyCompactList}\item 
+\Hypertarget{class_plant_bundle_a058e46d7f4abc5f2f9f19cb26b3c5f9c}\label{class_plant_bundle_a058e46d7f4abc5f2f9f19cb26b3c5f9c} 
+void {\bfseries clear\+Items} ()
+\begin{DoxyCompactList}\small\item\em Remove all items from the bundle. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_plant_bundle_a85d5d26bdc35cf02b9614b2876362392}{get\+Base\+Price}} () const
+\begin{DoxyCompactList}\small\item\em Calculate total price before discount. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_order_item}{Order\+Item}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Order\+Item} (const std\+::string \&name, double price, int quantity)
+\item 
+virtual std\+::string {\bfseries get\+Name} () const
+\item 
+virtual int {\bfseries get\+Quantity} () const
+\item 
+virtual void {\bfseries set\+Quantity} (int quantity)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_order_item}{Order\+Item}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries name}
+\item 
+double {\bfseries price}
+\item 
+int {\bfseries quantity}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Concrete composite class representing a bundle of plants (Composite pattern) This is a Composite in the Composite pattern. 
+
+\label{doc-constructors}
+\Hypertarget{class_plant_bundle_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_plant_bundle_a3ea34591787d1ec3612546182788ff15}\index{PlantBundle@{PlantBundle}!PlantBundle@{PlantBundle}}
+\index{PlantBundle@{PlantBundle}!PlantBundle@{PlantBundle}}
+\doxysubsubsection{\texorpdfstring{PlantBundle()}{PlantBundle()}}
+{\footnotesize\ttfamily \label{class_plant_bundle_a3ea34591787d1ec3612546182788ff15} 
+Plant\+Bundle\+::\+Plant\+Bundle (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{bundle\+Name}{, }\item[{const std\+::string \&}]{bundle\+Type}{, }\item[{int}]{quantity}{ = {\ttfamily 1}, }\item[{double}]{discount}{ = {\ttfamily 0.0}}\end{DoxyParamCaption})}
+
+
+
+Construct a new Plant Bundle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bundle\+Name} & Name of the bundle \\
+\hline
+{\em bundle\+Type} & Type of bundle (e.\+g., "{}\+Holiday"{}, "{}\+Season"{}) \\
+\hline
+{\em quantity} & Number of bundles \\
+\hline
+{\em discount} & Discount percentage (0.\+0 to 1.\+0) \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_plant_bundle_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_plant_bundle_a5b9a212e610a2d78dcadaf720ed72ae6}\index{PlantBundle@{PlantBundle}!addItem@{addItem}}
+\index{addItem@{addItem}!PlantBundle@{PlantBundle}}
+\doxysubsubsection{\texorpdfstring{addItem()}{addItem()}}
+{\footnotesize\ttfamily \label{class_plant_bundle_a5b9a212e610a2d78dcadaf720ed72ae6} 
+void Plant\+Bundle\+::add\+Item (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*}}]{item}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Add an item to the bundle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em item} & Pointer to \doxylink{class_order_item}{Order\+Item} to add \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_order_item}{Order\+Item}}.
+
+\Hypertarget{class_plant_bundle_a85d5d26bdc35cf02b9614b2876362392}\index{PlantBundle@{PlantBundle}!getBasePrice@{getBasePrice}}
+\index{getBasePrice@{getBasePrice}!PlantBundle@{PlantBundle}}
+\doxysubsubsection{\texorpdfstring{getBasePrice()}{getBasePrice()}}
+{\footnotesize\ttfamily \label{class_plant_bundle_a85d5d26bdc35cf02b9614b2876362392} 
+double Plant\+Bundle\+::get\+Base\+Price (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Calculate total price before discount. 
+
+\begin{DoxyReturn}{Returns}
+Base price as double 
+\end{DoxyReturn}
+\Hypertarget{class_plant_bundle_a121280a7ba93d05fdda2b8a0b7e005c8}\index{PlantBundle@{PlantBundle}!getBundleType@{getBundleType}}
+\index{getBundleType@{getBundleType}!PlantBundle@{PlantBundle}}
+\doxysubsubsection{\texorpdfstring{getBundleType()}{getBundleType()}}
+{\footnotesize\ttfamily \label{class_plant_bundle_a121280a7ba93d05fdda2b8a0b7e005c8} 
+std\+::string Plant\+Bundle\+::get\+Bundle\+Type (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the type of bundle. 
+
+\begin{DoxyReturn}{Returns}
+Bundle type string 
+\end{DoxyReturn}
+\Hypertarget{class_plant_bundle_aaa3a1267b2af57b0ed9652c759c2bd02}\index{PlantBundle@{PlantBundle}!getDescription@{getDescription}}
+\index{getDescription@{getDescription}!PlantBundle@{PlantBundle}}
+\doxysubsubsection{\texorpdfstring{getDescription()}{getDescription()}}
+{\footnotesize\ttfamily \label{class_plant_bundle_aaa3a1267b2af57b0ed9652c759c2bd02} 
+std\+::string Plant\+Bundle\+::get\+Description (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get a formatted description of the bundle. 
+
+\begin{DoxyReturn}{Returns}
+Bundle description string 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_order_item}{Order\+Item}}.
+
+\Hypertarget{class_plant_bundle_aa363657785e24e48d79192815f2bed58}\index{PlantBundle@{PlantBundle}!getDiscount@{getDiscount}}
+\index{getDiscount@{getDiscount}!PlantBundle@{PlantBundle}}
+\doxysubsubsection{\texorpdfstring{getDiscount()}{getDiscount()}}
+{\footnotesize\ttfamily \label{class_plant_bundle_aa363657785e24e48d79192815f2bed58} 
+double Plant\+Bundle\+::get\+Discount (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the current discount percentage. 
+
+\begin{DoxyReturn}{Returns}
+Discount value as double 
+\end{DoxyReturn}
+\Hypertarget{class_plant_bundle_aaf40b62414884edc20bf698416e94b10}\index{PlantBundle@{PlantBundle}!getItemCount@{getItemCount}}
+\index{getItemCount@{getItemCount}!PlantBundle@{PlantBundle}}
+\doxysubsubsection{\texorpdfstring{getItemCount()}{getItemCount()}}
+{\footnotesize\ttfamily \label{class_plant_bundle_aaf40b62414884edc20bf698416e94b10} 
+int Plant\+Bundle\+::get\+Item\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get number of items in the bundle. 
+
+\begin{DoxyReturn}{Returns}
+Item count as integer 
+\end{DoxyReturn}
+\Hypertarget{class_plant_bundle_a2f1fe408d343703d115ecedda1d5fcea}\index{PlantBundle@{PlantBundle}!getItems@{getItems}}
+\index{getItems@{getItems}!PlantBundle@{PlantBundle}}
+\doxysubsubsection{\texorpdfstring{getItems()}{getItems()}}
+{\footnotesize\ttfamily \label{class_plant_bundle_a2f1fe408d343703d115ecedda1d5fcea} 
+std\+::vector$<$ \mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*} $>$ Plant\+Bundle\+::get\+Items (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get all items in the bundle. 
+
+\begin{DoxyReturn}{Returns}
+Vector of \doxylink{class_order_item}{Order\+Item} pointers 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_order_item}{Order\+Item}}.
+
+\Hypertarget{class_plant_bundle_abbebe831d31b9b2a13e48447b3a9fdb6}\index{PlantBundle@{PlantBundle}!getPrice@{getPrice}}
+\index{getPrice@{getPrice}!PlantBundle@{PlantBundle}}
+\doxysubsubsection{\texorpdfstring{getPrice()}{getPrice()}}
+{\footnotesize\ttfamily \label{class_plant_bundle_abbebe831d31b9b2a13e48447b3a9fdb6} 
+double Plant\+Bundle\+::get\+Price (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the total price of the bundle after discount. 
+
+\begin{DoxyReturn}{Returns}
+Total price as double 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_order_item}{Order\+Item}}.
+
+\Hypertarget{class_plant_bundle_a1cba3bde01c06a02203b066817a46990}\index{PlantBundle@{PlantBundle}!removeItem@{removeItem}}
+\index{removeItem@{removeItem}!PlantBundle@{PlantBundle}}
+\doxysubsubsection{\texorpdfstring{removeItem()}{removeItem()}}
+{\footnotesize\ttfamily \label{class_plant_bundle_a1cba3bde01c06a02203b066817a46990} 
+void Plant\+Bundle\+::remove\+Item (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*}}]{item}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Remove an item from the bundle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em item} & Pointer to \doxylink{class_order_item}{Order\+Item} to remove \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_order_item}{Order\+Item}}.
+
+\Hypertarget{class_plant_bundle_a10dda8a8fc01e883e28fcc0333d197db}\index{PlantBundle@{PlantBundle}!setDiscount@{setDiscount}}
+\index{setDiscount@{setDiscount}!PlantBundle@{PlantBundle}}
+\doxysubsubsection{\texorpdfstring{setDiscount()}{setDiscount()}}
+{\footnotesize\ttfamily \label{class_plant_bundle_a10dda8a8fc01e883e28fcc0333d197db} 
+void Plant\+Bundle\+::set\+Discount (\begin{DoxyParamCaption}\item[{double}]{discount\+Percentage}{}\end{DoxyParamCaption})}
+
+
+
+Set the discount percentage for the bundle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em discount\+Percentage} & Discount value (0.\+0 to 1.\+0) \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Plant\+Bundle.\+h\item 
+Plant\+Bundle.\+cpp\end{DoxyCompactItemize}

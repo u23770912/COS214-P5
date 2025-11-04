@@ -1,0 +1,106 @@
+\doxysection{Bouquet\+Suggestion\+Template.\+h}
+\hypertarget{_bouquet_suggestion_template_8h_source}{}\label{_bouquet_suggestion_template_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ BOUQUET\_SUGGESTION\_TEMPLATE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ BOUQUET\_SUGGESTION\_TEMPLATE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}BouquetSuggestion.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{using\ namespace\ }std;}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_bouquet_suggestion_template}{BouquetSuggestionTemplate}}\ \{}
+\DoxyCodeLine{00025\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00026\ \ \ \ \ std::string\ eventType;}
+\DoxyCodeLine{00027\ \ \ \ \ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{//\ Primitive\ operations\ -\/\ must\ be\ implemented\ by\ subclasses}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{virtual}\ std::string\ getEventEmoji()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{virtual}\ std::string\ getEventMessage()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\ createStandardBouquet()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\ createPremiumBouquet()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\ createBudgetBouquet()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00034\ \ \ \ \ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//\ Hook\ methods\ -\/\ can\ be\ overridden\ but\ have\ default\ implementations}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ addSeasonalFlowers(\mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\&\ bouquet)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Default:\ no\ seasonal\ additions}}
+\DoxyCodeLine{00038\ \ \ \ \ \}}
+\DoxyCodeLine{00039\ \ \ \ \ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{virtual}\ std::string\ getWrappingStyle(\textcolor{keyword}{const}\ std::string\&\ tier)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tier\ ==\ \textcolor{stringliteral}{"{}premium"{}})\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Luxury\ Gift\ Box\ with\ Ribbon"{}};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tier\ ==\ \textcolor{stringliteral}{"{}budget"{}})\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Simple\ Paper\ Wrap"{}};}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Elegant\ Ribbon\ Wrap"{}};}
+\DoxyCodeLine{00044\ \ \ \ \ \}}
+\DoxyCodeLine{00045\ \ \ \ \ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ customizeForEvent(\mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\&\ bouquet)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Default:\ no\ special\ customization}}
+\DoxyCodeLine{00048\ \ \ \ \ \}}
+\DoxyCodeLine{00049\ \ \ \ \ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//\ Helper\ method\ for\ setting\ common\ properties}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ setBaseProperties(\mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\&\ bouquet,\ \textcolor{keyword}{const}\ std::string\&\ name,}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::string>\&\ flowers,}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<int>\&\ quantities,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ colors,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ price,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ significance)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ bouquet.eventType\ =\ eventType;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ bouquet.bouquetName\ =\ name;}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ bouquet.flowerTypes\ =\ flowers;}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ bouquet.quantities\ =\ quantities;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ bouquet.colorScheme\ =\ colors;}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ bouquet.estimatedPrice\ =\ price;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ bouquet.significance\ =\ significance;}
+\DoxyCodeLine{00064\ \ \ \ \ \}}
+\DoxyCodeLine{00065\ \ \ \ \ }
+\DoxyCodeLine{00066\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_bouquet_suggestion_template}{\string~BouquetSuggestionTemplate}}()\ \{\}}
+\DoxyCodeLine{00068\ \ \ \ \ }
+\DoxyCodeLine{00073\ \ \ \ \ std::vector<BouquetSuggestion>\ \mbox{\hyperlink{class_bouquet_suggestion_template_a1412212ea2f59e0cbb16419870401118}{generateSuggestions}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ std::vector<BouquetSuggestion>\ suggestions;}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Step\ 1:\ Display\ event\ information}}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ displayEventHeader();}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Step\ 2:\ Create\ three\ tiers\ of\ bouquets\ (algorithm\ structure)}}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\ standard\ =\ createStandardBouquet();}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ standard.wrappingStyle\ =\ getWrappingStyle(\textcolor{stringliteral}{"{}standard"{}});}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ customizeForEvent(standard);}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ addSeasonalFlowers(standard);}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ suggestions.push\_back(standard);}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\ premium\ =\ createPremiumBouquet();}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ premium.wrappingStyle\ =\ getWrappingStyle(\textcolor{stringliteral}{"{}premium"{}});}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ customizeForEvent(premium);}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ addSeasonalFlowers(premium);}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ suggestions.push\_back(premium);}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_bouquet_suggestion}{BouquetSuggestion}}\ budget\ =\ createBudgetBouquet();}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ budget.wrappingStyle\ =\ getWrappingStyle(\textcolor{stringliteral}{"{}budget"{}});}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ customizeForEvent(budget);}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ suggestions.push\_back(budget);}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Step\ 3:\ Display\ summary}}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ displaySummary(suggestions);}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ suggestions;}
+\DoxyCodeLine{00101\ \ \ \ \ \}}
+\DoxyCodeLine{00102\ \ \ \ \ }
+\DoxyCodeLine{00103\ \ \ \ \ std::string\ getEventType()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ eventType;\ \}}
+\DoxyCodeLine{00104\ \ \ \ \ }
+\DoxyCodeLine{00105\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{void}\ displayEventHeader()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}}\ <<\ getEventEmoji()\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ getEventMessage()\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00108\ \ \ \ \ \}}
+\DoxyCodeLine{00109\ \ \ \ \ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{void}\ displaySummary(\textcolor{keyword}{const}\ std::vector<BouquetSuggestion>\&\ suggestions)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Total\ options\ available:\ "{}}\ <<\ suggestions.size()\ <<\ std::endl;}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ std::cout\ <<\ std::string(60,\ \textcolor{charliteral}{'='})\ <<\ std::endl;}
+\DoxyCodeLine{00113\ \ \ \ \ \}}
+\DoxyCodeLine{00114\ \};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ BOUQUET\_SUGGESTION\_TEMPLATE\_H}}
+
+\end{DoxyCode}

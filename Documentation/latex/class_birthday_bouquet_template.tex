@@ -1,0 +1,139 @@
+\doxysection{Birthday\+Bouquet\+Template Class Reference}
+\hypertarget{class_birthday_bouquet_template}{}\label{class_birthday_bouquet_template}\index{BirthdayBouquetTemplate@{BirthdayBouquetTemplate}}
+Inheritance diagram for Birthday\+Bouquet\+Template\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_birthday_bouquet_template}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{class_birthday_bouquet_template_a900dc889e80e97e69f88626a7965dc1a}{get\+Event\+Emoji}} () const override
+\item 
+std\+::string \mbox{\hyperlink{class_birthday_bouquet_template_a9f8072e18c9c3764ff20e38c937cd299}{get\+Event\+Message}} () const override
+\item 
+\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \mbox{\hyperlink{class_birthday_bouquet_template_a2c2b3e1a6f4d480faf6d526858683244}{create\+Standard\+Bouquet}} () const override
+\item 
+\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \mbox{\hyperlink{class_birthday_bouquet_template_ae4d539c36f613115f75fc81b88b87c10}{create\+Premium\+Bouquet}} () const override
+\item 
+\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \mbox{\hyperlink{class_birthday_bouquet_template_ac0c967cb4b9e67c71aeac0db8f0cfb91}{create\+Budget\+Bouquet}} () const override
+\item 
+std\+::string \mbox{\hyperlink{class_birthday_bouquet_template_a0f04d286498670f81d7519655bc79dea}{get\+Wrapping\+Style}} (const std\+::string \&tier) const override
+\item 
+void \mbox{\hyperlink{class_birthday_bouquet_template_a11cdb201a6f3fa87df82e02f48334a57}{customize\+For\+Event}} (\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \&bouquet) const override
+\item 
+void \mbox{\hyperlink{class_birthday_bouquet_template_a039d1a208082951af3e1cbb6b87f3a5f}{add\+Seasonal\+Flowers}} (\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \&bouquet) const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries set\+Base\+Properties} (\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \&bouquet, const std\+::string \&name, const std\+::vector$<$ std\+::string $>$ \&flowers, const std\+::vector$<$ int $>$ \&quantities, const std\+::string \&colors, double price, const std\+::string \&significance) const
+\item 
+void {\bfseries display\+Event\+Header} () const
+\item 
+void {\bfseries display\+Summary} (const std\+::vector$<$ \mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} $>$ \&suggestions) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} $>$ {\bfseries generate\+Suggestions} () const
+\begin{DoxyCompactList}\small\item\em TEMPLATE METHOD -\/ Defines the algorithm skeleton This is the core of the Template Method Pattern. \end{DoxyCompactList}\item 
+std\+::string {\bfseries get\+Event\+Type} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries event\+Type}
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{class_birthday_bouquet_template_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_birthday_bouquet_template_a039d1a208082951af3e1cbb6b87f3a5f}\index{BirthdayBouquetTemplate@{BirthdayBouquetTemplate}!addSeasonalFlowers@{addSeasonalFlowers}}
+\index{addSeasonalFlowers@{addSeasonalFlowers}!BirthdayBouquetTemplate@{BirthdayBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{addSeasonalFlowers()}{addSeasonalFlowers()}}
+{\footnotesize\ttfamily \label{class_birthday_bouquet_template_a039d1a208082951af3e1cbb6b87f3a5f} 
+void Birthday\+Bouquet\+Template\+::add\+Seasonal\+Flowers (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \&}]{bouquet}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+\Hypertarget{class_birthday_bouquet_template_ac0c967cb4b9e67c71aeac0db8f0cfb91}\index{BirthdayBouquetTemplate@{BirthdayBouquetTemplate}!createBudgetBouquet@{createBudgetBouquet}}
+\index{createBudgetBouquet@{createBudgetBouquet}!BirthdayBouquetTemplate@{BirthdayBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{createBudgetBouquet()}{createBudgetBouquet()}}
+{\footnotesize\ttfamily \label{class_birthday_bouquet_template_ac0c967cb4b9e67c71aeac0db8f0cfb91} 
+\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} Birthday\+Bouquet\+Template\+::create\+Budget\+Bouquet (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+\Hypertarget{class_birthday_bouquet_template_ae4d539c36f613115f75fc81b88b87c10}\index{BirthdayBouquetTemplate@{BirthdayBouquetTemplate}!createPremiumBouquet@{createPremiumBouquet}}
+\index{createPremiumBouquet@{createPremiumBouquet}!BirthdayBouquetTemplate@{BirthdayBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{createPremiumBouquet()}{createPremiumBouquet()}}
+{\footnotesize\ttfamily \label{class_birthday_bouquet_template_ae4d539c36f613115f75fc81b88b87c10} 
+\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} Birthday\+Bouquet\+Template\+::create\+Premium\+Bouquet (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+\Hypertarget{class_birthday_bouquet_template_a2c2b3e1a6f4d480faf6d526858683244}\index{BirthdayBouquetTemplate@{BirthdayBouquetTemplate}!createStandardBouquet@{createStandardBouquet}}
+\index{createStandardBouquet@{createStandardBouquet}!BirthdayBouquetTemplate@{BirthdayBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{createStandardBouquet()}{createStandardBouquet()}}
+{\footnotesize\ttfamily \label{class_birthday_bouquet_template_a2c2b3e1a6f4d480faf6d526858683244} 
+\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} Birthday\+Bouquet\+Template\+::create\+Standard\+Bouquet (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+\Hypertarget{class_birthday_bouquet_template_a11cdb201a6f3fa87df82e02f48334a57}\index{BirthdayBouquetTemplate@{BirthdayBouquetTemplate}!customizeForEvent@{customizeForEvent}}
+\index{customizeForEvent@{customizeForEvent}!BirthdayBouquetTemplate@{BirthdayBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{customizeForEvent()}{customizeForEvent()}}
+{\footnotesize\ttfamily \label{class_birthday_bouquet_template_a11cdb201a6f3fa87df82e02f48334a57} 
+void Birthday\+Bouquet\+Template\+::customize\+For\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \&}]{bouquet}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+\Hypertarget{class_birthday_bouquet_template_a900dc889e80e97e69f88626a7965dc1a}\index{BirthdayBouquetTemplate@{BirthdayBouquetTemplate}!getEventEmoji@{getEventEmoji}}
+\index{getEventEmoji@{getEventEmoji}!BirthdayBouquetTemplate@{BirthdayBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{getEventEmoji()}{getEventEmoji()}}
+{\footnotesize\ttfamily \label{class_birthday_bouquet_template_a900dc889e80e97e69f88626a7965dc1a} 
+std\+::string Birthday\+Bouquet\+Template\+::get\+Event\+Emoji (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+\Hypertarget{class_birthday_bouquet_template_a9f8072e18c9c3764ff20e38c937cd299}\index{BirthdayBouquetTemplate@{BirthdayBouquetTemplate}!getEventMessage@{getEventMessage}}
+\index{getEventMessage@{getEventMessage}!BirthdayBouquetTemplate@{BirthdayBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{getEventMessage()}{getEventMessage()}}
+{\footnotesize\ttfamily \label{class_birthday_bouquet_template_a9f8072e18c9c3764ff20e38c937cd299} 
+std\+::string Birthday\+Bouquet\+Template\+::get\+Event\+Message (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+\Hypertarget{class_birthday_bouquet_template_a0f04d286498670f81d7519655bc79dea}\index{BirthdayBouquetTemplate@{BirthdayBouquetTemplate}!getWrappingStyle@{getWrappingStyle}}
+\index{getWrappingStyle@{getWrappingStyle}!BirthdayBouquetTemplate@{BirthdayBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{getWrappingStyle()}{getWrappingStyle()}}
+{\footnotesize\ttfamily \label{class_birthday_bouquet_template_a0f04d286498670f81d7519655bc79dea} 
+std\+::string Birthday\+Bouquet\+Template\+::get\+Wrapping\+Style (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{tier}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Birthday\+Bouquet\+Template.\+h\end{DoxyCompactItemize}

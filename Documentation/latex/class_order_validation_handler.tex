@@ -1,0 +1,75 @@
+\doxysection{Order\+Validation\+Handler Class Reference}
+\hypertarget{class_order_validation_handler}{}\label{class_order_validation_handler}\index{OrderValidationHandler@{OrderValidationHandler}}
+
+
+Concrete handler for order validation Validates that all items in the order are available in inventory.  
+
+
+
+
+{\ttfamily \#include $<$Order\+Validation\+Handler.\+h$>$}
+
+Inheritance diagram for Order\+Validation\+Handler\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_order_validation_handler}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_order_validation_handler_a044afe65ff6b014433bc125f68f505c4}\label{class_order_validation_handler_a044afe65ff6b014433bc125f68f505c4} 
+std\+::vector$<$ std\+::string $>$ {\bfseries get\+Validation\+Errors} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_order_process_handler}{Order\+Process\+Handler}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Order\+Process\+Handler} (const std\+::string \&name)
+\item 
+void {\bfseries set\+Next} (\mbox{\hyperlink{class_order_process_handler}{Order\+Process\+Handler}} \texorpdfstring{$\ast$}{*}handler)
+\item 
+\mbox{\hyperlink{class_order_process_handler}{Order\+Process\+Handler}} \texorpdfstring{$\ast$}{*} {\bfseries get\+Next} () const
+\item 
+bool {\bfseries handle\+Order} (\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*}order, \mbox{\hyperlink{class_customer}{Customer}} \texorpdfstring{$\ast$}{*}customer)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_order_validation_handler_aab0260775e4deb43a7b8c168ab3e6b6e}{process\+Order}} (\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*}order, \mbox{\hyperlink{class_customer}{Customer}} \texorpdfstring{$\ast$}{*}customer) override
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_order_process_handler}{Order\+Process\+Handler}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries log\+Step} (const std\+::string \&message)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_order_process_handler}{Order\+Process\+Handler}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_order_process_handler}{Order\+Process\+Handler}} \texorpdfstring{$\ast$}{*} {\bfseries next\+Handler}
+\item 
+std\+::string {\bfseries handler\+Name}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Concrete handler for order validation Validates that all items in the order are available in inventory. 
+
+\label{doc-func-members}
+\Hypertarget{class_order_validation_handler_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_order_validation_handler_aab0260775e4deb43a7b8c168ab3e6b6e}\index{OrderValidationHandler@{OrderValidationHandler}!processOrder@{processOrder}}
+\index{processOrder@{processOrder}!OrderValidationHandler@{OrderValidationHandler}}
+\doxysubsubsection{\texorpdfstring{processOrder()}{processOrder()}}
+{\footnotesize\ttfamily \label{class_order_validation_handler_aab0260775e4deb43a7b8c168ab3e6b6e} 
+bool Order\+Validation\+Handler\+::process\+Order (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*}}]{order}{, }\item[{\mbox{\hyperlink{class_customer}{Customer}} \texorpdfstring{$\ast$}{*}}]{customer}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_order_process_handler}{Order\+Process\+Handler}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Order\+Validation\+Handler.\+h\end{DoxyCompactItemize}

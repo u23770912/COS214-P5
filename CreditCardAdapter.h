@@ -9,9 +9,6 @@ class CreditCardAdaptee;
 
 /**
  * @brief Adapter for credit/debit card payment integration
- *
- * Translates the generic PaymentProcessor interface into calls against
- * the legacy CreditCardAdaptee implementation.
  */
 class CreditCardAdapter : public PaymentProcessor {
 private:

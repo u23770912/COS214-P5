@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['sample_20session_0',['Sample Session',['../md__c_u_s_t_o_m_e_r___o_r_d_e_r___t_e_s_t___r_e_a_d_m_e.html#autotoc_md16',1,'']]],
+  ['separate_20terminal_1',['Step 2: Start Java GUI (in a separate terminal)',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md47',1,'']]],
+  ['session_2',['Sample Session',['../md__c_u_s_t_o_m_e_r___o_r_d_e_r___t_e_s_t___r_e_a_d_m_e.html#autotoc_md16',1,'']]],
+  ['setup_20user_20guide_3',['Greenhouse Management System - Setup &amp;amp; User Guide',['../md__s_e_t_u_p___g_u_i_d_e.html',1,'']]],
+  ['simulation_20mode_4',['Mode 2: Console Simulation Mode',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md50',1,'']]],
+  ['single_20plant_20to_20order_5',['2. Add Single Plant to Order',['../md__c_u_s_t_o_m_e_r___o_r_d_e_r___t_e_s_t___r_e_a_d_m_e.html#autotoc_md11',1,'']]],
+  ['software_6',['Software',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md32',1,'']]],
+  ['start_20c_20backend_7',['Step 1: Start C++ Backend',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md46',1,'']]],
+  ['start_20java_20gui_20in_20a_20separate_20terminal_8',['Step 2: Start Java GUI (in a separate terminal)',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md47',1,'']]],
+  ['status_9',['Monitoring System Status',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md56',1,'']]],
+  ['step_201_3a_20start_20c_20backend_10',['Step 1: Start C++ Backend',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md46',1,'']]],
+  ['step_202_3a_20start_20java_20gui_20in_20a_20separate_20terminal_11',['Step 2: Start Java GUI (in a separate terminal)',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md47',1,'']]],
+  ['step_203_3a_20use_20the_20system_12',['Step 3: Use the System',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md48',1,'']]],
+  ['steps_13',['Next Steps',['../md__c_u_s_t_o_m_e_r___o_r_d_e_r___t_e_s_t___r_e_a_d_m_e.html#autotoc_md22',1,'']]],
+  ['structure_14',['3. Verify Project Structure',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md38',1,'']]],
+  ['structure_20reference_15',['File Structure Reference',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md72',1,'']]],
+  ['submit_20order_20for_20validation_16',['5. Submit Order for Validation',['../md__c_u_s_t_o_m_e_r___o_r_d_e_r___t_e_s_t___r_e_a_d_m_e.html#autotoc_md14',1,'']]],
+  ['system_17',['System',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md44',1,'Running the System'],['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md48',1,'Step 3: Use the System']]],
+  ['system_20capacity_18',['System Capacity',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md68',1,'']]],
+  ['system_20components_19',['System Components',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md59',1,'']]],
+  ['system_20requirements_20',['System Requirements',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md30',1,'']]],
+  ['system_20setup_20user_20guide_21',['Greenhouse Management System - Setup &amp;amp; User Guide',['../md__s_e_t_u_p___g_u_i_d_e.html',1,'']]],
+  ['system_20status_22',['Monitoring System Status',['../md__s_e_t_u_p___g_u_i_d_e.html#autotoc_md56',1,'']]]
+];

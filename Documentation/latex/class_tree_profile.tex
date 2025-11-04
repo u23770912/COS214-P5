@@ -1,0 +1,62 @@
+\doxysection{Tree\+Profile Class Reference}
+\hypertarget{class_tree_profile}{}\label{class_tree_profile}\index{TreeProfile@{TreeProfile}}
+Inheritance diagram for Tree\+Profile\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_tree_profile}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_tree_profile_a7faeb13cd34b95e40d3b90ab03306612}\label{class_tree_profile_a7faeb13cd34b95e40d3b90ab03306612} 
+{\bfseries Tree\+Profile} (const std\+::string \&species, const std\+::string \&ideal\+Water, const std\+::string \&sunlight, const std\+::string \&soil)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_plant_species_profile}{Plant\+Species\+Profile}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual std\+::string {\bfseries get\+Species\+Name} () const
+\item 
+virtual std\+::string {\bfseries get\+Property} (const std\+::string \&key) const
+\item 
+void {\bfseries set\+Property} (const std\+::string \&key, const std\+::string \&value)
+\item 
+std\+::vector$<$ std\+::string $>$ {\bfseries get\+Supported\+Care\+Types} () const
+\item 
+int {\bfseries get\+State\+Duration\+Seconds} (const std\+::string \&state\+Name, int default\+Seconds) const
+\item 
+void {\bfseries set\+State\+Duration\+Seconds} (const std\+::string \&state\+Name, int seconds)
+\item 
+int {\bfseries get\+Care\+Interval\+Seconds} (const std\+::string \&care\+Type, int default\+Seconds) const
+\item 
+void {\bfseries set\+Care\+Interval\+Seconds} (const std\+::string \&care\+Type, int seconds)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Static Public Member Functions inherited from \mbox{\hyperlink{class_plant_species_profile}{Plant\+Species\+Profile}}}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::string {\bfseries sanitize\+Numeric\+String} (const std\+::string \&value, const std\+::string \&fallback)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_plant_species_profile}{Plant\+Species\+Profile}}}
+\begin{DoxyCompactItemize}
+\item 
+int {\bfseries get\+Numeric\+Property} (const std\+::string \&key, int default\+Value) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Protected Member Functions inherited from \mbox{\hyperlink{class_plant_species_profile}{Plant\+Species\+Profile}}}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::string {\bfseries to\+Lower\+Key} (const std\+::string \&text)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_plant_species_profile}{Plant\+Species\+Profile}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries species\+Name}
+\item 
+std\+::map$<$ std\+::string, std\+::string $>$ {\bfseries properties}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Tree\+Profile.\+h\item 
+Tree\+Profile.\+cpp\end{DoxyCompactItemize}

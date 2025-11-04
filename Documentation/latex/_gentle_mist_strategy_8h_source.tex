@@ -1,0 +1,29 @@
+\doxysection{Gentle\+Mist\+Strategy.\+h}
+\hypertarget{_gentle_mist_strategy_8h_source}{}\label{_gentle_mist_strategy_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GENTLEMISTSTRATEGY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GENTLEMISTSTRATEGY\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}CareStrategy.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_gentle_mist_strategy}{GentleMistStrategy}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_care_strategy}{CareStrategy}}}
+\DoxyCodeLine{00015\ \{}
+\DoxyCodeLine{00016\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ applyCare(\textcolor{keywordtype}{int}\ amount,\ \textcolor{keyword}{const}\ std::string\ \&careType)\textcolor{keyword}{\ override}}
+\DoxyCodeLine{00018\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (careType\ ==\ \textcolor{stringliteral}{"{}mist"{}})}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Gently\ misting\ to\ maintain\ humidity\ level:\ "{}}\ <<\ amount\ <<\ \textcolor{stringliteral}{"{}\ ml"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}GentleMistStrategy\ does\ not\ handle\ care\ type:\ "{}}\ <<\ careType\ <<\ std::endl;}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00027\ \ \ \ \ \}}
+\DoxyCodeLine{00028\ \ \ \ \ std::string\ getName()\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Gentle\ Mist"{}};\ \}}
+\DoxyCodeLine{00029\ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ GENTLEMISTSTRATEGY\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,38 @@
+\doxysection{Bouquet\+Suggestion\+Factory Class Reference}
+\hypertarget{class_bouquet_suggestion_factory}{}\label{class_bouquet_suggestion_factory}\index{BouquetSuggestionFactory@{BouquetSuggestionFactory}}
+
+
+Factory + Singleton\+: Creates and manages bouquet templates.  
+
+
+
+
+{\ttfamily \#include $<$Bouquet\+Suggestion\+Factory.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_bouquet_suggestion_factory_a1a310386dba5c0394fe401fb11cbe0cb}\label{class_bouquet_suggestion_factory_a1a310386dba5c0394fe401fb11cbe0cb} 
+\mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}} \texorpdfstring{$\ast$}{*} {\bfseries get\+Template} (const std\+::string \&event\+Type)
+\item 
+\Hypertarget{class_bouquet_suggestion_factory_a5ae13d8032f77e53940cb6152aab8e63}\label{class_bouquet_suggestion_factory_a5ae13d8032f77e53940cb6152aab8e63} 
+std\+::vector$<$ std\+::string $>$ {\bfseries get\+Available\+Events} () const
+\item 
+\Hypertarget{class_bouquet_suggestion_factory_a6f1310e0846c462b54f3617745582203}\label{class_bouquet_suggestion_factory_a6f1310e0846c462b54f3617745582203} 
+void {\bfseries register\+Template} (const std\+::string \&event\+Type, \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}} \texorpdfstring{$\ast$}{*}tmpl)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_bouquet_suggestion_factory_ad5d4450ed31fd1dad0e491ddae1e825b}\label{class_bouquet_suggestion_factory_ad5d4450ed31fd1dad0e491ddae1e825b} 
+static \mbox{\hyperlink{class_bouquet_suggestion_factory}{Bouquet\+Suggestion\+Factory}} \& {\bfseries get\+Instance} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Factory + Singleton\+: Creates and manages bouquet templates. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Bouquet\+Suggestion\+Factory.\+h\item 
+Bouquet\+Suggestion\+Factory.\+cpp\end{DoxyCompactItemize}

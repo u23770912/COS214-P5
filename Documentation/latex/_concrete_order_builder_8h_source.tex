@@ -1,0 +1,56 @@
+\doxysection{Concrete\+Order\+Builder.\+h}
+\hypertarget{_concrete_order_builder_8h_source}{}\label{_concrete_order_builder_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ CONCRETEORDERBUILDER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ CONCRETEORDERBUILDER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}OrderBuilder.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}Order.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}SinglePlant.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}PlantBundle.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_order}{Order}};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{class\ }ConcreteOrderBuilder\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_order_builder}{OrderBuilder}}\ \{}
+\DoxyCodeLine{00017\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{class_order}{Order}}*\ currentOrder;}
+\DoxyCodeLine{00019\ \ \ \ \ std::string\ customerName;}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{int}\ orderCounter;}
+\DoxyCodeLine{00021\ \ \ \ \ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{//\ Helper\ method\ to\ generate\ unique\ order\ ID}}
+\DoxyCodeLine{00023\ \ \ \ \ std::string\ generateOrderId();}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ ConcreteOrderBuilder(\textcolor{keyword}{const}\ std::string\&\ customerName);}
+\DoxyCodeLine{00027\ \ \ \ \ \string~ConcreteOrderBuilder();}
+\DoxyCodeLine{00028\ \ \ \ \ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ Override\ OrderBuilder\ methods}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_concrete_order_builder_a849a51d37d62a7219050859b36d25efe}{buildPlant}}(\textcolor{keyword}{const}\ std::string\&\ plantType,\ \textcolor{keywordtype}{int}\ quantity)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_concrete_order_builder_af7bae384058f529bdad333967b8d74a9}{buildPlantPot}}(\textcolor{keyword}{const}\ std::string\&\ potType,\ \textcolor{keywordtype}{int}\ quantity)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_concrete_order_builder_a598edf6ceace336a01648aea6f3aa4dd}{buildBundle}}(\textcolor{keyword}{const}\ std::string\&\ bundleType,\ \textcolor{keywordtype}{int}\ quantity)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00033\ \ \ \ \ }
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{class_order}{Order}}*\ \mbox{\hyperlink{class_concrete_order_builder_aa59cc97e9a7cba0512c0ebdbc2d3077c}{getOrder}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_concrete_order_builder_a78cee0c87643ca7e5d5dbee8431fa5f4}{reset}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00036\ \ \ \ \ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//\ Additional\ methods\ for\ building\ complex\ orders}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ buildPlantWithPot(\textcolor{keyword}{const}\ std::string\&\ plantType,\ \textcolor{keyword}{const}\ std::string\&\ potType,\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ quantity,\ \textcolor{keyword}{const}\ std::string\&\ size\ =\ \textcolor{stringliteral}{"{}medium"{}});}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ buildCustomBundle(\textcolor{keyword}{const}\ std::string\&\ bundleName,\ \textcolor{keyword}{const}\ std::string\&\ bundleType,}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ discount\ =\ 0.0);}
+\DoxyCodeLine{00042\ \ \ \ \ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{//\ Method\ to\ add\ individual\ items\ to\ current\ bundle}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ addPlantToCurrentBundle(\textcolor{keyword}{const}\ std::string\&\ plantType,\ \textcolor{keywordtype}{int}\ quantity,\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ size\ =\ \textcolor{stringliteral}{"{}medium"{}});}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ addPlantWithPotToCurrentBundle(\textcolor{keyword}{const}\ std::string\&\ plantType,\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ potType,\ \textcolor{keywordtype}{int}\ quantity,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ size\ =\ \textcolor{stringliteral}{"{}medium"{}});}
+\DoxyCodeLine{00049\ \ \ \ \ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//\ Utility\ methods}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{bool}\ hasCurrentOrder()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ \ \ \ \ std::string\ getCurrentCustomerName()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

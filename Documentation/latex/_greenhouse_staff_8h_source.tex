@@ -1,0 +1,23 @@
+\doxysection{Greenhouse\+Staff.\+h}
+\hypertarget{_greenhouse_staff_8h_source}{}\label{_greenhouse_staff_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GREENHOUSESTAFF\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GREENHOUSESTAFF\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}StaffChainHandler.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{class\ }GreenhouseStaff\ :\ \textcolor{keyword}{public}\ StaffChainHandler}
+\DoxyCodeLine{00007\ \{}
+\DoxyCodeLine{00008\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00009\ \ \ \ \ GreenhouseStaff()\ :\ StaffChainHandler()\ \{\}}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~GreenhouseStaff()\ \{\}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{void}\ setNext(StaffChainHandler\ *next)\ \{\ this-\/>next\ =\ next;\ \}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_staff_chain_handler_a2f5385fe8301221602eb1793e822d30a}{isBusy}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ busy;\ \}}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{void}\ setBusy(\textcolor{keywordtype}{bool}\ status)\ \{\ this-\/>busy\ =\ status;\ \}}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_greenhouse_staff_a821f0e008baf3b312b3e4976837105e2}{handleCommand}}(\mbox{\hyperlink{class_command}{Command}}\ *command)\ =\ 0;}
+\DoxyCodeLine{00019\ \};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ GREENHOUSESTAFF\_H}}
+
+\end{DoxyCode}

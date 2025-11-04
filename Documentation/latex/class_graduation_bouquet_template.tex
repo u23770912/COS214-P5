@@ -1,0 +1,129 @@
+\doxysection{Graduation\+Bouquet\+Template Class Reference}
+\hypertarget{class_graduation_bouquet_template}{}\label{class_graduation_bouquet_template}\index{GraduationBouquetTemplate@{GraduationBouquetTemplate}}
+Inheritance diagram for Graduation\+Bouquet\+Template\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_graduation_bouquet_template}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{class_graduation_bouquet_template_a88fe8941327c59601d10009c812a8c96}{get\+Event\+Emoji}} () const override
+\item 
+std\+::string \mbox{\hyperlink{class_graduation_bouquet_template_a4902d499510db519c2a9d4b1c830c6db}{get\+Event\+Message}} () const override
+\item 
+\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \mbox{\hyperlink{class_graduation_bouquet_template_a52b1e0aaf7d98a3663dfd82a3f97c99e}{create\+Standard\+Bouquet}} () const override
+\item 
+\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \mbox{\hyperlink{class_graduation_bouquet_template_a7736e47ccb673a89aadfefbd713f1c03}{create\+Premium\+Bouquet}} () const override
+\item 
+\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \mbox{\hyperlink{class_graduation_bouquet_template_a39b5869a0f95748e844402e225b887a8}{create\+Budget\+Bouquet}} () const override
+\item 
+std\+::string \mbox{\hyperlink{class_graduation_bouquet_template_a53abe271ffba86b1c3d97f592efa99d9}{get\+Wrapping\+Style}} (const std\+::string \&tier) const override
+\item 
+void \mbox{\hyperlink{class_graduation_bouquet_template_a8df14ea2638744294b23bb82e1d3317e}{customize\+For\+Event}} (\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \&bouquet) const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries add\+Seasonal\+Flowers} (\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \&bouquet) const
+\item 
+void {\bfseries set\+Base\+Properties} (\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \&bouquet, const std\+::string \&name, const std\+::vector$<$ std\+::string $>$ \&flowers, const std\+::vector$<$ int $>$ \&quantities, const std\+::string \&colors, double price, const std\+::string \&significance) const
+\item 
+void {\bfseries display\+Event\+Header} () const
+\item 
+void {\bfseries display\+Summary} (const std\+::vector$<$ \mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} $>$ \&suggestions) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} $>$ {\bfseries generate\+Suggestions} () const
+\begin{DoxyCompactList}\small\item\em TEMPLATE METHOD -\/ Defines the algorithm skeleton This is the core of the Template Method Pattern. \end{DoxyCompactList}\item 
+std\+::string {\bfseries get\+Event\+Type} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries event\+Type}
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{class_graduation_bouquet_template_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_graduation_bouquet_template_a39b5869a0f95748e844402e225b887a8}\index{GraduationBouquetTemplate@{GraduationBouquetTemplate}!createBudgetBouquet@{createBudgetBouquet}}
+\index{createBudgetBouquet@{createBudgetBouquet}!GraduationBouquetTemplate@{GraduationBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{createBudgetBouquet()}{createBudgetBouquet()}}
+{\footnotesize\ttfamily \label{class_graduation_bouquet_template_a39b5869a0f95748e844402e225b887a8} 
+\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} Graduation\+Bouquet\+Template\+::create\+Budget\+Bouquet (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+\Hypertarget{class_graduation_bouquet_template_a7736e47ccb673a89aadfefbd713f1c03}\index{GraduationBouquetTemplate@{GraduationBouquetTemplate}!createPremiumBouquet@{createPremiumBouquet}}
+\index{createPremiumBouquet@{createPremiumBouquet}!GraduationBouquetTemplate@{GraduationBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{createPremiumBouquet()}{createPremiumBouquet()}}
+{\footnotesize\ttfamily \label{class_graduation_bouquet_template_a7736e47ccb673a89aadfefbd713f1c03} 
+\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} Graduation\+Bouquet\+Template\+::create\+Premium\+Bouquet (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+\Hypertarget{class_graduation_bouquet_template_a52b1e0aaf7d98a3663dfd82a3f97c99e}\index{GraduationBouquetTemplate@{GraduationBouquetTemplate}!createStandardBouquet@{createStandardBouquet}}
+\index{createStandardBouquet@{createStandardBouquet}!GraduationBouquetTemplate@{GraduationBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{createStandardBouquet()}{createStandardBouquet()}}
+{\footnotesize\ttfamily \label{class_graduation_bouquet_template_a52b1e0aaf7d98a3663dfd82a3f97c99e} 
+\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} Graduation\+Bouquet\+Template\+::create\+Standard\+Bouquet (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+\Hypertarget{class_graduation_bouquet_template_a8df14ea2638744294b23bb82e1d3317e}\index{GraduationBouquetTemplate@{GraduationBouquetTemplate}!customizeForEvent@{customizeForEvent}}
+\index{customizeForEvent@{customizeForEvent}!GraduationBouquetTemplate@{GraduationBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{customizeForEvent()}{customizeForEvent()}}
+{\footnotesize\ttfamily \label{class_graduation_bouquet_template_a8df14ea2638744294b23bb82e1d3317e} 
+void Graduation\+Bouquet\+Template\+::customize\+For\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_bouquet_suggestion}{Bouquet\+Suggestion}} \&}]{bouquet}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+\Hypertarget{class_graduation_bouquet_template_a88fe8941327c59601d10009c812a8c96}\index{GraduationBouquetTemplate@{GraduationBouquetTemplate}!getEventEmoji@{getEventEmoji}}
+\index{getEventEmoji@{getEventEmoji}!GraduationBouquetTemplate@{GraduationBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{getEventEmoji()}{getEventEmoji()}}
+{\footnotesize\ttfamily \label{class_graduation_bouquet_template_a88fe8941327c59601d10009c812a8c96} 
+std\+::string Graduation\+Bouquet\+Template\+::get\+Event\+Emoji (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+\Hypertarget{class_graduation_bouquet_template_a4902d499510db519c2a9d4b1c830c6db}\index{GraduationBouquetTemplate@{GraduationBouquetTemplate}!getEventMessage@{getEventMessage}}
+\index{getEventMessage@{getEventMessage}!GraduationBouquetTemplate@{GraduationBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{getEventMessage()}{getEventMessage()}}
+{\footnotesize\ttfamily \label{class_graduation_bouquet_template_a4902d499510db519c2a9d4b1c830c6db} 
+std\+::string Graduation\+Bouquet\+Template\+::get\+Event\+Message (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+\Hypertarget{class_graduation_bouquet_template_a53abe271ffba86b1c3d97f592efa99d9}\index{GraduationBouquetTemplate@{GraduationBouquetTemplate}!getWrappingStyle@{getWrappingStyle}}
+\index{getWrappingStyle@{getWrappingStyle}!GraduationBouquetTemplate@{GraduationBouquetTemplate}}
+\doxysubsubsection{\texorpdfstring{getWrappingStyle()}{getWrappingStyle()}}
+{\footnotesize\ttfamily \label{class_graduation_bouquet_template_a53abe271ffba86b1c3d97f592efa99d9} 
+std\+::string Graduation\+Bouquet\+Template\+::get\+Wrapping\+Style (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{tier}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_bouquet_suggestion_template}{Bouquet\+Suggestion\+Template}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Graduation\+Bouquet\+Template.\+h\end{DoxyCompactItemize}

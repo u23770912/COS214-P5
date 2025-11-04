@@ -1,0 +1,159 @@
+\doxysection{Concrete\+Order\+Builder Class Reference}
+\hypertarget{class_concrete_order_builder}{}\label{class_concrete_order_builder}\index{ConcreteOrderBuilder@{ConcreteOrderBuilder}}
+
+
+Concrete implementation of \doxylink{class_order_builder}{Order\+Builder} Builds orders with plants, plant pots, and bundles.  
+
+
+
+
+{\ttfamily \#include $<$Concrete\+Order\+Builder.\+h$>$}
+
+Inheritance diagram for Concrete\+Order\+Builder\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_concrete_order_builder}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_concrete_order_builder_a177d4bae9b16ef5efdeec895062c8e3e}\label{class_concrete_order_builder_a177d4bae9b16ef5efdeec895062c8e3e} 
+{\bfseries Concrete\+Order\+Builder} (const std\+::string \&customer\+Name)
+\item 
+void \mbox{\hyperlink{class_concrete_order_builder_a849a51d37d62a7219050859b36d25efe}{build\+Plant}} (const std\+::string \&plant\+Type, int quantity) override
+\begin{DoxyCompactList}\small\item\em Build a plant order item. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_concrete_order_builder_af7bae384058f529bdad333967b8d74a9}{build\+Plant\+Pot}} (const std\+::string \&pot\+Type, int quantity) override
+\begin{DoxyCompactList}\small\item\em Build a plant pot order item. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_concrete_order_builder_a598edf6ceace336a01648aea6f3aa4dd}{build\+Bundle}} (const std\+::string \&bundle\+Type, int quantity) override
+\begin{DoxyCompactList}\small\item\em Build a bundle order item. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_concrete_order_builder_aa59cc97e9a7cba0512c0ebdbc2d3077c}{get\+Order}} () override
+\begin{DoxyCompactList}\small\item\em Get the constructed order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_concrete_order_builder_a78cee0c87643ca7e5d5dbee8431fa5f4}{reset}} () override
+\begin{DoxyCompactList}\small\item\em Reset the builder to start a new order. \end{DoxyCompactList}\item 
+\Hypertarget{class_concrete_order_builder_a6b616071ae19782fff0e708d2f367161}\label{class_concrete_order_builder_a6b616071ae19782fff0e708d2f367161} 
+void {\bfseries build\+Plant\+With\+Pot} (const std\+::string \&plant\+Type, const std\+::string \&pot\+Type, int quantity, const std\+::string \&size="{}medium"{})
+\item 
+\Hypertarget{class_concrete_order_builder_a6e39c1af20db77a06e2e8d68af340e94}\label{class_concrete_order_builder_a6e39c1af20db77a06e2e8d68af340e94} 
+void {\bfseries build\+Custom\+Bundle} (const std\+::string \&bundle\+Name, const std\+::string \&bundle\+Type, double discount=0.\+0)
+\item 
+\Hypertarget{class_concrete_order_builder_acf5b7c04df161f015b645b70916b1417}\label{class_concrete_order_builder_acf5b7c04df161f015b645b70916b1417} 
+void {\bfseries add\+Plant\+To\+Current\+Bundle} (const std\+::string \&plant\+Type, int quantity, const std\+::string \&size="{}medium"{})
+\item 
+\Hypertarget{class_concrete_order_builder_a0dda60360110202f435c4053d350d6d2}\label{class_concrete_order_builder_a0dda60360110202f435c4053d350d6d2} 
+void {\bfseries add\+Plant\+With\+Pot\+To\+Current\+Bundle} (const std\+::string \&plant\+Type, const std\+::string \&pot\+Type, int quantity, const std\+::string \&size="{}medium"{})
+\item 
+\Hypertarget{class_concrete_order_builder_adaed4e4b40a756a2593d2ecb5249e1fa}\label{class_concrete_order_builder_adaed4e4b40a756a2593d2ecb5249e1fa} 
+bool {\bfseries has\+Current\+Order} () const
+\item 
+\Hypertarget{class_concrete_order_builder_a7419201ff9670670f564255a1b66c533}\label{class_concrete_order_builder_a7419201ff9670670f564255a1b66c533} 
+std\+::string {\bfseries get\+Current\+Customer\+Name} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Concrete implementation of \doxylink{class_order_builder}{Order\+Builder} Builds orders with plants, plant pots, and bundles. 
+
+\label{doc-func-members}
+\Hypertarget{class_concrete_order_builder_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_concrete_order_builder_a598edf6ceace336a01648aea6f3aa4dd}\index{ConcreteOrderBuilder@{ConcreteOrderBuilder}!buildBundle@{buildBundle}}
+\index{buildBundle@{buildBundle}!ConcreteOrderBuilder@{ConcreteOrderBuilder}}
+\doxysubsubsection{\texorpdfstring{buildBundle()}{buildBundle()}}
+{\footnotesize\ttfamily \label{class_concrete_order_builder_a598edf6ceace336a01648aea6f3aa4dd} 
+void Concrete\+Order\+Builder\+::build\+Bundle (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{bundle\+Type}{, }\item[{int}]{quantity}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Build a bundle order item. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bundle\+Type} & Type of bundle to build \\
+\hline
+{\em quantity} & Number of bundles to include \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_order_builder_a5c65485160e9c6a4d3fbe34263ef6da6}{Order\+Builder}}.
+
+\Hypertarget{class_concrete_order_builder_a849a51d37d62a7219050859b36d25efe}\index{ConcreteOrderBuilder@{ConcreteOrderBuilder}!buildPlant@{buildPlant}}
+\index{buildPlant@{buildPlant}!ConcreteOrderBuilder@{ConcreteOrderBuilder}}
+\doxysubsubsection{\texorpdfstring{buildPlant()}{buildPlant()}}
+{\footnotesize\ttfamily \label{class_concrete_order_builder_a849a51d37d62a7219050859b36d25efe} 
+void Concrete\+Order\+Builder\+::build\+Plant (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{plant\+Type}{, }\item[{int}]{quantity}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Build a plant order item. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em plant\+Type} & Type of plant to build \\
+\hline
+{\em quantity} & Number of plants to include \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_order_builder_a8b467c4018348146e8439171b62be050}{Order\+Builder}}.
+
+\Hypertarget{class_concrete_order_builder_af7bae384058f529bdad333967b8d74a9}\index{ConcreteOrderBuilder@{ConcreteOrderBuilder}!buildPlantPot@{buildPlantPot}}
+\index{buildPlantPot@{buildPlantPot}!ConcreteOrderBuilder@{ConcreteOrderBuilder}}
+\doxysubsubsection{\texorpdfstring{buildPlantPot()}{buildPlantPot()}}
+{\footnotesize\ttfamily \label{class_concrete_order_builder_af7bae384058f529bdad333967b8d74a9} 
+void Concrete\+Order\+Builder\+::build\+Plant\+Pot (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{pot\+Type}{, }\item[{int}]{quantity}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Build a plant pot order item. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pot\+Type} & Type of pot to build \\
+\hline
+{\em quantity} & Number of pots to include \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_order_builder_a59f2a6c0f3678d35d57f47cae074478d}{Order\+Builder}}.
+
+\Hypertarget{class_concrete_order_builder_aa59cc97e9a7cba0512c0ebdbc2d3077c}\index{ConcreteOrderBuilder@{ConcreteOrderBuilder}!getOrder@{getOrder}}
+\index{getOrder@{getOrder}!ConcreteOrderBuilder@{ConcreteOrderBuilder}}
+\doxysubsubsection{\texorpdfstring{getOrder()}{getOrder()}}
+{\footnotesize\ttfamily \label{class_concrete_order_builder_aa59cc97e9a7cba0512c0ebdbc2d3077c} 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} Concrete\+Order\+Builder\+::get\+Order (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the constructed order. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to the built \doxylink{class_order}{Order} object 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_order_builder_a5cbf44879b61213b410e1bb014cd2a10}{Order\+Builder}}.
+
+\Hypertarget{class_concrete_order_builder_a78cee0c87643ca7e5d5dbee8431fa5f4}\index{ConcreteOrderBuilder@{ConcreteOrderBuilder}!reset@{reset}}
+\index{reset@{reset}!ConcreteOrderBuilder@{ConcreteOrderBuilder}}
+\doxysubsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily \label{class_concrete_order_builder_a78cee0c87643ca7e5d5dbee8431fa5f4} 
+void Concrete\+Order\+Builder\+::reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reset the builder to start a new order. 
+
+
+
+Implements \mbox{\hyperlink{class_order_builder_ae2a2958d3bcb562d8b2a323d5064e3d4}{Order\+Builder}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Concrete\+Order\+Builder.\+h\item 
+Concrete\+Order\+Builder.\+cpp\end{DoxyCompactItemize}

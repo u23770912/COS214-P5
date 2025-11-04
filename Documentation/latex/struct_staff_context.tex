@@ -1,0 +1,32 @@
+\doxysection{Staff\+Context Struct Reference}
+\hypertarget{struct_staff_context}{}\label{struct_staff_context}\index{StaffContext@{StaffContext}}
+
+
+Encapsulates all staff-\/related objects for easy management.  
+
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_staff_context_a2bff82a4de8d5b30cec7ec72ccb5096a}\label{struct_staff_context_a2bff82a4de8d5b30cec7ec72ccb5096a} 
+\mbox{\hyperlink{class_staff_member}{Staff\+Member}} \texorpdfstring{$\ast$}{*} {\bfseries dispatcher}
+\item 
+\Hypertarget{struct_staff_context_a3a0b5449113c9f9d9e376536f017faba}\label{struct_staff_context_a3a0b5449113c9f9d9e376536f017faba} 
+\mbox{\hyperlink{class_staff_manager}{Staff\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries manager}
+\item 
+\Hypertarget{struct_staff_context_ad238fba50035b0cb064c2093cd4c626b}\label{struct_staff_context_ad238fba50035b0cb064c2093cd4c626b} 
+std\+::vector$<$ \mbox{\hyperlink{class_staff_chain_handler}{Staff\+Chain\+Handler}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries handlers}
+\item 
+\Hypertarget{struct_staff_context_a4f46f07782940776c61bd3268ed24b8b}\label{struct_staff_context_a4f46f07782940776c61bd3268ed24b8b} 
+std\+::vector$<$ std\+::pair$<$ std\+::string, \mbox{\hyperlink{class_staff_chain_handler}{Staff\+Chain\+Handler}} \texorpdfstring{$\ast$}{*} $>$ $>$ {\bfseries roster}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Encapsulates all staff-\/related objects for easy management. 
+
+This structure holds references to the staff dispatcher, manager, and all individual handlers in the chain. It ensures proper cleanup and maintains the relationships between staff objects. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+main.\+cpp\end{DoxyCompactItemize}

@@ -13,7 +13,18 @@
 
 class LifeCycleObserver;
 
-// The main context class that ties many patterns together.
+/**
+ * @brief Main plant product class that integrates multiple design patterns
+ * 
+ * This class serves as the context for multiple design patterns:
+ * - State Pattern: Manages plant lifecycle states
+ * - Observer Pattern: Notifies observers of plant state changes
+ * - Bridge Pattern: Abstracts plant species characteristics
+ * - Strategy Pattern: Implements different care strategies
+ * 
+ * Each plant has a unique ID, species profile, and can transition through
+ * various states during its lifecycle while receiving different types of care.
+ */
 class PlantProduct
 {
 private:
@@ -34,28 +45,86 @@ private:
     std::string plantId;
 
 public:
+    /**
+     * @brief Construct a new Plant Product
+     * @param id Unique identifier for the plant
+     * @param profile Species profile containing plant characteristics
+     */
     PlantProduct(const std::string &id, PlantSpeciesProfile *profile);
+    
+    /**
+     * @brief Destructor
+     */
     ~PlantProduct();
 
-    // --- State ---
+    // --- State Pattern Methods ---
+    /**
+     * @brief Transition plant to a new state
+     * @param state New state to transition to
+     */
     void transitionTo(PlantState *state);
+
+    /**
+     * @brief Get the name of the current state
+     * @return String representing current state
+     */
     std::string getCurrentStateName() const;
+
+    /**
+     * @brief Force transition to withering state
+     */
     void transitionToWithering();
+
+    /**
+     * @brief Get days spent in current state
+     * @return Number of days in current state
+     */
     int getDaysInCurrentState() const { return daysInCurrentState; }
 
-    // --- Timing ---
+    // --- Timing Methods ---
+    /**
+     * @brief Get seconds spent in current state
+     * @return Number of seconds in current state
+     */
     int getSecondsInCurrentState() const;
+
+    /**
+     * @brief Get seconds since last care action
+     * @return Number of seconds since last care
+     */
     int getSecondsSinceLastCare() const;
+
+    /**
+     * @brief Reset the last care timestamp
+     */
     void resetLastCareTime();
 
-    // --- Observer ---
+    // --- Observer Pattern Methods ---
+    /**
+     * @brief Set the lifecycle observer
+     * @param obs Observer to notify of lifecycle events
+     */
     void setObserver(LifeCycleObserver* obs) { monitor = obs; }
 
-    // --- Bridge ---
+    // --- Bridge Pattern Methods ---
+    /**
+     * @brief Get the plant's species profile
+     * @return Pointer to the plant's species profile
+     */
     PlantSpeciesProfile *getProfile() const;
 
-    // --- Strategy ---
+    // --- Strategy Pattern Methods ---
+    /**
+     * @brief Add a care strategy
+     * @param careType Type of care (e.g., "Watering", "Fertilizing")
+     * @param strategy Strategy implementation for the care type
+     */
     void addStrategy(const std::string &careType, CareStrategy *strategy);
+
+    /**
+     * @brief Perform a care action
+     * @param careType Type of care to perform
+     */
     void performCare(const std::string &careType);
 
     // Get strategy name for a care type (for display purposes)
