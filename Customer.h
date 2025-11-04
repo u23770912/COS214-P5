@@ -65,18 +65,8 @@ class Customer : public CustomerSubject {
         bool executeOrder(); // executes the PlaceOrderCommand and returns success status
         bool finalizeOrder(); // Finalizes the current order for execution
         
-        // Director-based construction methods - Delegate complex construction
-        Order* construct(); // Main construction method using Director
-        Order* constructSimplePlantOrder(const std::string& plantType, int quantity);
-        Order* constructPlantWithPotOrder(const std::string& plantType, const std::string& potType, int quantity);
-        Order* constructBundleOrder(const std::string& bundleName, 
-                                   const std::vector<std::string>& plantTypes,
-                                   const std::vector<int>& quantities, 
-                                   double discount);
-        
         // Order building methods - Core business logic only (no UI)
         bool addPlantToOrder(int plantIndex, int quantity = 1);
-        bool addBundleToOrder(const std::string& bundleName, const std::vector<int>& plantIndices);
         
         // UI methods - Delegated to facade (for compatibility with existing tests)
         void displayAvailableItems(); // Delegates to facade
@@ -95,6 +85,19 @@ class Customer : public CustomerSubject {
         void attachObserver(CustomerObserver* observer);
         void detachObserver(CustomerObserver* observer);
         
+        // Helper methods
+        void cleanupPreviousOrder();
+        bool addBundleToOrder(const std::string& bundleName, const std::vector<int>& plantQuantities);
+        
+        // Director-based construction methods
+        Order* construct();
+        Order* constructSimplePlantOrder(const std::string& plantType, int quantity);
+        Order* constructPlantWithPotOrder(const std::string& plantType, const std::string& potType, int quantity);
+        Order* constructBundleOrder(const std::string& bundleName, 
+                                   const std::vector<std::string>& plantTypes, 
+                                   const std::vector<int>& quantities, 
+                                   double discount);
+        
         // Staff interaction methods - Observer pattern (Convenience methods from salesfloor integration)
         void setStaffObserver(StaffManager* staff); // Convenience: sets staff and adds to observers
         void notifyStaffOfInteraction(const std::string& interactionType, const std::string& details = ""); // Delegates to notifyInteraction()
@@ -105,17 +108,11 @@ class Customer : public CustomerSubject {
         void restoreLastOrder();
         void viewOrderHistory();
 
-    // Suggestion browsing (e.g., bouquet/event suggestions)
-    void browseBouquetSuggestions(const std::string& eventType);
-
         // Adapter pattern - payment processing
         bool processPayment(const std::string& paymentType, double amount, const std::string& paymentDetails = "");
         void showPaymentOptions() const;
         bool isPaymentMethodSupported(const std::string& paymentType) const;
         bool executeOrderWithPayment(const std::string& paymentType, const std::string& paymentDetails = "");
-    private:
-        // Private helper methods for order management only
-        void cleanupPreviousOrder(); // Helper to clean up previous orders
 };
 
 #endif // CUSTOMER_H

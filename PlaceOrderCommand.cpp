@@ -1,6 +1,9 @@
 #include "PlaceOrderCommand.h"
 #include "Order.h"
 #include "Customer.h"
+#include "OrderValidationHandler.h"
+#include "PaymentProcessHandler.h"
+#include "NotificationHandler.h"
 #include <iostream>
 #include <ctime>
 
@@ -24,18 +27,55 @@ void PlaceOrderCommand::execute() {
         return;
     }
     
-    std::cout << "\n=== Executing PlaceOrderCommand ===" << std::endl;
+    std::cout << "\n╔════════════════════════════════════════════════════════════╗" << std::endl;
+    std::cout << "║         EXECUTING ORDER THROUGH CHAIN OF RESPONSIBILITY   ║" << std::endl;
+    std::cout << "╚════════════════════════════════════════════════════════════╝\n" << std::endl;
     std::cout << "Customer: " << customer->getName() << std::endl;
     std::cout << "Order ID: " << order->getOrderId() << std::endl;
     std::cout << "Timestamp: " << timestamp << std::endl;
+        
+    // Step 1: Create all handlers
+    OrderValidationHandler* validator = new OrderValidationHandler();
+    PaymentProcessHandler* paymentHandler = new PaymentProcessHandler();
+    NotificationHandler* successNotification = new NotificationHandler(false); // success
+    NotificationHandler* failureNotification = new NotificationHandler(true);  // failure
     
-    // For now, just mark as executed
-    // In full implementation, this would process through validation chain
-    executed = true;
-    order->setStatus("Placed");
+    // Step 2: Build the complete chain
+    // Validation → Payment → Success Notification
+    validator->setNext(paymentHandler);
+    paymentHandler->setNext(successNotification);
     
-    std::cout << "Order placed successfully!" << std::endl;
-    std::cout << "==================================\n" << std::endl;
+    std::cout << "\n[CHAIN] Starting order processing chain..." << std::endl;
+    std::cout << "[CHAIN] Chain structure: Validation → Payment → Notification" << std::endl;
+    
+    // Step 3: Start the chain with validation
+    bool validationSuccess = validator->handleOrder(order, customer);
+    
+    if (validationSuccess) {
+        std::cout << "\n[CHAIN] Full chain completed successfully!" << std::endl;
+        executed = true;
+        order->setStatus("Completed - Paid");
+    } else {
+
+        std::cout << "\n[CHAIN] Validation failed - sending failure notification..." << std::endl;
+        
+    
+        failureNotification->setErrorMessages(validator->getValidationErrors());
+        failureNotification->handleOrder(order, customer);
+        
+        order->setStatus("Validation Failed");
+        std::cout << "\n[CHAIN] Order validation failed!" << std::endl;
+    }
+    
+    // Cleanup all handlers
+    delete validator;
+    delete paymentHandler;
+    delete successNotification;
+    delete failureNotification;
+    
+    std::cout << "\n╔════════════════════════════════════════════════════════════╗" << std::endl;
+    std::cout << "║              CHAIN OF RESPONSIBILITY COMPLETE              ║" << std::endl;
+    std::cout << "╚════════════════════════════════════════════════════════════╝\n" << std::endl;
 }
 
 Order* PlaceOrderCommand::getOrder() const {
