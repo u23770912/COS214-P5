@@ -1,0 +1,132 @@
+\doxysection{Place\+Order\+Command Class Reference}
+\hypertarget{class_place_order_command}{}\label{class_place_order_command}\index{PlaceOrderCommand@{PlaceOrderCommand}}
+
+
+\doxylink{class_command}{Command} class for placing orders (\doxylink{class_command}{Command} pattern) Encapsulates the action of placing an order.  
+
+
+
+
+{\ttfamily \#include $<$Place\+Order\+Command.\+h$>$}
+
+Inheritance diagram for Place\+Order\+Command\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_place_order_command}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_place_order_command_acd389ecc861cfa35d97439bc38589542}\label{class_place_order_command_acd389ecc861cfa35d97439bc38589542} 
+{\bfseries Place\+Order\+Command} (\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*}order, \mbox{\hyperlink{class_customer}{Customer}} \texorpdfstring{$\ast$}{*}customer)
+\item 
+void \mbox{\hyperlink{class_place_order_command_aff940a19e217b51dd810e3485595baf3}{set\+Receiver}} (\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}plant) override
+\item 
+void \mbox{\hyperlink{class_place_order_command_a4f3e719ad21e485dc963a459e1f4e453}{execute}} () override
+\item 
+\mbox{\hyperlink{class_command}{Command}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_place_order_command_a07bc1790a36ed313a60bd6c7ab4e60a5}{clone}} () const override
+\item 
+std\+::string \mbox{\hyperlink{class_place_order_command_a32721cc67e633a290f41bebebd7c3c04}{get\+Type}} () const override
+\item 
+std\+::string \mbox{\hyperlink{class_place_order_command_a7bdaf6cf8a20653e5dad3518d9fbb4b6}{get\+Required\+Role}} () const override
+\item 
+\Hypertarget{class_place_order_command_a8fedfef875f322d3dc17f6c759b3cb3c}\label{class_place_order_command_a8fedfef875f322d3dc17f6c759b3cb3c} 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} {\bfseries get\+Order} () const
+\item 
+\Hypertarget{class_place_order_command_aa918576d2b45846c118e3a6e435c8f0a}\label{class_place_order_command_aa918576d2b45846c118e3a6e435c8f0a} 
+\mbox{\hyperlink{class_customer}{Customer}} \texorpdfstring{$\ast$}{*} {\bfseries get\+Customer} () const
+\item 
+\Hypertarget{class_place_order_command_aeab0423c1bead7ba003f79706f1f4f30}\label{class_place_order_command_aeab0423c1bead7ba003f79706f1f4f30} 
+std\+::string {\bfseries get\+Timestamp} () const
+\item 
+\Hypertarget{class_place_order_command_a32a5f49072035dd380486ca562b8839e}\label{class_place_order_command_a32a5f49072035dd380486ca562b8839e} 
+bool {\bfseries is\+Executed} () const
+\item 
+\Hypertarget{class_place_order_command_a29c44a09f3c1560ad45e6578931be019}\label{class_place_order_command_a29c44a09f3c1560ad45e6578931be019} 
+std\+::string {\bfseries get\+Command\+Info} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_command}{Command}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*} {\bfseries get\+Receiver} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Static Public Member Functions inherited from \mbox{\hyperlink{class_command}{Command}}}
+\begin{DoxyCompactItemize}
+\item 
+static void {\bfseries register\+Command} (const std\+::string \&type, \mbox{\hyperlink{class_command}{Command}} \texorpdfstring{$\ast$}{*}prototype)
+\item 
+static \mbox{\hyperlink{class_command}{Command}} \texorpdfstring{$\ast$}{*} {\bfseries create\+Command} (const std\+::string \&type)
+\item 
+static void {\bfseries cleanup\+Prototypes} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_command}{Command}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*} {\bfseries plant\+Receiver}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\doxylink{class_command}{Command} class for placing orders (\doxylink{class_command}{Command} pattern) Encapsulates the action of placing an order. 
+
+\label{doc-func-members}
+\Hypertarget{class_place_order_command_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_place_order_command_a07bc1790a36ed313a60bd6c7ab4e60a5}\index{PlaceOrderCommand@{PlaceOrderCommand}!clone@{clone}}
+\index{clone@{clone}!PlaceOrderCommand@{PlaceOrderCommand}}
+\doxysubsubsection{\texorpdfstring{clone()}{clone()}}
+{\footnotesize\ttfamily \label{class_place_order_command_a07bc1790a36ed313a60bd6c7ab4e60a5} 
+\mbox{\hyperlink{class_command}{Command}} \texorpdfstring{$\ast$}{*} Place\+Order\+Command\+::clone (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_command}{Command}}.
+
+\Hypertarget{class_place_order_command_a4f3e719ad21e485dc963a459e1f4e453}\index{PlaceOrderCommand@{PlaceOrderCommand}!execute@{execute}}
+\index{execute@{execute}!PlaceOrderCommand@{PlaceOrderCommand}}
+\doxysubsubsection{\texorpdfstring{execute()}{execute()}}
+{\footnotesize\ttfamily \label{class_place_order_command_a4f3e719ad21e485dc963a459e1f4e453} 
+void Place\+Order\+Command\+::execute (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_command}{Command}}.
+
+\Hypertarget{class_place_order_command_a7bdaf6cf8a20653e5dad3518d9fbb4b6}\index{PlaceOrderCommand@{PlaceOrderCommand}!getRequiredRole@{getRequiredRole}}
+\index{getRequiredRole@{getRequiredRole}!PlaceOrderCommand@{PlaceOrderCommand}}
+\doxysubsubsection{\texorpdfstring{getRequiredRole()}{getRequiredRole()}}
+{\footnotesize\ttfamily \label{class_place_order_command_a7bdaf6cf8a20653e5dad3518d9fbb4b6} 
+std\+::string Place\+Order\+Command\+::get\+Required\+Role (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_command}{Command}}.
+
+\Hypertarget{class_place_order_command_a32721cc67e633a290f41bebebd7c3c04}\index{PlaceOrderCommand@{PlaceOrderCommand}!getType@{getType}}
+\index{getType@{getType}!PlaceOrderCommand@{PlaceOrderCommand}}
+\doxysubsubsection{\texorpdfstring{getType()}{getType()}}
+{\footnotesize\ttfamily \label{class_place_order_command_a32721cc67e633a290f41bebebd7c3c04} 
+std\+::string Place\+Order\+Command\+::get\+Type (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_command}{Command}}.
+
+\Hypertarget{class_place_order_command_aff940a19e217b51dd810e3485595baf3}\index{PlaceOrderCommand@{PlaceOrderCommand}!setReceiver@{setReceiver}}
+\index{setReceiver@{setReceiver}!PlaceOrderCommand@{PlaceOrderCommand}}
+\doxysubsubsection{\texorpdfstring{setReceiver()}{setReceiver()}}
+{\footnotesize\ttfamily \label{class_place_order_command_aff940a19e217b51dd810e3485595baf3} 
+void Place\+Order\+Command\+::set\+Receiver (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}}]{plant}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_command}{Command}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Place\+Order\+Command.\+h\item 
+Place\+Order\+Command.\+cpp\end{DoxyCompactItemize}

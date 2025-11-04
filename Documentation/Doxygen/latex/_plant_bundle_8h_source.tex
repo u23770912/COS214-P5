@@ -1,0 +1,50 @@
+\doxysection{Plant\+Bundle.\+h}
+\hypertarget{_plant_bundle_8h_source}{}\label{_plant_bundle_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PLANTBUNDLE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PLANTBUNDLE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}OrderItem.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_plant_bundle_a3ea34591787d1ec3612546182788ff15}{PlantBundle}}\ :\ \textcolor{keyword}{public}\ OrderItem\ \{}
+\DoxyCodeLine{00012\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00013\ \ \ \ \ std::vector<OrderItem*>\ items;}
+\DoxyCodeLine{00014\ \ \ \ \ std::string\ bundleType;}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{double}\ discountPercentage;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{class_plant_bundle_a3ea34591787d1ec3612546182788ff15}{PlantBundle}}(\textcolor{keyword}{const}\ std::string\&\ bundleName,\ \textcolor{keyword}{const}\ std::string\&\ bundleType,\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ quantity\ =\ 1,\ \textcolor{keywordtype}{double}\ discount\ =\ 0.0);}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{class_plant_bundle_a6afe9bce29adf03dd00297b3d43bac5e}{\string~PlantBundle}}();}
+\DoxyCodeLine{00032\ \ \ \ \ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{//\ Override\ OrderItem\ methods}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_plant_bundle_abbebe831d31b9b2a13e48447b3a9fdb6}{getPrice}}()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00044\ \ \ \ \ std::string\ \mbox{\hyperlink{class_plant_bundle_aaa3a1267b2af57b0ed9652c759c2bd02}{getDescription}}()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00045\ \ \ \ \ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{//\ Override\ composite\ operations}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_plant_bundle_a5b9a212e610a2d78dcadaf720ed72ae6}{addItem}}(OrderItem*\ item)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_plant_bundle_a1cba3bde01c06a02203b066817a46990}{removeItem}}(OrderItem*\ item)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00063\ \ \ \ \ std::vector<OrderItem*>\ \mbox{\hyperlink{class_plant_bundle_a2f1fe408d343703d115ecedda1d5fcea}{getItems}}()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00064\ \ \ \ \ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{//\ PlantBundle\ specific\ methods}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_plant_bundle_a10dda8a8fc01e883e28fcc0333d197db}{setDiscount}}(\textcolor{keywordtype}{double}\ discountPercentage);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_plant_bundle_aa363657785e24e48d79192815f2bed58}{getDiscount}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00082\ \ \ \ \ std::string\ \mbox{\hyperlink{class_plant_bundle_a121280a7ba93d05fdda2b8a0b7e005c8}{getBundleType}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_plant_bundle_aaf40b62414884edc20bf698416e94b10}{getItemCount}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_plant_bundle_a058e46d7f4abc5f2f9f19cb26b3c5f9c}{clearItems}}();}
+\DoxyCodeLine{00094\ \ \ \ \ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_plant_bundle_a85d5d26bdc35cf02b9614b2876362392}{getBasePrice}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00100\ \};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

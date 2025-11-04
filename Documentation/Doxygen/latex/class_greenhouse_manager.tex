@@ -1,0 +1,163 @@
+\doxysection{Greenhouse\+Manager Class Reference}
+\hypertarget{class_greenhouse_manager}{}\label{class_greenhouse_manager}\index{GreenhouseManager@{GreenhouseManager}}
+
+
+Facade for managing greenhouse structure and plant assignments.  
+
+
+
+
+{\ttfamily \#include $<$Greenhouse\+Manager.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_greenhouse_component}{Greenhouse\+Component}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_greenhouse_manager_afd0eacc0c7744653b5bfb8b5379b82b8}{build\+Greenhouse\+Structure}} ()
+\begin{DoxyCompactList}\small\item\em Initialize greenhouse structure using builder pattern. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_greenhouse_manager_aa872e9be9aad9c592eb8ed17b70438f8}{add\+Plant\+To\+Structure}} (\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}plant)
+\begin{DoxyCompactList}\small\item\em Add a \doxylink{class_plant_product}{Plant\+Product} to the greenhouse structure. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_greenhouse_manager_a8f421497fa7f96e1789799e9d0fd036d}{remove\+Plant\+From\+Structure}} (const std\+::string \&plant\+Id)
+\begin{DoxyCompactList}\small\item\em Remove a plant from the greenhouse structure. \end{DoxyCompactList}\item 
+\Hypertarget{class_greenhouse_manager_a66ced954161cb2cb54bc2915409414bc}\label{class_greenhouse_manager_a66ced954161cb2cb54bc2915409414bc} 
+void {\bfseries display\+Greenhouse\+Structure} ()
+\begin{DoxyCompactList}\small\item\em Display the entire greenhouse structure with all plants. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_greenhouse_manager_ad447ce188ea51390e94cac6f0cd8d3a6}{display\+Plants\+By\+State}} (const std\+::string \&state)
+\begin{DoxyCompactList}\small\item\em Display plants by their current state. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_greenhouse_manager_a5a8f53f31762526f714110aa6e8cef55}{get\+Total\+Plant\+Count}} () const
+\begin{DoxyCompactList}\small\item\em Get count of plants in greenhouse structure. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_greenhouse_component}{Greenhouse\+Component}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_greenhouse_manager_a5e34bf8e3e4cab0a46d42f71d3053c0c}{get\+Root}} () const
+\begin{DoxyCompactList}\small\item\em Get greenhouse root. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_greenhouse_manager_a73a83b248a3962e3dd54a858eeb3c692}{register\+Species\+Node}} (const std\+::string \&species\+Name, \mbox{\hyperlink{class_plant_group}{Plant\+Group}} \texorpdfstring{$\ast$}{*}node)
+\begin{DoxyCompactList}\small\item\em Register a species node for quick lookup. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Facade for managing greenhouse structure and plant assignments. 
+
+This class extends \doxylink{class_greenhouse_system}{Greenhouse\+System} functionality by providing\+:
+\begin{DoxyItemize}
+\item Easy plant addition to correct species nodes
+\item Navigation through greenhouse hierarchy
+\item Visualization of entire greenhouse structure with all plants
+\item Plant removal when moving to sales floor
+\item Statistics and reporting
+\end{DoxyItemize}
+
+Design Pattern\+: Facade + Composite Management 
+
+\label{doc-func-members}
+\Hypertarget{class_greenhouse_manager_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_greenhouse_manager_aa872e9be9aad9c592eb8ed17b70438f8}\index{GreenhouseManager@{GreenhouseManager}!addPlantToStructure@{addPlantToStructure}}
+\index{addPlantToStructure@{addPlantToStructure}!GreenhouseManager@{GreenhouseManager}}
+\doxysubsubsection{\texorpdfstring{addPlantToStructure()}{addPlantToStructure()}}
+{\footnotesize\ttfamily \label{class_greenhouse_manager_aa872e9be9aad9c592eb8ed17b70438f8} 
+bool Greenhouse\+Manager\+::add\+Plant\+To\+Structure (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}}]{plant}{}\end{DoxyParamCaption})}
+
+
+
+Add a \doxylink{class_plant_product}{Plant\+Product} to the greenhouse structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em plant} & The plant to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if successfully added, false if species not found in structure 
+\end{DoxyReturn}
+\Hypertarget{class_greenhouse_manager_afd0eacc0c7744653b5bfb8b5379b82b8}\index{GreenhouseManager@{GreenhouseManager}!buildGreenhouseStructure@{buildGreenhouseStructure}}
+\index{buildGreenhouseStructure@{buildGreenhouseStructure}!GreenhouseManager@{GreenhouseManager}}
+\doxysubsubsection{\texorpdfstring{buildGreenhouseStructure()}{buildGreenhouseStructure()}}
+{\footnotesize\ttfamily \label{class_greenhouse_manager_afd0eacc0c7744653b5bfb8b5379b82b8} 
+\mbox{\hyperlink{class_greenhouse_component}{Greenhouse\+Component}} \texorpdfstring{$\ast$}{*} Greenhouse\+Manager\+::build\+Greenhouse\+Structure (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initialize greenhouse structure using builder pattern. 
+
+\begin{DoxyReturn}{Returns}
+The root \doxylink{class_greenhouse_component}{Greenhouse\+Component} 
+\end{DoxyReturn}
+\Hypertarget{class_greenhouse_manager_ad447ce188ea51390e94cac6f0cd8d3a6}\index{GreenhouseManager@{GreenhouseManager}!displayPlantsByState@{displayPlantsByState}}
+\index{displayPlantsByState@{displayPlantsByState}!GreenhouseManager@{GreenhouseManager}}
+\doxysubsubsection{\texorpdfstring{displayPlantsByState()}{displayPlantsByState()}}
+{\footnotesize\ttfamily \label{class_greenhouse_manager_ad447ce188ea51390e94cac6f0cd8d3a6} 
+void Greenhouse\+Manager\+::display\+Plants\+By\+State (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{state}{}\end{DoxyParamCaption})}
+
+
+
+Display plants by their current state. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em state} & State name (e.\+g., "{}\+In\+Nursery"{}, "{}\+Planted"{}, "{}\+Growing"{}) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_greenhouse_manager_a5e34bf8e3e4cab0a46d42f71d3053c0c}\index{GreenhouseManager@{GreenhouseManager}!getRoot@{getRoot}}
+\index{getRoot@{getRoot}!GreenhouseManager@{GreenhouseManager}}
+\doxysubsubsection{\texorpdfstring{getRoot()}{getRoot()}}
+{\footnotesize\ttfamily \label{class_greenhouse_manager_a5e34bf8e3e4cab0a46d42f71d3053c0c} 
+\mbox{\hyperlink{class_greenhouse_component}{Greenhouse\+Component}} \texorpdfstring{$\ast$}{*} Greenhouse\+Manager\+::get\+Root (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get greenhouse root. 
+
+\begin{DoxyReturn}{Returns}
+Root component 
+\end{DoxyReturn}
+\Hypertarget{class_greenhouse_manager_a5a8f53f31762526f714110aa6e8cef55}\index{GreenhouseManager@{GreenhouseManager}!getTotalPlantCount@{getTotalPlantCount}}
+\index{getTotalPlantCount@{getTotalPlantCount}!GreenhouseManager@{GreenhouseManager}}
+\doxysubsubsection{\texorpdfstring{getTotalPlantCount()}{getTotalPlantCount()}}
+{\footnotesize\ttfamily \label{class_greenhouse_manager_a5a8f53f31762526f714110aa6e8cef55} 
+int Greenhouse\+Manager\+::get\+Total\+Plant\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get count of plants in greenhouse structure. 
+
+\begin{DoxyReturn}{Returns}
+Total number of plants 
+\end{DoxyReturn}
+\Hypertarget{class_greenhouse_manager_a73a83b248a3962e3dd54a858eeb3c692}\index{GreenhouseManager@{GreenhouseManager}!registerSpeciesNode@{registerSpeciesNode}}
+\index{registerSpeciesNode@{registerSpeciesNode}!GreenhouseManager@{GreenhouseManager}}
+\doxysubsubsection{\texorpdfstring{registerSpeciesNode()}{registerSpeciesNode()}}
+{\footnotesize\ttfamily \label{class_greenhouse_manager_a73a83b248a3962e3dd54a858eeb3c692} 
+void Greenhouse\+Manager\+::register\+Species\+Node (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{species\+Name}{, }\item[{\mbox{\hyperlink{class_plant_group}{Plant\+Group}} \texorpdfstring{$\ast$}{*}}]{node}{}\end{DoxyParamCaption})}
+
+
+
+Register a species node for quick lookup. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em species\+Name} & Name of the species \\
+\hline
+{\em node} & The \doxylink{class_plant_group}{Plant\+Group} node representing this species \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_greenhouse_manager_a8f421497fa7f96e1789799e9d0fd036d}\index{GreenhouseManager@{GreenhouseManager}!removePlantFromStructure@{removePlantFromStructure}}
+\index{removePlantFromStructure@{removePlantFromStructure}!GreenhouseManager@{GreenhouseManager}}
+\doxysubsubsection{\texorpdfstring{removePlantFromStructure()}{removePlantFromStructure()}}
+{\footnotesize\ttfamily \label{class_greenhouse_manager_a8f421497fa7f96e1789799e9d0fd036d} 
+bool Greenhouse\+Manager\+::remove\+Plant\+From\+Structure (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{plant\+Id}{}\end{DoxyParamCaption})}
+
+
+
+Remove a plant from the greenhouse structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em plant\+Id} & The ID of the plant to remove \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if successfully removed 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Greenhouse\+Manager.\+h\item 
+Greenhouse\+Manager.\+cpp\end{DoxyCompactItemize}

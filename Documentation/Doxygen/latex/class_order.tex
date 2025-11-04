@@ -1,0 +1,273 @@
+\doxysection{Order Class Reference}
+\hypertarget{class_order}{}\label{class_order}\index{Order@{Order}}
+
+
+\doxylink{class_order}{Order} class that contains order items and manages the order.  
+
+
+
+
+{\ttfamily \#include $<$Order.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_order_a9af72cac70ef31afb546e5f5fe69462a}\label{class_order_a9af72cac70ef31afb546e5f5fe69462a} 
+{\bfseries Order} (const std\+::string \&order\+Id, const std\+::string \&customer\+Name)
+\item 
+void \mbox{\hyperlink{class_order_afd0e566dc9a23a7e8d1be9b92f3a049e}{add\+Order\+Item}} (\mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*}item)
+\begin{DoxyCompactList}\small\item\em Add an item to the order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_a00649f0e187ad966701c61fdcc861917}{remove\+Order\+Item}} (\mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*}item)
+\begin{DoxyCompactList}\small\item\em Remove an item from the order. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_order_aaf44ac2bde890988d65496fcfe980ed0}{get\+Order\+Items}} () const
+\begin{DoxyCompactList}\small\item\em Get all items in the order. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_order_ae999a76aef60219b09fbfe1e890b4743}{get\+Order\+Id}} () const
+\begin{DoxyCompactList}\small\item\em Get the order\textquotesingle{}s unique identifier. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_order_a4b031911da20dfa4ec7c8191c09f884e}{get\+Customer\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Get the customer\textquotesingle{}s name. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_order_a7308a302f6938344a624fb42883ee98b}{get\+Order\+Date}} () const
+\begin{DoxyCompactList}\small\item\em Get the order date. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_adc6acf0a3727f600653b23ac2ebe78d0}{set\+Order\+Date}} (const std\+::string \&date)
+\begin{DoxyCompactList}\small\item\em Set the order date. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_order_abababdc3b90d482d807766e5fbad5100}{get\+Status}} () const
+\begin{DoxyCompactList}\small\item\em Get the order status. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_a0c0d356d8305b1874bf1c4d39d750e73}{set\+Status}} (const std\+::string \&status)
+\begin{DoxyCompactList}\small\item\em Set the order status. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_order_a76699a6fd67a3d581b77300cc4abc347}{calculate\+Total\+Amount}} ()
+\begin{DoxyCompactList}\small\item\em Calculate the total amount for all items. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_order_a8a5eec3b84c37f10ff6ae580db65149c}{get\+Total\+Amount}} () const
+\begin{DoxyCompactList}\small\item\em Get the current total amount. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_order_a77dee862c8709c44ec1d7c2429e18119}{get\+Order\+Summary}} () const
+\begin{DoxyCompactList}\small\item\em Get a formatted summary of the order. \end{DoxyCompactList}\item 
+\Hypertarget{class_order_aaa881ba344f8f50c6d1fcbcb16982a8d}\label{class_order_aaa881ba344f8f50c6d1fcbcb16982a8d} 
+void {\bfseries clear\+Order} ()
+\begin{DoxyCompactList}\small\item\em Clear all items from the order. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_order_a8142c87355a824fa35d0f9a549819a46}{get\+Item\+Count}} () const
+\begin{DoxyCompactList}\small\item\em Get the number of items in the order. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_order_a39a41cee55588c5c382e635ac72834b9}{is\+Empty}} () const
+\begin{DoxyCompactList}\small\item\em Check if the order has no items. \end{DoxyCompactList}\item 
+\Hypertarget{class_order_a30ac64f1176d23385a3a11df08f493b3}\label{class_order_a30ac64f1176d23385a3a11df08f493b3} 
+void {\bfseries add\+Item} (const std\+::string \&item, double price)
+\item 
+\Hypertarget{class_order_a2533f7e7641c18e31558d3132c80357c}\label{class_order_a2533f7e7641c18e31558d3132c80357c} 
+void {\bfseries remove\+Item} (const std\+::string \&item)
+\item 
+\Hypertarget{class_order_ac5391533e63a1dd3d9c43234f2a79da8}\label{class_order_ac5391533e63a1dd3d9c43234f2a79da8} 
+void {\bfseries clear\+Items} ()
+\item 
+\Hypertarget{class_order_af38ff186460f834187ec1886cbc877be}\label{class_order_af38ff186460f834187ec1886cbc877be} 
+const std\+::vector$<$ std\+::string $>$ \& {\bfseries get\+Items} () const
+\item 
+\Hypertarget{class_order_a7e1995647d8f5f31822d23fcdc95b254}\label{class_order_a7e1995647d8f5f31822d23fcdc95b254} 
+std\+::string {\bfseries get\+Order\+Details} (const std\+::string \&customer\+Filter="{}"{}) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_order_a55e7d6efffe068eca989764c3690fcac}\label{class_order_a55e7d6efffe068eca989764c3690fcac} 
+static const std\+::vector$<$ \mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries get\+All\+Orders} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\doxylink{class_order}{Order} class that contains order items and manages the order. 
+
+\label{doc-func-members}
+\Hypertarget{class_order_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_order_afd0e566dc9a23a7e8d1be9b92f3a049e}\index{Order@{Order}!addOrderItem@{addOrderItem}}
+\index{addOrderItem@{addOrderItem}!Order@{Order}}
+\doxysubsubsection{\texorpdfstring{addOrderItem()}{addOrderItem()}}
+{\footnotesize\ttfamily \label{class_order_afd0e566dc9a23a7e8d1be9b92f3a049e} 
+void Order\+::add\+Order\+Item (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*}}]{item}{}\end{DoxyParamCaption})}
+
+
+
+Add an item to the order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em item} & \doxylink{class_order_item}{Order\+Item} pointer to add \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_order_a76699a6fd67a3d581b77300cc4abc347}\index{Order@{Order}!calculateTotalAmount@{calculateTotalAmount}}
+\index{calculateTotalAmount@{calculateTotalAmount}!Order@{Order}}
+\doxysubsubsection{\texorpdfstring{calculateTotalAmount()}{calculateTotalAmount()}}
+{\footnotesize\ttfamily \label{class_order_a76699a6fd67a3d581b77300cc4abc347} 
+double Order\+::calculate\+Total\+Amount (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Calculate the total amount for all items. 
+
+\begin{DoxyReturn}{Returns}
+Total amount as double 
+\end{DoxyReturn}
+\Hypertarget{class_order_a4b031911da20dfa4ec7c8191c09f884e}\index{Order@{Order}!getCustomerName@{getCustomerName}}
+\index{getCustomerName@{getCustomerName}!Order@{Order}}
+\doxysubsubsection{\texorpdfstring{getCustomerName()}{getCustomerName()}}
+{\footnotesize\ttfamily \label{class_order_a4b031911da20dfa4ec7c8191c09f884e} 
+std\+::string Order\+::get\+Customer\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the customer\textquotesingle{}s name. 
+
+\begin{DoxyReturn}{Returns}
+\doxylink{class_customer}{Customer} name string 
+\end{DoxyReturn}
+\Hypertarget{class_order_a8142c87355a824fa35d0f9a549819a46}\index{Order@{Order}!getItemCount@{getItemCount}}
+\index{getItemCount@{getItemCount}!Order@{Order}}
+\doxysubsubsection{\texorpdfstring{getItemCount()}{getItemCount()}}
+{\footnotesize\ttfamily \label{class_order_a8142c87355a824fa35d0f9a549819a46} 
+int Order\+::get\+Item\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the number of items in the order. 
+
+\begin{DoxyReturn}{Returns}
+Number of items 
+\end{DoxyReturn}
+\Hypertarget{class_order_a7308a302f6938344a624fb42883ee98b}\index{Order@{Order}!getOrderDate@{getOrderDate}}
+\index{getOrderDate@{getOrderDate}!Order@{Order}}
+\doxysubsubsection{\texorpdfstring{getOrderDate()}{getOrderDate()}}
+{\footnotesize\ttfamily \label{class_order_a7308a302f6938344a624fb42883ee98b} 
+std\+::string Order\+::get\+Order\+Date (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the order date. 
+
+\begin{DoxyReturn}{Returns}
+\doxylink{class_order}{Order} date string 
+\end{DoxyReturn}
+\Hypertarget{class_order_ae999a76aef60219b09fbfe1e890b4743}\index{Order@{Order}!getOrderId@{getOrderId}}
+\index{getOrderId@{getOrderId}!Order@{Order}}
+\doxysubsubsection{\texorpdfstring{getOrderId()}{getOrderId()}}
+{\footnotesize\ttfamily \label{class_order_ae999a76aef60219b09fbfe1e890b4743} 
+std\+::string Order\+::get\+Order\+Id (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the order\textquotesingle{}s unique identifier. 
+
+\begin{DoxyReturn}{Returns}
+\doxylink{class_order}{Order} ID string 
+\end{DoxyReturn}
+\Hypertarget{class_order_aaf44ac2bde890988d65496fcfe980ed0}\index{Order@{Order}!getOrderItems@{getOrderItems}}
+\index{getOrderItems@{getOrderItems}!Order@{Order}}
+\doxysubsubsection{\texorpdfstring{getOrderItems()}{getOrderItems()}}
+{\footnotesize\ttfamily \label{class_order_aaf44ac2bde890988d65496fcfe980ed0} 
+std\+::vector$<$ \mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*} $>$ Order\+::get\+Order\+Items (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get all items in the order. 
+
+\begin{DoxyReturn}{Returns}
+Vector of \doxylink{class_order_item}{Order\+Item} pointers 
+\end{DoxyReturn}
+\Hypertarget{class_order_a77dee862c8709c44ec1d7c2429e18119}\index{Order@{Order}!getOrderSummary@{getOrderSummary}}
+\index{getOrderSummary@{getOrderSummary}!Order@{Order}}
+\doxysubsubsection{\texorpdfstring{getOrderSummary()}{getOrderSummary()}}
+{\footnotesize\ttfamily \label{class_order_a77dee862c8709c44ec1d7c2429e18119} 
+std\+::string Order\+::get\+Order\+Summary (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get a formatted summary of the order. 
+
+\begin{DoxyReturn}{Returns}
+\doxylink{class_order}{Order} summary string 
+\end{DoxyReturn}
+\Hypertarget{class_order_abababdc3b90d482d807766e5fbad5100}\index{Order@{Order}!getStatus@{getStatus}}
+\index{getStatus@{getStatus}!Order@{Order}}
+\doxysubsubsection{\texorpdfstring{getStatus()}{getStatus()}}
+{\footnotesize\ttfamily \label{class_order_abababdc3b90d482d807766e5fbad5100} 
+std\+::string Order\+::get\+Status (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the order status. 
+
+\begin{DoxyReturn}{Returns}
+Status string 
+\end{DoxyReturn}
+\Hypertarget{class_order_a8a5eec3b84c37f10ff6ae580db65149c}\index{Order@{Order}!getTotalAmount@{getTotalAmount}}
+\index{getTotalAmount@{getTotalAmount}!Order@{Order}}
+\doxysubsubsection{\texorpdfstring{getTotalAmount()}{getTotalAmount()}}
+{\footnotesize\ttfamily \label{class_order_a8a5eec3b84c37f10ff6ae580db65149c} 
+double Order\+::get\+Total\+Amount (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the current total amount. 
+
+\begin{DoxyReturn}{Returns}
+Current total as double 
+\end{DoxyReturn}
+\Hypertarget{class_order_a39a41cee55588c5c382e635ac72834b9}\index{Order@{Order}!isEmpty@{isEmpty}}
+\index{isEmpty@{isEmpty}!Order@{Order}}
+\doxysubsubsection{\texorpdfstring{isEmpty()}{isEmpty()}}
+{\footnotesize\ttfamily \label{class_order_a39a41cee55588c5c382e635ac72834b9} 
+bool Order\+::is\+Empty (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Check if the order has no items. 
+
+\begin{DoxyReturn}{Returns}
+true if order is empty, false otherwise 
+\end{DoxyReturn}
+\Hypertarget{class_order_a00649f0e187ad966701c61fdcc861917}\index{Order@{Order}!removeOrderItem@{removeOrderItem}}
+\index{removeOrderItem@{removeOrderItem}!Order@{Order}}
+\doxysubsubsection{\texorpdfstring{removeOrderItem()}{removeOrderItem()}}
+{\footnotesize\ttfamily \label{class_order_a00649f0e187ad966701c61fdcc861917} 
+void Order\+::remove\+Order\+Item (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*}}]{item}{}\end{DoxyParamCaption})}
+
+
+
+Remove an item from the order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em item} & \doxylink{class_order_item}{Order\+Item} pointer to remove \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_order_adc6acf0a3727f600653b23ac2ebe78d0}\index{Order@{Order}!setOrderDate@{setOrderDate}}
+\index{setOrderDate@{setOrderDate}!Order@{Order}}
+\doxysubsubsection{\texorpdfstring{setOrderDate()}{setOrderDate()}}
+{\footnotesize\ttfamily \label{class_order_adc6acf0a3727f600653b23ac2ebe78d0} 
+void Order\+::set\+Order\+Date (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{date}{}\end{DoxyParamCaption})}
+
+
+
+Set the order date. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em date} & Date string to set \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_order_a0c0d356d8305b1874bf1c4d39d750e73}\index{Order@{Order}!setStatus@{setStatus}}
+\index{setStatus@{setStatus}!Order@{Order}}
+\doxysubsubsection{\texorpdfstring{setStatus()}{setStatus()}}
+{\footnotesize\ttfamily \label{class_order_a0c0d356d8305b1874bf1c4d39d750e73} 
+void Order\+::set\+Status (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{status}{}\end{DoxyParamCaption})}
+
+
+
+Set the order status. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em status} & Status string to set \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Order.\+h\item 
+Order.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,24 @@
+\doxysection{Sales\+Floor\+Staff.\+h}
+\hypertarget{_sales_floor_staff_8h_source}{}\label{_sales_floor_staff_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ SALESFLOORSTAFF\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ SALESFLOORSTAFF\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}StaffChainHandler.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }SalesFloorStaff\ :\ \textcolor{keyword}{public}\ StaffChainHandler}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ SalesFloorStaff()\ :\ StaffChainHandler()\ \{\}}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~SalesFloorStaff()\ \{\}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ setNext(StaffChainHandler\ *next)\ \{\ this-\/>next\ =\ next;\ \}}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_staff_chain_handler_a2f5385fe8301221602eb1793e822d30a}{isBusy}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ busy;\ \}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ setBusy(\textcolor{keywordtype}{bool}\ status)\ \{\ this-\/>busy\ =\ status;\ \}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_sales_floor_staff_a432b5789c92fa8415620c65d846a2447}{handleCommand}}(\mbox{\hyperlink{class_command}{Command}}\ *command)\ =\ 0;}
+\DoxyCodeLine{00027\ \};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ SALESFLOORSTAFF\_H}}
+
+\end{DoxyCode}

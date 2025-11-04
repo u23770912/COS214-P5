@@ -1,0 +1,118 @@
+\doxysection{Order\+Item Class Reference}
+\hypertarget{class_order_item}{}\label{class_order_item}\index{OrderItem@{OrderItem}}
+
+
+Abstract base class for order items (Composite pattern) This is the Component in the Composite pattern.  
+
+
+
+
+{\ttfamily \#include $<$Order\+Item.\+h$>$}
+
+Inheritance diagram for Order\+Item\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_order_item}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_order_item_affdfd6fb782f87b4173d43572239086d}\label{class_order_item_affdfd6fb782f87b4173d43572239086d} 
+{\bfseries Order\+Item} (const std\+::string \&name, double price, int quantity)
+\item 
+virtual double \mbox{\hyperlink{class_order_item_aa0665cfb5377e531a4dc3b67afe0ceeb}{get\+Price}} () const =0
+\item 
+\Hypertarget{class_order_item_a97e5ae4efa9a1ad4c6b44dc70e31b94a}\label{class_order_item_a97e5ae4efa9a1ad4c6b44dc70e31b94a} 
+virtual std\+::string {\bfseries get\+Name} () const
+\item 
+\Hypertarget{class_order_item_a97726e725399e0a2eb1c09d81bd5bf8c}\label{class_order_item_a97726e725399e0a2eb1c09d81bd5bf8c} 
+virtual int {\bfseries get\+Quantity} () const
+\item 
+\Hypertarget{class_order_item_a4ce310c855a0ee68bcda9199665a0754}\label{class_order_item_a4ce310c855a0ee68bcda9199665a0754} 
+virtual void {\bfseries set\+Quantity} (int quantity)
+\item 
+virtual void \mbox{\hyperlink{class_order_item_afd4ebb0e47b91c6d6b6f9eac25a49fb2}{add\+Item}} (\mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*}item)
+\item 
+virtual void \mbox{\hyperlink{class_order_item_a1fd2a2c75d083c84b0dda32a5990bd31}{remove\+Item}} (\mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*}item)
+\item 
+virtual std\+::vector$<$ \mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_order_item_a250ccab70827b2ed49b69ecdf078f5a3}{get\+Items}} () const
+\item 
+virtual std\+::string \mbox{\hyperlink{class_order_item_a04e261921a043675a2db10238b9a43e2}{get\+Description}} () const =0
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_order_item_a1e712114589e06032170285a183376ea}\label{class_order_item_a1e712114589e06032170285a183376ea} 
+std\+::string {\bfseries name}
+\item 
+\Hypertarget{class_order_item_a223b2394a34be9c984b29c23b6264801}\label{class_order_item_a223b2394a34be9c984b29c23b6264801} 
+double {\bfseries price}
+\item 
+\Hypertarget{class_order_item_a5aeb41fb2c4bb29d2dce2e18b4e696ad}\label{class_order_item_a5aeb41fb2c4bb29d2dce2e18b4e696ad} 
+int {\bfseries quantity}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstract base class for order items (Composite pattern) This is the Component in the Composite pattern. 
+
+\label{doc-func-members}
+\Hypertarget{class_order_item_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_order_item_afd4ebb0e47b91c6d6b6f9eac25a49fb2}\index{OrderItem@{OrderItem}!addItem@{addItem}}
+\index{addItem@{addItem}!OrderItem@{OrderItem}}
+\doxysubsubsection{\texorpdfstring{addItem()}{addItem()}}
+{\footnotesize\ttfamily \label{class_order_item_afd4ebb0e47b91c6d6b6f9eac25a49fb2} 
+void Order\+Item\+::add\+Item (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*}}]{item}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_plant_bundle_a5b9a212e610a2d78dcadaf720ed72ae6}{Plant\+Bundle}}.
+
+\Hypertarget{class_order_item_a04e261921a043675a2db10238b9a43e2}\index{OrderItem@{OrderItem}!getDescription@{getDescription}}
+\index{getDescription@{getDescription}!OrderItem@{OrderItem}}
+\doxysubsubsection{\texorpdfstring{getDescription()}{getDescription()}}
+{\footnotesize\ttfamily \label{class_order_item_a04e261921a043675a2db10238b9a43e2} 
+virtual std\+::string Order\+Item\+::get\+Description (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_plant_bundle_aaa3a1267b2af57b0ed9652c759c2bd02}{Plant\+Bundle}}.
+
+\Hypertarget{class_order_item_a250ccab70827b2ed49b69ecdf078f5a3}\index{OrderItem@{OrderItem}!getItems@{getItems}}
+\index{getItems@{getItems}!OrderItem@{OrderItem}}
+\doxysubsubsection{\texorpdfstring{getItems()}{getItems()}}
+{\footnotesize\ttfamily \label{class_order_item_a250ccab70827b2ed49b69ecdf078f5a3} 
+std\+::vector$<$ \mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*} $>$ Order\+Item\+::get\+Items (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_plant_bundle_a2f1fe408d343703d115ecedda1d5fcea}{Plant\+Bundle}}.
+
+\Hypertarget{class_order_item_aa0665cfb5377e531a4dc3b67afe0ceeb}\index{OrderItem@{OrderItem}!getPrice@{getPrice}}
+\index{getPrice@{getPrice}!OrderItem@{OrderItem}}
+\doxysubsubsection{\texorpdfstring{getPrice()}{getPrice()}}
+{\footnotesize\ttfamily \label{class_order_item_aa0665cfb5377e531a4dc3b67afe0ceeb} 
+virtual double Order\+Item\+::get\+Price (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_plant_bundle_abbebe831d31b9b2a13e48447b3a9fdb6}{Plant\+Bundle}}.
+
+\Hypertarget{class_order_item_a1fd2a2c75d083c84b0dda32a5990bd31}\index{OrderItem@{OrderItem}!removeItem@{removeItem}}
+\index{removeItem@{removeItem}!OrderItem@{OrderItem}}
+\doxysubsubsection{\texorpdfstring{removeItem()}{removeItem()}}
+{\footnotesize\ttfamily \label{class_order_item_a1fd2a2c75d083c84b0dda32a5990bd31} 
+void Order\+Item\+::remove\+Item (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*}}]{item}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_plant_bundle_a1cba3bde01c06a02203b066817a46990}{Plant\+Bundle}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Order\+Item.\+h\item 
+Order\+Item.\+cpp\end{DoxyCompactItemize}

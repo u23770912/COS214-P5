@@ -1,0 +1,137 @@
+\doxysection{Order\+Builder Class Reference}
+\hypertarget{class_order_builder}{}\label{class_order_builder}\index{OrderBuilder@{OrderBuilder}}
+
+
+Abstract Builder class for creating orders.  
+
+
+
+
+{\ttfamily \#include $<$Order\+Builder.\+h$>$}
+
+Inheritance diagram for Order\+Builder\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_order_builder}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_order_builder_a8b467c4018348146e8439171b62be050}{build\+Plant}} (const std\+::string \&plant\+Type, int quantity)=0
+\begin{DoxyCompactList}\small\item\em Build a plant order item. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_order_builder_a59f2a6c0f3678d35d57f47cae074478d}{build\+Plant\+Pot}} (const std\+::string \&pot\+Type, int quantity)=0
+\begin{DoxyCompactList}\small\item\em Build a plant pot order item. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_order_builder_a5c65485160e9c6a4d3fbe34263ef6da6}{build\+Bundle}} (const std\+::string \&bundle\+Type, int quantity)=0
+\begin{DoxyCompactList}\small\item\em Build a bundle order item. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_order_builder_a5cbf44879b61213b410e1bb014cd2a10}{get\+Order}} ()=0
+\begin{DoxyCompactList}\small\item\em Get the constructed order. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_order_builder_ae2a2958d3bcb562d8b2a323d5064e3d4}{reset}} ()=0
+\begin{DoxyCompactList}\small\item\em Reset the builder to start a new order. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstract Builder class for creating orders. 
+
+\label{doc-func-members}
+\Hypertarget{class_order_builder_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_order_builder_a5c65485160e9c6a4d3fbe34263ef6da6}\index{OrderBuilder@{OrderBuilder}!buildBundle@{buildBundle}}
+\index{buildBundle@{buildBundle}!OrderBuilder@{OrderBuilder}}
+\doxysubsubsection{\texorpdfstring{buildBundle()}{buildBundle()}}
+{\footnotesize\ttfamily \label{class_order_builder_a5c65485160e9c6a4d3fbe34263ef6da6} 
+virtual void Order\+Builder\+::build\+Bundle (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{bundle\+Type}{, }\item[{int}]{quantity}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Build a bundle order item. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bundle\+Type} & Type of bundle to build \\
+\hline
+{\em quantity} & Number of bundles to include \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_concrete_order_builder_a598edf6ceace336a01648aea6f3aa4dd}{Concrete\+Order\+Builder}}.
+
+\Hypertarget{class_order_builder_a8b467c4018348146e8439171b62be050}\index{OrderBuilder@{OrderBuilder}!buildPlant@{buildPlant}}
+\index{buildPlant@{buildPlant}!OrderBuilder@{OrderBuilder}}
+\doxysubsubsection{\texorpdfstring{buildPlant()}{buildPlant()}}
+{\footnotesize\ttfamily \label{class_order_builder_a8b467c4018348146e8439171b62be050} 
+virtual void Order\+Builder\+::build\+Plant (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{plant\+Type}{, }\item[{int}]{quantity}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Build a plant order item. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em plant\+Type} & Type of plant to build \\
+\hline
+{\em quantity} & Number of plants to include \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_concrete_order_builder_a849a51d37d62a7219050859b36d25efe}{Concrete\+Order\+Builder}}.
+
+\Hypertarget{class_order_builder_a59f2a6c0f3678d35d57f47cae074478d}\index{OrderBuilder@{OrderBuilder}!buildPlantPot@{buildPlantPot}}
+\index{buildPlantPot@{buildPlantPot}!OrderBuilder@{OrderBuilder}}
+\doxysubsubsection{\texorpdfstring{buildPlantPot()}{buildPlantPot()}}
+{\footnotesize\ttfamily \label{class_order_builder_a59f2a6c0f3678d35d57f47cae074478d} 
+virtual void Order\+Builder\+::build\+Plant\+Pot (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{pot\+Type}{, }\item[{int}]{quantity}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Build a plant pot order item. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pot\+Type} & Type of pot to build \\
+\hline
+{\em quantity} & Number of pots to include \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_concrete_order_builder_af7bae384058f529bdad333967b8d74a9}{Concrete\+Order\+Builder}}.
+
+\Hypertarget{class_order_builder_a5cbf44879b61213b410e1bb014cd2a10}\index{OrderBuilder@{OrderBuilder}!getOrder@{getOrder}}
+\index{getOrder@{getOrder}!OrderBuilder@{OrderBuilder}}
+\doxysubsubsection{\texorpdfstring{getOrder()}{getOrder()}}
+{\footnotesize\ttfamily \label{class_order_builder_a5cbf44879b61213b410e1bb014cd2a10} 
+virtual \mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} Order\+Builder\+::get\+Order (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Get the constructed order. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to the built \doxylink{class_order}{Order} object 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_concrete_order_builder_aa59cc97e9a7cba0512c0ebdbc2d3077c}{Concrete\+Order\+Builder}}.
+
+\Hypertarget{class_order_builder_ae2a2958d3bcb562d8b2a323d5064e3d4}\index{OrderBuilder@{OrderBuilder}!reset@{reset}}
+\index{reset@{reset}!OrderBuilder@{OrderBuilder}}
+\doxysubsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily \label{class_order_builder_ae2a2958d3bcb562d8b2a323d5064e3d4} 
+virtual void Order\+Builder\+::reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Reset the builder to start a new order. 
+
+
+
+Implemented in \mbox{\hyperlink{class_concrete_order_builder_a78cee0c87643ca7e5d5dbee8431fa5f4}{Concrete\+Order\+Builder}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Order\+Builder.\+h\end{DoxyCompactItemize}

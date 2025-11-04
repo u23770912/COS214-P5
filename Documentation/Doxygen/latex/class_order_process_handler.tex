@@ -1,0 +1,58 @@
+\doxysection{Order\+Process\+Handler Class Reference}
+\hypertarget{class_order_process_handler}{}\label{class_order_process_handler}\index{OrderProcessHandler@{OrderProcessHandler}}
+
+
+Abstract base class for order processing chain of responsibility This implements the Chain of Responsibility pattern for order processing workflow.  
+
+
+
+
+{\ttfamily \#include $<$Order\+Process\+Handler.\+h$>$}
+
+Inheritance diagram for Order\+Process\+Handler\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_order_process_handler}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_order_process_handler_a07c696ca11ea45460d8a22d9c1e1989b}\label{class_order_process_handler_a07c696ca11ea45460d8a22d9c1e1989b} 
+{\bfseries Order\+Process\+Handler} (const std\+::string \&name)
+\item 
+\Hypertarget{class_order_process_handler_aac649dd459cf2b9fb4cc992bc8befe4a}\label{class_order_process_handler_aac649dd459cf2b9fb4cc992bc8befe4a} 
+void {\bfseries set\+Next} (\mbox{\hyperlink{class_order_process_handler}{Order\+Process\+Handler}} \texorpdfstring{$\ast$}{*}handler)
+\item 
+\Hypertarget{class_order_process_handler_af6cc85847816eba0dbdd09d64ae30f8b}\label{class_order_process_handler_af6cc85847816eba0dbdd09d64ae30f8b} 
+\mbox{\hyperlink{class_order_process_handler}{Order\+Process\+Handler}} \texorpdfstring{$\ast$}{*} {\bfseries get\+Next} () const
+\item 
+\Hypertarget{class_order_process_handler_adccca4848371f144001607e8cc4e457c}\label{class_order_process_handler_adccca4848371f144001607e8cc4e457c} 
+bool {\bfseries handle\+Order} (\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*}order, \mbox{\hyperlink{class_customer}{Customer}} \texorpdfstring{$\ast$}{*}customer)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_order_process_handler_a100317e72da252007916112c0bb44624}\label{class_order_process_handler_a100317e72da252007916112c0bb44624} 
+virtual bool {\bfseries process\+Order} (\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*}order, \mbox{\hyperlink{class_customer}{Customer}} \texorpdfstring{$\ast$}{*}customer)=0
+\item 
+\Hypertarget{class_order_process_handler_a127b594b82a6a0414e46b2f18fb2a77d}\label{class_order_process_handler_a127b594b82a6a0414e46b2f18fb2a77d} 
+void {\bfseries log\+Step} (const std\+::string \&message)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_order_process_handler_a8d5920be14cf400efb7c7701d8a8a325}\label{class_order_process_handler_a8d5920be14cf400efb7c7701d8a8a325} 
+\mbox{\hyperlink{class_order_process_handler}{Order\+Process\+Handler}} \texorpdfstring{$\ast$}{*} {\bfseries next\+Handler}
+\item 
+\Hypertarget{class_order_process_handler_a25ba4ec2ac374f5db30a7f70c6ad2f36}\label{class_order_process_handler_a25ba4ec2ac374f5db30a7f70c6ad2f36} 
+std\+::string {\bfseries handler\+Name}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstract base class for order processing chain of responsibility This implements the Chain of Responsibility pattern for order processing workflow. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Order\+Process\+Handler.\+h\end{DoxyCompactItemize}

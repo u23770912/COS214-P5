@@ -1,0 +1,175 @@
+\doxysection{Inventory\+Manager Class Reference}
+\hypertarget{class_inventory_manager}{}\label{class_inventory_manager}\index{InventoryManager@{InventoryManager}}
+
+
+Singleton Database-\/like Inventory Manager with Reference-\/\+Only Access.  
+
+
+
+
+{\ttfamily \#include $<$Inventory\+Manager.\+h$>$}
+
+Inheritance diagram for Inventory\+Manager\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_inventory_manager}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_inventory_manager_a6fb57bfa5e8e70e75e2f31e9e38841af}\label{class_inventory_manager_a6fb57bfa5e8e70e75e2f31e9e38841af} 
+{\bfseries Inventory\+Manager} (const \mbox{\hyperlink{class_inventory_manager}{Inventory\+Manager}} \&)=delete
+\item 
+\Hypertarget{class_inventory_manager_a333759b59cbc927845ba239de960aa81}\label{class_inventory_manager_a333759b59cbc927845ba239de960aa81} 
+\mbox{\hyperlink{class_inventory_manager}{Inventory\+Manager}} \& {\bfseries operator=} (const \mbox{\hyperlink{class_inventory_manager}{Inventory\+Manager}} \&)=delete
+\item 
+\Hypertarget{class_inventory_manager_adc81db3d3616c0f76ad5b9a9d74cda00}\label{class_inventory_manager_adc81db3d3616c0f76ad5b9a9d74cda00} 
+{\bfseries Inventory\+Manager} (\mbox{\hyperlink{class_inventory_manager}{Inventory\+Manager}} \&\&)=delete
+\item 
+\Hypertarget{class_inventory_manager_a01f3544668fb0f18836d6bcd4022637f}\label{class_inventory_manager_a01f3544668fb0f18836d6bcd4022637f} 
+\mbox{\hyperlink{class_inventory_manager}{Inventory\+Manager}} \& {\bfseries operator=} (\mbox{\hyperlink{class_inventory_manager}{Inventory\+Manager}} \&\&)=delete
+\item 
+void \mbox{\hyperlink{class_inventory_manager_ae7ad255bd142f061229add46243fb4bd}{update}} (\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}plant, const std\+::string \&command\+Type) override
+\item 
+\Hypertarget{class_inventory_manager_ae4cb35507b54258f3b400045013c81bc}\label{class_inventory_manager_ae4cb35507b54258f3b400045013c81bc} 
+int {\bfseries get\+Stock\+Count} () const
+\item 
+\Hypertarget{class_inventory_manager_a60765c6479a6e418a83475827c693fa8}\label{class_inventory_manager_a60765c6479a6e418a83475827c693fa8} 
+std\+::vector$<$ \mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries get\+Green\+House\+Inventory} () const
+\item 
+\Hypertarget{class_inventory_manager_aa5c5470e8ff53fef94dbc678659a6bb0}\label{class_inventory_manager_aa5c5470e8ff53fef94dbc678659a6bb0} 
+std\+::vector$<$ \mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries get\+Ready\+For\+Sale\+Plants} () const
+\item 
+\Hypertarget{class_inventory_manager_a30eb22632a34acc50d460857120ddd9b}\label{class_inventory_manager_a30eb22632a34acc50d460857120ddd9b} 
+std\+::vector$<$ \mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries get\+Sold\+Plants} () const
+\item 
+\Hypertarget{class_inventory_manager_ac0ffadfe19864cdc717bdfa7c0d7480c}\label{class_inventory_manager_ac0ffadfe19864cdc717bdfa7c0d7480c} 
+void {\bfseries cleanup} ()
+\item 
+\Hypertarget{class_inventory_manager_afcf1ff4abd61cd52ba58467ec8653732}\label{class_inventory_manager_afcf1ff4abd61cd52ba58467ec8653732} 
+std\+::vector$<$ \mbox{\hyperlink{class_pot}{Pot}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries get\+Pot\+Inventory} () const
+\item 
+\Hypertarget{class_inventory_manager_af71678a61e5272b997fcc978410226ed}\label{class_inventory_manager_af71678a61e5272b997fcc978410226ed} 
+void {\bfseries add\+Pot} (\mbox{\hyperlink{class_pot}{Pot}} \texorpdfstring{$\ast$}{*}pot)
+\item 
+\Hypertarget{class_inventory_manager_a53a90b66ace7dfa21383755a17c018b0}\label{class_inventory_manager_a53a90b66ace7dfa21383755a17c018b0} 
+void {\bfseries remove\+Pot} (\mbox{\hyperlink{class_pot}{Pot}} \texorpdfstring{$\ast$}{*}pot)
+\item 
+\Hypertarget{class_inventory_manager_abc702e68486d6cc628f703cf2998df66}\label{class_inventory_manager_abc702e68486d6cc628f703cf2998df66} 
+void {\bfseries move\+To\+Sales\+Floor} (\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}plant)
+\item 
+\Hypertarget{class_inventory_manager_a6b6a35806ba3251f68be4da365321714}\label{class_inventory_manager_a6b6a35806ba3251f68be4da365321714} 
+void {\bfseries add\+To\+Greenhouse} (\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}plant)
+\item 
+\Hypertarget{class_inventory_manager_af64bc0df19c30f6fc2ae271cd0165238}\label{class_inventory_manager_af64bc0df19c30f6fc2ae271cd0165238} 
+void {\bfseries remove\+From\+Greenhouse} (\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}plant)
+\item 
+\Hypertarget{class_inventory_manager_ad1ec83b337b6fde1f1cd1c301ade121f}\label{class_inventory_manager_ad1ec83b337b6fde1f1cd1c301ade121f} 
+bool {\bfseries is\+Plant\+In\+Greenhouse} (\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}plant) const
+\item 
+\Hypertarget{class_inventory_manager_a40cf6a2b7f1910abb74cb9d3be06761b}\label{class_inventory_manager_a40cf6a2b7f1910abb74cb9d3be06761b} 
+bool {\bfseries is\+Plant\+Available\+For\+Sale} (const std\+::string \&plant\+Type, int quantity) const
+\item 
+\Hypertarget{class_inventory_manager_a26e5f7bdf6c5d00d46902b8cf7b4a017}\label{class_inventory_manager_a26e5f7bdf6c5d00d46902b8cf7b4a017} 
+bool {\bfseries is\+Pot\+Available} (const std\+::string \&pot\+Type, int quantity) const
+\item 
+\Hypertarget{class_inventory_manager_a242caadadad5053ccd2b89c6c4ac24e1}\label{class_inventory_manager_a242caadadad5053ccd2b89c6c4ac24e1} 
+std\+::vector$<$ \mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries get\+Available\+Plants\+By\+Type} (const std\+::string \&plant\+Type) const
+\item 
+\Hypertarget{class_inventory_manager_ae9185564d3bb6f3f3a17c771b30a900b}\label{class_inventory_manager_ae9185564d3bb6f3f3a17c771b30a900b} 
+bool {\bfseries reserve\+Plants\+For\+Order} (const std\+::string \&plant\+Type, int quantity)
+\item 
+\Hypertarget{class_inventory_manager_adf8317fd1ea703fc9d4aa8a8d2a00f94}\label{class_inventory_manager_adf8317fd1ea703fc9d4aa8a8d2a00f94} 
+bool {\bfseries reserve\+Pots\+For\+Order} (const std\+::string \&pot\+Type, int quantity)
+\item 
+\Hypertarget{class_inventory_manager_a8ee4134e30de4938636c4d17c2b0191c}\label{class_inventory_manager_a8ee4134e30de4938636c4d17c2b0191c} 
+void {\bfseries release\+Plants\+From\+Order} (const std\+::string \&plant\+Type, int quantity)
+\item 
+\Hypertarget{class_inventory_manager_ace2dca20a83eae37e028349e9ef35bc5}\label{class_inventory_manager_ace2dca20a83eae37e028349e9ef35bc5} 
+void {\bfseries release\+Pots\+From\+Order} (const std\+::string \&pot\+Type, int quantity)
+\item 
+\Hypertarget{class_inventory_manager_a67bf21d3169b2cf6a3bd171062163ecd}\label{class_inventory_manager_a67bf21d3169b2cf6a3bd171062163ecd} 
+int {\bfseries get\+Available\+Plant\+Count} (const std\+::string \&plant\+Type) const
+\item 
+\Hypertarget{class_inventory_manager_a6b611067cc582c61952b1b3b14f4aee2}\label{class_inventory_manager_a6b611067cc582c61952b1b3b14f4aee2} 
+int {\bfseries get\+Available\+Pot\+Count} (const std\+::string \&pot\+Type) const
+\item 
+\Hypertarget{class_inventory_manager_a2fc93a3a25c32619ff3e21f86f3f97db}\label{class_inventory_manager_a2fc93a3a25c32619ff3e21f86f3f97db} 
+void {\bfseries print\+Inventory\+Report} () const
+\item 
+\Hypertarget{class_inventory_manager_a216649ac4695c86295fbed9d0b02cb89}\label{class_inventory_manager_a216649ac4695c86295fbed9d0b02cb89} 
+bool {\bfseries sell\+Plants} (const std\+::string \&plant\+Type, int quantity)
+\item 
+\Hypertarget{class_inventory_manager_acf81ba66422e91f0c26eb97986ae1fc6}\label{class_inventory_manager_acf81ba66422e91f0c26eb97986ae1fc6} 
+void {\bfseries remove\+From\+Sales\+Floor} (\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}plant)
+\item 
+\Hypertarget{class_inventory_manager_ab31330def96fd34d90ea1cb6248cc3e6}\label{class_inventory_manager_ab31330def96fd34d90ea1cb6248cc3e6} 
+void {\bfseries mark\+As\+Sold} (\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}plant)
+\item 
+\Hypertarget{class_inventory_manager_af8a56c98e1fe0472a8d0851c4544b4b5}\label{class_inventory_manager_af8a56c98e1fe0472a8d0851c4544b4b5} 
+void {\bfseries add\+Custom\+Pot} (\mbox{\hyperlink{class_pot}{Pot}} \texorpdfstring{$\ast$}{*}pot)
+\item 
+\Hypertarget{class_inventory_manager_ad7d6552adb39a3e007d4a01ea9bb2b69}\label{class_inventory_manager_ad7d6552adb39a3e007d4a01ea9bb2b69} 
+\mbox{\hyperlink{class_pot}{Pot}} \texorpdfstring{$\ast$}{*} {\bfseries get\+Pot\+By\+Index} (int index)
+\item 
+\Hypertarget{class_inventory_manager_af6bbe07a49044f79cd01e0905fea485b}\label{class_inventory_manager_af6bbe07a49044f79cd01e0905fea485b} 
+void {\bfseries display\+Pot\+Inventory} () const
+\item 
+\Hypertarget{class_inventory_manager_a491f518263269316eaee1a0eeb535b5c}\label{class_inventory_manager_a491f518263269316eaee1a0eeb535b5c} 
+double {\bfseries get\+Total\+Pot\+Inventory\+Value} () const
+\item 
+\Hypertarget{class_inventory_manager_ab0129c8f54107f2012a1296cb76dfe5b}\label{class_inventory_manager_ab0129c8f54107f2012a1296cb76dfe5b} 
+int {\bfseries get\+Pot\+Inventory\+Count} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_inventory_manager}{Inventory\+Manager}} \& \mbox{\hyperlink{class_inventory_manager_a383ec95aa11017add01705701c6cdfde}{get\+Instance}} ()
+\begin{DoxyCompactList}\small\item\em Get reference to the single \doxylink{class_inventory_manager}{Inventory\+Manager} instance. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Singleton Database-\/like Inventory Manager with Reference-\/\+Only Access. 
+
+This design ensures\+:
+\begin{DoxyItemize}
+\item Only one instance exists (Singleton pattern)
+\item No heap allocation concerns (static storage)
+\item No dangling pointer issues (reference-\/only access)
+\item Clear ownership semantics (automatic lifetime management)
+\item Thread-\/safe initialization (C++11 guarantees) 
+\end{DoxyItemize}
+
+\label{doc-func-members}
+\Hypertarget{class_inventory_manager_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_inventory_manager_a383ec95aa11017add01705701c6cdfde}\index{InventoryManager@{InventoryManager}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!InventoryManager@{InventoryManager}}
+\doxysubsubsection{\texorpdfstring{getInstance()}{getInstance()}}
+{\footnotesize\ttfamily \label{class_inventory_manager_a383ec95aa11017add01705701c6cdfde} 
+\mbox{\hyperlink{class_inventory_manager}{Inventory\+Manager}} \& Inventory\+Manager\+::get\+Instance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get reference to the single \doxylink{class_inventory_manager}{Inventory\+Manager} instance. 
+
+\begin{DoxyReturn}{Returns}
+Reference to the singleton instance (never null, automatic lifetime)
+\end{DoxyReturn}
+Uses Meyer\textquotesingle{}s Singleton pattern -\/ guaranteed thread-\/safe initialization and automatic destruction at program end \Hypertarget{class_inventory_manager_ae7ad255bd142f061229add46243fb4bd}\index{InventoryManager@{InventoryManager}!update@{update}}
+\index{update@{update}!InventoryManager@{InventoryManager}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily \label{class_inventory_manager_ae7ad255bd142f061229add46243fb4bd} 
+void Inventory\+Manager\+::update (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}}]{plant}{, }\item[{const std\+::string \&}]{command\+Type}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_life_cycle_observer}{Life\+Cycle\+Observer}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Inventory\+Manager.\+h\item 
+Inventory\+Manager.\+cpp\end{DoxyCompactItemize}

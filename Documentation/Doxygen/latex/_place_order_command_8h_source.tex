@@ -1,0 +1,76 @@
+\doxysection{Place\+Order\+Command.\+h}
+\hypertarget{_place_order_command_8h_source}{}\label{_place_order_command_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PLACEORDERCOMMAND\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PLACEORDERCOMMAND\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}Command.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}Order.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}Customer.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_staff_member}{StaffMember}};\ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_inventory_manager}{InventoryManager}};\ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_single_plant}{SinglePlant}};\ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_plant_bundle}{PlantBundle}};\ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{class\ }PlaceOrderCommand\ :\ \textcolor{keyword}{public}\ Command\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_order}{Order}}*\ order;}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_customer}{Customer}}*\ customer;}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ std::string\ timestamp;}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ executed;}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_staff_member}{StaffMember}}*\ salesStaff;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ PlaceOrderCommand(\mbox{\hyperlink{class_order}{Order}}*\ order,\ \mbox{\hyperlink{class_customer}{Customer}}*\ customer);}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \string~PlaceOrderCommand();}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Override\ Command\ methods}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setReceiver(\mbox{\hyperlink{class_plant_product}{PlantProduct}}*\ plant)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ execute()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Override\ clone\ method\ for\ Prototype\ pattern}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ Command*\ clone()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ PlaceOrderCommand(*\textcolor{keyword}{this});}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Command\ type}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ std::string\ getType()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}PlaceOrder"{}};}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Required\ role\ to\ execute\ this\ command}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ std::string\ getRequiredRole()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Sales"{}};}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Getters}}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_order}{Order}}*\ getOrder()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_customer}{Customer}}*\ getCustomer()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ std::string\ getTimestamp()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isExecuted()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Command\ information}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ std::string\ getCommandInfo()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Helper\ method\ to\ generate\ timestamp}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ std::string\ generateTimestamp();}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Inventory\ validation\ methods}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ validateInventoryAvailability();}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ validateOrderItem(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_order_item}{OrderItem}}*\ item,\ \textcolor{keyword}{const}\ std::vector<PlantProduct*>\&\ availablePlants);}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ validateSinglePlant(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_single_plant}{SinglePlant}}*\ plant,\ \textcolor{keyword}{const}\ std::vector<PlantProduct*>\&\ availablePlants);}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ validatePlantBundle(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_plant_bundle}{PlantBundle}}*\ bundle,\ \textcolor{keyword}{const}\ std::vector<PlantProduct*>\&\ availablePlants);}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Order\ processing\ methods}}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ processOrderWithStaff();}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ updateInventoryAfterSale();}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ removeSoldItemsFromInventory(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_order_item}{OrderItem}}*\ item,\ \mbox{\hyperlink{class_inventory_manager}{InventoryManager}}*\ inventory);}
+\DoxyCodeLine{00073\ \};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

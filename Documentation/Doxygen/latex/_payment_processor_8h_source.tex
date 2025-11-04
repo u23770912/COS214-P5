@@ -1,0 +1,18 @@
+\doxysection{Payment\+Processor.\+h}
+\hypertarget{_payment_processor_8h_source}{}\label{_payment_processor_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PAYMENT\_PROCESSOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PAYMENT\_PROCESSOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_payment_processor}{PaymentProcessor}}\ \{}
+\DoxyCodeLine{00007\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_payment_processor}{\string~PaymentProcessor}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{comment}{//\ payload\ is\ format-\/dependent:\ "{}CASH"{}\ or\ "{}cardNumber;expiry;cvc"{}\ or\ other}}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ processPayment(\textcolor{keywordtype}{double}\ amount,\ \textcolor{keyword}{const}\ std::string\&\ customerId,\ \textcolor{keyword}{const}\ std::string\&\ payload)\ =\ 0;}
+\DoxyCodeLine{00011\ \};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ PAYMENT\_PROCESSOR\_H}}
+
+\end{DoxyCode}

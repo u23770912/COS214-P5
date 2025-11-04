@@ -1,0 +1,23 @@
+\doxysection{Minimal\+Pruning\+Strategy.\+h}
+\hypertarget{_minimal_pruning_strategy_8h_source}{}\label{_minimal_pruning_strategy_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MINIMAL\_PRUNING\_STRATEGY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MINIMAL\_PRUNING\_STRATEGY\_H}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CareStrategy.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_minimal_pruning_strategy}{MinimalPruningStrategy}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_care_strategy}{CareStrategy}}}
+\DoxyCodeLine{00008\ \{}
+\DoxyCodeLine{00009\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ applyCare(\textcolor{keywordtype}{int}\ amount,\ \textcolor{keyword}{const}\ std::string\ \&careType)\textcolor{keyword}{\ override}}
+\DoxyCodeLine{00011\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Implementation\ of\ minimal\ pruning\ logic}}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Applying\ minimal\ pruning\ of\ amount\ "{}}\ <<\ amount\ <<\ \textcolor{stringliteral}{"{}\ for\ care\ type:\ "{}}\ <<\ careType\ <<\ std::endl;}
+\DoxyCodeLine{00014\ \ \ \ \ \}}
+\DoxyCodeLine{00015\ \ \ \ \ std::string\ getName()\ \textcolor{keyword}{const\ override};}
+\DoxyCodeLine{00016\ \};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ MINIMAL\_PRUNING\_STRATEGY\_H}}
+
+\end{DoxyCode}

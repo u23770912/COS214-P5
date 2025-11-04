@@ -1,0 +1,106 @@
+\doxysection{Network\+Server Class Reference}
+\hypertarget{class_network_server}{}\label{class_network_server}\index{NetworkServer@{NetworkServer}}
+
+
+Simple network server that runs in background thread Handles GUI commands while main simulation runs.  
+
+
+
+
+{\ttfamily \#include $<$Network\+Server.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_network_server_a1b27694d6823cac0a20b62ae7d809f21}{start}} (int port)
+\begin{DoxyCompactList}\small\item\em Start server on specified port. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_network_server_a14555e4cd860540fa60a6028d71f0425}{accept\+Client}} ()
+\begin{DoxyCompactList}\small\item\em Accept incoming connection. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_network_server_afc3f347484d9efe1b5912f0380fa21bd}{read\+Command}} (std\+::string \&command)
+\begin{DoxyCompactList}\small\item\em Read command from client. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_network_server_a2be5835e8720f3e7fce1d6d78c84714b}{send\+Response}} (const std\+::string \&response)
+\begin{DoxyCompactList}\small\item\em Send response to client. \end{DoxyCompactList}\item 
+\Hypertarget{class_network_server_a99863c6fdc3d719d4ac4a28730df89cf}\label{class_network_server_a99863c6fdc3d719d4ac4a28730df89cf} 
+bool {\bfseries is\+Client\+Connected} () const
+\begin{DoxyCompactList}\small\item\em Check if client is connected. \end{DoxyCompactList}\item 
+\Hypertarget{class_network_server_af925de906d78b27e43e72f3a22b63fce}\label{class_network_server_af925de906d78b27e43e72f3a22b63fce} 
+void {\bfseries stop} ()
+\begin{DoxyCompactList}\small\item\em Stop server and close connections. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Simple network server that runs in background thread Handles GUI commands while main simulation runs. 
+
+\label{doc-func-members}
+\Hypertarget{class_network_server_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_network_server_a14555e4cd860540fa60a6028d71f0425}\index{NetworkServer@{NetworkServer}!acceptClient@{acceptClient}}
+\index{acceptClient@{acceptClient}!NetworkServer@{NetworkServer}}
+\doxysubsubsection{\texorpdfstring{acceptClient()}{acceptClient()}}
+{\footnotesize\ttfamily \label{class_network_server_a14555e4cd860540fa60a6028d71f0425} 
+bool Network\+Server\+::accept\+Client (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Accept incoming connection. 
+
+\begin{DoxyReturn}{Returns}
+true if client connected 
+\end{DoxyReturn}
+\Hypertarget{class_network_server_afc3f347484d9efe1b5912f0380fa21bd}\index{NetworkServer@{NetworkServer}!readCommand@{readCommand}}
+\index{readCommand@{readCommand}!NetworkServer@{NetworkServer}}
+\doxysubsubsection{\texorpdfstring{readCommand()}{readCommand()}}
+{\footnotesize\ttfamily \label{class_network_server_afc3f347484d9efe1b5912f0380fa21bd} 
+bool Network\+Server\+::read\+Command (\begin{DoxyParamCaption}\item[{std\+::string \&}]{command}{}\end{DoxyParamCaption})}
+
+
+
+Read command from client. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em command} & Output string for command \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if command read successfully 
+\end{DoxyReturn}
+\Hypertarget{class_network_server_a2be5835e8720f3e7fce1d6d78c84714b}\index{NetworkServer@{NetworkServer}!sendResponse@{sendResponse}}
+\index{sendResponse@{sendResponse}!NetworkServer@{NetworkServer}}
+\doxysubsubsection{\texorpdfstring{sendResponse()}{sendResponse()}}
+{\footnotesize\ttfamily \label{class_network_server_a2be5835e8720f3e7fce1d6d78c84714b} 
+void Network\+Server\+::send\+Response (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{response}{}\end{DoxyParamCaption})}
+
+
+
+Send response to client. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em response} & Response string to send \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_network_server_a1b27694d6823cac0a20b62ae7d809f21}\index{NetworkServer@{NetworkServer}!start@{start}}
+\index{start@{start}!NetworkServer@{NetworkServer}}
+\doxysubsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily \label{class_network_server_a1b27694d6823cac0a20b62ae7d809f21} 
+bool Network\+Server\+::start (\begin{DoxyParamCaption}\item[{int}]{port}{}\end{DoxyParamCaption})}
+
+
+
+Start server on specified port. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em port} & Port number to listen on \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if started successfully 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Network\+Server.\+h\item 
+Network\+Server.\+cpp\end{DoxyCompactItemize}

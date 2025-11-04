@@ -1,0 +1,37 @@
+\doxysection{Life\+Cycle\+Monitor Class Reference}
+\hypertarget{class_life_cycle_monitor}{}\label{class_life_cycle_monitor}\index{LifeCycleMonitor@{LifeCycleMonitor}}
+
+
+Monitors the lifecycle of a \doxylink{class_plant_product}{Plant\+Product} and notifies registered observers of changes.  
+
+
+
+
+{\ttfamily \#include $<$Life\+Cycle\+Monitor.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_life_cycle_monitor_a22e31d70295c7fdb8952c28c6c9601b1}\label{class_life_cycle_monitor_a22e31d70295c7fdb8952c28c6c9601b1} 
+{\bfseries Life\+Cycle\+Monitor} (\mbox{\hyperlink{class_plant_product}{Plant\+Product}} \texorpdfstring{$\ast$}{*}plant)
+\item 
+\Hypertarget{class_life_cycle_monitor_a567faa455dad20974274e47b83b73995}\label{class_life_cycle_monitor_a567faa455dad20974274e47b83b73995} 
+void {\bfseries register\+Observer} (\mbox{\hyperlink{class_life_cycle_observer}{Life\+Cycle\+Observer}} \texorpdfstring{$\ast$}{*}observer)
+\item 
+\Hypertarget{class_life_cycle_monitor_aa315157b82c89684f12e1300028adc05}\label{class_life_cycle_monitor_aa315157b82c89684f12e1300028adc05} 
+void {\bfseries remove\+Observer} (\mbox{\hyperlink{class_life_cycle_observer}{Life\+Cycle\+Observer}} \texorpdfstring{$\ast$}{*}observer)
+\item 
+\Hypertarget{class_life_cycle_monitor_a4a6fc5d74dd42b641474c539ed057a07}\label{class_life_cycle_monitor_a4a6fc5d74dd42b641474c539ed057a07} 
+void {\bfseries notify} (const std\+::string \&command\+Type)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Monitors the lifecycle of a \doxylink{class_plant_product}{Plant\+Product} and notifies registered observers of changes. 
+
+This class implements the Observer pattern to manage and notify observers about lifecycle events of a \doxylink{class_plant_product}{Plant\+Product} subject. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Life\+Cycle\+Monitor.\+h\item 
+Life\+Cycle\+Monitor.\+cpp\end{DoxyCompactItemize}

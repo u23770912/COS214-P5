@@ -1,0 +1,87 @@
+\doxysection{Credit\+Card\+Adapter Class Reference}
+\hypertarget{class_credit_card_adapter}{}\label{class_credit_card_adapter}\index{CreditCardAdapter@{CreditCardAdapter}}
+
+
+Adapter for credit/debit card payment integration.  
+
+
+
+
+{\ttfamily \#include $<$Credit\+Card\+Adapter.\+h$>$}
+
+Inheritance diagram for Credit\+Card\+Adapter\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_credit_card_adapter}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_credit_card_adapter_ab96a53005e84be11daf29d39ccd085bf}{Credit\+Card\+Adapter}} (\mbox{\hyperlink{class_credit_card_adaptee}{Credit\+Card\+Adaptee}} \texorpdfstring{$\ast$}{*}adaptee)
+\begin{DoxyCompactList}\small\item\em Construct a \doxylink{class_credit_card_adapter}{Credit\+Card\+Adapter}. \end{DoxyCompactList}\item 
+\Hypertarget{class_credit_card_adapter_af6cb05898ab15a50a99202b7ad63e501}\label{class_credit_card_adapter_af6cb05898ab15a50a99202b7ad63e501} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Credit\+Card\+Adapter} () override
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_credit_card_adapter_a22cd52cc1262e00c508e38d600c41a03}{process\+Payment}} (double amount, const std\+::string \&customer\+Id, const std\+::string \&payload) override
+\begin{DoxyCompactList}\small\item\em Process a credit card payment. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Adapter for credit/debit card payment integration. 
+
+\label{doc-constructors}
+\Hypertarget{class_credit_card_adapter_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_credit_card_adapter_ab96a53005e84be11daf29d39ccd085bf}\index{CreditCardAdapter@{CreditCardAdapter}!CreditCardAdapter@{CreditCardAdapter}}
+\index{CreditCardAdapter@{CreditCardAdapter}!CreditCardAdapter@{CreditCardAdapter}}
+\doxysubsubsection{\texorpdfstring{CreditCardAdapter()}{CreditCardAdapter()}}
+{\footnotesize\ttfamily \label{class_credit_card_adapter_ab96a53005e84be11daf29d39ccd085bf} 
+Credit\+Card\+Adapter\+::\+Credit\+Card\+Adapter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_credit_card_adaptee}{Credit\+Card\+Adaptee}} \texorpdfstring{$\ast$}{*}}]{adaptee}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Construct a \doxylink{class_credit_card_adapter}{Credit\+Card\+Adapter}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em adaptee} & Pointer to the concrete credit card provider \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_credit_card_adapter_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_credit_card_adapter_a22cd52cc1262e00c508e38d600c41a03}\index{CreditCardAdapter@{CreditCardAdapter}!processPayment@{processPayment}}
+\index{processPayment@{processPayment}!CreditCardAdapter@{CreditCardAdapter}}
+\doxysubsubsection{\texorpdfstring{processPayment()}{processPayment()}}
+{\footnotesize\ttfamily \label{class_credit_card_adapter_a22cd52cc1262e00c508e38d600c41a03} 
+bool Credit\+Card\+Adapter\+::process\+Payment (\begin{DoxyParamCaption}\item[{double}]{amount}{, }\item[{const std\+::string \&}]{customer\+Id}{, }\item[{const std\+::string \&}]{payload}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Process a credit card payment. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em amount} & Amount to charge \\
+\hline
+{\em customer\+Id} & \doxylink{class_customer}{Customer} identifier \\
+\hline
+{\em payload} & Card details formatted as "{}card;expiry;cvc"{} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true on success, false otherwise 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_payment_processor}{Payment\+Processor}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Credit\+Card\+Adapter.\+h\item 
+Credit\+Card\+Adapter.\+cpp\end{DoxyCompactItemize}

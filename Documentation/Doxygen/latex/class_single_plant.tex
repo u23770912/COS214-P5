@@ -1,0 +1,106 @@
+\doxysection{Single\+Plant Class Reference}
+\hypertarget{class_single_plant}{}\label{class_single_plant}\index{SinglePlant@{SinglePlant}}
+
+
+Concrete leaf class representing a single plant (Composite pattern) This is a Leaf in the Composite pattern.  
+
+
+
+
+{\ttfamily \#include $<$Single\+Plant.\+h$>$}
+
+Inheritance diagram for Single\+Plant\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_single_plant}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_single_plant_a6fa9c49da043941674288dc1c74ae59e}\label{class_single_plant_a6fa9c49da043941674288dc1c74ae59e} 
+{\bfseries Single\+Plant} (const std\+::string \&plant\+Type, double price, int quantity, const std\+::string \&size="{}medium"{})
+\item 
+double \mbox{\hyperlink{class_single_plant_ac6e2adc8105bc1a14f3a6f154a4e0567}{get\+Price}} () const override
+\item 
+std\+::string \mbox{\hyperlink{class_single_plant_a071aa482af0f1d8d8c0a238fc09ab1be}{get\+Description}} () const override
+\item 
+\Hypertarget{class_single_plant_acf8eca97678baa35302830a57a5ecf2c}\label{class_single_plant_acf8eca97678baa35302830a57a5ecf2c} 
+void {\bfseries add\+Pot} (const std\+::string \&pot\+Type, double pot\+Price)
+\item 
+\Hypertarget{class_single_plant_acd8700d8074f0ce2e970710be594e20e}\label{class_single_plant_acd8700d8074f0ce2e970710be594e20e} 
+void {\bfseries remove\+Pot} ()
+\item 
+\Hypertarget{class_single_plant_affda1fd8923a463c66c7fd0b258e55a9}\label{class_single_plant_affda1fd8923a463c66c7fd0b258e55a9} 
+bool {\bfseries has\+Plant\+Pot} () const
+\item 
+\Hypertarget{class_single_plant_a0e184b1649b0481883c31de3ede4dd79}\label{class_single_plant_a0e184b1649b0481883c31de3ede4dd79} 
+std\+::string {\bfseries get\+Plant\+Type} () const
+\item 
+\Hypertarget{class_single_plant_a693116fc825de240d340ce988eb5e014}\label{class_single_plant_a693116fc825de240d340ce988eb5e014} 
+std\+::string {\bfseries get\+Size} () const
+\item 
+\Hypertarget{class_single_plant_ae776cdc3448d677aa37261fc1b0948bd}\label{class_single_plant_ae776cdc3448d677aa37261fc1b0948bd} 
+std\+::string {\bfseries get\+Pot\+Type} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_order_item}{Order\+Item}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Order\+Item} (const std\+::string \&name, double price, int quantity)
+\item 
+virtual std\+::string {\bfseries get\+Name} () const
+\item 
+virtual int {\bfseries get\+Quantity} () const
+\item 
+virtual void {\bfseries set\+Quantity} (int quantity)
+\item 
+virtual void \mbox{\hyperlink{class_order_item_afd4ebb0e47b91c6d6b6f9eac25a49fb2}{add\+Item}} (\mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*}item)
+\item 
+virtual void \mbox{\hyperlink{class_order_item_a1fd2a2c75d083c84b0dda32a5990bd31}{remove\+Item}} (\mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*}item)
+\item 
+virtual std\+::vector$<$ \mbox{\hyperlink{class_order_item}{Order\+Item}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_order_item_a250ccab70827b2ed49b69ecdf078f5a3}{get\+Items}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_order_item}{Order\+Item}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries name}
+\item 
+double {\bfseries price}
+\item 
+int {\bfseries quantity}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Concrete leaf class representing a single plant (Composite pattern) This is a Leaf in the Composite pattern. 
+
+\label{doc-func-members}
+\Hypertarget{class_single_plant_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_single_plant_a071aa482af0f1d8d8c0a238fc09ab1be}\index{SinglePlant@{SinglePlant}!getDescription@{getDescription}}
+\index{getDescription@{getDescription}!SinglePlant@{SinglePlant}}
+\doxysubsubsection{\texorpdfstring{getDescription()}{getDescription()}}
+{\footnotesize\ttfamily \label{class_single_plant_a071aa482af0f1d8d8c0a238fc09ab1be} 
+std\+::string Single\+Plant\+::get\+Description (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_order_item}{Order\+Item}}.
+
+\Hypertarget{class_single_plant_ac6e2adc8105bc1a14f3a6f154a4e0567}\index{SinglePlant@{SinglePlant}!getPrice@{getPrice}}
+\index{getPrice@{getPrice}!SinglePlant@{SinglePlant}}
+\doxysubsubsection{\texorpdfstring{getPrice()}{getPrice()}}
+{\footnotesize\ttfamily \label{class_single_plant_ac6e2adc8105bc1a14f3a6f154a4e0567} 
+double Single\+Plant\+::get\+Price (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_order_item}{Order\+Item}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Single\+Plant.\+h\item 
+Single\+Plant.\+cpp\end{DoxyCompactItemize}

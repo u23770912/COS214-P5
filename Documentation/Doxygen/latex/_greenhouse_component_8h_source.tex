@@ -1,0 +1,22 @@
+\doxysection{Greenhouse\+Component.\+h}
+\hypertarget{_greenhouse_component_8h_source}{}\label{_greenhouse_component_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GREENHOUSECOMPONENT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GREENHOUSECOMPONENT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{class\ }GreenhouseComponent\ \{}
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keyword}{public}:\ }
+\DoxyCodeLine{00008\ \ \ \ \ \ \ \ \ GreenhouseComponent();}
+\DoxyCodeLine{00009\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \string~GreenhouseComponent();}
+\DoxyCodeLine{00010\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ print(\textcolor{keyword}{const}\ std::string\&\ prefix\ =\ \textcolor{stringliteral}{"{}"{}},\ \textcolor{keywordtype}{bool}\ isLast\ =\ \textcolor{keyword}{true})\ =\ 0;}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ add(GreenhouseComponent*\ item)\ =\ 0;}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ display()\ =\ 0;}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ getPlantCount()\ =\ 0;}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ remove(GreenhouseComponent*\ item)\ =\ 0;}
+\DoxyCodeLine{00015\ \};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

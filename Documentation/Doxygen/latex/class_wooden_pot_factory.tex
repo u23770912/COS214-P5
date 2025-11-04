@@ -1,0 +1,64 @@
+\doxysection{Wooden\+Pot\+Factory Class Reference}
+\hypertarget{class_wooden_pot_factory}{}\label{class_wooden_pot_factory}\index{WoodenPotFactory@{WoodenPotFactory}}
+
+
+Concrete factory for creating \doxylink{class_wooden_pot}{Wooden\+Pot} objects.  
+
+
+
+
+{\ttfamily \#include $<$Wooden\+Pot\+Factory.\+h$>$}
+
+Inheritance diagram for Wooden\+Pot\+Factory\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_wooden_pot_factory}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_pot}{Pot}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_wooden_pot_factory_af9e68b3b5cb10396ededff6fce026ea6}{create\+Pot}} (std\+::string size, std\+::string shape, bool drainage) override
+\begin{DoxyCompactList}\small\item\em Creates a new wooden pot. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Concrete factory for creating \doxylink{class_wooden_pot}{Wooden\+Pot} objects. 
+
+This class implements the \doxylink{class_pot_factory}{Pot\+Factory} interface to create instances of \doxylink{class_wooden_pot}{Wooden\+Pot} with specified properties. 
+
+\label{doc-func-members}
+\Hypertarget{class_wooden_pot_factory_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_wooden_pot_factory_af9e68b3b5cb10396ededff6fce026ea6}\index{WoodenPotFactory@{WoodenPotFactory}!createPot@{createPot}}
+\index{createPot@{createPot}!WoodenPotFactory@{WoodenPotFactory}}
+\doxysubsubsection{\texorpdfstring{createPot()}{createPot()}}
+{\footnotesize\ttfamily \label{class_wooden_pot_factory_af9e68b3b5cb10396ededff6fce026ea6} 
+\mbox{\hyperlink{class_pot}{Pot}} \texorpdfstring{$\ast$}{*} Wooden\+Pot\+Factory\+::create\+Pot (\begin{DoxyParamCaption}\item[{std\+::string}]{size}{, }\item[{std\+::string}]{shape}{, }\item[{bool}]{drainage}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Creates a new wooden pot. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & The size of the wooden pot \\
+\hline
+{\em shape} & The shape of the wooden pot \\
+\hline
+{\em drainage} & Whether the wooden pot has drainage holes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to a newly created \doxylink{class_wooden_pot}{Wooden\+Pot} object 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_pot_factory_a55b4e0d1239593773e646665fb6ee7ff}{Pot\+Factory}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Wooden\+Pot\+Factory.\+h\item 
+Wooden\+Pot\+Factory.\+cpp\end{DoxyCompactItemize}

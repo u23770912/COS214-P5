@@ -1,0 +1,182 @@
+\doxysection{Order\+Director Class Reference}
+\hypertarget{class_order_director}{}\label{class_order_director}\index{OrderDirector@{OrderDirector}}
+
+
+Director class for the Builder Design Pattern.  
+
+
+
+
+{\ttfamily \#include $<$Order\+Director.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_order_director_aa1ae35e9f30fce7e1c0ad8976b014f50}\label{class_order_director_aa1ae35e9f30fce7e1c0ad8976b014f50} 
+{\bfseries Order\+Director} (\mbox{\hyperlink{class_order_builder}{Order\+Builder}} \texorpdfstring{$\ast$}{*}builder)
+\item 
+void \mbox{\hyperlink{class_order_director_af12aecb104e0bf2d0cfe618d73ddeabc}{set\+Builder}} (\mbox{\hyperlink{class_order_builder}{Order\+Builder}} \texorpdfstring{$\ast$}{*}builder)
+\begin{DoxyCompactList}\small\item\em Set the builder to be used for construction. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order_builder}{Order\+Builder}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_order_director_a07edbf2dcc3f5e8a8c9f03235c9eceac}{get\+Builder}} () const
+\begin{DoxyCompactList}\small\item\em Get the current builder. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_order_director_af091c3f5b5aab7a6c1542d6a3aa211da}{construct}} ()
+\begin{DoxyCompactList}\small\item\em Main construction method -\/ encapsulates the entire order building process This is the single entry point that \doxylink{class_customer}{Customer} calls. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_order_director_a1b7927033a6b374b996d6a8dce3925b6}{construct\+Simple\+Plant\+Order}} (const std\+::string \&plant\+Type, int quantity)
+\begin{DoxyCompactList}\small\item\em Construct a simple plant order (one type of plant) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_order_director_ad63c028df2db7a3148741fe4054212b4}{construct\+Plant\+With\+Pot\+Order}} (const std\+::string \&plant\+Type, const std\+::string \&pot\+Type, int quantity)
+\begin{DoxyCompactList}\small\item\em Construct a plant order with pot. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_order_director_aceabf10d97b840b7942be96e7a7ae83f}{construct\+Bundle\+Order}} (const std\+::string \&bundle\+Name, const std\+::vector$<$ std\+::string $>$ \&plant\+Types, const std\+::vector$<$ int $>$ \&quantities, double discount)
+\begin{DoxyCompactList}\small\item\em Construct a custom bundle order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_order_director_a3c94c9ff43c4bafb0203923f8a5518f2}{construct\+Garden\+Starter\+Kit}} ()
+\begin{DoxyCompactList}\small\item\em Construct a premium garden starter kit Predefined combination of popular plants with accessories. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_order_director_adf1953a0beecb88638f32e0355240ef9}{construct\+Succulent\+Collection}} ()
+\begin{DoxyCompactList}\small\item\em Construct a succulent collection bundle Predefined collection of various succulent plants. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Director class for the Builder Design Pattern. 
+
+The \doxylink{class_order_director}{Order\+Director} encapsulates the construction logic for different types of orders. It coordinates the step-\/by-\/step building process through the Builder interface, allowing the \doxylink{class_customer}{Customer} to simply call \doxylink{class_order_director_af091c3f5b5aab7a6c1542d6a3aa211da}{construct()} without managing the building details. 
+
+\label{doc-func-members}
+\Hypertarget{class_order_director_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_order_director_af091c3f5b5aab7a6c1542d6a3aa211da}\index{OrderDirector@{OrderDirector}!construct@{construct}}
+\index{construct@{construct}!OrderDirector@{OrderDirector}}
+\doxysubsubsection{\texorpdfstring{construct()}{construct()}}
+{\footnotesize\ttfamily \label{class_order_director_af091c3f5b5aab7a6c1542d6a3aa211da} 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} Order\+Director\+::construct (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Main construction method -\/ encapsulates the entire order building process This is the single entry point that \doxylink{class_customer}{Customer} calls. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to the constructed \doxylink{class_order}{Order} 
+\end{DoxyReturn}
+\Hypertarget{class_order_director_aceabf10d97b840b7942be96e7a7ae83f}\index{OrderDirector@{OrderDirector}!constructBundleOrder@{constructBundleOrder}}
+\index{constructBundleOrder@{constructBundleOrder}!OrderDirector@{OrderDirector}}
+\doxysubsubsection{\texorpdfstring{constructBundleOrder()}{constructBundleOrder()}}
+{\footnotesize\ttfamily \label{class_order_director_aceabf10d97b840b7942be96e7a7ae83f} 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} Order\+Director\+::construct\+Bundle\+Order (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{bundle\+Name}{, }\item[{const std\+::vector$<$ std\+::string $>$ \&}]{plant\+Types}{, }\item[{const std\+::vector$<$ int $>$ \&}]{quantities}{, }\item[{double}]{discount}{}\end{DoxyParamCaption})}
+
+
+
+Construct a custom bundle order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bundle\+Name} & Name of the bundle \\
+\hline
+{\em plant\+Types} & Vector of plant types to include \\
+\hline
+{\em quantities} & Vector of quantities for each plant type \\
+\hline
+{\em discount} & Discount percentage to apply \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the constructed \doxylink{class_order}{Order} 
+\end{DoxyReturn}
+\Hypertarget{class_order_director_a3c94c9ff43c4bafb0203923f8a5518f2}\index{OrderDirector@{OrderDirector}!constructGardenStarterKit@{constructGardenStarterKit}}
+\index{constructGardenStarterKit@{constructGardenStarterKit}!OrderDirector@{OrderDirector}}
+\doxysubsubsection{\texorpdfstring{constructGardenStarterKit()}{constructGardenStarterKit()}}
+{\footnotesize\ttfamily \label{class_order_director_a3c94c9ff43c4bafb0203923f8a5518f2} 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} Order\+Director\+::construct\+Garden\+Starter\+Kit (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Construct a premium garden starter kit Predefined combination of popular plants with accessories. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to the constructed \doxylink{class_order}{Order} 
+\end{DoxyReturn}
+\Hypertarget{class_order_director_ad63c028df2db7a3148741fe4054212b4}\index{OrderDirector@{OrderDirector}!constructPlantWithPotOrder@{constructPlantWithPotOrder}}
+\index{constructPlantWithPotOrder@{constructPlantWithPotOrder}!OrderDirector@{OrderDirector}}
+\doxysubsubsection{\texorpdfstring{constructPlantWithPotOrder()}{constructPlantWithPotOrder()}}
+{\footnotesize\ttfamily \label{class_order_director_ad63c028df2db7a3148741fe4054212b4} 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} Order\+Director\+::construct\+Plant\+With\+Pot\+Order (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{plant\+Type}{, }\item[{const std\+::string \&}]{pot\+Type}{, }\item[{int}]{quantity}{}\end{DoxyParamCaption})}
+
+
+
+Construct a plant order with pot. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em plant\+Type} & Type of plant to order \\
+\hline
+{\em pot\+Type} & Type of pot to include \\
+\hline
+{\em quantity} & Number of plant+pot combinations \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the constructed \doxylink{class_order}{Order} 
+\end{DoxyReturn}
+\Hypertarget{class_order_director_a1b7927033a6b374b996d6a8dce3925b6}\index{OrderDirector@{OrderDirector}!constructSimplePlantOrder@{constructSimplePlantOrder}}
+\index{constructSimplePlantOrder@{constructSimplePlantOrder}!OrderDirector@{OrderDirector}}
+\doxysubsubsection{\texorpdfstring{constructSimplePlantOrder()}{constructSimplePlantOrder()}}
+{\footnotesize\ttfamily \label{class_order_director_a1b7927033a6b374b996d6a8dce3925b6} 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} Order\+Director\+::construct\+Simple\+Plant\+Order (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{plant\+Type}{, }\item[{int}]{quantity}{}\end{DoxyParamCaption})}
+
+
+
+Construct a simple plant order (one type of plant) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em plant\+Type} & Type of plant to order \\
+\hline
+{\em quantity} & Number of plants \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the constructed \doxylink{class_order}{Order} 
+\end{DoxyReturn}
+\Hypertarget{class_order_director_adf1953a0beecb88638f32e0355240ef9}\index{OrderDirector@{OrderDirector}!constructSucculentCollection@{constructSucculentCollection}}
+\index{constructSucculentCollection@{constructSucculentCollection}!OrderDirector@{OrderDirector}}
+\doxysubsubsection{\texorpdfstring{constructSucculentCollection()}{constructSucculentCollection()}}
+{\footnotesize\ttfamily \label{class_order_director_adf1953a0beecb88638f32e0355240ef9} 
+\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*} Order\+Director\+::construct\+Succulent\+Collection (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Construct a succulent collection bundle Predefined collection of various succulent plants. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to the constructed \doxylink{class_order}{Order} 
+\end{DoxyReturn}
+\Hypertarget{class_order_director_a07edbf2dcc3f5e8a8c9f03235c9eceac}\index{OrderDirector@{OrderDirector}!getBuilder@{getBuilder}}
+\index{getBuilder@{getBuilder}!OrderDirector@{OrderDirector}}
+\doxysubsubsection{\texorpdfstring{getBuilder()}{getBuilder()}}
+{\footnotesize\ttfamily \label{class_order_director_a07edbf2dcc3f5e8a8c9f03235c9eceac} 
+\mbox{\hyperlink{class_order_builder}{Order\+Builder}} \texorpdfstring{$\ast$}{*} Order\+Director\+::get\+Builder (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the current builder. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to the current builder 
+\end{DoxyReturn}
+\Hypertarget{class_order_director_af12aecb104e0bf2d0cfe618d73ddeabc}\index{OrderDirector@{OrderDirector}!setBuilder@{setBuilder}}
+\index{setBuilder@{setBuilder}!OrderDirector@{OrderDirector}}
+\doxysubsubsection{\texorpdfstring{setBuilder()}{setBuilder()}}
+{\footnotesize\ttfamily \label{class_order_director_af12aecb104e0bf2d0cfe618d73ddeabc} 
+void Order\+Director\+::set\+Builder (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_order_builder}{Order\+Builder}} \texorpdfstring{$\ast$}{*}}]{builder}{}\end{DoxyParamCaption})}
+
+
+
+Set the builder to be used for construction. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em builder} & Pointer to the builder instance \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Order\+Director.\+h\item 
+Order\+Director.\+cpp\end{DoxyCompactItemize}

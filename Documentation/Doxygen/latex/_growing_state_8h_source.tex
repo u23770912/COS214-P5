@@ -1,0 +1,26 @@
+\doxysection{Growing\+State.\+h}
+\hypertarget{_growing_state_8h_source}{}\label{_growing_state_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GROWING\_STATE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GROWING\_STATE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}PlantState.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }GrowingState\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_plant_state}{PlantState}}}
+\DoxyCodeLine{00008\ \{}
+\DoxyCodeLine{00009\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keywordtype}{int}\ careCount;}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ GrowingState()\ :\ careCount(0)\ \{\}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{void}\ onEnter(\mbox{\hyperlink{class_plant_product}{PlantProduct}}\ *plant)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ onExit(\mbox{\hyperlink{class_plant_product}{PlantProduct}}\ *plant)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00017\ \ \ \ \ std::string\ getName()\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Growing"{}};\ \}}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ advanceState(\mbox{\hyperlink{class_plant_product}{PlantProduct}}\ *plant)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00019\ \};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,84 @@
+\doxysection{Customer\+Observer Class Reference}
+\hypertarget{class_customer_observer}{}\label{class_customer_observer}\index{CustomerObserver@{CustomerObserver}}
+
+
+Abstract Observer for the \doxylink{class_customer}{Customer} Observer pattern Defines the interface for objects that should be notified of customer interactions.  
+
+
+
+
+{\ttfamily \#include $<$Customer\+Observer.\+h$>$}
+
+Inheritance diagram for Customer\+Observer\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_customer_observer}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_customer_observer_a3b97361960b790a87b2a749c71a0401d}{update\+Customer\+Interaction}} (\mbox{\hyperlink{class_customer}{Customer}} \texorpdfstring{$\ast$}{*}customer, const std\+::string \&interaction\+Type, const std\+::string \&details="{}"{})=0
+\begin{DoxyCompactList}\small\item\em Update method called when customer state changes or events occur. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{class_customer_observer_a319a32278069f40e73f48957f017272d}{validate\+Customer\+Order}} (\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*}order, \mbox{\hyperlink{class_customer}{Customer}} \texorpdfstring{$\ast$}{*}customer)=0
+\begin{DoxyCompactList}\small\item\em Handle order validation request from customer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstract Observer for the \doxylink{class_customer}{Customer} Observer pattern Defines the interface for objects that should be notified of customer interactions. 
+
+\label{doc-func-members}
+\Hypertarget{class_customer_observer_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_customer_observer_a3b97361960b790a87b2a749c71a0401d}\index{CustomerObserver@{CustomerObserver}!updateCustomerInteraction@{updateCustomerInteraction}}
+\index{updateCustomerInteraction@{updateCustomerInteraction}!CustomerObserver@{CustomerObserver}}
+\doxysubsubsection{\texorpdfstring{updateCustomerInteraction()}{updateCustomerInteraction()}}
+{\footnotesize\ttfamily \label{class_customer_observer_a3b97361960b790a87b2a749c71a0401d} 
+virtual void Customer\+Observer\+::update\+Customer\+Interaction (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_customer}{Customer}} \texorpdfstring{$\ast$}{*}}]{customer}{, }\item[{const std\+::string \&}]{interaction\+Type}{, }\item[{const std\+::string \&}]{details}{ = {\ttfamily "{}"{}}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Update method called when customer state changes or events occur. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em customer} & The customer triggering the notification \\
+\hline
+{\em interaction\+Type} & Type of interaction (e.\+g., "{}\+ORDER\+\_\+\+SUBMITTED"{}, "{}\+ASSISTANCE\+\_\+\+NEEDED"{}) \\
+\hline
+{\em details} & Additional details about the interaction \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_staff_manager_a64787f051f1accc39dd9239218cfbc20}{Staff\+Manager}}.
+
+\Hypertarget{class_customer_observer_a319a32278069f40e73f48957f017272d}\index{CustomerObserver@{CustomerObserver}!validateCustomerOrder@{validateCustomerOrder}}
+\index{validateCustomerOrder@{validateCustomerOrder}!CustomerObserver@{CustomerObserver}}
+\doxysubsubsection{\texorpdfstring{validateCustomerOrder()}{validateCustomerOrder()}}
+{\footnotesize\ttfamily \label{class_customer_observer_a319a32278069f40e73f48957f017272d} 
+virtual bool Customer\+Observer\+::validate\+Customer\+Order (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_order}{Order}} \texorpdfstring{$\ast$}{*}}]{order}{, }\item[{\mbox{\hyperlink{class_customer}{Customer}} \texorpdfstring{$\ast$}{*}}]{customer}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Handle order validation request from customer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em order} & The order to validate \\
+\hline
+{\em customer} & The customer who submitted the order \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if validation succeeds, false otherwise 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_staff_manager_a7a0b3c17dafda146fa47afd35d360ee9}{Staff\+Manager}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Customer\+Observer.\+h\end{DoxyCompactItemize}

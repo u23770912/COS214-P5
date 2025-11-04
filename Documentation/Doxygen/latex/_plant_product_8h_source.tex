@@ -1,0 +1,87 @@
+\doxysection{Plant\+Product.\+h}
+\hypertarget{_plant_product_8h_source}{}\label{_plant_product_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PLANT\_PRODUCT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PLANT\_PRODUCT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <chrono>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}LifeCycleObserver.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}PlantState.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}PlantSpeciesProfile.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}CareStrategy.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}LifeCycleObserver.h"{}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_life_cycle_observer}{LifeCycleObserver}};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00028\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_plant_product_afadafde1f8fd81945e2ea00e0d0de69c}{PlantProduct}}}
+\DoxyCodeLine{00029\ \{}
+\DoxyCodeLine{00030\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{//\ State\ Pattern}}
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{class_plant_state}{PlantState}}\ *currentState;}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{int}\ daysInCurrentState;}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//\ Timing\ for\ autonomous\ growth}}
+\DoxyCodeLine{00036\ \ \ \ \ std::chrono::steady\_clock::time\_point\ stateStartTime;}
+\DoxyCodeLine{00037\ \ \ \ \ std::chrono::steady\_clock::time\_point\ lastCareNotification;}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//\ Observer\ Pattern}}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{class_life_cycle_observer}{LifeCycleObserver}}*\ monitor;}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{//\ Bridge\ Pattern}}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{class_plant_species_profile}{PlantSpeciesProfile}}\ *speciesProfile;}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{//\ Strategy\ Pattern}}
+\DoxyCodeLine{00044\ \ \ \ \ std::map<std::string,\ CareStrategy\ *>\ strategy\_map;}
+\DoxyCodeLine{00045\ \ \ \ \ std::string\ plantId;}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{class_plant_product_afadafde1f8fd81945e2ea00e0d0de69c}{PlantProduct}}(\textcolor{keyword}{const}\ std::string\ \&\textcolor{keywordtype}{id},\ \mbox{\hyperlink{class_plant_species_profile}{PlantSpeciesProfile}}\ *profile);}
+\DoxyCodeLine{00054\ \ \ \ \ }
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{class_plant_product_a3dab54af64bab8e2b6ca76f1a07c1165}{\string~PlantProduct}}();}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ State\ Pattern\ Methods\ -\/-\/-\/}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_plant_product_a1dc679735ec7a9c001cd595d94b720d9}{transitionTo}}(\mbox{\hyperlink{class_plant_state}{PlantState}}\ *state);}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00071\ \ \ \ \ std::string\ \mbox{\hyperlink{class_plant_product_a75bb54a0d829d53f374ab07faae214c3}{getCurrentStateName}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_plant_product_a65ba6bbcfeea8b5642b88a7035084012}{transitionToWithering}}();}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_plant_product_af2b1a1e2cce73c2c4cbf1bf59dd15f85}{getDaysInCurrentState}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ daysInCurrentState;\ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ Timing\ Methods\ -\/-\/-\/}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_plant_product_ae173ae1e854ee83e75b4d648ccb82e17}{getSecondsInCurrentState}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_plant_product_a6eb89bc0005a9edfdf3f5ccae03f4212}{getSecondsSinceLastCare}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_plant_product_a7790cfb554857030a79b0072f880cca4}{resetLastCareTime}}();}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ Observer\ Pattern\ Methods\ -\/-\/-\/}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_plant_product_a089b8d1d906d7fef5752772a7dc61cd3}{setObserver}}(\mbox{\hyperlink{class_life_cycle_observer}{LifeCycleObserver}}*\ obs)\ \{\ monitor\ =\ obs;\ \}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ Bridge\ Pattern\ Methods\ -\/-\/-\/}}
+\DoxyCodeLine{00114\ \ \ \ \ \mbox{\hyperlink{class_plant_species_profile}{PlantSpeciesProfile}}\ *\mbox{\hyperlink{class_plant_product_a760eee9b9dfc0cd62a3585e0a4dabbdb}{getProfile}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ Strategy\ Pattern\ Methods\ -\/-\/-\/}}
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_plant_product_abf3c25a131e54ee9d3082f3a807a6403}{addStrategy}}(\textcolor{keyword}{const}\ std::string\ \&careType,\ \mbox{\hyperlink{class_care_strategy}{CareStrategy}}\ *strategy);}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_plant_product_af25b4492d3f546e6b1ea20b5803f79f3}{performCare}}(\textcolor{keyword}{const}\ std::string\ \&careType);}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{comment}{//\ Get\ strategy\ name\ for\ a\ care\ type\ (for\ display\ purposes)}}
+\DoxyCodeLine{00131\ \ \ \ \ std::string\ getStrategyNameForCareType(\textcolor{keyword}{const}\ std::string\ \&careType)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ Business\ Logic\ -\/-\/-\/}}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{void}\ advanceLifecycle();}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordtype}{void}\ notify(\textcolor{keyword}{const}\ std::string\ \&commandType);}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ Plant\ ID\ -\/-\/-\/}}
+\DoxyCodeLine{00138\ \ \ \ \ std::string\ getId()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ plantId;\ \}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{comment}{//\ Helper\ method\ to\ validate\ care\ appropriateness}}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keywordtype}{bool}\ isCareTypeAppropriate(\textcolor{keyword}{const}\ std::string\ \&careType)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00143\ \};}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ PLANT\_PRODUCT\_H}}
+
+\end{DoxyCode}

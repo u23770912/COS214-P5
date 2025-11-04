@@ -1,0 +1,26 @@
+\doxysection{EFTAdapter.\+h}
+\hypertarget{_e_f_t_adapter_8h_source}{}\label{_e_f_t_adapter_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ EFTADAPTER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ EFTADAPTER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}PaymentProcessor.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_e_f_t_adaptee}{EFTAdaptee}};\ \ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_e_f_t_adapter_a2b4f0ed26051f7e45512fd169ab6e431}{EFTAdapter}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_payment_processor}{PaymentProcessor}}\ \{}
+\DoxyCodeLine{00015\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{class_e_f_t_adaptee}{EFTAdaptee}}*\ adaptee;}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{class_e_f_t_adapter_a2b4f0ed26051f7e45512fd169ab6e431}{EFTAdapter}}(\mbox{\hyperlink{class_e_f_t_adaptee}{EFTAdaptee}}*\ adaptee);}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_e_f_t_adapter_a8c44e7eed07a5ffe4a9c91d2d05f5f6a}{\string~EFTAdapter}}();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_e_f_t_adapter_a6b60efeaceb71a0a0b3b3c59549072c2}{processPayment}}(\textcolor{keywordtype}{double}\ amount,\ \textcolor{keyword}{const}\ std::string\&\ customerId,\ \textcolor{keyword}{const}\ std::string\&\ payload)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00041\ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ EFTADAPTER\_H}}
+
+\end{DoxyCode}
