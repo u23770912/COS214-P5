@@ -1,6 +1,6 @@
 # CI/CD Pipeline Guide
 
-## 📋 Table of Contents
+## Table of Contents
 1. [What is CI/CD?](#what-is-cicd)
 2. [Pipeline Overview](#pipeline-overview)
 3. [How It Works](#how-it-works)
@@ -56,7 +56,7 @@
     ┌───▼────────┐      ┌────▼─────────┐    ┌────▼──────────┐
     │ • cppcheck │      │ • Compile    │    │ • Run tests   │
     │ • syntax   │      │ • Link       │    │ • Valgrind    │
-    │ • style    │      │ • Artifacts  │    │ • Coverage    │
+    │ • style    │      │ • Artifacts  │    |               │
     └────────────┘      └──────────────┘    └───────┬───────┘
                                                      │
                                                      ▼
@@ -72,8 +72,8 @@
 
 ### 1. **Trigger Events**
 The pipeline runs when:
-- ✅ You **push** to: `main`, `Dev-Branch`, `Unit-Test`, `Testing-branch`, or `feature/*` branches
-- ✅ Someone creates a **pull request** to `main` or `Dev-Branch`
+- You **push** to: `main`, `Dev-Branch`, `Unit-Test`, `Testing-branch`, or `feature/*` branches
+- Someone creates a **pull request** to `main` or `Dev-Branch`
 
 ### 2. **Workflow Execution**
 ```yaml
@@ -95,7 +95,7 @@ on:
 
 ## Jobs Explained
 
-### 🔍 Job 1: LINT (Code Quality)
+### Job 1: LINT (Code Quality)
 
 **Purpose**: Check code quality before building
 
@@ -110,15 +110,15 @@ on:
 5. **Syntax Check** - Validates all files compile
 
 **What It Catches**:
-- ❌ Undefined variables
-- ❌ Memory leaks
-- ❌ Unused code
-- ❌ Logic errors
-- ❌ Style violations
+- Undefined variables
+- Memory leaks
+- Unused code
+- Logic errors
+- Style violations
 
 ---
 
-### 🔨 Job 2: BUILD (Compilation)
+### Job 2: BUILD (Compilation)
 
 **Purpose**: Compile the application
 
@@ -129,13 +129,13 @@ on:
 4. **Upload Artifacts** - Saves executable for testing
 
 **Features**:
-- ✅ Parallel compilation (`-j` flag)
-- ✅ Caches object files
-- ✅ Stores build artifacts (7 days)
+- Parallel compilation (`-j` flag)
+- Caches object files
+- Stores build artifacts (7 days)
 
 ---
 
-### 🧪 Job 3: TEST (Validation)
+### Job 3: TEST (Validation)
 
 **Purpose**: Run automated tests
 
@@ -146,26 +146,15 @@ on:
 4. **Generate Report** - Creates test summary
 
 **Tests Run**:
-- ✅ Unit tests (when implemented)
-- ✅ Integration tests
-- ✅ Memory leak detection
-- ✅ Performance checks
+- Unit tests (when implemented)
+- Integration tests
+- Memory leak detection
+- Performance checks
 
 ---
 
-### 📊 Job 4: COVERAGE (Optional)
 
-**Purpose**: Measure test coverage
-
-**When**: Only runs on pull requests
-
-**Tools**:
-- `lcov` - Line coverage
-- `gcovr` - Branch coverage
-
----
-
-### ✅ Job 5: SUCCESS
+### Job 4: SUCCESS
 
 **Purpose**: Confirmation message
 
@@ -199,8 +188,8 @@ make clean
 make
 
 # Should output:
-# ✅ Compilation successful
-# ✅ Created executable: greenhouse
+# Compilation successful
+# Created executable: greenhouse
 ```
 
 ### 3. **Run Tests**
@@ -388,7 +377,7 @@ strategy:
 
 ## Troubleshooting
 
-### ❌ Build Fails on GitHub but Works Locally
+### Build Fails on GitHub but Works Locally
 
 **Cause**: Missing dependencies in CI environment
 
@@ -399,7 +388,7 @@ strategy:
     sudo apt-get install -y libgtk-3-dev
 ```
 
-### ❌ Tests Timeout
+### Tests Timeout
 
 **Cause**: Tests run too long
 
@@ -410,7 +399,7 @@ strategy:
   run: make test
 ```
 
-### ❌ GTK Warning in CI
+### GTK Warning in CI
 
 **Cause**: No display server in CI
 
@@ -421,26 +410,6 @@ xvfb-run ./greenhouse
 
 ---
 
-## Best Practices
-
-✅ **Keep builds fast** - Use caching  
-✅ **Test early** - Run lint first  
-✅ **Fail fast** - Stop on critical errors  
-✅ **Clear logs** - Add echo messages  
-✅ **Version dependencies** - Pin versions  
-✅ **Protect main** - Require checks to pass  
-
----
-
-## Next Steps
-
-1. ✅ **Pipeline is configured** - Already done!
-2. ⏳ **Add unit tests** - Create test files
-3. ⏳ **Enable coverage** - Add --coverage flag
-4. ⏳ **Add status badge** - Show in README
-5. ⏳ **Configure branch protection** - Require passing tests
-
----
 
 ## Resources
 
@@ -450,5 +419,3 @@ xvfb-run ./greenhouse
 - [Valgrind Quick Start](https://valgrind.org/docs/manual/quick-start.html)
 
 ---
-
-**Questions?** Check the workflow logs in the "Actions" tab on GitHub!
