@@ -4,6 +4,15 @@
 #include <iomanip>
 #include <chrono>
 #include <thread>
+#include <cstdio>
+
+#ifdef _WIN32
+#include <io.h>
+#define isatty _isatty
+#define fileno _fileno
+#else
+#include <unistd.h>
+#endif
 
 // Bridge 
 #include "PlantProduct.h"
@@ -27,8 +36,18 @@
 #include "StandardPruningStrategy.h"
 #include "ArtisticPruningStrategy.h"
 #include "MinimalPruningStrategy.h"
+#include "StaffMember.h"
+#include "Gardener.h"
+#include "Cashier.h"
+#include "StaffManager.h"
 
 using namespace std;
+
+// Global test dispatcher & manager used to ensure teams are registered
+static StaffMember* g_testDispatcher = nullptr;
+static Gardener* g_testGardener = nullptr;
+static Cashier* g_testCashier = nullptr;
+static StaffManager* g_testManager = nullptr;
 
 
 void printSectionHeader(const string &title)
@@ -54,8 +73,12 @@ void printTestResult(const string &test, bool passed)
 
 void waitForUser()
 {
+    // Skip prompts in non-interactive environments (CI/CD)
+    if (!isatty(fileno(stdin))) {
+        return;
+    }
     cout << "\nPress Enter to continue...";
-    // cin.ignore(10000, '\n');
+    cin.ignore(10000, '\n');
 }
 
 
@@ -127,6 +150,25 @@ void testBridgePattern()
     delete roseProfile;
     delete aloeProfile;
     delete oakProfile;
+
+    // -----------------------------------------------------------------
+    // Safety setup: ensure a minimal staff dispatcher with Greenhouse team
+    // is available so any lifecycle notifications that dispatch commands
+    // won't fail due to a missing "Greenhouse" team. This mirrors the
+    // runtime setup used by the integrated app and keeps tests robust.
+    // -----------------------------------------------------------------
+    // create or reuse the global test dispatcher and handlers
+    g_testDispatcher = new StaffMember();
+    // create one gardener (greenhouse) and one cashier (sales) and register
+    g_testGardener = new Gardener();
+    g_testCashier = new Cashier();
+    g_testGardener->setManager(g_testDispatcher);
+    g_testCashier->setManager(g_testDispatcher);
+    g_testDispatcher->registerTeam("Greenhouse", g_testGardener);
+    g_testDispatcher->registerTeam("Sales", g_testCashier);
+
+    // Create a StaffManager that will be used by plants if they are attached
+    g_testManager = new StaffManager(g_testDispatcher);
 
     waitForUser();
 }
@@ -777,6 +819,12 @@ int main()
          << string(80, '=') << endl;
     cout << "State, Strategy, and Bridge Patterns are correctly implemented!" << endl;
     cout << string(80, '=') << endl;
+    // Cleanup the test dispatcher and teams created for safety
+    if (g_testManager) { delete g_testManager; g_testManager = nullptr; }
+    if (g_testGardener) { delete g_testGardener; g_testGardener = nullptr; }
+    if (g_testCashier) { delete g_testCashier; g_testCashier = nullptr; }
+    if (g_testDispatcher) { delete g_testDispatcher; g_testDispatcher = nullptr; }
 
     return 0;
 }
+
