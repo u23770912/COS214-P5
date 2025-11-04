@@ -1,0 +1,195 @@
+#include <iostream>
+#include <cassert>
+#include <memory>
+#include "FlowerProfile.h"
+#include "TreeProfile.h"
+#include "SucculentProfile.h"
+#include "DripWateringStrategy.h"
+#include "FloodWateringStrategy.h"
+#include "GentleMistStrategy.h"
+#include "GrowingState.h"
+#include "InNurseryState.h"
+#include "PlantProduct.h"
+#include "PlantSpeciesProfile.h"
+
+// Helper function to print test results
+void printTestResult(const std::string& testName, bool passed) {
+    std::cout << (passed ? "[PASS] " : "[FAIL] ") << testName << std::endl;
+}
+// Test watering strategies
+void testWateringStrategies() {
+    std::cout << "\nTesting Watering Strategies..." << std::endl;
+    
+    DripWateringStrategy* dripStrategy = nullptr;
+    FloodWateringStrategy* floodStrategy = nullptr;
+    GentleMistStrategy* mistStrategy = nullptr;
+
+    try {
+        dripStrategy = new DripWateringStrategy();
+        floodStrategy = new FloodWateringStrategy();
+        mistStrategy = new GentleMistStrategy();
+
+        // Test strategy names
+        bool namesTest = true;
+        namesTest &= (dripStrategy->getName() == "Drip Watering");
+        namesTest &= (floodStrategy->getName() == "Flood Watering");
+        namesTest &= (mistStrategy->getName() == "Gentle Mist");
+        printTestResult("Strategy Names", namesTest);
+
+        // Test care application
+        dripStrategy->applyCare(100, "water");
+        floodStrategy->applyCare(200, "water");
+        mistStrategy->applyCare(50, "water");
+        printTestResult("Care Application", true);
+
+    } catch (const std::exception& e) {
+        std::cout << "Exception: " << e.what() << std::endl;
+        printTestResult("Care Application", false);
+    }
+
+    // Clean up
+    if (dripStrategy) {
+        delete dripStrategy;
+        dripStrategy = nullptr;
+    }
+    if (floodStrategy) {
+        delete floodStrategy;
+        floodStrategy = nullptr;
+    }
+    if (mistStrategy) {
+        delete mistStrategy;
+        mistStrategy = nullptr;
+    }
+}
+
+// Strategy Pattern Tests
+// Test state transitions
+void testStateTransitions() {
+    std::cout << "\nTesting State Transitions..." << std::endl;
+    
+    FlowerProfile* profile = nullptr;
+    PlantProduct* plant = nullptr;
+
+    try {
+        profile = new FlowerProfile("Rose", "moderate", "full sun", "well-draining");
+        plant = new PlantProduct("test_plant", profile);
+
+        // Test initial state (should be Planted by default)
+        bool initialStateTest = (plant->getCurrentStateName() != "");
+        printTestResult("Initial State", initialStateTest);
+
+        // Test state transition
+        plant->advanceLifecycle(); // This should trigger state transition
+        bool transitionTest = (plant->getCurrentStateName() != "");
+        printTestResult("State Transition", transitionTest);
+
+        // Test state behavior
+        plant->advanceLifecycle();
+        printTestResult("State Behavior", true);
+
+    } catch (const std::exception& e) {
+        std::cout << "Exception: " << e.what() << std::endl;
+        printTestResult("State Tests", false);
+    }
+
+    // Clean up
+    if (plant) {
+        delete plant;
+        plant = nullptr;
+    }
+    if (profile) {
+        delete profile;
+        profile = nullptr;
+    }
+}
+
+// Test plant profile with strategies (Bridge Pattern)
+void testProfileWithStrategies() {
+    std::cout << "\nTesting Profile-Strategy Integration..." << std::endl;
+    
+    // Test Flower Profile
+    try {
+        std::cout << "Testing Flower Profile..." << std::endl;
+        FlowerProfile* flowerProfile = new FlowerProfile("Rose", "200", "full sun", "well-draining");
+        bool flowerTest = true;
+        flowerTest &= (flowerProfile->getSpeciesName() == "Rose");
+        flowerTest &= (flowerProfile->getProperty("category") == "Flower");
+        printTestResult("Flower Profile Properties", flowerTest);
+        delete flowerProfile;
+    } catch (const std::exception& e) {
+        std::cout << "Exception in Flower test: " << e.what() << std::endl;
+        printTestResult("Flower Profile Test", false);
+    }
+
+    // Test Tree Profile
+    try {
+        std::cout << "Testing Tree Profile..." << std::endl;
+        TreeProfile* treeProfile = new TreeProfile("Oak", "300", "full sun", "well-drained");
+        bool treeTest = true;
+        treeTest &= (treeProfile->getSpeciesName() == "Oak");
+        treeTest &= (treeProfile->getProperty("category") == "Tree");
+        printTestResult("Tree Profile Properties", treeTest);
+        delete treeProfile;
+    } catch (const std::exception& e) {
+        std::cout << "Exception in Tree test: " << e.what() << std::endl;
+        printTestResult("Tree Profile Test", false);
+    }
+
+    // Test Succulent Profile
+    try {
+        std::cout << "Testing Succulent Profile..." << std::endl;
+        SucculentProfile* succulentProfile = new SucculentProfile("Aloe", "150", "bright indirect", "sandy");
+        bool succulentTest = true;
+        succulentTest &= (succulentProfile->getSpeciesName() == "Aloe");
+        succulentTest &= (succulentProfile->getProperty("category") == "Succulent");
+        printTestResult("Succulent Profile Properties", succulentTest);
+        delete succulentProfile;
+    } catch (const std::exception& e) {
+        std::cout << "Exception in Succulent test: " << e.what() << std::endl;
+        printTestResult("Succulent Profile Test", false);
+    }
+
+    // Test Strategy Integration
+    try {
+        std::cout << "Testing Strategy Integration..." << std::endl;
+        FlowerProfile* profile = new FlowerProfile("Rose", "200", "full sun", "well-draining");
+        PlantProduct* plant = new PlantProduct("test_plant", profile);
+        
+        // Test watering strategy
+        DripWateringStrategy* dripStrategy = new DripWateringStrategy();
+        plant->addStrategy("water", dripStrategy);
+        plant->performCare("water");
+        printTestResult("Strategy Integration", true);
+
+        // Clean up - note that plant will delete the strategy
+        delete plant;
+        delete profile;
+    } catch (const std::exception& e) {
+        std::cout << "Exception in Strategy test: " << e.what() << std::endl;
+        printTestResult("Strategy Integration", false);
+    }
+}
+
+// Test multiple state transitions
+// Main test runner
+int main() {
+    std::cout << "Running Plant System Tests..." << std::endl;
+    
+    try {
+        testWateringStrategies();
+        testStateTransitions();
+        testProfileWithStrategies();
+        
+        std::cout << "\nTests completed successfully." << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << "\nTest failed with exception: " << e.what() << std::endl;
+        return 1;
+    } catch (...) {
+        std::cout << "\nTest failed with unknown exception" << std::endl;
+        return 1;
+    }
+    
+    return 0;
+}
+
+

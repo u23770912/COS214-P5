@@ -4,6 +4,12 @@
 #include "CareStrategy.h"
 #include <iostream>
 
+/**
+ * @brief Strategy for drip watering method
+ * 
+ * Implements a slow, controlled watering strategy that delivers
+ * water directly to plant roots through a drip system.
+ */
 class DripWateringStrategy : public CareStrategy
 {
     public:

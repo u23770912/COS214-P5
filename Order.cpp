@@ -1,5 +1,5 @@
 #include "Order.h"
-// #include "OrderMemento.h"
+#include "OrderMemento.h"
 #include <sstream>
 #include <iomanip>
 #include <ctime>
@@ -273,7 +273,7 @@ std::string Order::getOrderDetails(const std::string& customerFilter) const {
     return details.str();
 }
 
-/*
+
 OrderMemento* Order::createMemento() const {
     std::stringstream state;
     
@@ -409,7 +409,7 @@ void Order::restoreState(const OrderMemento* memento) {
     // Recalculate total
     calculateTotalAmount();
 }
-*/
+
 
 const std::vector<Order*>& Order::getAllOrders()
 {

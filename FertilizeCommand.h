@@ -5,6 +5,12 @@
 #include "PlantProduct.h"
 #include <iostream>
 
+/**
+ * @brief Command class for fertilizing plants
+ * 
+ * This class implements the Command pattern for fertilizing operations.
+ * It executes the fertilizing care action on plants.
+ */
 class FertilizeCommand : public Command {
 public:
     // Constructor for prototype

@@ -34,12 +34,11 @@ $(TARGET): $(MAIN_OBJS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Build individual test executables
-# Each test is built independently with only shared objects (no other test objects)
+# First ensure all object files are built, then link the test
 $(TEST_TARGETS): %: %.cpp $(OBJS)
 	@echo "Building test: $@"
-	@rm -f $@.o
+	@echo "Using objects: $(OBJS)"
 	$(CXX) $(CXXFLAGS) $< $(OBJS) -o $@ $(LDFLAGS)
-	@rm -f $@.o
 
 # Build all test executables
 build-tests: $(TEST_TARGETS)
