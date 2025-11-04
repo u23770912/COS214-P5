@@ -5,7 +5,7 @@
 #include "PlantPot.h" // NEW: Required to define PlantPot for the removal test
 
 // and is not required for the isolated removal test.
-
+//Author: u23734176
 int main() {
     // === 1. Original Director Construction Test ===
     std::cout << "--- 1. Testing Director Construction ---" << std::endl;
