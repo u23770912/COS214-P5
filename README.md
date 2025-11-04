@@ -112,6 +112,7 @@ COS214-P5/
 ├── .github/
 │   └── workflows/
 │       └── main.yml          # CI/CD pipeline configuration
+├── Documentation/            # Project documentation and diagrams
 ├── *.cpp / *.h               # Source and header files
 ├── *_test.cpp                # Unit test files
 ├── Makefile                  # Build automation
